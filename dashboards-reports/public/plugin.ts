@@ -43,28 +43,28 @@ export class ReportsDashboardsPlugin
     Plugin<ReportsDashboardsPluginSetup, ReportsDashboardsPluginStart> {
   public setup(core: CoreSetup): ReportsDashboardsPluginSetup {
     // Register an application into the side navigation menu
-    core.application.register({
-      id: PLUGIN_NAME,
-      title: 'Reporting',
-      category: {
-        id: 'opensearch',
-        label: 'OpenSearch Plugins',
-        order: 2000,
-      },
-      order: 2000,
-      async mount(params: AppMountParameters) {
-        // Load application bundle
-        const { renderApp } = await import('./application');
-        // Get start services as specified in opensearch_dashboards.json
-        const [coreStart, depsStart] = await core.getStartServices();
-        // Render the application
-        return renderApp(
-          coreStart,
-          depsStart as AppPluginStartDependencies,
-          params
-        );
-      },
-    });
+    // core.application.register({
+    //   id: PLUGIN_NAME,
+    //   title: 'Reporting',
+    //   category: {
+    //     id: 'opensearch',
+    //     label: 'OpenSearch Plugins',
+    //     order: 2000,
+    //   },
+    //   order: 2000,
+    //   async mount(params: AppMountParameters) {
+    //     // Load application bundle
+    //     const { renderApp } = await import('./application');
+    //     // Get start services as specified in opensearch_dashboards.json
+    //     const [coreStart, depsStart] = await core.getStartServices();
+    //     // Render the application
+    //     return renderApp(
+    //       coreStart,
+    //       depsStart as AppPluginStartDependencies,
+    //       params
+    //     );
+    //   },
+    // });
 
     // Return methods that should be available to other plugins
     return {};
