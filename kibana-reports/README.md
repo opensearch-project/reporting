@@ -23,7 +23,7 @@ Please add your feature requests here [ New Requests ](https://github.com/opendi
    git config core.sparseCheckout true
    git checkout dev
    ```
-1. Run `yarn kbn bootstrap` inside `kibana/plugins/kibana-reports`.
+1. Run `yarn osd bootstrap` inside `kibana/plugins/kibana-reports`.
 
 Ultimately, your directory structure should look like this:
 

@@ -46,7 +46,7 @@
     "ws": "^7.2.3"
   },
   "devDependencies": {
-    "@elastic/eslint-import-resolver-kibana": "link:../../packages/kbn-eslint-import-resolver-kibana",
+    "@elastic/eslint-import-resolver-kibana": "link:../../packages/osd-eslint-import-resolver-opensearch-dashboards",
     "@types/dompurify": "^2.0.4",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jsdom": "^16.2.3",

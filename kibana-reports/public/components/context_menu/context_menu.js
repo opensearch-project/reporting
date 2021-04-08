@@ -115,7 +115,7 @@ const generateInContextReport = async (
     {
       headers: {
         'Content-Type': 'application/json',
-        'kbn-version': '7.10.2',
+        'osd-version': '7.10.2',
         accept: '*/*',
         'accept-language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7,zh-TW;q=0.6',
         pragma: 'no-cache',
@@ -272,7 +272,7 @@ const isVisualizationNavMenu = (navMenu) => {
 function locationHashChanged() {
   const observer = new MutationObserver(function (mutations) {
     const navMenu = document.querySelectorAll(
-      'span.kbnTopNavMenu__wrapper > nav.euiHeaderLinks > div.euiHeaderLinks__list'
+      'span.osdTopNavMenu__wrapper > nav.euiHeaderLinks > div.euiHeaderLinks__list'
     );
     if (
       navMenu &&
@@ -329,7 +329,7 @@ async function getTenantInfoIfExists() {
   const res = await fetch(`../api/v1/multitenancy/tenant`, {
     headers: {
       'Content-Type': 'application/json',
-      'kbn-version': '7.10.2',
+      'osd-version': '7.10.2',
       accept: '*/*',
       'accept-language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7,zh-TW;q=0.6',
       pragma: 'no-cache',
