@@ -138,7 +138,7 @@ export const scheduleSchema = schema.object({
 });
 
 export const opensearchDashboardsUserSchema = schema.object({
-  opensearch_dashboards_recipients: schema.arrayOf(schema.string()),
+  kibana_recipients: schema.arrayOf(schema.string()),
 });
 
 export const channelSchema = schema.object({
