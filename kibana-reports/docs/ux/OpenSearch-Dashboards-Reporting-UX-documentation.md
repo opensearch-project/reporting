@@ -1,6 +1,6 @@
-# Kibana Reporting
+# OpenSearch Dashboards Reporting
 ## Overview
-Kibana Reports for Open Distro allows `report owners` (including but not limited to Developers, DevOps, IT Engineers, and IT admins) to export and share reports from Kibana dashboards, saved queries, alerts and visualizations. It helps automate the process of scheduling reports via on-demand or periodic basis (including cron schedules). It also automates exporting and sharing reports from triggers, such as alerts. The feature is present in the Dashboard, Discover, and Visualization tabs. Scheduled reports can be sent to (shared with) self or various stakeholders within the organization such as, including but not limited to, executives, managers, engineers (developers, DevOps, IT Engineer) in the form of pdf, hyperlinks, csv, excel via various channels such as email or the Kibana reporting plugin.
+OpenSearch Dashboards Reports for Open Distro allows `report owners` (including but not limited to Developers, DevOps, IT Engineers, and IT admins) to export and share reports from OpenSearch Dashboards dashboards, saved queries, alerts and visualizations. It helps automate the process of scheduling reports via on-demand or periodic basis (including cron schedules). It also automates exporting and sharing reports from triggers, such as alerts. The feature is present in the Dashboard, Discover, and Visualization tabs. Scheduled reports can be sent to (shared with) self or various stakeholders within the organization such as, including but not limited to, executives, managers, engineers (developers, DevOps, IT Engineer) in the form of pdf, hyperlinks, csv, excel via various channels such as email or the OpenSearch Dashboards reporting plugin.
 
 ## Key user flows
 ### From source
@@ -95,7 +95,7 @@ Here you can view the details of a report definition. From the report definition
 
 ### Create Report definition
 
-Creating a report definition allows you to define how a report will be triggered or configured. Here you can generate a one-time report to be delivered immediately (Similar to sharing a report from a dashboard), or at a later date, as well as set recurring and cron-based schedules, or select an alert that will trigger the report generation. You can also configure delivery to yourself and other Kibana users, email recepients, and optionally include the report as part of the email attachment.
+Creating a report definition allows you to define how a report will be triggered or configured. Here you can generate a one-time report to be delivered immediately (Similar to sharing a report from a dashboard), or at a later date, as well as set recurring and cron-based schedules, or select an alert that will trigger the report generation. You can also configure delivery to yourself and other OpenSearch Dashboards users, email recepients, and optionally include the report as part of the email attachment.
 
 ![Reporting - Create Report definition](img/screens/0.5.0_create-report-definition.png)
 

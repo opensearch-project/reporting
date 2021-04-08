@@ -1,6 +1,6 @@
-# Kibana Reports for Open Distro
+# OpenSearch Dashboards Reports for Open Distro
 
-Kibana Reports for Open Distro allows ‘Report Owner’ (engineers, including but not limited to developers, DevOps, IT Engineer, and IT admin) export and share reports from Kibana dashboards, saved search, alerts and visualizations. It helps automate the process of scheduling reports on an on-demand or a periodical basis (on cron schedules as well). Further, it also automates the process of exporting and sharing reports triggered for various alerts. The feature is present in the Dashboard, Discover, and Visualization tabs. Scheduled reports can be sent to (shared with) self or various stakeholders within the organization such as, including but not limited to, executives, managers, engineers (developers, DevOps, IT Engineer) in the form of pdf, hyperlinks, csv, excel via various channels such as email, slack, Amazon Chime. However, in order to export, schedule and share reports, report owners should have the necessary permissions as defined under Roles and Privileges.
+OpenSearch Dashboards Reports for Open Distro allows ‘Report Owner’ (engineers, including but not limited to developers, DevOps, IT Engineer, and IT admin) export and share reports from OpenSearch Dashboards dashboards, saved search, alerts and visualizations. It helps automate the process of scheduling reports on an on-demand or a periodical basis (on cron schedules as well). Further, it also automates the process of exporting and sharing reports triggered for various alerts. The feature is present in the Dashboard, Discover, and Visualization tabs. Scheduled reports can be sent to (shared with) self or various stakeholders within the organization such as, including but not limited to, executives, managers, engineers (developers, DevOps, IT Engineer) in the form of pdf, hyperlinks, csv, excel via various channels such as email, slack, Amazon Chime. However, in order to export, schedule and share reports, report owners should have the necessary permissions as defined under Roles and Privileges.
 
 # Request for Comments ( RFC )
 
@@ -8,13 +8,13 @@ Please add your feature requests here [ New Requests ](https://github.com/opendi
 
 ## Setup
 
-1. Download Elasticsearch for the version that matches the [Kibana version specified in package.json](./package.json#L7).
-1. Download the Kibana source code for the [version specified in package.json](./package.json#L7) you want to set up.
+1. Download Elasticsearch for the version that matches the [OpenSearch Dashboards version specified in package.json](./package.json#L7).
+1. Download the OpenSearch Dashboards source code for the [version specified in package.json](./package.json#L7) you want to set up.
 
-   See the [Kibana contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md#setting-up-your-development-environment) for more instructions on setting up your development environment.
+   See the [OpenSearch Dashboards contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md#setting-up-your-development-environment) for more instructions on setting up your development environment.
 
-1. Change your node version to the version specified in `.node-version` inside the Kibana root directory.
-1. Create a `plugins` directory inside the Kibana source code directory, if `plugins` directory doesn't exist.
+1. Change your node version to the version specified in `.node-version` inside the OpenSearch Dashboards root directory.
+1. Create a `plugins` directory inside the OpenSearch Dashboards source code directory, if `plugins` directory doesn't exist.
 1. Check out this package from version control into the `plugins` directory.
    ```
    git clone git@github.com:opendistro-for-elasticsearch/kibana-reports.git plugins --no-checkout
@@ -45,17 +45,17 @@ Example output: `./build/opendistro-kibana-reports-0.0.1.zip`
 
 - `yarn start`
 
-  Starts Kibana and includes this plugin. Kibana will be available on `localhost:5601`.
+  Starts OpenSearch Dashboards and includes this plugin. OpenSearch Dashboards will be available on `localhost:5601`.
 
 - `yarn test:jest`
 
   Runs the plugin tests.
 
-## Contributing to Kibana reports for Open Distro
+## Contributing to OpenSearch Dashboards reports for Open Distro
 
 We welcome you to get involved in development, documentation, testing the kibana reports plugin. See our [CONTRIBUTING.md](./CONTRIBUTING.md) and join in.
 
-Since this is a Kibana plugin, it can be useful to review the [Kibana contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md) alongside the documentation around [Kibana plugins](https://www.elastic.co/guide/en/kibana/master/kibana-plugins.html) and [plugin development](https://www.elastic.co/guide/en/kibana/master/plugin-development.html).
+Since this is a OpenSearch Dashboards plugin, it can be useful to review the [OpenSearch Dashboards contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md) alongside the documentation around [OpenSearch Dashboards plugins](https://www.elastic.co/guide/en/kibana/master/kibana-plugins.html) and [plugin development](https://www.elastic.co/guide/en/kibana/master/plugin-development.html).
 
 ## Code of Conduct
 

@@ -1,11 +1,11 @@
-## Chrome Binaries for Kibana Reports used by Puppeteer
+## Chrome Binaries for OpenSearch Dashboards Reports used by Puppeteer
 Headless Chrome for Linux and Mac are chrome binaries which are significantly smaller than the standard binaries shipped by Google and Puppeteer. 
 Chrome binary can be built from shell script build_headless_chrome.sh for Mac, Linux x64 and Linux arm64, 
 output of script is called headless_shell.
 
 ## Puppeteer's Chrome version
 
-Find the puppeteer version used in Kibana node_modules.json and get the associated chrome SHA to build from crrev.com and puppeteer repositories. Puppeteer 1.9 uses rev 674921 with commit sha as 312d84c8ce62810976feda0d3457108a6dfff9e6)
+Find the puppeteer version used in OpenSearch Dashboards node_modules.json and get the associated chrome SHA to build from crrev.com and puppeteer repositories. Puppeteer 1.9 uses rev 674921 with commit sha as 312d84c8ce62810976feda0d3457108a6dfff9e6)
 
 ## headless Chrome folder structure
 -chromium

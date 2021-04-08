@@ -1,4 +1,4 @@
-# Kibana Reporting
+# OpenSearch Dashboards Reporting
 ### You don’t have to go a dashboard, we will bring dashboards to you.
 
 ---
@@ -7,7 +7,7 @@
 
 ### 1.1 Motivation
 
-The ability to generate reports from dashboards and views on Kibana is a highly requested feature .
+The ability to generate reports from dashboards and views on OpenSearch Dashboards is a highly requested feature .
 This plugin will introduce the ability to generate reports, as well as enable the user to customize them, receive them on a schedule or monitor, and have the reports received on external channels such as email, Slack and Chime. 
 
 - https://discuss.opendistrocommunity.dev/t/reporting-module/153
@@ -15,7 +15,7 @@ This plugin will introduce the ability to generate reports, as well as enable th
 
 ### 1.2 Introduction
 
-Kibana Reports for Open Distro allows ‘Report Owner’ (engineers, including but not limited to developers, DevOps, IT Engineer, and IT admin) export and share reports from Kibana dashboards, saved search, alerts and visualizations. It helps automate the process of scheduling reports on an on-demand or a periodical basis (on cron schedules as well). Further, it also automates the process of exporting and sharing reports triggered for various alerts. The feature is present in the Dashboard, Discover, and Visualization tabs. Scheduled reports can be sent to (shared with) self or various stakeholders within the organization such as, including but not limited to, executives, managers, engineers (developers, DevOps, IT Engineer) in the form of pdf, hyperlinks, csv, excel via various channels such as email, slack, Amazon Chime. However, in order to export, schedule and share reports, report owners should have the necessary permissions as defined under Roles and Privileges.
+OpenSearch Dashboards Reports for Open Distro allows ‘Report Owner’ (engineers, including but not limited to developers, DevOps, IT Engineer, and IT admin) export and share reports from OpenSearch Dashboards dashboards, saved search, alerts and visualizations. It helps automate the process of scheduling reports on an on-demand or a periodical basis (on cron schedules as well). Further, it also automates the process of exporting and sharing reports triggered for various alerts. The feature is present in the Dashboard, Discover, and Visualization tabs. Scheduled reports can be sent to (shared with) self or various stakeholders within the organization such as, including but not limited to, executives, managers, engineers (developers, DevOps, IT Engineer) in the form of pdf, hyperlinks, csv, excel via various channels such as email, slack, Amazon Chime. However, in order to export, schedule and share reports, report owners should have the necessary permissions as defined under Roles and Privileges.
 
 
 ## 2. Requirements
@@ -27,7 +27,7 @@ Kibana Reports for Open Distro allows ‘Report Owner’ (engineers, including b
 1. As a user, when I click ‘Share > As a report’, the system should allow me to share the dashboard or saved search or visualizations that I am currently working on as a report.
 
     Here is the matrix showing various panels and what kind of export option should be available.        
-    Kibana panel | PDF           | PNG           |Hyperlink (HTML) | CSV/Excel
+    OpenSearch Dashboards panel | PDF           | PNG           |Hyperlink (HTML) | CSV/Excel
     ------------ | ------------- | ------------- | ------------- | -------------
     Dashboards | Yes | Yes | Yes | No
     Visualizations | Yes |  Yes |Yes | No
@@ -80,8 +80,8 @@ Kibana Reports for Open Distro allows ‘Report Owner’ (engineers, including b
 1. As a user, when I select `Alert`, I should be able to select the alert a report gets triggered from.
 
 ##### Delivery settings
-1. As a user, I should be able to deliver a report to Kibana and/or Email recepients.
-1. As a user, when I set Kibana as a delivery channel, I should be able to select which Kibana users the report gets delivered to.
+1. As a user, I should be able to deliver a report to OpenSearch Dashboards and/or Email recepients.
+1. As a user, when I set OpenSearch Dashboards as a delivery channel, I should be able to select which OpenSearch Dashboards users the report gets delivered to.
 1. As a user, when I set email as a delivery channel, I should be able to set recepients, email subject, and email body.
 1. As a user, I should be able to insert a file URL refecence to the email body.
 1. As a user, I should be able to insert the report source URL reference to the email body.
@@ -117,14 +117,14 @@ Kibana Reports for Open Distro allows ‘Report Owner’ (engineers, including b
 1. As a report owner, I should be able to share or archive a report.
     1. As report owner, I should be able to add new email recepients, and new kibana recepients to an existing report.
     1. As a report owner, I sholud not be able to remove existing email or kibana recepients from an existing report.
-    1. As a report owner, I should receive a Kibana toast notification when a report has been delivered to new recepients.
+    1. As a report owner, I should receive a OpenSearch Dashboards toast notification when a report has been delivered to new recepients.
     1. As a report recepient, I should not get new notifications or emails when additional users have been added to an existing report.
 1. As a report recepient, I can only archive a report.
 
 
 
 ### Functional
-* The user should be able to create/modify reports both through the Kibana UI or programmatically through APIs.
+* The user should be able to create/modify reports both through the OpenSearch Dashboards UI or programmatically through APIs.
 * Ability to schedule/trigger reports periodically (a cron based schedule) or at a given frequency continuously or within certain time range.
 * Ability on instantly create downloadable reports or deliver scheduled reports via external channels.
 * Ability to enable/disable report generation
@@ -146,7 +146,7 @@ From implementation point of view need to answer/solve four problems:
 
 We will provide user to generate two kind of reports :
 
-1. Based on Kibana dashboards **TODO**: Investigate how dashboards are defined
+1. Based on OpenSearch Dashboards dashboards **TODO**: Investigate how dashboards are defined
 2. Based on queries 
     1. SQL queries
     2. Elasticsearch DSL (Out of Scope) - Though this will be a great feature to have, we will have to scope down what kind of Elasticsearch queries can be supported (depending on whether how easily it can be CSV formatted) and re-implement the CSV formatting logic from Elasticsearch JSON response.
@@ -208,7 +208,7 @@ Based on the above technical requirements, we propose the following architecture
 
 ### 3.5.1 Architecture - 1 
 
-In this architecture , the Kibana backend plugin will handle both the report generation logic as well as scheduling mechanism.
+In this architecture , the OpenSearch Dashboards backend plugin will handle both the report generation logic as well as scheduling mechanism.
 
 ![Architecture 1](img/arch_1.png)
 
@@ -219,12 +219,12 @@ In this architecture , the Kibana backend plugin will handle both the report gen
 
 **Cons:**
 
-* Kibana is not distributed by nature. In the absence of leader election capabilities where multiple Kibana instances are running with reporting plugin, the same report will be generated per instance of Kibana.
+* OpenSearch Dashboards is not distributed by nature. In the absence of leader election capabilities where multiple OpenSearch Dashboards instances are running with reporting plugin, the same report will be generated per instance of OpenSearch Dashboards.
 * Effort to create integration scheduling module.
 
 ### 3.5.2  Architecture - 2
 
-In this architecture , the Kibana backend plugin will handle only the report generation logic and the scheduling functionality will be delegated to a separate Elasticsearch plugin
+In this architecture , the OpenSearch Dashboards backend plugin will handle only the report generation logic and the scheduling functionality will be delegated to a separate Elasticsearch plugin
 
 ![Architecture 2](img/arch_2.png)
 
@@ -232,7 +232,7 @@ In this architecture , the Kibana backend plugin will handle only the report gen
 **Pros:**
 
 * No need to reinvent the integrated scheduling mechanism, since we can leverage ODFE Job scheduler plugin.
-* Extending job scheduler plugin will allow us to make sure that only one instance of Kibana handles report generation and thus eliminate coordination among Kibana instances.
+* Extending job scheduler plugin will allow us to make sure that only one instance of OpenSearch Dashboards handles report generation and thus eliminate coordination among OpenSearch Dashboards instances.
 
 **Cons:**
 
@@ -241,15 +241,15 @@ In this architecture , the Kibana backend plugin will handle only the report gen
 
 ### 3.5.3  Architecture - 3
 
-In this architecture , the whole report generation and scheduling functionality will implemented as Elasticsearch plugin. Kibana backend will act as a proxy between Kibana UI and ES plugin.
+In this architecture , the whole report generation and scheduling functionality will implemented as Elasticsearch plugin. OpenSearch Dashboards backend will act as a proxy between OpenSearch Dashboards UI and ES plugin.
 
 ![Architecture 3](img/arch_3.png)
 
 **Pros:**
 
 
-* Since Kibana server plugin will act as proxy, the Kibana APIs will have chances of modification and in the future
-* Reduced interprocess communication between Kibana server and Elasticsearch, thus reduced latency and minimal coordination errors.
+* Since OpenSearch Dashboards server plugin will act as proxy, the OpenSearch Dashboards APIs will have chances of modification and in the future
+* Reduced interprocess communication between OpenSearch Dashboards server and Elasticsearch, thus reduced latency and minimal coordination errors.
 
 **Cons:**
 
@@ -259,7 +259,7 @@ In this architecture , the whole report generation and scheduling functionality 
 
 ### **3.5.4 Decision:**
 
-Because of the limited distributed nature of Kibana sever and added effort to develop a stable scheduling mechanism as part of Kibana server plugin, we need  to eliminate option ***3.5.1. ***Though ***3.5.3*** would be an idle choice to go with, lack of core functionality (to generate PDFs) as Java/Kotlin binding prohibits to go with that approach. ***3.5.2 ***allows to reuse existing libraries and plugin extensions, and would be the choice of implementation.
+Because of the limited distributed nature of OpenSearch Dashboards sever and added effort to develop a stable scheduling mechanism as part of OpenSearch Dashboards server plugin, we need  to eliminate option ***3.5.1. ***Though ***3.5.3*** would be an idle choice to go with, lack of core functionality (to generate PDFs) as Java/Kotlin binding prohibits to go with that approach. ***3.5.2 ***allows to reuse existing libraries and plugin extensions, and would be the choice of implementation.
 
 
 ## 4. Detail Design
@@ -272,14 +272,14 @@ TODO: write-up
 
 TODO: Add index mappings . 
 
-### 4.2 Kibana Server APIs
+### 4.2 OpenSearch Dashboards Server APIs
 
-All the Kibana Server APIs will be exposed as HTTP(S) RESTFul APIs.
+All the OpenSearch Dashboards Server APIs will be exposed as HTTP(S) RESTFul APIs.
 
-API calls are stateless. Each request that you make happens in isolation from other calls and must include all of the necessary information for Kibana to fulfill the request. APIs may optionally take JSON formatted request body.
+API calls are stateless. Each request that you make happens in isolation from other calls and must include all of the necessary information for OpenSearch Dashboards to fulfill the request. APIs may optionally take JSON formatted request body.
 API requests return JSON output, which is a format that is machine-readable and works well for automation.
 
-List of existing [Kibana REST APIs](https://www.elastic.co/guide/en/kibana/master/using-api.html)
+List of existing [OpenSearch Dashboards REST APIs](https://www.elastic.co/guide/en/kibana/master/using-api.html)
 
 **(A) generateReport**
 
@@ -389,7 +389,7 @@ createDestination()
 **(G) listDestination**
 
 ```
-# useful API for use in Kibana UI to help resuse destinations (via dropdown)
+# useful API for use in OpenSearch Dashboards UI to help resuse destinations (via dropdown)
 listDestination()
 ```
 
