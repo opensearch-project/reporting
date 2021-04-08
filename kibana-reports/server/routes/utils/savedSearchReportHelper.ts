@@ -78,7 +78,7 @@ async function populateMetaData(
   // Get saved search info
   let resIndexPattern: any = {};
   const ssParams = {
-    index: '.kibana',
+    index: '.opensearch_dashboards',
     id: 'search:' + metaData.saved_search_id,
   };
   const ssInfos = await callCluster(client, 'get', ssParams, isScheduledTask);
@@ -99,7 +99,7 @@ async function populateMetaData(
         client,
         'get',
         {
-          index: '.kibana',
+          index: '.opensearch_dashboards',
           id: 'index-pattern:' + item.id,
         },
         isScheduledTask

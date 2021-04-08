@@ -43,21 +43,21 @@ export default function (router: IRouter) {
       let responseParams;
       if (request.params.reportSourceType === 'dashboard') {
         const params: RequestParams.Search = {
-          index: '.kibana',
+          index: '.opensearch_dashboards',
           q: 'type:dashboard',
           size: DEFAULT_MAX_SIZE,
         };
         responseParams = params;
       } else if (request.params.reportSourceType === 'visualization') {
         const params: RequestParams.Search = {
-          index: '.kibana',
+          index: '.opensearch_dashboards',
           q: 'type:visualization',
           size: DEFAULT_MAX_SIZE,
         };
         responseParams = params;
       } else if (request.params.reportSourceType === 'search') {
         const params: RequestParams.Search = {
-          index: '.kibana',
+          index: '.opensearch_dashboards',
           q: 'type:search',
           size: DEFAULT_MAX_SIZE,
         };

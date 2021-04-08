@@ -114,7 +114,7 @@ const validateSavedObject = async (
 
   const savedObjectId = `${getType(source)}:${getId(url)}`;
   const params: RequestParams.Exists = {
-    index: '.kibana',
+    index: '.opensearch_dashboards',
     id: savedObjectId,
   };
 
