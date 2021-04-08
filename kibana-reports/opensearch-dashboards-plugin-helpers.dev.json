@@ -3,7 +3,6 @@
     "package.json",
     "tsconfig.json",
     "yarn.lock",
-    "kibana.json",
     "common/**/*",
     "public/**/*",
     "server/**/*"

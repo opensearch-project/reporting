@@ -15,14 +15,14 @@
 
 import { ReportDefinitionSchemaType } from '../../model';
 import {
-  KibanaRequest,
+  OpenSearchDashboardsRequest,
   RequestHandlerContext,
   ILegacyScopedClusterClient,
 } from '../../../../../src/core/server';
 import { uiToBackendReportDefinition } from '../utils/converters/uiToBackend';
 
 export const createReportDefinition = async (
-  request: KibanaRequest,
+  request: OpenSearchDashboardsRequest,
   context: RequestHandlerContext,
   reportDefinition: ReportDefinitionSchemaType
 ) => {

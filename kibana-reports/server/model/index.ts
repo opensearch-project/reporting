@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-import { schema, TypeOf } from '@kbn/config-schema';
+import { schema, TypeOf } from '@osd/config-schema';
 import {
   isValidRelativeUrl,
   regexDuration,
@@ -122,7 +122,7 @@ export const scheduleSchema = schema.object({
   schedule_type: schema.oneOf([
     /*
     TODO: Future Date option will be added in the future.
-    Currently @kbn/config-schema has no support for more than 2 conditions, keep an eye on library update
+    Currently @osd/config-schema has no support for more than 2 conditions, keep an eye on library update
     */
     schema.literal(SCHEDULE_TYPE.recurring),
     schema.literal(SCHEDULE_TYPE.cron),
@@ -137,8 +137,8 @@ export const scheduleSchema = schema.object({
   enabled: schema.boolean(),
 });
 
-export const kibanaUserSchema = schema.object({
-  kibana_recipients: schema.arrayOf(schema.string()),
+export const opendistroDashboardsUserSchema = schema.object({
+  opendistro_dashboards_recipients: schema.arrayOf(schema.string()),
 });
 
 export const channelSchema = schema.object({
@@ -162,7 +162,7 @@ export const triggerSchema = schema.object({
   trigger_type: schema.oneOf([
     /*
       TODO: Alerting will be added in the future.
-      Currently @kbn/config-schema has no support for more than 2 conditions, keep an eye on library update
+      Currently @osd/config-schema has no support for more than 2 conditions, keep an eye on library update
     */
     schema.literal(TRIGGER_TYPE.schedule),
     schema.literal(TRIGGER_TYPE.onDemand),
@@ -183,7 +183,7 @@ export const deliverySchema = schema.object({
   delivery_params: schema.conditional(
     schema.siblingRef('delivery_type'),
     DELIVERY_TYPE.kibanaUser,
-    kibanaUserSchema,
+    opendistroDashboardsUserSchema,
     channelSchema
   ),
 });
@@ -254,7 +254,7 @@ export type ReportSchemaType = TypeOf<typeof reportSchema>;
 export type DataReportSchemaType = TypeOf<typeof dataReportSchema>;
 export type VisualReportSchemaType = TypeOf<typeof visualReportSchema>;
 export type ChannelSchemaType = TypeOf<typeof channelSchema>;
-export type KibanaUserSchemaType = TypeOf<typeof kibanaUserSchema>;
+export type KibanaUserSchemaType = TypeOf<typeof opendistroDashboardsUserSchema>;
 export type DeliverySchemaType = TypeOf<typeof deliverySchema>;
 export type TriggerSchemaType = TypeOf<typeof triggerSchema>;
 export type ScheduleSchemaType = TypeOf<typeof scheduleSchema>;

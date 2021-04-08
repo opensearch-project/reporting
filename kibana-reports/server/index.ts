@@ -13,11 +13,11 @@
  * permissions and limitations under the License.
  */
 
-import { OpendistroKibanaReportsPlugin } from './plugin';
 import {
-  PluginInitializerContext,
   HttpServerInfo,
+  PluginInitializerContext,
 } from '../../../src/core/server';
+import { OpendistroReportsOpenSearchDashboardsPlugin } from './plugin';
 
 export type AccessInfoType = {
   basePath: string;
@@ -28,10 +28,10 @@ export type AccessInfoType = {
 //  as well as, Kibana Platform `plugin()` initializer.
 
 export function plugin(initializerContext: PluginInitializerContext) {
-  return new OpendistroKibanaReportsPlugin(initializerContext);
+  return new OpendistroReportsOpenSearchDashboardsPlugin(initializerContext);
 }
 
 export {
-  OpendistroKibanaReportsPluginSetup,
-  OpendistroKibanaReportsPluginStart,
+  OpendistroReportsOpenSearchDashboardsPluginSetup,
+  OpendistroReportsOpenSearchDashboardsPluginStart,
 } from './types';

@@ -14,7 +14,7 @@
  */
 
 import {
-  IKibanaResponse,
+  IOpenSearchDashboardsResponse,
   IRouter,
   ResponseError,
 } from '../../../../src/core/server';
@@ -32,7 +32,7 @@ export default function (router: IRouter) {
       context,
       request,
       response
-    ): Promise<IKibanaResponse<any | ResponseError>> => {
+    ): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
       //@ts-ignore
       const logger: Logger = context.reporting_plugin.logger;
       try {

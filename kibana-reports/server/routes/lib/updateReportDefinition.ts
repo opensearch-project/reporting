@@ -16,13 +16,13 @@
 import { ReportDefinitionSchemaType } from '../../model';
 import {
   ILegacyScopedClusterClient,
-  KibanaRequest,
+  OpenSearchDashboardsRequest,
   RequestHandlerContext,
 } from '../../../../../src/core/server';
 import { uiToBackendReportDefinition } from '../utils/converters/uiToBackend';
 
 export const updateReportDefinition = async (
-  request: KibanaRequest,
+  request: OpenSearchDashboardsRequest,
   context: RequestHandlerContext,
   reportDefinition: ReportDefinitionSchemaType
 ) => {

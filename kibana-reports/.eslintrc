@@ -3,7 +3,7 @@ extends: '@elastic/kibana'
 
 settings:
   import/resolver:
-    '@kbn/eslint-import-resolver-kibana':
+    '@osd/eslint-import-resolver-kibana':
       rootPackageName: 'opendistro-kibana-reports'
       pluginPaths:
         - .

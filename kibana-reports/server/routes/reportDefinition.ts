@@ -13,10 +13,10 @@
  * permissions and limitations under the License.
  */
 
-import { schema } from '@kbn/config-schema';
+import { schema } from '@osd/config-schema';
 import {
   IRouter,
-  IKibanaResponse,
+  IOpenSearchDashboardsResponse,
   ResponseError,
   ILegacyScopedClusterClient,
 } from '../../../../src/core/server';
@@ -47,7 +47,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       context,
       request,
       response
-    ): Promise<IKibanaResponse<any | ResponseError>> => {
+    ): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
       addToMetric('report_definition', 'create', 'count');
       let reportDefinition = request.body;
       //@ts-ignore
@@ -57,7 +57,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         reportDefinition.report_params.core_params.origin =
           request.headers.origin;
         reportDefinition = await validateReportDefinition(
-          context.core.elasticsearch.legacy.client,
+          context.core.opensearch.legacy.client,
           reportDefinition,
           basePath
         );
@@ -106,7 +106,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       context,
       request,
       response
-    ): Promise<IKibanaResponse<any | ResponseError>> => {
+    ): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
       addToMetric('report_definition', 'update', 'count');
       let reportDefinition = request.body;
       //@ts-ignore
@@ -116,7 +116,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         reportDefinition.report_params.core_params.origin =
           request.headers.origin;
         reportDefinition = await validateReportDefinition(
-          context.core.elasticsearch.legacy.client,
+          context.core.opensearch.legacy.client,
           reportDefinition,
           basePath
         );
@@ -164,7 +164,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       context,
       request,
       response
-    ): Promise<IKibanaResponse<any | ResponseError>> => {
+    ): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
       addToMetric('report_definition', 'list', 'count');
       const { fromIndex, maxItems } = request.query as {
         fromIndex: number;
@@ -220,7 +220,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       context,
       request,
       response
-    ): Promise<IKibanaResponse<any | ResponseError>> => {
+    ): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
       addToMetric('report_definition', 'info', 'count');
       try {
         // @ts-ignore
@@ -268,7 +268,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       context,
       request,
       response
-    ): Promise<IKibanaResponse<any | ResponseError>> => {
+    ): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
       addToMetric('report_definition', 'delete', 'count');
       try {
         // @ts-ignore

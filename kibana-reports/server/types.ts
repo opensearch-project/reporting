@@ -14,6 +14,6 @@
  */
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface OpendistroKibanaReportsPluginSetup {}
+export interface OpendistroReportsOpenSearchDashboardsPluginSetup {}
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface OpendistroKibanaReportsPluginStart {}
+export interface OpendistroReportsOpenSearchDashboardsPluginStart {}

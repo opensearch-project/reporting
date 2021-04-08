@@ -14,7 +14,7 @@
  */
 
 import React from 'react';
-import { FormattedMessage, I18nProvider } from '@kbn/i18n/react';
+import { FormattedMessage, I18nProvider } from '@osd/i18n/react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
 import {
@@ -45,7 +45,7 @@ export interface CoreInterface {
   setBreadcrumbs: (newBreadcrumbs: ChromeBreadcrumb[]) => void;
 }
 
-interface OpendistroKibanaReportsAppDeps {
+interface OpendistroReportsOpenSearchDashboardsAppDeps {
   basename: string;
   notifications: CoreStart['notifications'];
   http: CoreStart['http'];
@@ -59,13 +59,13 @@ const styles: CSS.Properties = {
   maxWidth: '1600px',
 };
 
-export const OpendistroKibanaReportsApp = ({
+export const OpendistroReportsOpenSearchDashboardsApp = ({
   basename,
   notifications,
   http,
   navigation,
   chrome,
-}: OpendistroKibanaReportsAppDeps) => {
+}: OpendistroReportsOpenSearchDashboardsAppDeps) => {
   // Render the application DOM.
   return (
     <Router basename={'/' + basename}>

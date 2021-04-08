@@ -1,16 +1,16 @@
 {
   "name": "opendistro_kibana_reports",
-  "version": "1.13.2.0",
-  "description": "Kibana Reporting Plugin",
+  "version": "1.15.0.0",
+  "description": "OpenSearch Dashboards Reporting Plugin",
   "license": "Apache-2.0",
   "main": "index.ts",
-  "kibana": {
+  "opensearchDashboards": {
     "version": "7.10.2",
     "templateVersion": "1.0.0"
   },
   "scripts": {
-    "kbn": "node ../../scripts/kbn",
-    "es": "node ../../scripts/es",
+    "osd": "node ../../scripts/osd",
+    "opensearch": "node ../../scripts/opensearch",
     "lint": "eslint .",
     "start": "yarn plugin_helpers start",
     "build": "yarn plugin_helpers build",

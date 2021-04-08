@@ -15,13 +15,13 @@
 
 import {
   IRouter,
-  IKibanaResponse,
+  IOpenSearchDashboardsResponse,
   ResponseError,
 } from '../../../../src/core/server';
 import { API_PREFIX } from '../../common';
 import { checkErrorType, parseEsErrorResponse } from './utils/helpers';
 import { RequestParams } from '@elastic/elasticsearch';
-import { schema } from '@kbn/config-schema';
+import { schema } from '@osd/config-schema';
 import { DEFAULT_MAX_SIZE } from './utils/constants';
 import { addToMetric } from './utils/metricHelper';
 
@@ -39,7 +39,7 @@ export default function (router: IRouter) {
       context,
       request,
       response
-    ): Promise<IKibanaResponse<any | ResponseError>> => {
+    ): Promise<IOpenSearchDashboardsResponse<any | ResponseError>> => {
       let responseParams;
       if (request.params.reportSourceType === 'dashboard') {
         const params: RequestParams.Search = {
@@ -64,7 +64,7 @@ export default function (router: IRouter) {
         responseParams = params;
       }
       try {
-        const esResp = await context.core.elasticsearch.legacy.client.callAsCurrentUser(
+        const esResp = await context.core.opensearch.legacy.client.callAsCurrentUser(
           'search',
           responseParams
         );

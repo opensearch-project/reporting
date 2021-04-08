@@ -20,20 +20,20 @@ import {
   Plugin,
 } from '../../../src/core/public';
 import {
-  OpendistroKibanaReportsPluginSetup,
-  OpendistroKibanaReportsPluginStart,
+  OpendistroReportsOpenSearchDashboardsPluginSetup,
+  OpendistroReportsOpenSearchDashboardsPluginStart,
   AppPluginStartDependencies,
 } from './types';
 import './components/context_menu/context_menu';
 import { PLUGIN_NAME } from '../common';
 
-export class OpendistroKibanaReportsPlugin
+export class OpendistroReportsOpenSearchDashboardsPlugin
   implements
     Plugin<
-      OpendistroKibanaReportsPluginSetup,
-      OpendistroKibanaReportsPluginStart
+      OpendistroReportsOpenSearchDashboardsPluginSetup,
+      OpendistroReportsOpenSearchDashboardsPluginStart
     > {
-  public setup(core: CoreSetup): OpendistroKibanaReportsPluginSetup {
+  public setup(core: CoreSetup): OpendistroReportsOpenSearchDashboardsPluginSetup {
     // Register an application into the side navigation menu
     core.application.register({
       id: PLUGIN_NAME,
@@ -62,7 +62,7 @@ export class OpendistroKibanaReportsPlugin
     return {};
   }
 
-  public start(core: CoreStart): OpendistroKibanaReportsPluginStart {
+  public start(core: CoreStart): OpendistroReportsOpenSearchDashboardsPluginStart {
     return {};
   }
 

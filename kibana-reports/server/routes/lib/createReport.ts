@@ -22,7 +22,7 @@ import {
 
 import {
   ILegacyScopedClusterClient,
-  KibanaRequest,
+  OpenSearchDashboardsRequest,
   Logger,
   RequestHandlerContext,
 } from '../../../../../src/core/server';
@@ -38,7 +38,7 @@ import { SemaphoreInterface } from 'async-mutex';
 import { AccessInfoType } from 'server';
 
 export const createReport = async (
-  request: KibanaRequest,
+  request: OpenSearchDashboardsRequest,
   context: RequestHandlerContext,
   report: ReportSchemaType,
   accessInfo: AccessInfoType,
@@ -57,7 +57,7 @@ export const createReport = async (
   const esReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.esReportsClient.asScoped(
     request
   );
-  const esClient = context.core.elasticsearch.legacy.client;
+  const esClient = context.core.opensearch.legacy.client;
   // @ts-ignore
   const timezone = request.query.timezone;
   const {

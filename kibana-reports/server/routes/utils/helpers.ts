@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-import { KibanaResponseFactory } from '../../../../../src/core/server';
+import { OpenSearchDashboardsResponseFactory } from '../../../../../src/core/server';
 import { v1 as uuidv1 } from 'uuid';
 import {
   ILegacyClusterClient,
@@ -44,7 +44,7 @@ export function parseEsErrorResponse(error: any) {
   return error.message;
 }
 
-export function errorResponse(response: KibanaResponseFactory, error: any) {
+export function errorResponse(response: OpenSearchDashboardsResponseFactory, error: any) {
   return response.custom({
     statusCode: error.statusCode || 500,
     body: parseEsErrorResponse(error),

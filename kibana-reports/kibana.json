@@ -1,9 +1,0 @@
-{
-  "id": "opendistroReportsKibana",
-  "version": "1.13.2.0",
-  "kibanaVersion": "7.10.2",
-  "requiredPlugins": ["navigation", "data"],
-  "optionalPlugins": ["share"],
-  "server": true,
-  "ui": true
-}
