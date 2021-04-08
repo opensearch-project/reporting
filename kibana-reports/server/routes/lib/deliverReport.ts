@@ -53,8 +53,8 @@ export const deliverReport = async (
     const { htmlDescription } = deliveryParams as ChannelSchemaType;
     const originalQueryUrl = origin + queryUrl;
     /**
-     * have to manually compose the url because the Kibana url for AES is.../_plugin/kibana/app/opendistro_kibana_reports#/report_details/${reportId}
-     * while default Kibana is just .../app/opendistro_kibana_reports#/report_details/${reportId}
+     * have to manually compose the url because the OpenSearch Dashboards url for AES is.../_plugin/kibana/app/opendistro_kibana_reports#/report_details/${reportId}
+     * while default OpenSearch Dashboards is just .../app/opendistro_kibana_reports#/report_details/${reportId}
      */
     const reportDetailUrl = `${originalQueryUrl.replace(
       /\/app\/.*$/i,

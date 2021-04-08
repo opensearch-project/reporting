@@ -137,8 +137,8 @@ export const scheduleSchema = schema.object({
   enabled: schema.boolean(),
 });
 
-export const opendistroDashboardsUserSchema = schema.object({
-  opendistro_dashboards_recipients: schema.arrayOf(schema.string()),
+export const opensearchDashboardsUserSchema = schema.object({
+  opensearch_dashboards_recipients: schema.arrayOf(schema.string()),
 });
 
 export const channelSchema = schema.object({
@@ -183,7 +183,7 @@ export const deliverySchema = schema.object({
   delivery_params: schema.conditional(
     schema.siblingRef('delivery_type'),
     DELIVERY_TYPE.kibanaUser,
-    opendistroDashboardsUserSchema,
+    opensearchDashboardsUserSchema,
     channelSchema
   ),
 });
@@ -254,7 +254,7 @@ export type ReportSchemaType = TypeOf<typeof reportSchema>;
 export type DataReportSchemaType = TypeOf<typeof dataReportSchema>;
 export type VisualReportSchemaType = TypeOf<typeof visualReportSchema>;
 export type ChannelSchemaType = TypeOf<typeof channelSchema>;
-export type KibanaUserSchemaType = TypeOf<typeof opendistroDashboardsUserSchema>;
+export type OpenSearchDashboardsUserSchemaType = TypeOf<typeof opensearchDashboardsUserSchema>;
 export type DeliverySchemaType = TypeOf<typeof deliverySchema>;
 export type TriggerSchemaType = TypeOf<typeof triggerSchema>;
 export type ScheduleSchemaType = TypeOf<typeof scheduleSchema>;

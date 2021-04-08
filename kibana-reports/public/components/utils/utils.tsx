@@ -22,7 +22,7 @@ export const permissionsMissingToast = (action: string) => {
     iconType: 'alert',
     id: 'permissionsMissingErrorToast' + action.replace(' ', ''),
     text: (
-      <p>Insufficient permissions. Reach out to your Kibana administrator.</p>
+      <p>Insufficient permissions. Reach out to your OpenSearch Dashboards administrator.</p>
     ),
   };
 };

@@ -37,7 +37,7 @@ const emptyMessageReportDefinitions = (
             href="https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/reporting/"
             target="_blank"
           >
-            Get started with Kibana reporting <EuiIcon type="popout" />
+            Get started with OpenSearch Dashboards reporting <EuiIcon type="popout" />
           </EuiLink>
         </EuiText>
       </div>

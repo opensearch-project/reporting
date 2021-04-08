@@ -73,15 +73,15 @@ export class OpendistroReportsOpenSearchDashboardsPlugin
     };
 
     const router = core.http.createRouter();
-    // Deprecated API. Switch to the new elasticsearch client as soon as https://github.com/elastic/kibana/issues/35508 done.
-    const esReportsClient: ILegacyClusterClient = core.elasticsearch.legacy.createClient(
+    // Deprecated API. Switch to the new opensearch client as soon as https://github.com/elastic/kibana/issues/35508 done.
+    const esReportsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
       'es_reports',
       {
         plugins: [esReportsPlugin],
       }
     );
 
-    const notificationClient: ILegacyClusterClient = core.elasticsearch.legacy.createClient(
+    const notificationClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
       'notification',
       {
         plugins: [notificationPlugin],
@@ -109,20 +109,20 @@ export class OpendistroReportsOpenSearchDashboardsPlugin
 
   public start(core: CoreStart) {
     this.logger.debug('opendistro_kibana_reports: Started');
-    const esReportsClient: ILegacyClusterClient = core.elasticsearch.legacy.createClient(
+    const esReportsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
       'es_reports',
       {
         plugins: [esReportsPlugin],
       }
     );
 
-    const notificationClient: ILegacyClusterClient = core.elasticsearch.legacy.createClient(
+    const notificationClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
       'notification',
       {
         plugins: [notificationPlugin],
       }
     );
-    const esClient: ILegacyClusterClient = core.elasticsearch.legacy.client;
+    const esClient: ILegacyClusterClient = core.opensearch.legacy.client;
     /*
     setIntervalAsync provides the same familiar interface as built-in setInterval for asynchronous functions,
     while preventing multiple executions from overlapping in time.

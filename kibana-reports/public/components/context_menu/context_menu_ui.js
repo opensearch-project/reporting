@@ -216,7 +216,7 @@ export const permissionsMissingOnGeneration = () => {
     </svg>
   </button>
   <div class="euiText euiText--small euiToastBody">
-    <p>Insufficient permissions. Reach out to your Kibana administrator.</p>
+    <p>Insufficient permissions. Reach out to your OpenSearch Dashboards administrator.</p>
   </div>
   </div>
   `;

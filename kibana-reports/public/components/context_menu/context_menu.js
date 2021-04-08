@@ -308,7 +308,7 @@ $(window).one('hashchange', function (e) {
   locationHashChanged();
 });
 /**
- * for navigating to tabs from Kibana sidebar, it uses history.pushState, which doesn't trigger onHashchange.
+ * for navigating to tabs from OpenSearch Dashboards sidebar, it uses history.pushState, which doesn't trigger onHashchange.
  * https://stackoverflow.com/questions/4570093/how-to-get-notified-about-changes-of-the-history-via-history-pushstate/4585031
  */
 (function (history) {

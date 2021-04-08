@@ -18,7 +18,7 @@ import { EuiComboBox, EuiFormRow } from '@elastic/eui';
 import { useEffect } from 'react';
 import { ReportDeliveryProps } from './delivery';
 
-const KibanaUserDelivery = (props: ReportDeliveryProps) => {
+const OpenSearchDashboardsUserDelivery = (props: ReportDeliveryProps) => {
   const {
     edit,
     editDefinitionId,
@@ -67,8 +67,8 @@ const KibanaUserDelivery = (props: ReportDeliveryProps) => {
     if (deliveryParams.kibana_recipients) {
       reportDefinitionRequest.delivery.delivery_params = {
         kibana_recipients: deliveryParams.kibana_recipients.map(
-          (kibanaRecipient) =>
-            onCreateDeliveryRecipientOption(kibanaRecipient, selectedOptions)
+          (opensearchDashboardsRecipient) =>
+            onCreateDeliveryRecipientOption(opensearchDashboardsRecipient, selectedOptions)
         ),
       };
     } else {
@@ -96,7 +96,7 @@ const KibanaUserDelivery = (props: ReportDeliveryProps) => {
   }, []);
 
   return (
-    <EuiFormRow label="Kibana recipients" helpText="Select or add users">
+    <EuiFormRow label="OpenSearch Dashboards recipients" helpText="Select or add users">
       <EuiComboBox
         placeholder="Select or create options"
         options={options}
@@ -110,4 +110,4 @@ const KibanaUserDelivery = (props: ReportDeliveryProps) => {
   );
 };
 
-export { KibanaUserDelivery };
+export { OpenSearchDashboardsUserDelivery };

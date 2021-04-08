@@ -1222,7 +1222,7 @@ exports[`<EmailDelivery /> panel render email edit component 1`] = `
 </div>
 `;
 
-exports[`<EmailDelivery /> panel test render Kibana recipient 1`] = `
+exports[`<EmailDelivery /> panel test render OpenSearch Dashboards recipient 1`] = `
 <div>
   <div
     class="euiFormRow"

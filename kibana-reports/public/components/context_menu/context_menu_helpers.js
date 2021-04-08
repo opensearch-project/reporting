@@ -73,12 +73,12 @@ export const contextMenuCreateReportDefinition = (baseURI) => {
 };
 
 export const displayLoadingModal = () => {
-  const kibanaBody = document.getElementById('kibana-body');
-  if (kibanaBody) {
+  const opensearchDashboardsBody = document.getElementById('opensearch-dashboards-body');
+  if (opensearchdashboardsBody) {
     try {
       const loadingModal = document.createElement('div');
       loadingModal.innerHTML = reportGenerationInProgressModal();
-      kibanaBody.appendChild(loadingModal.children[0]);
+      opensearchDashboardsBody.appendChild(loadingModal.children[0]);
     } catch (e) {
       console.log('error displaying loading modal:', e);
     }

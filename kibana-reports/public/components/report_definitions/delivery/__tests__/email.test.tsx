@@ -152,7 +152,7 @@ describe('<EmailDelivery /> panel', () => {
     await act(() => promise);
   });
 
-  test('test render Kibana recipient', async () => {
+  test('test render OpenSearch Dashboards recipient', async () => {
     const promise = Promise.resolve();
     let report_definition = {
       report_params: {

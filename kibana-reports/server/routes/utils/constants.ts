@@ -73,7 +73,7 @@ export enum SELECTOR {
 // https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-request-from-size.html
 export const DEFAULT_MAX_SIZE = 10000;
 
-export const DEFAULT_REPORT_HEADER = '<h1>Open Distro Kibana Reports</h1>';
+export const DEFAULT_REPORT_HEADER = '<h1>OpenSearch Dashboards Reports</h1>';
 
 export const SECURITY_CONSTANTS = {
   AUTH_COOKIE_NAME: 'security_authentication',

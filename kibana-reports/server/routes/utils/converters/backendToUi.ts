@@ -358,7 +358,7 @@ const getUiTriggerParams = (
 const getUiDeliveryParams = (
   delivery: DeliveryType | undefined
 ): DeliverySchemaType => {
-  const kibanaUserDeliveryParams = {
+  const opensearchDashboardsUserDeliveryParams = {
     delivery_type: DELIVERY_TYPE.kibanaUser,
     delivery_params: {
       kibana_recipients: [],
@@ -375,7 +375,7 @@ const getUiDeliveryParams = (
       },
     };
   } else {
-    params = kibanaUserDeliveryParams;
+    params = opensearchDashboardsUserDeliveryParams;
   }
   return params;
 };
