@@ -34,7 +34,7 @@ import './commands'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-// Switch the base URL of Elasticsearch when security enabled in the cluster
+// Switch the base URL of OpenSearch when security enabled in the cluster
 if (Cypress.env('security_enabled')) {
-    Cypress.env('elasticsearch', 'https://localhost:9200');
+    Cypress.env('opensearch', 'https://localhost:9200');
 }

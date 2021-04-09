@@ -42,7 +42,7 @@ const { ADMIN_AUTH } = require('./constants');
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
-  // Add the basic auth header when security enabled in the Elasticsearch cluster
+  // Add the basic auth header when security enabled in the OpenSearch cluster
   // https://github.com/cypress-io/cypress/issues/1288
   if (Cypress.env('security_enabled')) {
     if (options) {
@@ -61,7 +61,7 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
 // Be able to add default options to cy.request(), https://github.com/cypress-io/cypress/issues/726
 Cypress.Commands.overwrite('request', (originalFn, ...args) => {
   let defaults = {};
-  // Add the basic authentication header when security enabled in the Elasticsearch cluster
+  // Add the basic authentication header when security enabled in the OpenSearch cluster
   if (Cypress.env('security_enabled')) {
     defaults.auth = ADMIN_AUTH;
   }

@@ -7,8 +7,8 @@
   "supportFile": ".cypress/support/index.js",
   "videosFolder": ".cypress/videos",
   "env": {
-    "elasticsearch": "localhost:9200",
-    "kibana": "localhost:5601",
+    "opensearch": "localhost:9200",
+    "opensearchDashboards": "localhost:5601",
     "security_enabled": true
   }
 }
