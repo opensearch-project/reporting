@@ -25,7 +25,7 @@ export const reportTableMockResponse = [
         delivery: {
           delivery_type: 'Kibana user',
           delivery_params: {
-            kibana_recipients: [],
+            opensearch_dashboards_recipients: [],
           },
         },
         report_params: {
@@ -61,7 +61,7 @@ export const mockReportsTableItems = [
     reportName: 'Test report table response',
     type: 'On demand',
     sender: '—',
-    kibanaRecipients: '—',
+    opensearchDashboardsRecipients: '—',
     emailRecipients: '—',
     reportSource: 'Dashboard',
     timeCreated: undefined,
@@ -95,7 +95,7 @@ export const reportDefinitionsTableMockResponse = [
         },
         delivery: {
           delivery_type: 'Kibana user',
-          delivery_params: { kibana_recipients: [] },
+          delivery_params: { opensearch_dashboards_recipients: [] },
         },
         trigger: {
           trigger_type: 'Schedule',

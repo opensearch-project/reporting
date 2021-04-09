@@ -67,7 +67,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
   const defaultCreateDeliveryParams = () => {
     reportDefinitionRequest.delivery = {
       delivery_type: DELIVERY_TYPE_OPTIONS[0].id,
-      delivery_params: { kibana_recipients: [] },
+      delivery_params: { opensearch_dashboards_recipients: [] },
     };
   };
 

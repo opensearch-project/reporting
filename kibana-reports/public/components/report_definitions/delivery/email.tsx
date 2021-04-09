@@ -94,7 +94,7 @@ export const EmailDelivery = (props: ReportDeliveryProps) => {
     // if the original notification setting is OpenSearch Dashboards user
     if (delivery.delivery_type === DELIVERY_TYPE_OPTIONS[0].id) {
       defaultCreateDeliveryParams();
-      delete reportDefinitionRequest.delivery.delivery_params.kibana_recipients;
+      delete reportDefinitionRequest.delivery.delivery_params.opensearch_dashboards_recipients;
     } else {
       //@ts-ignore
       const emailParams: ChannelSchemaType = delivery.delivery_params;

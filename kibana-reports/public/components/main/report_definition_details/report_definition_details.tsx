@@ -348,8 +348,8 @@ export function ReportDefinitionDetails(props) {
         : `\u2014`,
       channel: deliveryType,
       status: reportDefinition.status,
-      kibanaRecipients: deliveryParams.kibana_recipients
-        ? deliveryParams.kibana_recipients
+      opensearchDashboardsRecipients: deliveryParams.opensearch_dashboards_recipients
+        ? deliveryParams.opensearch_dashboards_recipients
         : `\u2014`,
       emailRecipients:
         deliveryType === 'Channel' ? deliveryParams.recipients : `\u2014`,

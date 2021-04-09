@@ -84,7 +84,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         addToMetric('report', 'create', 'count', report);
         if (
           delivery.delivery_type === DELIVERY_TYPE.kibanaUser &&
-          delivery.delivery_params.kibana_recipients.length === 0
+          delivery.delivery_params.opensearch_dashboards_recipients.length === 0
         ) {
           return response.ok({
             body: {

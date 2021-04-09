@@ -50,7 +50,7 @@ const input = {
     delivery: {
       delivery_type: 'Kibana user',
       delivery_params: {
-        kibana_recipients: [],
+        opensearch_dashboards_recipients: [],
       },
     },
     trigger: {

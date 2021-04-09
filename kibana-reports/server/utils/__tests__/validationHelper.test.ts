@@ -40,7 +40,7 @@ const createReportDefinitionInput: ReportDefinitionSchemaType = {
   delivery: {
     delivery_type: DELIVERY_TYPE.kibanaUser,
     delivery_params: {
-      kibana_recipients: [],
+      opensearch_dashboards_recipients: [],
     },
   },
   trigger: {

@@ -31,7 +31,7 @@ const OpenSearchDashboardsUserDelivery = (props: ReportDeliveryProps) => {
 
   const onChangeDeliveryRecipients = (selectedOptions) => {
     setSelected(selectedOptions);
-    reportDefinitionRequest.delivery.delivery_params.kibana_recipients = selectedOptions.map(
+    reportDefinitionRequest.delivery.delivery_params.opensearch_dashboards_recipients = selectedOptions.map(
       (option) => option.label
     );
   };
@@ -64,18 +64,18 @@ const OpenSearchDashboardsUserDelivery = (props: ReportDeliveryProps) => {
   };
 
   const defaultEditDeliveryParams = (deliveryParams) => {
-    if (deliveryParams.kibana_recipients) {
+    if (deliveryParams.opensearch_dashboards_recipients) {
       reportDefinitionRequest.delivery.delivery_params = {
-        kibana_recipients: deliveryParams.kibana_recipients.map(
+        opensearch_dashboards_recipients: deliveryParams.opensearch_dashboards_recipients.map(
           (opensearchDashboardsRecipient) =>
             onCreateDeliveryRecipientOption(opensearchDashboardsRecipient, selectedOptions)
         ),
       };
     } else {
-      const kibanaUserParams = {
-        kibana_recipients: selectedOptions,
+      const opensearchDashboardsUserParams = {
+        opensearch_dashboards_recipients: selectedOptions,
       };
-      reportDefinitionRequest.delivery.delivery_params = kibanaUserParams;
+      reportDefinitionRequest.delivery.delivery_params = opensearchDashboardsUserParams;
     }
   };
 
@@ -90,7 +90,7 @@ const OpenSearchDashboardsUserDelivery = (props: ReportDeliveryProps) => {
         });
     } else {
       reportDefinitionRequest.delivery.delivery_params = {
-        kibana_recipients: selectedOptions,
+        opensearch_dashboards_recipients: selectedOptions,
       };
     }
   }, []);

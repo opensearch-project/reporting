@@ -57,7 +57,7 @@ export const addReportsTableContent = (data) => {
       reportName: reportParams.report_name,
       type: trigger.trigger_type,
       sender: `\u2014`,
-      kibanaRecipients: `\u2014`,
+      opensearchDashboardsRecipients: `\u2014`,
       emailRecipients: `\u2014`,
       reportSource: reportParams.report_source,
       //TODO: wrong name
