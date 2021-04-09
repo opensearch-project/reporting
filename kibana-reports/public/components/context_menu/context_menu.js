@@ -97,7 +97,7 @@ const generateInContextReport = async (
         },
       },
       delivery: {
-        delivery_type: 'Kibana user',
+        delivery_type: 'OpenSearch Dashboards user',
         delivery_params: {
           opensearch_dashboards_recipients: [],
         },

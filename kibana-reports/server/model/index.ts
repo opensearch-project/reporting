@@ -177,12 +177,12 @@ export const triggerSchema = schema.object({
 
 export const deliverySchema = schema.object({
   delivery_type: schema.oneOf([
-    schema.literal(DELIVERY_TYPE.kibanaUser),
+    schema.literal(DELIVERY_TYPE.opensearchDashboardsUser),
     schema.literal(DELIVERY_TYPE.channel),
   ]),
   delivery_params: schema.conditional(
     schema.siblingRef('delivery_type'),
-    DELIVERY_TYPE.kibanaUser,
+    DELIVERY_TYPE.opensearchDashboardsUser,
     opensearchDashboardsUserSchema,
     channelSchema
   ),

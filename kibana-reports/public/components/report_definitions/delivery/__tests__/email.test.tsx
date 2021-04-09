@@ -168,7 +168,7 @@ describe('<EmailDelivery /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: 'Kibana user',
+        delivery_type: 'OpenSearch Dashboards user',
       },
       trigger: {
         trigger_type: 'On demand',

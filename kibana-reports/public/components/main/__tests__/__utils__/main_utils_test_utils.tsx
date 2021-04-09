@@ -23,7 +23,7 @@ export const reportTableMockResponse = [
       query_url: 'test_query_url_value.com',
       report_definition: {
         delivery: {
-          delivery_type: 'Kibana user',
+          delivery_type: 'OpenSearch Dashboards user',
           delivery_params: {
             opensearch_dashboards_recipients: [],
           },
@@ -94,7 +94,7 @@ export const reportDefinitionsTableMockResponse = [
           },
         },
         delivery: {
-          delivery_type: 'Kibana user',
+          delivery_type: 'OpenSearch Dashboards user',
           delivery_params: { opensearch_dashboards_recipients: [] },
         },
         trigger: {

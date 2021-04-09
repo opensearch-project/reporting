@@ -103,7 +103,7 @@ const getBackendDelivery = (
   } = delivery;
   let res: any;
   switch (deliveryType) {
-    case DELIVERY_TYPE.kibanaUser:
+    case DELIVERY_TYPE.opensearchDashboardsUser:
       break;
 
     case DELIVERY_TYPE.channel:

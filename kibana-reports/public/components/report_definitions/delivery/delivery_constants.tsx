@@ -17,8 +17,8 @@ export const EMAIL_RECIPIENT_OPTIONS = [];
 
 export const DELIVERY_TYPE_OPTIONS = [
   {
-    id: 'Kibana user',
-    label: 'Kibana user',
+    id: 'OpenSearch Dashboards user',
+    label: 'OpenSearch Dashboards user',
   },
   {
     id: 'Channel',
