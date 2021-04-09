@@ -63,7 +63,7 @@ export class OpendistroReportsOpenSearchDashboardsPlugin
   }
 
   public setup(core: CoreSetup) {
-    this.logger.debug('opendistro_kibana_reports: Setup');
+    this.logger.debug('opendistro-reports-opensearch-dashboards: Setup');
 
     const config = core.http.getServerInfo();
     const serverBasePath = core.http.basePath.serverBasePath;
@@ -108,7 +108,7 @@ export class OpendistroReportsOpenSearchDashboardsPlugin
   }
 
   public start(core: CoreStart) {
-    this.logger.debug('opendistro_kibana_reports: Started');
+    this.logger.debug('opendistro-reports-opensearch-dashboards: Started');
     const esReportsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
       'es_reports',
       {

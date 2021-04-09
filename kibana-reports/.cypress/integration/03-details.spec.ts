@@ -15,10 +15,10 @@
 
 describe('Cypress', () => {
   it('Visit report definition details page', () => {
-    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro_kibana_reports#/`);
+    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro-reports-opensearch-dashboards#/`);
     cy.location('pathname', { timeout: 60000 }).should(
       'include',
-      '/opendistro_kibana_reports'
+      '/opendistro-reports-opensearch-dashboards'
     );
 
     cy.wait(12500);
@@ -43,10 +43,10 @@ describe('Cypress', () => {
   });
 
   it('Visit report details page', () => {
-    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro_kibana_reports#/`);
+    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro-reports-opensearch-dashboards#/`);
     cy.location('pathname', { timeout: 60000 }).should(
       'include',
-      '/opendistro_kibana_reports'
+      '/opendistro-reports-opensearch-dashboards'
     );
 
     cy.wait(12500);

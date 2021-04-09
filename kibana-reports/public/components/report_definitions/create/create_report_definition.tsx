@@ -275,7 +275,7 @@ export function CreateReport(props) {
             const reportDefinitionId = resp.scheduler_response.reportDefinitionId;
             generateReportFromDefinitionId(reportDefinitionId, httpClient);
           }
-          window.location.assign(`opendistro_kibana_reports#/create=success`);
+          window.location.assign(`opendistro-reports-opensearch-dashboards#/create=success`);
         })
         .catch((error) => {
           console.log('error in creating report definition: ' + error);
@@ -339,7 +339,7 @@ export function CreateReport(props) {
           <EuiFlexItem grow={false}>
             <EuiButtonEmpty
               onClick={() => {
-                window.location.assign(`opendistro_kibana_reports#/`);
+                window.location.assign(`opendistro-reports-opensearch-dashboards#/`);
               }}
             >
               Cancel

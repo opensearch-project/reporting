@@ -30,7 +30,7 @@ const getReportSourceURL = (baseURI) => {
 };
 
 export const contextMenuViewReports = () =>
-  window.location.assign('opendistro_kibana_reports#/');
+  window.location.assign('opendistro-reports-opensearch-dashboards#/');
 
 export const getTimeFieldsFromUrl = () => {
   const url = window.location.href;
@@ -68,7 +68,7 @@ export const contextMenuCreateReportDefinition = (baseURI) => {
   }
   reportSource += reportSourceId.toString();
   window.location.assign(
-    `opendistro_kibana_reports#/create?previous=${reportSource}?timeFrom=${timeRanges.time_from.toISOString()}?timeTo=${timeRanges.time_to.toISOString()}`
+    `opendistro-reports-opensearch-dashboards#/create?previous=${reportSource}?timeFrom=${timeRanges.time_from.toISOString()}?timeTo=${timeRanges.time_to.toISOString()}`
   );
 };
 

@@ -14,7 +14,7 @@
  */
 
 export const PLUGIN_ID = 'opendistroReportsOpenSearchDashboards';
-export const PLUGIN_NAME = 'opendistro_kibana_reports';
+export const PLUGIN_NAME = 'opendistro-reports-opensearch-dashboards';
 
 export const API_PREFIX = '/api/reporting';
 

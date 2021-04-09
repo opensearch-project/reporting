@@ -498,7 +498,7 @@ export function ReportDefinitionDetails(props) {
     httpClient
       .delete(`../api/reporting/reportDefinitions/${reportDefinitionId}`)
       .then(() => {
-        window.location.assign(`opendistro_kibana_reports#/delete=success`);
+        window.location.assign(`opendistro-reports-opensearch-dashboards#/delete=success`);
       })
       .catch((error) => {
         console.log('error when deleting report definition:', error);
@@ -593,7 +593,7 @@ export function ReportDefinitionDetails(props) {
                   fill={true}
                   onClick={() => {
                     window.location.assign(
-                      `opendistro_kibana_reports#/edit/${reportDefinitionId}`
+                      `opendistro-reports-opensearch-dashboards#/edit/${reportDefinitionId}`
                     );
                   }}
                   id={'editReportDefinitionButton'}

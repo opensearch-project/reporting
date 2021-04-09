@@ -38,14 +38,14 @@ export const getDashboardBaseUrlCreate = (
   }
   if (edit) {
     return baseUrl.replace(
-      `opendistro_kibana_reports#/edit/${editDefinitionId}`,
+      `opendistro-reports-opensearch-dashboards#/edit/${editDefinitionId}`,
       'dashboards#/view/'
     );
   } else if (fromInContext) {
     return baseUrl;
   }
   return baseUrl.replace(
-    'opendistro_kibana_reports#/create',
+    'opendistro-reports-opensearch-dashboards#/create',
     'dashboards#/view/'
   );
 };
@@ -63,14 +63,14 @@ export const getVisualizationBaseUrlCreate = (
   }
   if (edit) {
     return baseUrl.replace(
-      `opendistro_kibana_reports#/edit/${editDefinitionId}`,
+      `opendistro-reports-opensearch-dashboards#/edit/${editDefinitionId}`,
       'visualize#/edit/'
     );
   } else if (fromInContext) {
     return baseUrl;
   }
   return baseUrl.replace(
-    'opendistro_kibana_reports#/create',
+    'opendistro-reports-opensearch-dashboards#/create',
     'visualize#/edit/'
   );
 };
@@ -88,14 +88,14 @@ export const getSavedSearchBaseUrlCreate = (
   }
   if (edit) {
     return baseUrl.replace(
-      `opendistro_kibana_reports#/edit/${editDefinitionId}`,
+      `opendistro-reports-opensearch-dashboards#/edit/${editDefinitionId}`,
       'discover#/view/'
     );
   } else if (fromInContext) {
     return baseUrl;
   }
   return baseUrl.replace(
-    'opendistro_kibana_reports#/create',
+    'opendistro-reports-opensearch-dashboards#/create',
     'discover#/view/'
   );
 };

@@ -355,7 +355,7 @@ describe('<ReportSettings /> panel', () => {
       configurable: true,
       value: {
         href:
-          'http://localhost:5601/app/opendistro_kibana_reports#/create?previous=dashboard:abcdefghijklmnop12345?timeFrom=2020-10-26T20:52:56.382Z?timeTo=2020-10-27T20:52:56.384Z',
+          'http://localhost:5601/app/opendistro-reports-opensearch-dashboards#/create?previous=dashboard:abcdefghijklmnop12345?timeFrom=2020-10-26T20:52:56.382Z?timeTo=2020-10-27T20:52:56.384Z',
       },
     });
 
@@ -413,7 +413,7 @@ describe('<ReportSettings /> panel', () => {
       configurable: true,
       value: {
         href:
-          'http://localhost:5601/app/opendistro_kibana_reports#/create?previous=visualize:abcdefghijklmnop12345?timeFrom=2020-10-26T20:52:56.382Z?timeTo=2020-10-27T20:52:56.384Z',
+          'http://localhost:5601/app/opendistro-reports-opensearch-dashboards#/create?previous=visualize:abcdefghijklmnop12345?timeFrom=2020-10-26T20:52:56.382Z?timeTo=2020-10-27T20:52:56.384Z',
       },
     });
 
@@ -470,7 +470,7 @@ describe('<ReportSettings /> panel', () => {
     Object.defineProperty(window, 'location', {
       value: {
         href:
-          'http://localhost:5601/app/opendistro_kibana_reports#/create?previous=discover:abcdefghijklmnop12345?timeFrom=2020-10-26T20:52:56.382Z?timeTo=2020-10-27T20:52:56.384Z',
+          'http://localhost:5601/app/opendistro-reports-opensearch-dashboards#/create?previous=discover:abcdefghijklmnop12345?timeFrom=2020-10-26T20:52:56.382Z?timeTo=2020-10-27T20:52:56.384Z',
       },
     });
 

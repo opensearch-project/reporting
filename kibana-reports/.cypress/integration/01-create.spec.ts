@@ -15,28 +15,28 @@
 
 describe('Cypress', () => {
   it('Visits Reporting homepage', () => {
-    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro_kibana_reports#/`);
+    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro-reports-opensearch-dashboards#/`);
     cy.location('pathname', { timeout: 60000 }).should(
       'include',
-      '/opendistro_kibana_reports'
+      '/opendistro-reports-opensearch-dashboards'
     );
   });
 
   it('Visit Create page', () => {
-    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro_kibana_reports#/`);
+    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro-reports-opensearch-dashboards#/`);
     cy.location('pathname', { timeout: 60000 }).should(
       'include',
-      '/opendistro_kibana_reports'
+      '/opendistro-reports-opensearch-dashboards'
     );
     cy.wait(12500); // wait for the page to load
     cy.get('#createReportHomepageButton').click({ force: true });
   });
 
   it('Create a new on-demand report definition', () => {
-    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro_kibana_reports#/`);
+    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro-reports-opensearch-dashboards#/`);
     cy.location('pathname', { timeout: 60000 }).should(
       'include',
-      '/opendistro_kibana_reports'
+      '/opendistro-reports-opensearch-dashboards'
     );
     cy.wait(12500);
     cy.get('#createReportHomepageButton').click();
@@ -55,10 +55,10 @@ describe('Cypress', () => {
   });
 
   it('Create a new scheduled report definition', () => {
-    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro_kibana_reports#/`);
+    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro-reports-opensearch-dashboards#/`);
     cy.location('pathname', { timeout: 60000 }).should(
       'include',
-      '/opendistro_kibana_reports'
+      '/opendistro-reports-opensearch-dashboards'
     );
     cy.wait(12500);
     cy.get('#createReportHomepageButton').click();

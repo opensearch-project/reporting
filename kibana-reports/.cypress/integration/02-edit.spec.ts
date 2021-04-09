@@ -15,10 +15,10 @@
 
 describe('Cypress', () => {
   it('Visit edit page, update name and description', () => {
-    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro_kibana_reports#/`);
+    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro-reports-opensearch-dashboards#/`);
     cy.location('pathname', { timeout: 60000 }).should(
       'include',
-      '/opendistro_kibana_reports'
+      '/opendistro-reports-opensearch-dashboards'
     );
 
     cy.wait(12500);
@@ -43,10 +43,10 @@ describe('Cypress', () => {
   });
 
   it('Visit edit page, change report source and trigger', () => {
-    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro_kibana_reports#/`);
+    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro-reports-opensearch-dashboards#/`);
     cy.location('pathname', { timeout: 60000 }).should(
       'include',
-      '/opendistro_kibana_reports'
+      '/opendistro-reports-opensearch-dashboards'
     );
 
     cy.wait(12500);
@@ -67,10 +67,10 @@ describe('Cypress', () => {
   });
 
   it('Visit edit page, change report source back', () => {
-    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro_kibana_reports#/`);
+    cy.visit(`${Cypress.env('opensearchDashboards')}/app/opendistro-reports-opensearch-dashboards#/`);
     cy.location('pathname', { timeout: 60000 }).should(
       'include',
-      '/opendistro_kibana_reports'
+      '/opendistro-reports-opensearch-dashboards'
     );
 
     cy.wait(12500);
