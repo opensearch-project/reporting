@@ -86,7 +86,7 @@ async function populateMetaData(
   metaData.sorting = ssInfos._source.search.sort;
   metaData.type = ssInfos._source.type;
   metaData.filters =
-    ssInfos._source.search.kibanaSavedObjectMeta.searchSourceJSON;
+    ssInfos._source.search.opensearchDashboardsSavedObjectMeta.searchSourceJSON;
 
   // Get the list of selected columns in the saved search.Otherwise select all the fields under the _source
   await getSelectedFields(ssInfos._source.search.columns);

@@ -86,12 +86,12 @@ export const EmailDelivery = (props: ReportDeliveryProps) => {
     );
   };
 
-  // TODO: need better handling when we add full support for kibana user report delivery
+  // TODO: need better handling when we add full support for OpenSearch Dashboards user report delivery
   const optionalMessageLabel = `Add optional message (${selectedTab} mode)`;
 
   const defaultEditDeliveryParams = (delivery: DeliverySchemaType) => {
     //TODO: need better handle?
-    // if the original notification setting is kibana user
+    // if the original notification setting is OpenSearch Dashboards user
     if (delivery.delivery_type === DELIVERY_TYPE_OPTIONS[0].id) {
       defaultCreateDeliveryParams();
       delete reportDefinitionRequest.delivery.delivery_params.kibana_recipients;

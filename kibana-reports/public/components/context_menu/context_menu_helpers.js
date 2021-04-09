@@ -74,7 +74,7 @@ export const contextMenuCreateReportDefinition = (baseURI) => {
 
 export const displayLoadingModal = () => {
   const opensearchDashboardsBody = document.getElementById('opensearch-dashboards-body');
-  if (opensearchdashboardsBody) {
+  if (opensearchDashboardsBody) {
     try {
       const loadingModal = document.createElement('div');
       loadingModal.innerHTML = reportGenerationInProgressModal();

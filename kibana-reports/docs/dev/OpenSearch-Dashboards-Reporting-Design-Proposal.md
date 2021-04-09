@@ -94,7 +94,7 @@ OpenSearch Dashboards Reports for Open Distro allows ‘Report Owner’ (enginee
 1. As a user, when a report is created from a triggered definition condition, I should receive a notification on all configured delivery channels (Email, chime, slack, etc)
 1. As a user, when a new report is available I should see a notification status in the reporting icon in the sidebar
 1. As a user, when a report fails due to an error, I should see the report with a failed status on the `Reports` list.
-1. As a report definition owner, when a report fails to trigger due to an error, I should receive a kibana toast alert letting me know that the report failed.
+1. As a report definition owner, when a report fails to trigger due to an error, I should receive a OpenSearch Dashboards toast alert letting me know that the report failed.
 
 #### View report definition details
 1. As a user, I should be able to view all my saved definition settings.
@@ -115,8 +115,8 @@ OpenSearch Dashboards Reports for Open Distro allows ‘Report Owner’ (enginee
 
 ##### Sharing or archiving an existing report
 1. As a report owner, I should be able to share or archive a report.
-    1. As report owner, I should be able to add new email recepients, and new kibana recepients to an existing report.
-    1. As a report owner, I sholud not be able to remove existing email or kibana recepients from an existing report.
+    1. As report owner, I should be able to add new email recepients, and new OpenSearch Dashboards recepients to an existing report.
+    1. As a report owner, I sholud not be able to remove existing email or OpenSearch Dashboards recepients from an existing report.
     1. As a report owner, I should receive a OpenSearch Dashboards toast notification when a report has been delivered to new recepients.
     1. As a report recepient, I should not get new notifications or emails when additional users have been added to an existing report.
 1. As a report recepient, I can only archive a report.
@@ -168,7 +168,7 @@ We should expose the APIs to generate reports on-demand (instantly) and to sched
 
 ### 3.3 Where: (Notification)
 
-Storing the reports  **TODO: why we don’t want to store reports, kibana detached mode, ; kibana locally on each node**
+Storing the reports  **TODO: why we don’t want to store reports, OpenSearch Dashboards detached mode, ; OpenSearch Dashboards locally on each node**
 
 1. For instant on-demand reports, if requested through browser or any HTTP client the reports
 2. For reports triggered by non-browser clients (ODFE Report scheduler plugin , ODFE plugin), it will be mandatory to provide delivery channels such as email, Chime or Slack endpoints. 
@@ -450,16 +450,16 @@ POST _opendistro/_alerting/destinations
   "type": "custom_webhook",
   "name": "my-custom-destination",
   "custom_webhook": {
-    "path": "/api/kibana/generateReport/<report-id>", <-----
+    "path": "/api/opensearchDashboards/generateReport/<report-id>", <-----
     "header_params": {
       "Content-Type": "application/json"
     },
     "scheme": "HTTPS",
-    "port": <kibana-port>,
+    "port": <opensearch-dashboards-port>,
     "query_params": {
       "token": "R2x1UlN4ZHF8MXxxVFJpelJNVDgzdGNwXXXXXXXXX"
     },
-    "host": <kibana-host>
+    "host": <opensearch-dashboards-host>
   }
 }
 

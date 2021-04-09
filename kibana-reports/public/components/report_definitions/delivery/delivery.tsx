@@ -82,7 +82,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
           handleEmailCheckbox({ target: { checked: isEmailSelected } });
         });
     } else {
-      // By default it's set to deliver to kibana user
+      // By default it's set to deliver to OpenSearch Dashboards user
       defaultCreateDeliveryParams();
     }
   }, []);
