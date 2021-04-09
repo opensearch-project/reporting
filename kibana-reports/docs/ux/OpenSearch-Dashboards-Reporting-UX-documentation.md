@@ -79,7 +79,7 @@ Here you can view the details of a report that's been generated. From the report
 
 ### Report details - sharing a report
 
-Sharing a report allows you to add kibana recepients, optionally add new email recepients, as well as configure the email subject, body and optionally include the report as an attachment to the email.
+Sharing a report allows you to add OpenSearch Dashboards recepients, optionally add new email recepients, as well as configure the email subject, body and optionally include the report as an attachment to the email.
 
 ![Reporting - Report details - Share](img/screens/0.3.1_report_share.png)
 

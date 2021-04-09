@@ -132,7 +132,7 @@ OpenSearch Dashboards Reports for Open Distro allows ‘Report Owner’ (enginee
 
 ### Non-functional
 
-* In the absence of missing subsystems such as a Elasticsearch report scheduler plugin, the scheduling UI should be hidden or present the user with correct messaging (for example limited functionality)
+* In the absence of missing subsystems such as a OpenSearch report scheduler plugin, the scheduling UI should be hidden or present the user with correct messaging (for example limited functionality)
 * The service should be reliable -  we should be able to generate a report in an acceptable time frame or else abort.
 * **Security** - a user should not be allowed to create reports of resources they don’t have access to. For example, if a user should not be able to generate report of dashboard with index-pattern they do not have read permissions to.
 
@@ -149,7 +149,7 @@ We will provide user to generate two kind of reports :
 1. Based on OpenSearch Dashboards dashboards **TODO**: Investigate how dashboards are defined
 2. Based on queries 
     1. SQL queries
-    2. Elasticsearch DSL (Out of Scope) - Though this will be a great feature to have, we will have to scope down what kind of Elasticsearch queries can be supported (depending on whether how easily it can be CSV formatted) and re-implement the CSV formatting logic from Elasticsearch JSON response.
+    2. OpenSearch DSL (Out of Scope) - Though this will be a great feature to have, we will have to scope down what kind of OpenSearch queries can be supported (depending on whether how easily it can be CSV formatted) and re-implement the CSV formatting logic from OpenSearch JSON response.
 
 
 
@@ -224,7 +224,7 @@ In this architecture , the OpenSearch Dashboards backend plugin will handle both
 
 ### 3.5.2  Architecture - 2
 
-In this architecture , the OpenSearch Dashboards backend plugin will handle only the report generation logic and the scheduling functionality will be delegated to a separate Elasticsearch plugin
+In this architecture , the OpenSearch Dashboards backend plugin will handle only the report generation logic and the scheduling functionality will be delegated to a separate OpenSearch plugin
 
 ![Architecture 2](img/arch_2.png)
 
@@ -241,7 +241,7 @@ In this architecture , the OpenSearch Dashboards backend plugin will handle only
 
 ### 3.5.3  Architecture - 3
 
-In this architecture , the whole report generation and scheduling functionality will implemented as Elasticsearch plugin. OpenSearch Dashboards backend will act as a proxy between OpenSearch Dashboards UI and ES plugin.
+In this architecture , the whole report generation and scheduling functionality will implemented as OpenSearch plugin. OpenSearch Dashboards backend will act as a proxy between OpenSearch Dashboards UI and ES plugin.
 
 ![Architecture 3](img/arch_3.png)
 
@@ -249,7 +249,7 @@ In this architecture , the whole report generation and scheduling functionality 
 
 
 * Since OpenSearch Dashboards server plugin will act as proxy, the OpenSearch Dashboards APIs will have chances of modification and in the future
-* Reduced interprocess communication between OpenSearch Dashboards server and Elasticsearch, thus reduced latency and minimal coordination errors.
+* Reduced interprocess communication between OpenSearch Dashboards server and OpenSearch, thus reduced latency and minimal coordination errors.
 
 **Cons:**
 
