@@ -16,7 +16,7 @@
 import { ILegacyClusterClient, Logger } from '../../../../src/core/server';
 import { createScheduledReport } from './createScheduledReport';
 import { POLL_INTERVAL } from '../utils/constants';
-import { parseEsErrorResponse } from '../routes/utils/helpers';
+import { parseOpenSearchErrorResponse } from '../routes/utils/helpers';
 import { backendToUiReport } from '../routes/utils/converters/backendToUi';
 import { BackendReportInstanceType } from 'server/model/backendModel';
 
@@ -58,7 +58,7 @@ async function pollAndExecuteJob(
     }
   } catch (error) {
     logger.error(
-      `Failed to poll job ${error.statusCode} ${parseEsErrorResponse(error)}`
+      `Failed to poll job ${error.statusCode} ${parseOpenSearchErrorResponse(error)}`
     );
   }
 }

@@ -32,7 +32,7 @@ import {
  * };
  *
  */
-export function parseEsErrorResponse(error: any) {
+export function parseOpenSearchErrorResponse(error: any) {
   if (error.response) {
     try {
       const esErrorResponse = JSON.parse(error.response);
@@ -47,7 +47,7 @@ export function parseEsErrorResponse(error: any) {
 export function errorResponse(response: OpenSearchDashboardsResponseFactory, error: any) {
   return response.custom({
     statusCode: error.statusCode || 500,
-    body: parseEsErrorResponse(error),
+    body: parseOpenSearchErrorResponse(error),
   });
 }
 

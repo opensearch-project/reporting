@@ -16,7 +16,7 @@
 import {
   buildQuery,
   convertToCSV,
-  getEsData,
+  getOpenSearchData,
   getSelectedFields,
   metaData,
 } from './dataReportHelpers';
@@ -135,7 +135,7 @@ async function generateReportData(
   const report = { _source: metaData };
   const indexPattern: string = report._source.paternName;
   const maxResultSize: number = await getMaxResultSize();
-  const esCount = await getEsDataSize();
+  const esCount = await getOpenSearchDataSize();
 
   const total = Math.min(esCount.count, params.limit);
   if (total === 0) {
@@ -144,11 +144,11 @@ async function generateReportData(
 
   const reqBody = buildRequestBody(buildQuery(report, 0));
   if (total > maxResultSize) {
-    await getEsDataByScroll();
+    await getOpenSearchDataByScroll();
   } else {
-    await getEsDataBySearch();
+    await getOpenSearchDataBySearch();
   }
-  return convertEsDataToCsv();
+  return convertOpenSearchDataToCsv();
 
   // Fetch ES query max size windows to decide search or scroll
   async function getMaxResultSize() {
@@ -175,7 +175,7 @@ async function generateReportData(
   }
 
   // Build the ES Count query to count the size of result
-  async function getEsDataSize() {
+  async function getOpenSearchDataSize() {
     const countReq = buildQuery(report, 1);
     return await callCluster(
       client,
@@ -188,7 +188,7 @@ async function generateReportData(
     );
   }
 
-  async function getEsDataByScroll() {
+  async function getOpenSearchDataByScroll() {
     // Open scroll context by fetching first batch
     esData = await callCluster(
       client,
@@ -231,7 +231,7 @@ async function generateReportData(
     );
   }
 
-  async function getEsDataBySearch() {
+  async function getOpenSearchDataBySearch() {
     esData = await callCluster(
       client,
       'search',
@@ -261,9 +261,9 @@ async function generateReportData(
   }
 
   // Parse ES data and convert to CSV
-  async function convertEsDataToCsv() {
+  async function convertOpenSearchDataToCsv() {
     const dataset: any = [];
-    dataset.push(getEsData(arrayHits, report, params));
+    dataset.push(getOpenSearchData(arrayHits, report, params));
     return await convertToCSV(dataset);
   }
 }

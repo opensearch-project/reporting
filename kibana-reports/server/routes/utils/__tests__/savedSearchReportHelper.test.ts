@@ -64,7 +64,7 @@ describe('test create saved search report', () => {
 
   test('create report with expected file name', async () => {
     const hits: Array<{ _source: any }> = [];
-    const client = mockEsClient(hits);
+    const client = mockOpenSearchClient(hits);
     const { timeCreated, fileName } = await createSavedSearchReport(
       input,
       client
@@ -73,17 +73,17 @@ describe('test create saved search report', () => {
   }, 20000);
 
   test('create report with expected file name extension', async () => {
-    const csvReport = await createSavedSearchReport(input, mockEsClient([]));
+    const csvReport = await createSavedSearchReport(input, mockOpenSearchClient([]));
     expect(csvReport.fileName).toContain('.csv');
 
     input.report_definition.report_params.core_params.report_format = 'xlsx';
-    const xlsxReport = await createSavedSearchReport(input, mockEsClient([]));
+    const xlsxReport = await createSavedSearchReport(input, mockOpenSearchClient([]));
     expect(xlsxReport.fileName).toContain('.xlsx');
   }, 20000);
 
   test('create report for empty data set', async () => {
     const hits: Array<{ _source: any }> = [];
-    const client = mockEsClient(hits);
+    const client = mockOpenSearchClient(hits);
     const { dataUrl } = await createSavedSearchReport(input, client);
     expect(dataUrl).toEqual('');
   }, 20000);
@@ -96,7 +96,7 @@ describe('test create saved search report', () => {
       hit({ category: 'c4', customer_gender: 'Male' }),
       hit({ category: 'c5', customer_gender: 'Male' }),
     ];
-    const client = mockEsClient(hits);
+    const client = mockOpenSearchClient(hits);
     const { dataUrl } = await createSavedSearchReport(input, client);
 
     expect(dataUrl).toEqual(
@@ -123,7 +123,7 @@ describe('test create saved search report', () => {
       hit({ category: 'c10', customer_gender: 'Female' }),
       hit({ category: 'c11', customer_gender: 'Male' }),
     ];
-    const client = mockEsClient(hits);
+    const client = mockOpenSearchClient(hits);
     const { dataUrl } = await createSavedSearchReport(input, client);
 
     expect(dataUrl).toEqual(
@@ -153,7 +153,7 @@ describe('test create saved search report', () => {
       hit({ category: 'c4', customer_gender: 'Male' }),
       hit({ category: 'c5', customer_gender: 'Male' }),
     ];
-    const client = mockEsClient(hits);
+    const client = mockOpenSearchClient(hits);
     const { dataUrl } = await createSavedSearchReport(input, client);
 
     expect(dataUrl).toEqual('category,customer_gender\n' + 'c1,Male');
@@ -175,7 +175,7 @@ describe('test create saved search report', () => {
       hit({ category: 'c9', customer_gender: 'Female' }),
       hit({ category: 'c10', customer_gender: 'Female' }),
     ];
-    const client = mockEsClient(hits);
+    const client = mockOpenSearchClient(hits);
     const { dataUrl } = await createSavedSearchReport(input, client);
 
     expect(dataUrl).toEqual(
@@ -201,7 +201,7 @@ describe('test create saved search report', () => {
       hit({ category: 'c5', customer_gender: 'Male' }),
       hit({ category: 'c6', customer_gender: 'Female' }),
     ];
-    const client = mockEsClient(hits);
+    const client = mockOpenSearchClient(hits);
     const { dataUrl } = await createSavedSearchReport(input, client);
 
     expect(dataUrl).toEqual(
@@ -221,7 +221,7 @@ describe('test create saved search report', () => {
       hit({ category: 'c2,', customer_gender: 'M,ale' }),
       hit({ category: ',,c3', customer_gender: 'Male,,,' }),
     ];
-    const client = mockEsClient(hits);
+    const client = mockOpenSearchClient(hits);
     const { dataUrl } = await createSavedSearchReport(input, client);
 
     expect(dataUrl).toEqual(
@@ -240,7 +240,7 @@ describe('test create saved search report', () => {
       hit({ category: ',-c4', customer_gender: 'Male' }),
       hit({ category: ',,,@c5', customer_gender: 'Male' }),
     ];
-    const client = mockEsClient(hits);
+    const client = mockOpenSearchClient(hits);
     const { dataUrl } = await createSavedSearchReport(input, client);
 
     expect(dataUrl).toEqual(
@@ -264,7 +264,7 @@ describe('test create saved search report', () => {
       hit({ category: ',-c4', customer_gender: 'Male' }),
       hit({ category: ',,,@c5', customer_gender: 'Male' }),
     ];
-    const client = mockEsClient(hits);
+    const client = mockOpenSearchClient(hits);
     const { dataUrl } = await createSavedSearchReport(input, client);
 
     expect(dataUrl).toEqual(
@@ -281,7 +281,7 @@ describe('test create saved search report', () => {
 /**
  * Mock Elasticsearch client and return different mock objects based on endpoint and parameters.
  */
-function mockEsClient(mockHits: Array<{ _source: any }>) {
+function mockOpenSearchClient(mockHits: Array<{ _source: any }>) {
   let call = 0;
   const client = jest.fn();
   client.callAsInternalUser = jest

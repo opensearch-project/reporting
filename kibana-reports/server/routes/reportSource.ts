@@ -19,7 +19,7 @@ import {
   ResponseError,
 } from '../../../../src/core/server';
 import { API_PREFIX } from '../../common';
-import { checkErrorType, parseEsErrorResponse } from './utils/helpers';
+import { checkErrorType, parseOpenSearchErrorResponse } from './utils/helpers';
 import { RequestParams } from '@elastic/elasticsearch';
 import { schema } from '@osd/config-schema';
 import { DEFAULT_MAX_SIZE } from './utils/constants';
@@ -81,7 +81,7 @@ export default function (router: IRouter) {
         addToMetric('report_source', 'list', checkErrorType(error));
         return response.custom({
           statusCode: error.statusCode,
-          body: parseEsErrorResponse(error),
+          body: parseOpenSearchErrorResponse(error),
         });
       }
     }

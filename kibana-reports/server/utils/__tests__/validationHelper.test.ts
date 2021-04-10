@@ -57,14 +57,14 @@ const createReportInput: ReportSchemaType = {
 describe('test input validation', () => {
   test('create report with correct saved object id', async () => {
     const savedObjectIds = [`dashboard:${SAMPLE_SAVED_OBJECT_ID}`];
-    const client = mockEsClient(savedObjectIds);
+    const client = mockOpenSearchClient(savedObjectIds);
     const report = await validateReport(client, createReportInput);
     expect(report).toBeDefined();
   });
 
   test('create report with non-exist saved object id', async () => {
     const savedObjectIds = ['dashboard:fake-id'];
-    const client = mockEsClient(savedObjectIds);
+    const client = mockOpenSearchClient(savedObjectIds);
     await expect(
       validateReport(client, createReportInput)
     ).rejects.toThrowError(
@@ -74,7 +74,7 @@ describe('test input validation', () => {
 
   test('create report definition with correct saved object id', async () => {
     const savedObjectIds = [`dashboard:${SAMPLE_SAVED_OBJECT_ID}`];
-    const client = mockEsClient(savedObjectIds);
+    const client = mockOpenSearchClient(savedObjectIds);
     const report = await validateReportDefinition(
       client,
       createReportDefinitionInput
@@ -84,7 +84,7 @@ describe('test input validation', () => {
 
   test('create report definition with non-exist saved object id', async () => {
     const savedObjectIds = ['dashboard:fake-id'];
-    const client = mockEsClient(savedObjectIds);
+    const client = mockOpenSearchClient(savedObjectIds);
     await expect(
       validateReportDefinition(client, createReportDefinitionInput)
     ).rejects.toThrowError(
@@ -93,7 +93,7 @@ describe('test input validation', () => {
   });
 });
 // TODO: merge this with other mock clients used in testing, to create some mock helpers file
-const mockEsClient = (mockSavedObjectIds: string[]) => {
+const mockOpenSearchClient = (mockSavedObjectIds: string[]) => {
   const client = {
     callAsCurrentUser: jest
       .fn()

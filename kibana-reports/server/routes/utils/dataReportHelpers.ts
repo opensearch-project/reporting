@@ -153,7 +153,7 @@ export const buildQuery = (report, is_count) => {
 };
 
 // Fetch the data from ES
-export const getEsData = (arrayHits, report, params) => {
+export const getOpenSearchData = (arrayHits, report, params) => {
   let hits: any = [];
   for (let valueRes of arrayHits) {
     for (let data of valueRes.hits) {
