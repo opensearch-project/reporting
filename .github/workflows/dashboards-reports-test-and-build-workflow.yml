@@ -1,10 +1,10 @@
-name: Test and Build Kibana Reports
+name: Test and Build OpenSearch Dashboards Reports
 
 on: [pull_request, push]
 
 env:
-  PLUGIN_NAME: opendistroReportsKibana
-  OD_VERSION: 1.13.2.0
+  PLUGIN_NAME: opendistroReportsOpenSearchDashboards
+  OD_VERSION: 1.15.0.0
 
 jobs:
   build:
@@ -13,96 +13,96 @@ jobs:
       - name: Checkout Plugin
         uses: actions/checkout@v1
 
-      - name: Checkout Kibana
+      - name: Checkout OpenSearch Dashboards
         uses: actions/checkout@v1
         with:
           repository: elastic/kibana
           ref: v7.10.2
-          path: kibana-reports/kibana
+          path: dashboards-reports/OpenSearch-Dashboards
 
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
           node-version: "10.23.1"
 
-      - name: Move Kibana Reports to Plugins Dir
-        run: mv kibana-reports kibana/plugins/${{ env.PLUGIN_NAME }}
+      - name: Move Dashboards Reports to Plugins Dir
+        run: mv dashboards-reports OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
 
       - name: Add Chromium Binary to Reporting for Testing
         run: |
           sudo apt install -y libnss3-dev fonts-liberation libfontconfig1
-          cd kibana/plugins/${{ env.PLUGIN_NAME }}
+          cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
           wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip
           unzip chromium-linux-x64.zip
           rm chromium-linux-x64.zip
 
-      - name: Kibana Plugin Bootstrap
+      - name: OpenSearch Dashboards Plugin Bootstrap
         uses: nick-invision/retry@v1
         with:
           timeout_minutes: 30
           max_attempts: 3
-          command: cd kibana/plugins/${{ env.PLUGIN_NAME }}; yarn kbn bootstrap
+          command: cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}; yarn osd bootstrap
 
       - name: Test
         uses: nick-invision/retry@v1
         with:
           timeout_minutes: 30
           max_attempts: 3
-          command: cd kibana/plugins/${{ env.PLUGIN_NAME }}; yarn test --coverage
+          command: cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}; yarn test
 
       - name: Upload coverage
         uses: codecov/codecov-action@v1
         with:
-          flags: Kibana-reports
-          directory: kibana/plugins/
+          flags: dashboards-reports
+          directory: OpenSearch-Dashboards/plugins/
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Build Artifact
         run: |
-          cd kibana/plugins/${{ env.PLUGIN_NAME }}
+          cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
           yarn build
 
           cd build
-          mkdir -p ./{linux-x64,linux-arm64,windows-x64}/kibana/${{ env.PLUGIN_NAME }}
+          mkdir -p ./{linux-x64,linux-arm64,windows-x64}/OpenSearch-Dashboards/${{ env.PLUGIN_NAME }}
           cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-x64/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-x64.zip
           cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-arm64/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-arm64.zip
           mv ./${{ env.PLUGIN_NAME }}-*.zip ./windows-x64/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-windows-x64.zip
 
           cd linux-x64
           wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip
-          unzip chromium-linux-x64.zip -d ./kibana/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./kibana
+          unzip chromium-linux-x64.zip -d ./OpenSearch-Dashboards/${{ env.PLUGIN_NAME }}
+          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./OpenSearch-Dashboards
           mv ./${{ env.PLUGIN_NAME }}-*.zip ..
           cd ..
 
           cd linux-arm64
           wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-arm64.zip
-          unzip chromium-linux-arm64.zip -d ./kibana/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./kibana
+          unzip chromium-linux-arm64.zip -d ./OpenSearch-Dashboards/${{ env.PLUGIN_NAME }}
+          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./OpenSearch-Dashboards
           mv ./${{ env.PLUGIN_NAME }}-*.zip ..
           cd ..
 
           cd windows-x64
           wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip
-          unzip chromium-windows-x64.zip -d ./kibana/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./kibana
+          unzip chromium-windows-x64.zip -d ./OpenSearch-Dashboards/${{ env.PLUGIN_NAME }}
+          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./OpenSearch-Dashboards
           mv ./${{ env.PLUGIN_NAME }}-*.zip ..
           cd ..
 
       - name: Upload Artifact For Linux x64
         uses: actions/upload-artifact@v1
         with:
-          name: kibana-reports-linux-x64
-          path: kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-x64.zip
+          name: dashboards-reports-linux-x64
+          path: OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-x64.zip
 
       - name: Upload Artifact For Linux arm64
         uses: actions/upload-artifact@v1
         with:
-          name: kibana-reports-linux-arm64
-          path: kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-arm64.zip
+          name: dashboards-reports-linux-arm64
+          path: OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-arm64.zip
 
       - name: Upload Artifact For Windows
         uses: actions/upload-artifact@v1
         with:
-          name: kibana-reports-windows-x64
-          path: kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-windows-x64.zip
+          name: dashboards-reports-windows-x64
+          path: OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-windows-x64.zip
