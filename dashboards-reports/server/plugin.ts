@@ -23,7 +23,7 @@ import {
 } from '../../../src/core/server';
 import { setIntervalAsync } from 'set-interval-async/dynamic';
 import { Semaphore, SemaphoreInterface, withTimeout } from 'async-mutex';
-import esReportsPlugin from './backend/opendistro-es-reports-plugin';
+import opensearchReportsPlugin from './backend/opendistro-opensearch-reports-plugin';
 import notificationPlugin from './backend/opendistro-notification-plugin';
 import {
   OpendistroReportsOpenSearchDashboardsPluginSetup,
@@ -36,7 +36,7 @@ import { AccessInfoType } from 'server';
 
 export interface ReportsPluginRequestContext {
   logger: Logger;
-  esClient: ILegacyClusterClient;
+  opensearchClient: ILegacyClusterClient;
 }
 //@ts-ignore
 declare module 'kibana/server' {
@@ -74,10 +74,10 @@ export class OpendistroReportsOpenSearchDashboardsPlugin
 
     const router = core.http.createRouter();
     // Deprecated API. Switch to the new opensearch client as soon as https://github.com/elastic/kibana/issues/35508 done.
-    const esReportsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
-      'es_reports',
+    const opensearchReportsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
+      'opensearch_reports',
       {
-        plugins: [esReportsPlugin],
+        plugins: [opensearchReportsPlugin],
       }
     );
 
@@ -99,7 +99,7 @@ export class OpendistroReportsOpenSearchDashboardsPlugin
           logger: this.logger,
           semaphore: this.semaphore,
           notificationClient,
-          esReportsClient,
+          opensearchReportsClient,
         };
       }
     );
@@ -109,10 +109,10 @@ export class OpendistroReportsOpenSearchDashboardsPlugin
 
   public start(core: CoreStart) {
     this.logger.debug('opendistro-reports-opensearch-dashboards: Started');
-    const esReportsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
-      'es_reports',
+    const opensearchReportsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
+      'opensearch_reports',
       {
-        plugins: [esReportsPlugin],
+        plugins: [opensearchReportsPlugin],
       }
     );
 
@@ -122,7 +122,7 @@ export class OpendistroReportsOpenSearchDashboardsPlugin
         plugins: [notificationPlugin],
       }
     );
-    const esClient: ILegacyClusterClient = core.opensearch.legacy.client;
+    const opensearchClient: ILegacyClusterClient = core.opensearch.legacy.client;
     /*
     setIntervalAsync provides the same familiar interface as built-in setInterval for asynchronous functions,
     while preventing multiple executions from overlapping in time.
@@ -134,9 +134,9 @@ export class OpendistroReportsOpenSearchDashboardsPlugin
     // setIntervalAsync(
     //   pollAndExecuteJob,
     //   POLL_INTERVAL,
-    //   esReportsClient,
+    //   opensearchReportsClient,
     //   notificationClient,
-    //   esClient,
+    //   opensearchClient,
     //   this.logger
     // );
     return {};

@@ -21,7 +21,7 @@ import { uiToBackendReportDefinition } from '../utils/converters/uiToBackend';
 
 export const saveReport = async (
   report: ReportSchemaType,
-  esReportsClient: ILegacyScopedClusterClient
+  opensearchReportsClient: ILegacyScopedClusterClient
 ) => {
   const timePending = Date.now();
   const {
@@ -51,12 +51,12 @@ export const saveReport = async (
     inContextDownloadUrlPath: queryUrl,
   };
 
-  const esResp = await esReportsClient.callAsCurrentUser(
-    'es_reports.createReport',
+  const opensearchResp = await opensearchReportsClient.callAsCurrentUser(
+    'opensearch_reports.createReport',
     {
       body: reqBody,
     }
   );
 
-  return esResp;
+  return opensearchResp;
 };

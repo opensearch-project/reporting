@@ -54,10 +54,10 @@ export const createReport = async (
     request
   );
   // @ts-ignore
-  const esReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.esReportsClient.asScoped(
+  const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
     request
   );
-  const esClient = context.core.opensearch.legacy.client;
+  const opensearchClient = context.core.opensearch.legacy.client;
   // @ts-ignore
   const timezone = request.query.timezone;
   const {
@@ -81,14 +81,14 @@ export const createReport = async (
     if (savedReportId) {
       reportId = savedReportId;
     } else {
-      const esResp = await saveReport(report, esReportsClient);
-      reportId = esResp.reportInstance.id;
+      const opensearchResp = await saveReport(report, opensearchReportsClient);
+      reportId = opensearchResp.reportInstance.id;
     }
     // generate report
     if (reportSource === REPORT_TYPE.savedSearch) {
       createReportResult = await createSavedSearchReport(
         report,
-        esClient,
+        opensearchClient,
         isScheduledTask
       );
     } else {
@@ -141,7 +141,7 @@ export const createReport = async (
     // update report state to "created"
     // TODO: temporarily remove the following
     // if (!savedReportId) {
-    //   await updateReportState(reportId, esReportsClient, REPORT_STATE.created);
+    //   await updateReportState(reportId, opensearchReportsClient, REPORT_STATE.created);
     // }
 
     // deliver report
@@ -149,7 +149,7 @@ export const createReport = async (
       await deliverReport(
         report,
         notificationClient,
-        esReportsClient,
+        opensearchReportsClient,
         reportId,
         logger
       );
@@ -159,7 +159,7 @@ export const createReport = async (
     // TODO: save error detail and display on UI
     // TODO: temporarily disable the following, will add back
     // if (!savedReportId) {
-    //   await updateReportState(reportId, esReportsClient, REPORT_STATE.error);
+    //   await updateReportState(reportId, opensearchReportsClient, REPORT_STATE.error);
     // }
     throw error;
   }

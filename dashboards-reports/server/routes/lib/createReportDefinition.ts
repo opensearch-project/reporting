@@ -27,19 +27,19 @@ export const createReportDefinition = async (
   reportDefinition: ReportDefinitionSchemaType
 ) => {
   // @ts-ignore
-  const esReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.esReportsClient.asScoped(
+  const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
     request
   );
   // create report definition
   const reqBody = {
     reportDefinition: uiToBackendReportDefinition(reportDefinition),
   };
-  const esResp = await esReportsClient.callAsCurrentUser(
-    'es_reports.createReportDefinition',
+  const opensearchResp = await opensearchReportsClient.callAsCurrentUser(
+    'opensearch_reports.createReportDefinition',
     {
       body: reqBody,
     }
   );
 
-  return esResp;
+  return opensearchResp;
 };

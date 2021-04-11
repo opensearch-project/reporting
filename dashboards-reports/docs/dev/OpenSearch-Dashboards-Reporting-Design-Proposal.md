@@ -241,7 +241,7 @@ In this architecture , the OpenSearch Dashboards backend plugin will handle only
 
 ### 3.5.3  Architecture - 3
 
-In this architecture , the whole report generation and scheduling functionality will implemented as OpenSearch plugin. OpenSearch Dashboards backend will act as a proxy between OpenSearch Dashboards UI and ES plugin.
+In this architecture , the whole report generation and scheduling functionality will implemented as OpenSearch plugin. OpenSearch Dashboards backend will act as a proxy between OpenSearch Dashboards UI and OpenSearch plugin.
 
 ![Architecture 3](img/arch_3.png)
 

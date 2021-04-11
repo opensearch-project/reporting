@@ -21,7 +21,7 @@ import {
 } from '../../../../../src/core/server';
 
 /**
- * ES error response body:
+ * OpenSearch error response body:
  *  {
  *   error: {
  *     root_cause: [{ type: 'status_exception', reason: 'test exception' }],
@@ -35,8 +35,8 @@ import {
 export function parseOpenSearchErrorResponse(error: any) {
   if (error.response) {
     try {
-      const esErrorResponse = JSON.parse(error.response);
-      return esErrorResponse.error.reason || error.response;
+      const opensearchErrorResponse = JSON.parse(error.response);
+      return opensearchErrorResponse.error.reason || error.response;
     } catch (parsingError) {
       return error.response;
     }
@@ -61,10 +61,10 @@ export function getFileName(itemName: string, timeCreated: Date): string {
 }
 
 /**
- * Call ES cluster function.
- * @param client    ES client
- * @param endpoint  ES API method
- * @param params    ES API parameters
+ * Call OpenSearch cluster function.
+ * @param client    OpenSearch client
+ * @param endpoint  OpenSearch API method
+ * @param params    OpenSearch API parameters
  */
 export const callCluster = async (
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
@@ -72,19 +72,19 @@ export const callCluster = async (
   params: any,
   isScheduledTask: boolean
 ) => {
-  let esResp;
+  let opensearchResp;
   if (isScheduledTask) {
-    esResp = await (client as ILegacyClusterClient).callAsInternalUser(
+    opensearchResp = await (client as ILegacyClusterClient).callAsInternalUser(
       endpoint,
       params
     );
   } else {
-    esResp = await (client as ILegacyScopedClusterClient).callAsCurrentUser(
+    opensearchResp = await (client as ILegacyScopedClusterClient).callAsCurrentUser(
       endpoint,
       params
     );
   }
-  return esResp;
+  return opensearchResp;
 };
 
 export const checkErrorType = (error: any) => {

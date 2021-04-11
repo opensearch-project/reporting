@@ -129,7 +129,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       }
       // Update report definition metadata
       try {
-        const esResp = await updateReportDefinition(
+        const opensearchResp = await updateReportDefinition(
           request,
           context,
           reportDefinition
@@ -138,7 +138,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         return response.ok({
           body: {
             state: 'Report definition updated',
-            scheduler_response: esResp,
+            scheduler_response: opensearchResp,
           },
         });
       } catch (error) {
@@ -173,12 +173,12 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
 
       try {
         // @ts-ignore
-        const esReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.esReportsClient.asScoped(
+        const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
           request
         );
 
-        const esResp = await esReportsClient.callAsCurrentUser(
-          'es_reports.getReportDefinitions',
+        const opensearchResp = await opensearchReportsClient.callAsCurrentUser(
+          'opensearch_reports.getReportDefinitions',
           {
             fromIndex: fromIndex,
             maxItems: maxItems || DEFAULT_MAX_SIZE,
@@ -186,7 +186,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         );
 
         const reportDefinitionsList = backendToUiReportDefinitionsList(
-          esResp.reportDefinitionDetailsList,
+          opensearchResp.reportDefinitionDetailsList,
           basePath
         );
 
@@ -224,19 +224,19 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       addToMetric('report_definition', 'info', 'count');
       try {
         // @ts-ignore
-        const esReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.esReportsClient.asScoped(
+        const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
           request
         );
 
-        const esResp = await esReportsClient.callAsCurrentUser(
-          'es_reports.getReportDefinitionById',
+        const opensearchResp = await opensearchReportsClient.callAsCurrentUser(
+          'opensearch_reports.getReportDefinitionById',
           {
             reportDefinitionId: request.params.reportDefinitionId,
           }
         );
 
         const reportDefinition = backendToUiReportDefinition(
-          esResp.reportDefinitionDetails,
+          opensearchResp.reportDefinitionDetails,
           basePath
         );
 
@@ -272,12 +272,12 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       addToMetric('report_definition', 'delete', 'count');
       try {
         // @ts-ignore
-        const esReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.esReportsClient.asScoped(
+        const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
           request
         );
 
-        const esResp = await esReportsClient.callAsCurrentUser(
-          'es_reports.deleteReportDefinitionById',
+        const opensearchResp = await opensearchReportsClient.callAsCurrentUser(
+          'opensearch_reports.deleteReportDefinitionById',
           {
             reportDefinitionId: request.params.reportDefinitionId,
           }
@@ -286,7 +286,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         return response.ok({
           body: {
             state: 'Report definition deleted',
-            es_response: esResp,
+            opensearch_response: opensearchResp,
           },
         });
       } catch (error) {

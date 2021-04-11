@@ -21,9 +21,9 @@ import { backendToUiReport } from '../routes/utils/converters/backendToUi';
 import { BackendReportInstanceType } from 'server/model/backendModel';
 
 async function pollAndExecuteJob(
-  esReportsClient: ILegacyClusterClient,
+  opensearchReportsClient: ILegacyClusterClient,
   notificationClient: ILegacyClusterClient,
-  esClient: ILegacyClusterClient,
+  opensearchClient: ILegacyClusterClient,
   logger: Logger
 ) {
   logger.info(
@@ -31,10 +31,10 @@ async function pollAndExecuteJob(
   );
   try {
     // poll job
-    const esResp = await esReportsClient.callAsInternalUser(
-      'es_reports.pollReportInstance'
+    const opensearchResp = await opensearchReportsClient.callAsInternalUser(
+      'opensearch_reports.pollReportInstance'
     );
-    const job: BackendReportInstanceType = esResp.reportInstance;
+    const job: BackendReportInstanceType = opensearchResp.reportInstance;
 
     // job retrieved, otherwise will be undefined because 204 No-content is returned
     if (job) {
@@ -47,14 +47,14 @@ async function pollAndExecuteJob(
       await createScheduledReport(
         reportId,
         reportMetadata,
-        esClient,
-        esReportsClient,
+        opensearchClient,
+        opensearchReportsClient,
         notificationClient,
         logger
       );
     } else {
       // 204 no content is returned, 204 doesn't have response body
-      logger.info(`No scheduled job to execute ${JSON.stringify(esResp)}`);
+      logger.info(`No scheduled job to execute ${JSON.stringify(opensearchResp)}`);
     }
   } catch (error) {
     logger.error(

@@ -64,14 +64,14 @@ export default function (router: IRouter) {
         responseParams = params;
       }
       try {
-        const esResp = await context.core.opensearch.legacy.client.callAsCurrentUser(
+        const opensearchResp = await context.core.opensearch.legacy.client.callAsCurrentUser(
           'search',
           responseParams
         );
         addToMetric('report_source', 'list', 'count');
 
         return response.ok({
-          body: esResp,
+          body: opensearchResp,
         });
       } catch (error) {
         //@ts-ignore

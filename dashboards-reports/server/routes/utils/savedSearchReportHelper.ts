@@ -60,7 +60,7 @@ export async function createSavedSearchReport(
 
 /**
  * Populate parameters and saved search info related to meta data object.
- * @param client  ES client
+ * @param client  OpenSearch client
  * @param report  Report input
  */
 async function populateMetaData(
@@ -121,8 +121,8 @@ async function populateMetaData(
 }
 
 /**
- * Generate CSV data by query and convert ES data set.
- * @param client  ES client
+ * Generate CSV data by query and convert OpenSearch data set.
+ * @param client  OpenSearch client
  * @param limit   limit size of result data set
  */
 async function generateReportData(
@@ -130,14 +130,14 @@ async function generateReportData(
   params: any,
   isScheduledTask: boolean
 ) {
-  let esData: any = {};
+  let opensearchData: any = {};
   const arrayHits: any = [];
   const report = { _source: metaData };
   const indexPattern: string = report._source.paternName;
   const maxResultSize: number = await getMaxResultSize();
-  const esCount = await getOpenSearchDataSize();
+  const opensearchCount = await getOpenSearchDataSize();
 
-  const total = Math.min(esCount.count, params.limit);
+  const total = Math.min(opensearchCount.count, params.limit);
   if (total === 0) {
     return '';
   }
@@ -150,7 +150,7 @@ async function generateReportData(
   }
   return convertOpenSearchDataToCsv();
 
-  // Fetch ES query max size windows to decide search or scroll
+  // Fetch OpenSearch query max size windows to decide search or scroll
   async function getMaxResultSize() {
     const settings = await callCluster(
       client,
@@ -174,7 +174,7 @@ async function generateReportData(
     return maxResultSize;
   }
 
-  // Build the ES Count query to count the size of result
+  // Build the OpenSearch Count query to count the size of result
   async function getOpenSearchDataSize() {
     const countReq = buildQuery(report, 1);
     return await callCluster(
@@ -190,7 +190,7 @@ async function generateReportData(
 
   async function getOpenSearchDataByScroll() {
     // Open scroll context by fetching first batch
-    esData = await callCluster(
+    opensearchData = await callCluster(
       client,
       'search',
       {
@@ -201,7 +201,7 @@ async function generateReportData(
       },
       isScheduledTask
     );
-    arrayHits.push(esData.hits);
+    arrayHits.push(opensearchData.hits);
 
     // Start scrolling till the end
     const nbScroll = Math.floor(total / maxResultSize);
@@ -210,7 +210,7 @@ async function generateReportData(
         client,
         'scroll',
         {
-          scrollId: esData._scroll_id,
+          scrollId: opensearchData._scroll_id,
           scroll: scrollTimeout,
         },
         isScheduledTask
@@ -225,14 +225,14 @@ async function generateReportData(
       client,
       'clearScroll',
       {
-        scrollId: esData._scroll_id,
+        scrollId: opensearchData._scroll_id,
       },
       isScheduledTask
     );
   }
 
   async function getOpenSearchDataBySearch() {
-    esData = await callCluster(
+    opensearchData = await callCluster(
       client,
       'search',
       {
@@ -242,7 +242,7 @@ async function generateReportData(
       },
       isScheduledTask
     );
-    arrayHits.push(esData.hits);
+    arrayHits.push(opensearchData.hits);
   }
 
   function buildRequestBody(query: any) {
@@ -260,7 +260,7 @@ async function generateReportData(
     };
   }
 
-  // Parse ES data and convert to CSV
+  // Parse OpenSearch data and convert to CSV
   async function convertOpenSearchDataToCsv() {
     const dataset: any = [];
     dataset.push(getOpenSearchData(arrayHits, report, params));

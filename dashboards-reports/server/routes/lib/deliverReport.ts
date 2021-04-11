@@ -26,7 +26,7 @@ import { updateReportState } from './updateReportState';
 export const deliverReport = async (
   report: ReportSchemaType,
   notificationClient: ILegacyScopedClusterClient | ILegacyClusterClient,
-  esReportsClient: ILegacyClusterClient | ILegacyScopedClusterClient,
+  opensearchReportsClient: ILegacyClusterClient | ILegacyScopedClusterClient,
   reportId: string,
   logger: Logger
 ) => {
@@ -118,5 +118,5 @@ export const deliverReport = async (
 
   // update report state
   // TODO: temporarily disable the following, will add back
-  // await updateReportState(reportId, esReportsClient, REPORT_STATE.shared);
+  // await updateReportState(reportId, opensearchReportsClient, REPORT_STATE.shared);
 };

@@ -49,7 +49,7 @@ export const getSelectedFields = async (columns) => {
   metaData.selectedFields = selectedFields;
 };
 
-//Build the ES query from the meta data
+//Build the OpenSearch query from the meta data
 // is_count is set to 1 if we building the count query but 0 if we building the fetch data query
 export const buildQuery = (report, is_count) => {
   let requestBody = esb.boolQuery();
@@ -152,7 +152,7 @@ export const buildQuery = (report, is_count) => {
   return reqBody;
 };
 
-// Fetch the data from ES
+// Fetch the data from OpenSearch
 export const getOpenSearchData = (arrayHits, report, params) => {
   let hits: any = [];
   for (let valueRes of arrayHits) {

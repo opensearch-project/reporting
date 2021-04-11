@@ -13,28 +13,28 @@
  * permissions and limitations under the License.
  */
 
-import { ES_REPORTS_API } from '../../common';
+import { OPENSEARCH_REPORTS_API } from '../../common';
 
 export default function (Client: any, config: any, components: any) {
   const clientAction = components.clientAction.factory;
 
-  Client.prototype.es_reports = components.clientAction.namespaceFactory();
-  const esReports = Client.prototype.es_reports.prototype;
+  Client.prototype.opensearch_reports = components.clientAction.namespaceFactory();
+  const opensearchReports = Client.prototype.opensearch_reports.prototype;
 
   /**
    * report related APIs
    */
-  esReports.createReport = clientAction({
+  opensearchReports.createReport = clientAction({
     url: {
-      fmt: `${ES_REPORTS_API.ON_DEMAND_REPORT}`,
+      fmt: `${OPENSEARCH_REPORTS_API.ON_DEMAND_REPORT}`,
     },
     method: 'PUT',
     needBody: true,
   });
 
-  esReports.createReportFromDefinition = clientAction({
+  opensearchReports.createReportFromDefinition = clientAction({
     url: {
-      fmt: `${ES_REPORTS_API.ON_DEMAND_REPORT}/<%=reportDefinitionId%>`,
+      fmt: `${OPENSEARCH_REPORTS_API.ON_DEMAND_REPORT}/<%=reportDefinitionId%>`,
       req: {
         reportDefinitionId: {
           type: 'string',
@@ -46,9 +46,9 @@ export default function (Client: any, config: any, components: any) {
     needBody: true,
   });
 
-  esReports.updateReportInstanceStatus = clientAction({
+  opensearchReports.updateReportInstanceStatus = clientAction({
     url: {
-      fmt: `${ES_REPORTS_API.REPORT_INSTANCE}/<%=reportInstanceId%>`,
+      fmt: `${OPENSEARCH_REPORTS_API.REPORT_INSTANCE}/<%=reportInstanceId%>`,
       req: {
         reportInstanceId: {
           type: 'string',
@@ -60,9 +60,9 @@ export default function (Client: any, config: any, components: any) {
     needBody: true,
   });
 
-  esReports.getReportById = clientAction({
+  opensearchReports.getReportById = clientAction({
     url: {
-      fmt: `${ES_REPORTS_API.REPORT_INSTANCE}/<%=reportInstanceId%>`,
+      fmt: `${OPENSEARCH_REPORTS_API.REPORT_INSTANCE}/<%=reportInstanceId%>`,
       req: {
         reportInstanceId: {
           type: 'string',
@@ -73,9 +73,9 @@ export default function (Client: any, config: any, components: any) {
     method: 'GET',
   });
 
-  esReports.getReports = clientAction({
+  opensearchReports.getReports = clientAction({
     url: {
-      fmt: `${ES_REPORTS_API.LIST_REPORT_INSTANCES}`,
+      fmt: `${OPENSEARCH_REPORTS_API.LIST_REPORT_INSTANCES}`,
       params: {
         fromIndex: {
           type: 'number',
@@ -91,17 +91,17 @@ export default function (Client: any, config: any, components: any) {
   /**
    * report definition related APIs
    */
-  esReports.createReportDefinition = clientAction({
+  opensearchReports.createReportDefinition = clientAction({
     url: {
-      fmt: `${ES_REPORTS_API.REPORT_DEFINITION}`,
+      fmt: `${OPENSEARCH_REPORTS_API.REPORT_DEFINITION}`,
     },
     method: 'POST',
     needBody: true,
   });
 
-  esReports.updateReportDefinitionById = clientAction({
+  opensearchReports.updateReportDefinitionById = clientAction({
     url: {
-      fmt: `${ES_REPORTS_API.REPORT_DEFINITION}/<%=reportDefinitionId%>`,
+      fmt: `${OPENSEARCH_REPORTS_API.REPORT_DEFINITION}/<%=reportDefinitionId%>`,
       req: {
         reportDefinitionId: {
           type: 'string',
@@ -113,9 +113,9 @@ export default function (Client: any, config: any, components: any) {
     needBody: true,
   });
 
-  esReports.getReportDefinitionById = clientAction({
+  opensearchReports.getReportDefinitionById = clientAction({
     url: {
-      fmt: `${ES_REPORTS_API.REPORT_DEFINITION}/<%=reportDefinitionId%>`,
+      fmt: `${OPENSEARCH_REPORTS_API.REPORT_DEFINITION}/<%=reportDefinitionId%>`,
       req: {
         reportDefinitionId: {
           type: 'string',
@@ -126,9 +126,9 @@ export default function (Client: any, config: any, components: any) {
     method: 'GET',
   });
 
-  esReports.getReportDefinitions = clientAction({
+  opensearchReports.getReportDefinitions = clientAction({
     url: {
-      fmt: `${ES_REPORTS_API.LIST_REPORT_DEFINITIONS}`,
+      fmt: `${OPENSEARCH_REPORTS_API.LIST_REPORT_DEFINITIONS}`,
       params: {
         fromIndex: {
           type: 'number',
@@ -141,9 +141,9 @@ export default function (Client: any, config: any, components: any) {
     method: 'GET',
   });
 
-  esReports.deleteReportDefinitionById = clientAction({
+  opensearchReports.deleteReportDefinitionById = clientAction({
     url: {
-      fmt: `${ES_REPORTS_API.REPORT_DEFINITION}/<%=reportDefinitionId%>`,
+      fmt: `${OPENSEARCH_REPORTS_API.REPORT_DEFINITION}/<%=reportDefinitionId%>`,
       req: {
         reportDefinitionId: {
           type: 'string',
@@ -157,9 +157,9 @@ export default function (Client: any, config: any, components: any) {
   /**
    * Poller API
    */
-  esReports.pollReportInstance = clientAction({
+  opensearchReports.pollReportInstance = clientAction({
     url: {
-      fmt: `${ES_REPORTS_API.POLL_REPORT_INSTANCE}`,
+      fmt: `${OPENSEARCH_REPORTS_API.POLL_REPORT_INSTANCE}`,
     },
     method: 'GET',
   });

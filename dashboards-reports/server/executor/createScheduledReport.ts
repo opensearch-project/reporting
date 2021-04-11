@@ -30,8 +30,8 @@ import { updateReportState } from '../routes/lib/updateReportState';
 export const createScheduledReport = async (
   reportId: string,
   report: ReportSchemaType,
-  esClient: ILegacyClusterClient,
-  esReportsClient: ILegacyClusterClient,
+  opensearchClient: ILegacyClusterClient,
+  opensearchReportsClient: ILegacyClusterClient,
   notificationClient: ILegacyClusterClient,
   logger: Logger
 ) => {
@@ -50,7 +50,7 @@ export const createScheduledReport = async (
     // if (reportSource === REPORT_TYPE.savedSearch) {
     //   createReportResult = await createSavedSearchReport(
     //     report,
-    //     esClient,
+    //     opensearchClient,
     //     isScheduledTask
     //   );
     // } else {
@@ -64,14 +64,14 @@ export const createScheduledReport = async (
     //   );
     // }
 
-    await updateReportState(reportId, esReportsClient, REPORT_STATE.created);
+    await updateReportState(reportId, opensearchReportsClient, REPORT_STATE.created);
 
     // deliver report
     if (deliveryType == DELIVERY_TYPE.channel) {
       await deliverReport(
         report,
         notificationClient,
-        esReportsClient,
+        opensearchReportsClient,
         reportId,
         logger
       );
@@ -80,6 +80,6 @@ export const createScheduledReport = async (
     // update report instance with "error" state
     //TODO: save error detail and display on UI
     logger.error(`Failed to create scheduled report ${error}`);
-    await updateReportState(reportId, esReportsClient, REPORT_STATE.error);
+    await updateReportState(reportId, opensearchReportsClient, REPORT_STATE.error);
   }
 };

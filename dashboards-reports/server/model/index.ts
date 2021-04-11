@@ -94,7 +94,7 @@ export const intervalSchema = schema.object({
       schema.literal('MINUTES'),
       schema.literal('HOURS'),
       schema.literal('DAYS'),
-      // Job scheduler in reporting ES plugin always saves as following format
+      // Job scheduler in reporting OpenSearch plugin always saves as following format
       schema.literal('Minutes'),
       schema.literal('Hours'),
       schema.literal('Days'),

@@ -130,18 +130,18 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       try {
         const savedReportId = request.params.reportId;
         // @ts-ignore
-        const esReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.esReportsClient.asScoped(
+        const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
           request
         );
         // get report
-        const esResp = await esReportsClient.callAsCurrentUser(
-          'es_reports.getReportById',
+        const opensearchResp = await opensearchReportsClient.callAsCurrentUser(
+          'opensearch_reports.getReportById',
           {
             reportInstanceId: savedReportId,
           }
         );
         // convert report to use UI model
-        const report = backendToUiReport(esResp.reportInstance, basePath);
+        const report = backendToUiReport(opensearchResp.reportInstance, basePath);
         // generate report
         const reportData = await createReport(
           request,
@@ -192,12 +192,12 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       let report: any;
       try {
         // @ts-ignore
-        const esReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.esReportsClient.asScoped(
+        const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
           request
         );
-        // call ES API to create report from definition
-        const esResp = await esReportsClient.callAsCurrentUser(
-          'es_reports.createReportFromDefinition',
+        // call OpenSearch API to create report from definition
+        const opensearchResp = await opensearchReportsClient.callAsCurrentUser(
+          'opensearch_reports.createReportFromDefinition',
           {
             reportDefinitionId: reportDefinitionId,
             body: {
@@ -205,9 +205,9 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
             },
           }
         );
-        const reportId = esResp.reportInstance.id;
+        const reportId = opensearchResp.reportInstance.id;
         // convert report to use UI model
-        const report = backendToUiReport(esResp.reportInstance, basePath);
+        const report = backendToUiReport(opensearchResp.reportInstance, basePath);
         // generate report
         const reportData = await createReport(
           request,
@@ -259,11 +259,11 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
 
       try {
         // @ts-ignore
-        const esReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.esReportsClient.asScoped(
+        const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
           request
         );
-        const esResp = await esReportsClient.callAsCurrentUser(
-          'es_reports.getReports',
+        const opensearchResp = await opensearchReportsClient.callAsCurrentUser(
+          'opensearch_reports.getReports',
           {
             fromIndex: fromIndex,
             maxItems: maxItems || DEFAULT_MAX_SIZE,
@@ -271,7 +271,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         );
 
         const reportsList = backendToUiReportsList(
-          esResp.reportInstanceList,
+          opensearchResp.reportInstanceList,
           basePath
         );
 
@@ -309,18 +309,18 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       addToMetric('report', 'info', 'count');
       try {
         // @ts-ignore
-        const esReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.esReportsClient.asScoped(
+        const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
           request
         );
 
-        const esResp = await esReportsClient.callAsCurrentUser(
-          'es_reports.getReportById',
+        const opensearchResp = await opensearchReportsClient.callAsCurrentUser(
+          'opensearch_reports.getReportById',
           {
             reportInstanceId: request.params.reportId,
           }
         );
 
-        const report = backendToUiReport(esResp.reportInstance, basePath);
+        const report = backendToUiReport(opensearchResp.reportInstance, basePath);
 
         return response.ok({
           body: report,

@@ -23,7 +23,7 @@ import { getBackendReportState } from '../utils/converters/uiToBackend';
 // The only thing can be updated of a report instance is its "state"
 export const updateReportState = async (
   reportId: string,
-  esReportsClient: ILegacyClusterClient | ILegacyScopedClusterClient,
+  opensearchReportsClient: ILegacyClusterClient | ILegacyScopedClusterClient,
   state: REPORT_STATE
 ) => {
   //Build request body
@@ -32,14 +32,14 @@ export const updateReportState = async (
     status: getBackendReportState(state),
   };
 
-  const esResp = await esReportsClient.callAsInternalUser(
+  const opensearchResp = await opensearchReportsClient.callAsInternalUser(
     // @ts-ignore
-    'es_reports.updateReportInstanceStatus',
+    'opensearch_reports.updateReportInstanceStatus',
     {
       reportInstanceId: reportId,
       body: reqBody,
     }
   );
 
-  return esResp;
+  return opensearchResp;
 };
