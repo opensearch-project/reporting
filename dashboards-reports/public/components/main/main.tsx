@@ -214,7 +214,7 @@ export function Main(props) {
         refreshReportsDefinitionsTable();
       }, 1000);
     }
-    window.location.href = 'opendistro-reports-opensearch-dashboards#/';
+    window.location.href = 'reports-dashboards#/';
   }, []);
 
   const refreshReportsTable = async () => {
@@ -313,7 +313,7 @@ export function Main(props) {
             <EuiButton
               fill={true}
               onClick={() => {
-                window.location.assign('opendistro-reports-opensearch-dashboards#/create');
+                window.location.assign('reports-dashboards#/create');
               }}
               id={'createReportHomepageButton'}
             >

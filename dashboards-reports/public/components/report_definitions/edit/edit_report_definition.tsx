@@ -189,7 +189,7 @@ export function EditReportDefinition(props) {
         params: reportDefinitionId.toString(),
       })
       .then(async () => {
-        window.location.assign(`opendistro-reports-opensearch-dashboards#/edit=success`);
+        window.location.assign(`reports-dashboards#/edit=success`);
       })
       .catch((error) => {
         console.log('error in updating report definition:', error);
@@ -333,7 +333,7 @@ export function EditReportDefinition(props) {
           <EuiFlexItem grow={false}>
             <EuiButtonEmpty
               onClick={() => {
-                window.location.assign('opendistro-reports-opensearch-dashboards#/');
+                window.location.assign('reports-dashboards#/');
               }}
             >
               Cancel

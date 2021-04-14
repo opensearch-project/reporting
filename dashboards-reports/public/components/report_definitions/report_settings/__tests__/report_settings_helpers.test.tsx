@@ -29,7 +29,7 @@ const TEST_DEFINITION_ID = '12345';
 describe('report_settings_helpers tests', () => {
   test('parseInContextUrl', () => {
     const urlString =
-      'http://localhost:5601/app/opendistro-reports-opensearch-dashboards#/create?previous=dashboard:7adfa750-4c81-11e8-b3d7-01146121b73d?timeFrom=2020-10-26T20:52:56.382Z?timeTo=2020-10-27T20:52:56.384Z';
+      'http://localhost:5601/app/reports-dashboards#/create?previous=dashboard:7adfa750-4c81-11e8-b3d7-01146121b73d?timeFrom=2020-10-26T20:52:56.382Z?timeTo=2020-10-27T20:52:56.384Z';
 
     const id = parseInContextUrl(urlString, 'id');
     expect(id).toBe('7adfa750-4c81-11e8-b3d7-01146121b73d');

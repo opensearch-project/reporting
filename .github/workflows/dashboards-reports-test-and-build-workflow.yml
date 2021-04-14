@@ -3,7 +3,7 @@ name: Test and Build OpenSearch Dashboards Reports
 on: [pull_request, push]
 
 env:
-  PLUGIN_NAME: opendistroReportsOpenSearchDashboards
+  PLUGIN_NAME: reportsDashboards
   OD_VERSION: 1.15.0.0
 
 jobs:

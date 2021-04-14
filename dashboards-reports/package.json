@@ -1,5 +1,5 @@
 {
-  "name": "opendistro-reports-opensearch-dashboards",
+  "name": "reports-dashboards",
   "version": "1.15.0.0",
   "description": "OpenSearch Dashboards Reporting Plugin",
   "license": "Apache-2.0",

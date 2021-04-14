@@ -33,7 +33,7 @@ describe('<Main /> panel', () => {
       configurable: true,
       value: {
         assign: jest.fn(),
-        href: 'opendistro-reports-opensearch-dashboards#/',
+        href: 'reports-dashboards#/',
       },
     });
 
@@ -52,7 +52,7 @@ describe('<Main /> panel', () => {
       configurable: true,
       value: {
         assign: jest.fn(),
-        href: 'opendistro-reports-opensearch-dashboards#/create=success',
+        href: 'reports-dashboards#/create=success',
       },
     });
 
@@ -70,7 +70,7 @@ describe('<Main /> panel', () => {
       configurable: true,
       value: {
         assign: jest.fn(),
-        href: 'opendistro-reports-opensearch-dashboards#/edit=success',
+        href: 'reports-dashboards#/edit=success',
       },
     });
 
@@ -88,7 +88,7 @@ describe('<Main /> panel', () => {
       configurable: true,
       value: {
         assign: jest.fn(),
-        href: 'opendistro-reports-opensearch-dashboards#/delete=success',
+        href: 'reports-dashboards#/delete=success',
       },
     });
 

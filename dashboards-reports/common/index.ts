@@ -13,8 +13,8 @@
  * permissions and limitations under the License.
  */
 
-export const PLUGIN_ID = 'opendistroReportsOpenSearchDashboards';
-export const PLUGIN_NAME = 'opendistro-reports-opensearch-dashboards';
+export const PLUGIN_ID = 'reportsDashboards';
+export const PLUGIN_NAME = 'reports-dashboards';
 
 export const API_PREFIX = '/api/reporting';
 

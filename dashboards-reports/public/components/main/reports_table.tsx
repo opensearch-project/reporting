@@ -103,7 +103,7 @@ export function ReportsTable(props) {
           disabled={item.state === 'Pending'}
           onClick={() => {
             window.location.assign(
-              `opendistro-reports-opensearch-dashboards#/report_details/${item.id}`
+              `reports-dashboards#/report_details/${item.id}`
             );
           }}
           id={'reportDetailsLink'}

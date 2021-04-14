@@ -46,7 +46,7 @@ const emptyMessageReportDefinitions = (
       <div>
         <EuiButton
           onClick={() => {
-            window.location.assign('opendistro-reports-opensearch-dashboards#/create');
+            window.location.assign('reports-dashboards#/create');
           }}
         >
           Create report definition
@@ -92,7 +92,7 @@ export function ReportDefinitions(props) {
   const navigateToDefinitionDetails = (name: any) => {
     let id = getDefinitionTableItemId(name);
     window.location.assign(
-      `opendistro-reports-opensearch-dashboards#/report_definition_details/${id}`
+      `reports-dashboards#/report_definition_details/${id}`
     );
   };
 

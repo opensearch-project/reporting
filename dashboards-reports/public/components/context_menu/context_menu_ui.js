@@ -245,7 +245,7 @@ export const reportGenerationSuccess = () => {
     <div class="euiText euiText--small euiToastBody">
       <p>View 
         <a class="euiLink euiLink--primary"
-        href="opendistro-reports-opensearch-dashboards#/" rel="noreferrer">Reports</a>.</p>
+        href="reports-dashboards#/" rel="noreferrer">Reports</a>.</p>
     </div>
   </div>
   `;
