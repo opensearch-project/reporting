@@ -26,8 +26,8 @@ import { Semaphore, SemaphoreInterface, withTimeout } from 'async-mutex';
 import opensearchReportsPlugin from './backend/opendistro-opensearch-reports-plugin';
 import notificationPlugin from './backend/opendistro-notification-plugin';
 import {
-  OpendistroReportsOpenSearchDashboardsPluginSetup,
-  OpendistroReportsOpenSearchDashboardsPluginStart,
+  ReportsDashboardsPluginSetup,
+  ReportsDashboardsPluginStart,
 } from './types';
 import registerRoutes from './routes';
 import { pollAndExecuteJob } from './executor/executor';
@@ -45,11 +45,11 @@ declare module 'kibana/server' {
   }
 }
 
-export class OpendistroReportsOpenSearchDashboardsPlugin
+export class ReportsDashboardsPlugin
   implements
     Plugin<
-      OpendistroReportsOpenSearchDashboardsPluginSetup,
-      OpendistroReportsOpenSearchDashboardsPluginStart
+      ReportsDashboardsPluginSetup,
+      ReportsDashboardsPluginStart
     > {
   private readonly logger: Logger;
   private readonly semaphore: SemaphoreInterface;

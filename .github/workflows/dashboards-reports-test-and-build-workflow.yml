@@ -16,8 +16,8 @@ jobs:
       - name: Checkout OpenSearch Dashboards
         uses: actions/checkout@v1
         with:
-          repository: elastic/kibana
-          ref: v7.10.2
+          repository: opensearch-project/Opensearch-Dashboards
+          ref: 1.x
           path: dashboards-reports/OpenSearch-Dashboards
 
       - name: Setup Node

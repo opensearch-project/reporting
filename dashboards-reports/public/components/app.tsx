@@ -45,7 +45,7 @@ export interface CoreInterface {
   setBreadcrumbs: (newBreadcrumbs: ChromeBreadcrumb[]) => void;
 }
 
-interface OpendistroReportsOpenSearchDashboardsAppDeps {
+interface ReportsDashboardsAppDeps {
   basename: string;
   notifications: CoreStart['notifications'];
   http: CoreStart['http'];
@@ -59,13 +59,13 @@ const styles: CSS.Properties = {
   maxWidth: '1600px',
 };
 
-export const OpendistroReportsOpenSearchDashboardsApp = ({
+export const ReportsDashboardsApp = ({
   basename,
   notifications,
   http,
   navigation,
   chrome,
-}: OpendistroReportsOpenSearchDashboardsAppDeps) => {
+}: ReportsDashboardsAppDeps) => {
   // Render the application DOM.
   return (
     <Router basename={'/' + basename}>

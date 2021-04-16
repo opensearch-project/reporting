@@ -17,7 +17,7 @@ import {
   HttpServerInfo,
   PluginInitializerContext,
 } from '../../../src/core/server';
-import { OpendistroReportsOpenSearchDashboardsPlugin } from './plugin';
+import { ReportsDashboardsPlugin } from './plugin';
 
 export type AccessInfoType = {
   basePath: string;
@@ -28,10 +28,10 @@ export type AccessInfoType = {
 //  as well as, OpenSearch Dashboards Platform `plugin()` initializer.
 
 export function plugin(initializerContext: PluginInitializerContext) {
-  return new OpendistroReportsOpenSearchDashboardsPlugin(initializerContext);
+  return new ReportsDashboardsPlugin(initializerContext);
 }
 
 export {
-  OpendistroReportsOpenSearchDashboardsPluginSetup,
-  OpendistroReportsOpenSearchDashboardsPluginStart,
+  ReportsDashboardsPluginSetup,
+  ReportsDashboardsPluginStart,
 } from './types';

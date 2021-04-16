@@ -20,20 +20,20 @@ import {
   Plugin,
 } from '../../../src/core/public';
 import {
-  OpendistroReportsOpenSearchDashboardsPluginSetup,
-  OpendistroReportsOpenSearchDashboardsPluginStart,
+  ReportsDashboardsPluginSetup,
+  ReportsDashboardsPluginStart,
   AppPluginStartDependencies,
 } from './types';
 import './components/context_menu/context_menu';
 import { PLUGIN_NAME } from '../common';
 
-export class OpendistroReportsOpenSearchDashboardsPlugin
+export class ReportsDashboardsPlugin
   implements
     Plugin<
-      OpendistroReportsOpenSearchDashboardsPluginSetup,
-      OpendistroReportsOpenSearchDashboardsPluginStart
+      ReportsDashboardsPluginSetup,
+      ReportsDashboardsPluginStart
     > {
-  public setup(core: CoreSetup): OpendistroReportsOpenSearchDashboardsPluginSetup {
+  public setup(core: CoreSetup): ReportsDashboardsPluginSetup {
     // Register an application into the side navigation menu
     core.application.register({
       id: PLUGIN_NAME,
@@ -62,7 +62,7 @@ export class OpendistroReportsOpenSearchDashboardsPlugin
     return {};
   }
 
-  public start(core: CoreStart): OpendistroReportsOpenSearchDashboardsPluginStart {
+  public start(core: CoreStart): ReportsDashboardsPluginStart {
     return {};
   }
 

@@ -14,14 +14,14 @@
  */
 
 import './index.scss';
-import { OpendistroReportsOpenSearchDashboardsPlugin } from './plugin';
+import { ReportsDashboardsPlugin } from './plugin';
 
 // This exports static code and TypeScript types,
 // as well as, OpenSearch Dashboards Platform `plugin()` initializer.
 export function plugin() {
-  return new OpendistroReportsOpenSearchDashboardsPlugin();
+  return new ReportsDashboardsPlugin();
 }
 export {
-  OpendistroReportsOpenSearchDashboardsPluginSetup,
-  OpendistroReportsOpenSearchDashboardsPluginStart,
+  ReportsDashboardsPluginSetup,
+  ReportsDashboardsPluginStart,
 } from './types';

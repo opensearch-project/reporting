@@ -17,7 +17,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppMountParameters, CoreStart } from '../../../src/core/public';
 import { AppPluginStartDependencies } from './types';
-import { OpendistroReportsOpenSearchDashboardsApp } from './components/app';
+import { ReportsDashboardsApp } from './components/app';
 
 export const renderApp = (
   { notifications, http, chrome }: CoreStart,
@@ -25,7 +25,7 @@ export const renderApp = (
   { appBasePath, element }: AppMountParameters
 ) => {
   ReactDOM.render(
-    <OpendistroReportsOpenSearchDashboardsApp
+    <ReportsDashboardsApp
       basename={appBasePath}
       notifications={notifications}
       http={http}

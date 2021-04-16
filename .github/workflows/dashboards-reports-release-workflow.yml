@@ -27,9 +27,8 @@ jobs:
       - name: Checkout OpenSearch Dashboards
         uses: actions/checkout@v1
         with:
-          repository: opendistro-for-elasticsearch/kibana-oss
-          ref: 7.10.2
-          token: ${{secrets.OD_ACCESS}}
+          repository: opensearch-project/Opensearch-Dashboards
+          ref: 1.x
           path: dashboards-reports/OpenSearch-Dashboards
 
       - name: Setup Node
