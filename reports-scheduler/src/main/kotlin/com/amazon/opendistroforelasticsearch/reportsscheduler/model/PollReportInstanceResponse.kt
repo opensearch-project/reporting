@@ -22,15 +22,15 @@ import com.amazon.opendistroforelasticsearch.reportsscheduler.model.RestTag.RETR
 import com.amazon.opendistroforelasticsearch.reportsscheduler.settings.PluginSettings
 import com.amazon.opendistroforelasticsearch.reportsscheduler.util.createJsonParser
 import com.amazon.opendistroforelasticsearch.reportsscheduler.util.logger
-import org.elasticsearch.common.io.stream.StreamInput
-import org.elasticsearch.common.io.stream.StreamOutput
-import org.elasticsearch.common.xcontent.ToXContent
-import org.elasticsearch.common.xcontent.XContentBuilder
-import org.elasticsearch.common.xcontent.XContentFactory
-import org.elasticsearch.common.xcontent.XContentParser
-import org.elasticsearch.common.xcontent.XContentParser.Token
-import org.elasticsearch.common.xcontent.XContentParserUtils
-import org.elasticsearch.rest.RestStatus
+import org.opensearch.common.io.stream.StreamInput
+import org.opensearch.common.io.stream.StreamOutput
+import org.opensearch.common.xcontent.ToXContent
+import org.opensearch.common.xcontent.XContentBuilder
+import org.opensearch.common.xcontent.XContentFactory
+import org.opensearch.common.xcontent.XContentParser
+import org.opensearch.common.xcontent.XContentParser.Token
+import org.opensearch.common.xcontent.XContentParserUtils
+import org.opensearch.rest.RestStatus
 import java.io.IOException
 
 /**

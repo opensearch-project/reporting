@@ -19,12 +19,12 @@ package com.amazon.opendistroforelasticsearch.reportsscheduler.action
 import com.amazon.opendistroforelasticsearch.commons.authuser.User
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.PollReportInstanceRequest
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.PollReportInstanceResponse
-import org.elasticsearch.action.ActionType
-import org.elasticsearch.action.support.ActionFilters
-import org.elasticsearch.client.Client
-import org.elasticsearch.common.inject.Inject
-import org.elasticsearch.common.xcontent.NamedXContentRegistry
-import org.elasticsearch.transport.TransportService
+import org.opensearch.action.ActionType
+import org.opensearch.action.support.ActionFilters
+import org.opensearch.client.Client
+import org.opensearch.common.inject.Inject
+import org.opensearch.common.xcontent.NamedXContentRegistry
+import org.opensearch.transport.TransportService
 
 /**
  * Poll for report instance job transport action

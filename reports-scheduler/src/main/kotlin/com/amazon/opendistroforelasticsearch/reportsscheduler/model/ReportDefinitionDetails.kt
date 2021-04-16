@@ -30,12 +30,12 @@ import com.amazon.opendistroforelasticsearch.reportsscheduler.security.UserAcces
 import com.amazon.opendistroforelasticsearch.reportsscheduler.settings.PluginSettings
 import com.amazon.opendistroforelasticsearch.reportsscheduler.util.logger
 import com.amazon.opendistroforelasticsearch.reportsscheduler.util.stringList
-import org.elasticsearch.common.xcontent.ToXContent
-import org.elasticsearch.common.xcontent.ToXContent.EMPTY_PARAMS
-import org.elasticsearch.common.xcontent.XContentBuilder
-import org.elasticsearch.common.xcontent.XContentFactory
-import org.elasticsearch.common.xcontent.XContentParser
-import org.elasticsearch.common.xcontent.XContentParserUtils
+import org.opensearch.common.xcontent.ToXContent
+import org.opensearch.common.xcontent.ToXContent.EMPTY_PARAMS
+import org.opensearch.common.xcontent.XContentBuilder
+import org.opensearch.common.xcontent.XContentFactory
+import org.opensearch.common.xcontent.XContentParser
+import org.opensearch.common.xcontent.XContentParserUtils
 import java.time.Instant
 
 /**

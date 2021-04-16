@@ -22,8 +22,8 @@ import com.amazon.opendistroforelasticsearch.reportsscheduler.jsonify
 import com.amazon.opendistroforelasticsearch.reportsscheduler.validateErrorResponse
 import com.amazon.opendistroforelasticsearch.reportsscheduler.validateTimeNearRefTime
 import com.amazon.opendistroforelasticsearch.reportsscheduler.validateTimeRecency
-import org.elasticsearch.rest.RestRequest
-import org.elasticsearch.rest.RestStatus
+import org.opensearch.rest.RestRequest
+import org.opensearch.rest.RestStatus
 import org.junit.Assert
 import java.time.Duration
 import java.time.Instant

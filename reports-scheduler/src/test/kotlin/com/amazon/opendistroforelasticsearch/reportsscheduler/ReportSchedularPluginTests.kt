@@ -15,9 +15,9 @@
  */
 package com.amazon.opendistroforelasticsearch.reportsscheduler
 
-import org.elasticsearch.test.ESTestCase
+import org.opensearch.test.OpenSearchTestCase
 
-class ReportSchedularPluginTests : ESTestCase() {
+class ReportSchedularPluginTests : OpenSearchTestCase() {
     fun testSample() {
     }
 }

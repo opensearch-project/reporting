@@ -19,13 +19,13 @@ import com.amazon.opendistroforelasticsearch.reportsscheduler.ReportsSchedulerPl
 import com.amazon.opendistroforelasticsearch.reportsscheduler.action.PollReportInstanceAction
 import com.amazon.opendistroforelasticsearch.reportsscheduler.action.ReportInstanceActions
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.PollReportInstanceRequest
-import org.elasticsearch.client.node.NodeClient
-import org.elasticsearch.rest.BaseRestHandler.RestChannelConsumer
-import org.elasticsearch.rest.BytesRestResponse
-import org.elasticsearch.rest.RestHandler.Route
-import org.elasticsearch.rest.RestRequest
-import org.elasticsearch.rest.RestRequest.Method.GET
-import org.elasticsearch.rest.RestStatus
+import org.opensearch.client.node.NodeClient
+import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
+import org.opensearch.rest.BytesRestResponse
+import org.opensearch.rest.RestHandler.Route
+import org.opensearch.rest.RestRequest
+import org.opensearch.rest.RestRequest.Method.GET
+import org.opensearch.rest.RestStatus
 
 /**
  * Rest handler for getting list of report instances.

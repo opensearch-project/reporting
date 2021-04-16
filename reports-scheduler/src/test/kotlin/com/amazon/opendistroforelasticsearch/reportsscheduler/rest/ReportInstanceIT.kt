@@ -20,8 +20,8 @@ import com.amazon.opendistroforelasticsearch.reportsscheduler.PluginRestTestCase
 import com.amazon.opendistroforelasticsearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
 import com.amazon.opendistroforelasticsearch.reportsscheduler.constructReportDefinitionRequest
 import com.amazon.opendistroforelasticsearch.reportsscheduler.validateErrorResponse
-import org.elasticsearch.rest.RestRequest
-import org.elasticsearch.rest.RestStatus
+import org.opensearch.rest.RestRequest
+import org.opensearch.rest.RestStatus
 import org.junit.Assert
 
 class ReportInstanceIT : PluginRestTestCase() {

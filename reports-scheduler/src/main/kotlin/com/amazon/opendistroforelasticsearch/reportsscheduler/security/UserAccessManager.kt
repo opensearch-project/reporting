@@ -20,8 +20,8 @@ import com.amazon.opendistroforelasticsearch.commons.authuser.User
 import com.amazon.opendistroforelasticsearch.reportsscheduler.metrics.Metrics
 import com.amazon.opendistroforelasticsearch.reportsscheduler.settings.PluginSettings
 import com.amazon.opendistroforelasticsearch.reportsscheduler.settings.PluginSettings.FilterBy
-import org.elasticsearch.ElasticsearchStatusException
-import org.elasticsearch.rest.RestStatus
+import org.opensearch.OpenSearchStatusException
+import org.opensearch.rest.RestStatus
 import java.util.stream.Collectors
 
 /**
@@ -50,7 +50,7 @@ internal object UserAccessManager {
     fun validateUser(user: User?) {
         if (isUserPrivateTenant(user) && user?.name == null) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-            throw ElasticsearchStatusException("User name not provided for private tenant access",
+            throw OpenSearchStatusException("User name not provided for private tenant access",
                 RestStatus.FORBIDDEN)
         }
         when (PluginSettings.filterBy) {
@@ -60,25 +60,25 @@ internal object UserAccessManager {
                 user?.name
                     ?: run {
                         Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-                        throw ElasticsearchStatusException("Filter-by enabled with security disabled",
+                        throw OpenSearchStatusException("Filter-by enabled with security disabled",
                             RestStatus.FORBIDDEN)
                     }
             }
             FilterBy.Roles -> { // backend roles must be present
                 if (user == null || user.roles.isNullOrEmpty()) {
                     Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-                    throw ElasticsearchStatusException("User doesn't have roles configured. Contact administrator.",
+                    throw OpenSearchStatusException("User doesn't have roles configured. Contact administrator.",
                         RestStatus.FORBIDDEN)
                 } else if (user.roles.stream().filter { !PluginSettings.ignoredRoles.contains(it) }.count() == 0L) {
                     Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-                    throw ElasticsearchStatusException("No distinguishing roles configured. Contact administrator.",
+                    throw OpenSearchStatusException("No distinguishing roles configured. Contact administrator.",
                         RestStatus.FORBIDDEN)
                 }
             }
             FilterBy.BackendRoles -> { // backend roles must be present
                 if (user?.backendRoles.isNullOrEmpty()) {
                     Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-                    throw ElasticsearchStatusException("User doesn't have backend roles configured. Contact administrator.",
+                    throw OpenSearchStatusException("User doesn't have backend roles configured. Contact administrator.",
                         RestStatus.FORBIDDEN)
                 }
             }
@@ -92,7 +92,7 @@ internal object UserAccessManager {
         if (user != null) { // Check only if security is enabled
             if (user.name != KIBANA_SERVER_USER) {
                 Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-                throw ElasticsearchStatusException("Permission denied", RestStatus.FORBIDDEN)
+                throw OpenSearchStatusException("Permission denied", RestStatus.FORBIDDEN)
             }
         }
     }

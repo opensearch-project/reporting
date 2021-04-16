@@ -33,8 +33,8 @@ import com.amazon.opendistroforelasticsearch.reportsscheduler.model.UpdateReport
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.UpdateReportDefinitionResponse
 import com.amazon.opendistroforelasticsearch.reportsscheduler.security.UserAccessManager
 import com.amazon.opendistroforelasticsearch.reportsscheduler.util.logger
-import org.elasticsearch.ElasticsearchStatusException
-import org.elasticsearch.rest.RestStatus
+import org.opensearch.OpenSearchStatusException
+import org.opensearch.rest.RestStatus
 import java.time.Instant
 
 /**
@@ -60,7 +60,7 @@ internal object ReportDefinitionActions {
             request.reportDefinition
         )
         val docId = ReportDefinitionsIndex.createReportDefinition(reportDefinitionDetails)
-        docId ?: throw ElasticsearchStatusException("Report Definition Creation failed",
+        docId ?: throw OpenSearchStatusException("Report Definition Creation failed",
             RestStatus.INTERNAL_SERVER_ERROR)
         return CreateReportDefinitionResponse(docId)
     }
@@ -77,12 +77,12 @@ internal object ReportDefinitionActions {
         currentReportDefinitionDetails
             ?: run {
                 Metrics.REPORT_DEFINITION_UPDATE_USER_ERROR_MISSING_REPORT_DEF_DETAILS.counter.increment()
-                throw ElasticsearchStatusException("Report Definition ${request.reportDefinitionId} not found", RestStatus.NOT_FOUND)
+                throw OpenSearchStatusException("Report Definition ${request.reportDefinitionId} not found", RestStatus.NOT_FOUND)
             }
 
         if (!UserAccessManager.doesUserHasAccess(user, currentReportDefinitionDetails.tenant, currentReportDefinitionDetails.access)) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-            throw ElasticsearchStatusException("Permission denied for Report Definition ${request.reportDefinitionId}", RestStatus.FORBIDDEN)
+            throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportDefinitionId}", RestStatus.FORBIDDEN)
         }
         val currentTime = Instant.now()
         val reportDefinitionDetails = ReportDefinitionDetails(request.reportDefinitionId,
@@ -94,7 +94,7 @@ internal object ReportDefinitionActions {
         )
         if (!ReportDefinitionsIndex.updateReportDefinition(request.reportDefinitionId, reportDefinitionDetails)) {
             Metrics.REPORT_DEFINITION_UPDATE_SYSTEM_ERROR.counter.increment()
-            throw ElasticsearchStatusException("Report Definition Update failed", RestStatus.INTERNAL_SERVER_ERROR)
+            throw OpenSearchStatusException("Report Definition Update failed", RestStatus.INTERNAL_SERVER_ERROR)
         }
         return UpdateReportDefinitionResponse(request.reportDefinitionId)
     }
@@ -111,12 +111,12 @@ internal object ReportDefinitionActions {
         reportDefinitionDetails
             ?: run {
                 Metrics.REPORT_DEFINITION_INFO_SYSTEM_ERROR.counter.increment()
-                throw ElasticsearchStatusException("Report Definition ${request.reportDefinitionId} not found", RestStatus.NOT_FOUND)
+                throw OpenSearchStatusException("Report Definition ${request.reportDefinitionId} not found", RestStatus.NOT_FOUND)
             }
 
         if (!UserAccessManager.doesUserHasAccess(user, reportDefinitionDetails.tenant, reportDefinitionDetails.access)) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-            throw ElasticsearchStatusException("Permission denied for Report Definition ${request.reportDefinitionId}", RestStatus.FORBIDDEN)
+            throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportDefinitionId}", RestStatus.FORBIDDEN)
         }
         return GetReportDefinitionResponse(reportDefinitionDetails, UserAccessManager.hasAllInfoAccess(user))
     }
@@ -133,16 +133,16 @@ internal object ReportDefinitionActions {
         reportDefinitionDetails
             ?: run {
                 Metrics.REPORT_DEFINITION_DELETE_USER_ERROR_MISSING_REPORT_DEF_DETAILS.counter.increment()
-                throw ElasticsearchStatusException("Report Definition ${request.reportDefinitionId} not found", RestStatus.NOT_FOUND)
+                throw OpenSearchStatusException("Report Definition ${request.reportDefinitionId} not found", RestStatus.NOT_FOUND)
             }
 
         if (!UserAccessManager.doesUserHasAccess(user, reportDefinitionDetails.tenant, reportDefinitionDetails.access)) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-            throw ElasticsearchStatusException("Permission denied for Report Definition ${request.reportDefinitionId}", RestStatus.FORBIDDEN)
+            throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportDefinitionId}", RestStatus.FORBIDDEN)
         }
         if (!ReportDefinitionsIndex.deleteReportDefinition(request.reportDefinitionId)) {
             Metrics.REPORT_DEFINITION_DELETE_SYSTEM_ERROR.counter.increment()
-            throw ElasticsearchStatusException("Report Definition ${request.reportDefinitionId} delete failed", RestStatus.REQUEST_TIMEOUT)
+            throw OpenSearchStatusException("Report Definition ${request.reportDefinitionId} delete failed", RestStatus.REQUEST_TIMEOUT)
         }
         return DeleteReportDefinitionResponse(request.reportDefinitionId)
     }

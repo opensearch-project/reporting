@@ -15,8 +15,8 @@
  */
 package com.amazon.opendistroforelasticsearch.reportsscheduler.model
 
-import org.elasticsearch.common.xcontent.ToXContent
-import org.elasticsearch.common.xcontent.ToXContent.Params
+import org.opensearch.common.xcontent.ToXContent
+import org.opensearch.common.xcontent.ToXContent.Params
 
 /**
  * Plugin Rest common Tags.

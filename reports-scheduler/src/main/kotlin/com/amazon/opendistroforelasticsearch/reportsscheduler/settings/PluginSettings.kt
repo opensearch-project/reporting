@@ -19,12 +19,12 @@ package com.amazon.opendistroforelasticsearch.reportsscheduler.settings
 import com.amazon.opendistroforelasticsearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
 import com.amazon.opendistroforelasticsearch.reportsscheduler.ReportsSchedulerPlugin.Companion.PLUGIN_NAME
 import org.apache.logging.log4j.LogManager
-import org.elasticsearch.bootstrap.BootstrapInfo
-import org.elasticsearch.cluster.service.ClusterService
-import org.elasticsearch.common.settings.Setting
-import org.elasticsearch.common.settings.Setting.Property.Dynamic
-import org.elasticsearch.common.settings.Setting.Property.NodeScope
-import org.elasticsearch.common.settings.Settings
+import org.opensearch.bootstrap.BootstrapInfo
+import org.opensearch.cluster.service.ClusterService
+import org.opensearch.common.settings.Setting
+import org.opensearch.common.settings.Setting.Property.Dynamic
+import org.opensearch.common.settings.Setting.Property.NodeScope
+import org.opensearch.common.settings.Settings
 import java.io.IOException
 import java.nio.file.Path
 
