@@ -39,8 +39,8 @@ export class ReportsDashboardsPlugin
       id: PLUGIN_NAME,
       title: 'Reporting',
       category: {
-        id: 'odfe',
-        label: 'Open Distro for Elasticsearch',
+        id: 'opensearch',
+        label: 'OpenSearch Plugins',
         order: 2000,
       },
       order: 2000,
