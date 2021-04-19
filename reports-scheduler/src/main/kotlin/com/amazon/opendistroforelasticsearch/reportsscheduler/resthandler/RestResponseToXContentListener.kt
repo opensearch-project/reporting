@@ -18,12 +18,12 @@ package com.amazon.opendistroforelasticsearch.reportsscheduler.resthandler
 
 import com.amazon.opendistroforelasticsearch.reportsscheduler.metrics.Metrics
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.BaseResponse
-import org.elasticsearch.common.xcontent.XContentBuilder
-import org.elasticsearch.rest.BytesRestResponse
-import org.elasticsearch.rest.RestChannel
-import org.elasticsearch.rest.RestResponse
-import org.elasticsearch.rest.RestStatus
-import org.elasticsearch.rest.action.RestToXContentListener
+import org.opensearch.common.xcontent.XContentBuilder
+import org.opensearch.rest.BytesRestResponse
+import org.opensearch.rest.RestChannel
+import org.opensearch.rest.RestResponse
+import org.opensearch.rest.RestStatus
+import org.opensearch.rest.action.RestToXContentListener
 
 /**
  * Overrides RestToXContentListener REST based action listener that assumes the response is of type

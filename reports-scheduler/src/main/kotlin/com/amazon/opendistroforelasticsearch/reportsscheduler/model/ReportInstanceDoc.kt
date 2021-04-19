@@ -16,7 +16,7 @@
 
 package com.amazon.opendistroforelasticsearch.reportsscheduler.model
 
-import org.elasticsearch.index.seqno.SequenceNumbers
+import org.opensearch.index.seqno.SequenceNumbers
 
 internal data class ReportInstanceDoc(
     val reportInstance: ReportInstance,

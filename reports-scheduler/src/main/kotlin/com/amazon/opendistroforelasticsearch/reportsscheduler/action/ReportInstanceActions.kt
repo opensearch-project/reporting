@@ -37,8 +37,8 @@ import com.amazon.opendistroforelasticsearch.reportsscheduler.model.UpdateReport
 import com.amazon.opendistroforelasticsearch.reportsscheduler.security.UserAccessManager
 import com.amazon.opendistroforelasticsearch.reportsscheduler.settings.PluginSettings
 import com.amazon.opendistroforelasticsearch.reportsscheduler.util.logger
-import org.elasticsearch.ElasticsearchStatusException
-import org.elasticsearch.rest.RestStatus
+import org.opensearch.OpenSearchStatusException
+import org.opensearch.rest.RestStatus
 import java.time.Instant
 import kotlin.random.Random
 
@@ -71,7 +71,7 @@ internal object ReportInstanceActions {
         val docId = ReportInstancesIndex.createReportInstance(reportInstance)
         docId ?: run {
             Metrics.REPORT_FROM_DEFINITION_SYSTEM_ERROR.counter.increment()
-            throw ElasticsearchStatusException("Report Instance Creation failed", RestStatus.INTERNAL_SERVER_ERROR)
+            throw OpenSearchStatusException("Report Instance Creation failed", RestStatus.INTERNAL_SERVER_ERROR)
         }
         val reportInstanceCopy = reportInstance.copy(id = docId)
         return InContextReportCreateResponse(reportInstanceCopy, UserAccessManager.hasAllInfoAccess(user))
@@ -90,12 +90,12 @@ internal object ReportInstanceActions {
         reportDefinitionDetails
             ?: run {
                 Metrics.REPORT_DEFINITION_INFO_USER_ERROR_MISSING_REPORT_DEF_DETAILS.counter.increment()
-                throw ElasticsearchStatusException("Report Definition ${request.reportDefinitionId} not found", RestStatus.NOT_FOUND)
+                throw OpenSearchStatusException("Report Definition ${request.reportDefinitionId} not found", RestStatus.NOT_FOUND)
             }
 
         if (!UserAccessManager.doesUserHasAccess(user, reportDefinitionDetails.tenant, reportDefinitionDetails.access)) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-            throw ElasticsearchStatusException("Permission denied for Report Definition ${request.reportDefinitionId}", RestStatus.FORBIDDEN)
+            throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportDefinitionId}", RestStatus.FORBIDDEN)
         }
         val beginTime: Instant = currentTime.minus(reportDefinitionDetails.reportDefinition.format.duration)
         val endTime: Instant = currentTime
@@ -112,7 +112,7 @@ internal object ReportInstanceActions {
         val docId = ReportInstancesIndex.createReportInstance(reportInstance)
         docId ?: run {
             Metrics.REPORT_FROM_DEFINITION_ID_SYSTEM_ERROR.counter.increment()
-            throw ElasticsearchStatusException("Report Instance Creation failed", RestStatus.INTERNAL_SERVER_ERROR)
+            throw OpenSearchStatusException("Report Instance Creation failed", RestStatus.INTERNAL_SERVER_ERROR)
         }
         val reportInstanceCopy = reportInstance.copy(id = docId)
         return OnDemandReportCreateResponse(reportInstanceCopy, UserAccessManager.hasAllInfoAccess(user))
@@ -130,15 +130,15 @@ internal object ReportInstanceActions {
         currentReportInstance
             ?: run {
                 Metrics.REPORT_INSTANCE_UPDATE_USER_ERROR_MISSING_REPORT_INSTANCE.counter.increment()
-                throw ElasticsearchStatusException("Report Instance ${request.reportInstanceId} not found", RestStatus.NOT_FOUND)
+                throw OpenSearchStatusException("Report Instance ${request.reportInstanceId} not found", RestStatus.NOT_FOUND)
             }
         if (!UserAccessManager.doesUserHasAccess(user, currentReportInstance.tenant, currentReportInstance.access)) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-            throw ElasticsearchStatusException("Permission denied for Report Definition ${request.reportInstanceId}", RestStatus.FORBIDDEN)
+            throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportInstanceId}", RestStatus.FORBIDDEN)
         }
         if (request.status == Status.Scheduled) { // Don't allow changing status to Scheduled
             Metrics.REPORT_INSTANCE_UPDATE_USER_ERROR_INVALID_STATUS.counter.increment()
-            throw ElasticsearchStatusException("Status cannot be updated to ${Status.Scheduled}", RestStatus.BAD_REQUEST)
+            throw OpenSearchStatusException("Status cannot be updated to ${Status.Scheduled}", RestStatus.BAD_REQUEST)
         }
         val currentTime = Instant.now()
         val updatedReportInstance = currentReportInstance.copy(updatedTime = currentTime,
@@ -146,7 +146,7 @@ internal object ReportInstanceActions {
             statusText = request.statusText)
         if (!ReportInstancesIndex.updateReportInstance(updatedReportInstance)) {
             Metrics.REPORT_INSTANCE_UPDATE_SYSTEM_ERROR.counter.increment()
-            throw ElasticsearchStatusException("Report Instance state update failed", RestStatus.INTERNAL_SERVER_ERROR)
+            throw OpenSearchStatusException("Report Instance state update failed", RestStatus.INTERNAL_SERVER_ERROR)
         }
         return UpdateReportInstanceStatusResponse(request.reportInstanceId)
     }
@@ -163,12 +163,12 @@ internal object ReportInstanceActions {
         reportInstance
             ?: run {
                 Metrics.REPORT_INSTANCE_INFO_USER_ERROR_MISSING_REPORT_INSTANCE.counter.increment()
-                throw ElasticsearchStatusException("Report Instance ${request.reportInstanceId} not found", RestStatus.NOT_FOUND)
+                throw OpenSearchStatusException("Report Instance ${request.reportInstanceId} not found", RestStatus.NOT_FOUND)
             }
 
         if (!UserAccessManager.doesUserHasAccess(user, reportInstance.tenant, reportInstance.access)) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-            throw ElasticsearchStatusException("Permission denied for Report Definition ${request.reportInstanceId}", RestStatus.FORBIDDEN)
+            throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportInstanceId}", RestStatus.FORBIDDEN)
         }
         return GetReportInstanceResponse(reportInstance, UserAccessManager.hasAllInfoAccess(user))
     }

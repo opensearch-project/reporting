@@ -20,7 +20,7 @@ import com.amazon.opendistroforelasticsearch.jobscheduler.spi.JobDocVersion
 import com.amazon.opendistroforelasticsearch.jobscheduler.spi.ScheduledJobParameter
 import com.amazon.opendistroforelasticsearch.jobscheduler.spi.ScheduledJobParser
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.ReportDefinitionDetails
-import org.elasticsearch.common.xcontent.XContentParser
+import org.opensearch.common.xcontent.XContentParser
 
 internal object ReportDefinitionJobParser : ScheduledJobParser {
     /**

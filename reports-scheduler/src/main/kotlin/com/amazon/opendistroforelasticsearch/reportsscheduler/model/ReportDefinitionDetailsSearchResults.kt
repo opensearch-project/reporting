@@ -17,8 +17,8 @@
 package com.amazon.opendistroforelasticsearch.reportsscheduler.model
 
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.RestTag.REPORT_DEFINITION_LIST_FIELD
-import org.elasticsearch.action.search.SearchResponse
-import org.elasticsearch.common.xcontent.XContentParser
+import org.opensearch.action.search.SearchResponse
+import org.opensearch.common.xcontent.XContentParser
 
 /**
  * ReportDefinitions search results

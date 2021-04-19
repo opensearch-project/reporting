@@ -16,12 +16,12 @@
 
 package com.amazon.opendistroforelasticsearch.reportsscheduler.model
 
-import org.elasticsearch.action.ActionResponse
-import org.elasticsearch.common.xcontent.ToXContent
-import org.elasticsearch.common.xcontent.ToXContentObject
-import org.elasticsearch.common.xcontent.XContentBuilder
-import org.elasticsearch.common.xcontent.XContentFactory
-import org.elasticsearch.rest.RestStatus
+import org.opensearch.action.ActionResponse
+import org.opensearch.common.xcontent.ToXContent
+import org.opensearch.common.xcontent.ToXContentObject
+import org.opensearch.common.xcontent.XContentBuilder
+import org.opensearch.common.xcontent.XContentFactory
+import org.opensearch.rest.RestStatus
 
 /**
  * Base response which give REST status.

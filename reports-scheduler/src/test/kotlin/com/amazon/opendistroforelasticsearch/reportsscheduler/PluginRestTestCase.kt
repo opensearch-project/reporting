@@ -28,19 +28,19 @@ import org.apache.http.impl.client.BasicCredentialsProvider
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder
 import org.apache.http.message.BasicHeader
 import org.apache.http.ssl.SSLContextBuilder
-import org.elasticsearch.client.Request
-import org.elasticsearch.client.RequestOptions
-import org.elasticsearch.client.Response
-import org.elasticsearch.client.ResponseException
-import org.elasticsearch.client.RestClient
-import org.elasticsearch.client.RestClientBuilder
-import org.elasticsearch.common.settings.Settings
-import org.elasticsearch.common.unit.TimeValue
-import org.elasticsearch.common.util.concurrent.ThreadContext
-import org.elasticsearch.common.xcontent.DeprecationHandler
-import org.elasticsearch.common.xcontent.NamedXContentRegistry
-import org.elasticsearch.common.xcontent.XContentType
-import org.elasticsearch.test.rest.ESRestTestCase
+import org.opensearch.client.Request
+import org.opensearch.client.RequestOptions
+import org.opensearch.client.Response
+import org.opensearch.client.ResponseException
+import org.opensearch.client.RestClient
+import org.opensearch.client.RestClientBuilder
+import org.opensearch.common.settings.Settings
+import org.opensearch.common.unit.TimeValue
+import org.opensearch.common.util.concurrent.ThreadContext
+import org.opensearch.common.xcontent.DeprecationHandler
+import org.opensearch.common.xcontent.NamedXContentRegistry
+import org.opensearch.common.xcontent.XContentType
+import org.opensearch.test.rest.OpenSearchRestTestCase
 import org.junit.After
 import org.junit.AfterClass
 import org.junit.Before
@@ -56,7 +56,7 @@ import javax.management.ObjectName
 import javax.management.remote.JMXConnectorFactory
 import javax.management.remote.JMXServiceURL
 
-abstract class PluginRestTestCase : ESRestTestCase() {
+abstract class PluginRestTestCase : OpenSearchRestTestCase() {
 
     private fun isHttps(): Boolean {
         return System.getProperty("https", "false")!!.toBoolean()
@@ -87,7 +87,7 @@ abstract class PluginRestTestCase : ESRestTestCase() {
                 val jsonObject: Map<*, *> = index as java.util.HashMap<*, *>
                 val indexName: String = jsonObject["index"] as String
                 // .opendistro_security isn't allowed to delete from cluster
-                if (".opendistro_security" != indexName) {
+                if (!indexName.startsWith(".kibana") && !indexName.startsWith(".opendistro_security")) {
                     client().performRequest(Request("DELETE", "/$indexName"))
                 }
             }
