@@ -50,13 +50,6 @@ jobs:
           max_attempts: 3
           command: cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}; yarn test
 
-      - name: Upload coverage
-        uses: codecov/codecov-action@v1
-        with:
-          flags: dashboards-reports
-          directory: OpenSearch-Dashboards/plugins/
-          token: ${{ secrets.CODECOV_TOKEN }}
-
       - name: Build Artifact
         run: |
           cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
