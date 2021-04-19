@@ -1,4 +1,15 @@
 /*
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * The OpenSearch Contributors require contributions made to
+ * this file be licensed under the Apache-2.0 license or a
+ * compatible open source license.
+ *
+ * Modifications Copyright OpenSearch Contributors. See
+ * GitHub history for details.
+ */
+
+/*
  * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
@@ -17,6 +28,7 @@
 package com.amazon.opendistroforelasticsearch.reportsscheduler.index
 
 import com.amazon.opendistroforelasticsearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
+import com.amazon.opendistroforelasticsearch.reportsscheduler.metrics.Metrics
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.ReportDefinitionDetails
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.ReportDefinitionDetailsSearchResults
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.RestTag.ACCESS_LIST_FIELD
@@ -25,22 +37,22 @@ import com.amazon.opendistroforelasticsearch.reportsscheduler.model.RestTag.UPDA
 import com.amazon.opendistroforelasticsearch.reportsscheduler.settings.PluginSettings
 import com.amazon.opendistroforelasticsearch.reportsscheduler.util.SecureIndexClient
 import com.amazon.opendistroforelasticsearch.reportsscheduler.util.logger
-import org.elasticsearch.ResourceAlreadyExistsException
-import org.elasticsearch.action.DocWriteResponse
-import org.elasticsearch.action.admin.indices.create.CreateIndexRequest
-import org.elasticsearch.action.delete.DeleteRequest
-import org.elasticsearch.action.get.GetRequest
-import org.elasticsearch.action.index.IndexRequest
-import org.elasticsearch.action.search.SearchRequest
-import org.elasticsearch.action.update.UpdateRequest
-import org.elasticsearch.client.Client
-import org.elasticsearch.cluster.service.ClusterService
-import org.elasticsearch.common.unit.TimeValue
-import org.elasticsearch.common.xcontent.LoggingDeprecationHandler
-import org.elasticsearch.common.xcontent.NamedXContentRegistry
-import org.elasticsearch.common.xcontent.XContentType
-import org.elasticsearch.index.query.QueryBuilders
-import org.elasticsearch.search.builder.SearchSourceBuilder
+import org.opensearch.ResourceAlreadyExistsException
+import org.opensearch.action.DocWriteResponse
+import org.opensearch.action.admin.indices.create.CreateIndexRequest
+import org.opensearch.action.delete.DeleteRequest
+import org.opensearch.action.get.GetRequest
+import org.opensearch.action.index.IndexRequest
+import org.opensearch.action.search.SearchRequest
+import org.opensearch.action.update.UpdateRequest
+import org.opensearch.client.Client
+import org.opensearch.cluster.service.ClusterService
+import org.opensearch.common.unit.TimeValue
+import org.opensearch.common.xcontent.LoggingDeprecationHandler
+import org.opensearch.common.xcontent.NamedXContentRegistry
+import org.opensearch.common.xcontent.XContentType
+import org.opensearch.index.query.QueryBuilders
+import org.opensearch.search.builder.SearchSourceBuilder
 import java.util.concurrent.TimeUnit
 
 /**
@@ -84,10 +96,12 @@ internal object ReportDefinitionsIndex {
                 if (response.isAcknowledged) {
                     log.info("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation Acknowledged")
                 } else {
+                    Metrics.REPORT_DEFINITION_CREATE_SYSTEM_ERROR.counter.increment()
                     throw IllegalStateException("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation not Acknowledged")
                 }
             } catch (exception: Exception) {
                 if (exception !is ResourceAlreadyExistsException && exception.cause !is ResourceAlreadyExistsException) {
+                    Metrics.REPORT_DEFINITION_CREATE_SYSTEM_ERROR.counter.increment()
                     throw exception
                 }
             }
@@ -117,6 +131,7 @@ internal object ReportDefinitionsIndex {
         val actionFuture = client.index(indexRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         return if (response.result != DocWriteResponse.Result.CREATED) {
+            Metrics.REPORT_DEFINITION_CREATE_SYSTEM_ERROR.counter.increment()
             log.warn("$LOG_PREFIX:createReportDefinition - response:$response")
             null
         } else {
@@ -198,6 +213,7 @@ internal object ReportDefinitionsIndex {
         val actionFuture = client.update(updateRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         if (response.result != DocWriteResponse.Result.UPDATED) {
+            Metrics.REPORT_DEFINITION_UPDATE_SYSTEM_ERROR.counter.increment()
             log.warn("$LOG_PREFIX:updateReportDefinition failed for $id; response:$response")
         }
         return response.result == DocWriteResponse.Result.UPDATED
@@ -216,6 +232,7 @@ internal object ReportDefinitionsIndex {
         val actionFuture = client.delete(deleteRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         if (response.result != DocWriteResponse.Result.DELETED) {
+            Metrics.REPORT_DEFINITION_DELETE_SYSTEM_ERROR.counter.increment()
             log.warn("$LOG_PREFIX:deleteReportDefinition failed for $id; response:$response")
         }
         return response.result == DocWriteResponse.Result.DELETED

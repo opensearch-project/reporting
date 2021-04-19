@@ -1,4 +1,15 @@
 /*
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * The OpenSearch Contributors require contributions made to
+ * this file be licensed under the Apache-2.0 license or a
+ * compatible open source license.
+ *
+ * Modifications Copyright OpenSearch Contributors. See
+ * GitHub history for details.
+ */
+
+/*
  * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
@@ -19,25 +30,25 @@ import com.amazon.opendistroforelasticsearch.reportsscheduler.ReportsSchedulerPl
 import com.amazon.opendistroforelasticsearch.reportsscheduler.action.InContextReportCreateAction
 import com.amazon.opendistroforelasticsearch.reportsscheduler.action.OnDemandReportCreateAction
 import com.amazon.opendistroforelasticsearch.reportsscheduler.action.ReportInstanceActions
+import com.amazon.opendistroforelasticsearch.reportsscheduler.metrics.Metrics
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.InContextReportCreateRequest
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.OnDemandReportCreateRequest
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.RestTag.REPORT_DEFINITION_ID_FIELD
 import com.amazon.opendistroforelasticsearch.reportsscheduler.util.contentParserNextToken
-import org.elasticsearch.client.node.NodeClient
-import org.elasticsearch.rest.BaseRestHandler
-import org.elasticsearch.rest.BaseRestHandler.RestChannelConsumer
-import org.elasticsearch.rest.BytesRestResponse
-import org.elasticsearch.rest.RestHandler.Route
-import org.elasticsearch.rest.RestRequest
-import org.elasticsearch.rest.RestRequest.Method.POST
-import org.elasticsearch.rest.RestRequest.Method.PUT
-import org.elasticsearch.rest.RestStatus
+import org.opensearch.client.node.NodeClient
+import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
+import org.opensearch.rest.BytesRestResponse
+import org.opensearch.rest.RestHandler.Route
+import org.opensearch.rest.RestRequest
+import org.opensearch.rest.RestRequest.Method.POST
+import org.opensearch.rest.RestRequest.Method.PUT
+import org.opensearch.rest.RestStatus
 
 /**
  * Rest handler for creating on-demand report instances.
  * This handler uses [ReportInstanceActions].
  */
-internal class OnDemandReportRestHandler : BaseRestHandler() {
+internal class OnDemandReportRestHandler : PluginBaseHandler() {
     companion object {
         private const val REPORT_INSTANCE_LIST_ACTION = "on_demand_report_actions"
         private const val ON_DEMAND_REPORT_URL = "$BASE_REPORTS_URI/on_demand"
@@ -83,14 +94,18 @@ internal class OnDemandReportRestHandler : BaseRestHandler() {
     /**
      * {@inheritDoc}
      */
-    override fun prepareRequest(request: RestRequest, client: NodeClient): RestChannelConsumer {
+    override fun executeRequest(request: RestRequest, client: NodeClient): RestChannelConsumer {
         return when (request.method()) {
             PUT -> RestChannelConsumer {
+                Metrics.REPORT_FROM_DEFINITION_TOTAL.counter.increment()
+                Metrics.REPORT_FROM_DEFINITION_INTERVAL_COUNT.counter.increment()
                 client.execute(InContextReportCreateAction.ACTION_TYPE,
                     InContextReportCreateRequest(request.contentParserNextToken()),
                     RestResponseToXContentListener(it))
             }
             POST -> RestChannelConsumer {
+                Metrics.REPORT_FROM_DEFINITION_ID_TOTAL.counter.increment()
+                Metrics.REPORT_FROM_DEFINITION_ID_INTERVAL_COUNT.counter.increment()
                 client.execute(OnDemandReportCreateAction.ACTION_TYPE,
                     OnDemandReportCreateRequest.parse(request.contentParserNextToken(), request.param(REPORT_DEFINITION_ID_FIELD)),
                     RestResponseToXContentListener(it))

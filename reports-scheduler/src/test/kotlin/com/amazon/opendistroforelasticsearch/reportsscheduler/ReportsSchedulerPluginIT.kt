@@ -1,4 +1,15 @@
 /*
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * The OpenSearch Contributors require contributions made to
+ * this file be licensed under the Apache-2.0 license or a
+ * compatible open source license.
+ *
+ * Modifications Copyright OpenSearch Contributors. See
+ * GitHub history for details.
+ */
+
+/*
  * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
@@ -14,14 +25,14 @@
  */
 package com.amazon.opendistroforelasticsearch.reportsscheduler
 
-import org.elasticsearch.action.admin.cluster.health.ClusterHealthRequest
-import org.elasticsearch.action.admin.cluster.node.info.NodesInfoRequest
-import org.elasticsearch.action.admin.cluster.node.info.PluginsAndModules
-import org.elasticsearch.cluster.health.ClusterHealthStatus
-import org.elasticsearch.plugins.PluginInfo
-import org.elasticsearch.test.ESIntegTestCase
+import org.opensearch.action.admin.cluster.health.ClusterHealthRequest
+import org.opensearch.action.admin.cluster.node.info.NodesInfoRequest
+import org.opensearch.action.admin.cluster.node.info.PluginsAndModules
+import org.opensearch.cluster.health.ClusterHealthStatus
+import org.opensearch.plugins.PluginInfo
+import org.opensearch.test.OpenSearchIntegTestCase
 
-class ReportsSchedulerPluginIT : ESIntegTestCase() {
+class ReportsSchedulerPluginIT : OpenSearchIntegTestCase() {
     fun testPluginsAreInstalled() {
         val request = ClusterHealthRequest()
         val response = client().admin().cluster().health(request).actionGet()

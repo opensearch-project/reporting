@@ -1,4 +1,15 @@
 /*
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * The OpenSearch Contributors require contributions made to
+ * this file be licensed under the Apache-2.0 license or a
+ * compatible open source license.
+ *
+ * Modifications Copyright OpenSearch Contributors. See
+ * GitHub history for details.
+ */
+
+/*
  * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
@@ -17,10 +28,11 @@
 package com.amazon.opendistroforelasticsearch.reportsscheduler.security
 
 import com.amazon.opendistroforelasticsearch.commons.authuser.User
+import com.amazon.opendistroforelasticsearch.reportsscheduler.metrics.Metrics
 import com.amazon.opendistroforelasticsearch.reportsscheduler.settings.PluginSettings
 import com.amazon.opendistroforelasticsearch.reportsscheduler.settings.PluginSettings.FilterBy
-import org.elasticsearch.ElasticsearchStatusException
-import org.elasticsearch.rest.RestStatus
+import org.opensearch.OpenSearchStatusException
+import org.opensearch.rest.RestStatus
 import java.util.stream.Collectors
 
 /**
@@ -48,7 +60,8 @@ internal object UserAccessManager {
      */
     fun validateUser(user: User?) {
         if (isUserPrivateTenant(user) && user?.name == null) {
-            throw ElasticsearchStatusException("User name not provided for private tenant access",
+            Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
+            throw OpenSearchStatusException("User name not provided for private tenant access",
                 RestStatus.FORBIDDEN)
         }
         when (PluginSettings.filterBy) {
@@ -56,21 +69,27 @@ internal object UserAccessManager {
             }
             FilterBy.User -> { // User name must be present
                 user?.name
-                    ?: throw ElasticsearchStatusException("Filter-by enabled with security disabled",
-                        RestStatus.FORBIDDEN)
+                    ?: run {
+                        Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
+                        throw OpenSearchStatusException("Filter-by enabled with security disabled",
+                            RestStatus.FORBIDDEN)
+                    }
             }
             FilterBy.Roles -> { // backend roles must be present
                 if (user == null || user.roles.isNullOrEmpty()) {
-                    throw ElasticsearchStatusException("User doesn't have roles configured. Contact administrator.",
+                    Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
+                    throw OpenSearchStatusException("User doesn't have roles configured. Contact administrator.",
                         RestStatus.FORBIDDEN)
                 } else if (user.roles.stream().filter { !PluginSettings.ignoredRoles.contains(it) }.count() == 0L) {
-                    throw ElasticsearchStatusException("No distinguishing roles configured. Contact administrator.",
+                    Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
+                    throw OpenSearchStatusException("No distinguishing roles configured. Contact administrator.",
                         RestStatus.FORBIDDEN)
                 }
             }
             FilterBy.BackendRoles -> { // backend roles must be present
                 if (user?.backendRoles.isNullOrEmpty()) {
-                    throw ElasticsearchStatusException("User doesn't have backend roles configured. Contact administrator.",
+                    Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
+                    throw OpenSearchStatusException("User doesn't have backend roles configured. Contact administrator.",
                         RestStatus.FORBIDDEN)
                 }
             }
@@ -83,7 +102,8 @@ internal object UserAccessManager {
     fun validatePollingUser(user: User?) {
         if (user != null) { // Check only if security is enabled
             if (user.name != KIBANA_SERVER_USER) {
-                throw ElasticsearchStatusException("Permission denied", RestStatus.FORBIDDEN)
+                Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
+                throw OpenSearchStatusException("Permission denied", RestStatus.FORBIDDEN)
             }
         }
     }

@@ -1,3 +1,14 @@
+##
+# SPDX-License-Identifier: Apache-2.0
+#
+# The OpenSearch Contributors require contributions made to
+# this file be licensed under the Apache-2.0 license or a
+# compatible open source license.
+#
+# Modifications Copyright OpenSearch Contributors. See
+# GitHub history for details.
+##
+
 #
 # Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 #
@@ -22,7 +33,7 @@ import sys
 import fileinput
 import re
 
-link_prefix = "https://github.com/opendistro-for-elasticsearch/kibana-reports/reports-scheduler"
+link_prefix = "https://github.com/opendistro-for-opensearch/kibana-reports/reports-scheduler"
 searchExp = re.compile("([\(\[]).*?([\)\]])")
 
 current_date = raw_input("what day is today (e.g. 2020-06-29): ")
@@ -31,8 +42,8 @@ plugin_name = "reports-scheduler"
 plugin_version = raw_input('Plugin version (x.x.x.x): ')
 
 app_num = int(
-    raw_input('Elasticsearch plugin (enter 1) or Kibana plugin (enter 2)? '))
-app = 'Elasticsearch'
+    raw_input('OpenSearch plugin (enter 1) or Kibana plugin (enter 2)? '))
+app = 'OpenSearch'
 if app_num is 2:
     app = 'Kibana'
 
@@ -54,7 +65,7 @@ for line in fileinput.input(file_path, inplace=True):
     sys.stdout.write(line)
 
 # Rename file to be consistent with ODFE standards
-new_file_path = "opendistro-for-elasticsearch-" + plugin_name + ".release-notes-" + \
+new_file_path = "opendistro-for-opensearch-" + plugin_name + ".release-notes-" + \
     plugin_version + ".md"
 os.rename(file_path, new_file_path)
 

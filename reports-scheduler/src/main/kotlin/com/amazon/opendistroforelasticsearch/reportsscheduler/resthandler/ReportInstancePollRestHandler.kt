@@ -1,4 +1,15 @@
 /*
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * The OpenSearch Contributors require contributions made to
+ * this file be licensed under the Apache-2.0 license or a
+ * compatible open source license.
+ *
+ * Modifications Copyright OpenSearch Contributors. See
+ * GitHub history for details.
+ */
+
+/*
  * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
@@ -19,20 +30,19 @@ import com.amazon.opendistroforelasticsearch.reportsscheduler.ReportsSchedulerPl
 import com.amazon.opendistroforelasticsearch.reportsscheduler.action.PollReportInstanceAction
 import com.amazon.opendistroforelasticsearch.reportsscheduler.action.ReportInstanceActions
 import com.amazon.opendistroforelasticsearch.reportsscheduler.model.PollReportInstanceRequest
-import org.elasticsearch.client.node.NodeClient
-import org.elasticsearch.rest.BaseRestHandler
-import org.elasticsearch.rest.BaseRestHandler.RestChannelConsumer
-import org.elasticsearch.rest.BytesRestResponse
-import org.elasticsearch.rest.RestHandler.Route
-import org.elasticsearch.rest.RestRequest
-import org.elasticsearch.rest.RestRequest.Method.GET
-import org.elasticsearch.rest.RestStatus
+import org.opensearch.client.node.NodeClient
+import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
+import org.opensearch.rest.BytesRestResponse
+import org.opensearch.rest.RestHandler.Route
+import org.opensearch.rest.RestRequest
+import org.opensearch.rest.RestRequest.Method.GET
+import org.opensearch.rest.RestStatus
 
 /**
  * Rest handler for getting list of report instances.
  * This handler uses [ReportInstanceActions].
  */
-internal class ReportInstancePollRestHandler : BaseRestHandler() {
+internal class ReportInstancePollRestHandler : PluginBaseHandler() {
     companion object {
         private const val REPORT_INSTANCE_POLL_ACTION = "report_instance_poll_actions"
         private const val POLL_REPORT_INSTANCE_URL = "$BASE_REPORTS_URI/poll_instance"
@@ -70,7 +80,7 @@ internal class ReportInstancePollRestHandler : BaseRestHandler() {
     /**
      * {@inheritDoc}
      */
-    override fun prepareRequest(request: RestRequest, client: NodeClient): RestChannelConsumer {
+    override fun executeRequest(request: RestRequest, client: NodeClient): RestChannelConsumer {
         return when (request.method()) {
             GET -> RestChannelConsumer {
                 client.execute(PollReportInstanceAction.ACTION_TYPE,

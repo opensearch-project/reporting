@@ -1,4 +1,15 @@
 /*
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * The OpenSearch Contributors require contributions made to
+ * this file be licensed under the Apache-2.0 license or a
+ * compatible open source license.
+ *
+ * Modifications Copyright OpenSearch Contributors. See
+ * GitHub history for details.
+ */
+
+/*
  * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
@@ -38,36 +49,38 @@ import com.amazon.opendistroforelasticsearch.reportsscheduler.resthandler.Report
 import com.amazon.opendistroforelasticsearch.reportsscheduler.resthandler.ReportInstanceListRestHandler
 import com.amazon.opendistroforelasticsearch.reportsscheduler.resthandler.ReportInstancePollRestHandler
 import com.amazon.opendistroforelasticsearch.reportsscheduler.resthandler.ReportInstanceRestHandler
+import com.amazon.opendistroforelasticsearch.reportsscheduler.resthandler.ReportStatsRestHandler
 import com.amazon.opendistroforelasticsearch.reportsscheduler.scheduler.ReportDefinitionJobParser
 import com.amazon.opendistroforelasticsearch.reportsscheduler.scheduler.ReportDefinitionJobRunner
 import com.amazon.opendistroforelasticsearch.reportsscheduler.settings.PluginSettings
-import org.elasticsearch.action.ActionRequest
-import org.elasticsearch.action.ActionResponse
-import org.elasticsearch.client.Client
-import org.elasticsearch.cluster.metadata.IndexNameExpressionResolver
-import org.elasticsearch.cluster.node.DiscoveryNodes
-import org.elasticsearch.cluster.service.ClusterService
-import org.elasticsearch.common.io.stream.NamedWriteableRegistry
-import org.elasticsearch.common.settings.ClusterSettings
-import org.elasticsearch.common.settings.IndexScopedSettings
-import org.elasticsearch.common.settings.Setting
-import org.elasticsearch.common.settings.Settings
-import org.elasticsearch.common.settings.SettingsFilter
-import org.elasticsearch.common.xcontent.NamedXContentRegistry
-import org.elasticsearch.env.Environment
-import org.elasticsearch.env.NodeEnvironment
-import org.elasticsearch.plugins.ActionPlugin
-import org.elasticsearch.plugins.Plugin
-import org.elasticsearch.repositories.RepositoriesService
-import org.elasticsearch.rest.RestController
-import org.elasticsearch.rest.RestHandler
-import org.elasticsearch.script.ScriptService
-import org.elasticsearch.threadpool.ThreadPool
-import org.elasticsearch.watcher.ResourceWatcherService
+
+import org.opensearch.action.ActionRequest
+import org.opensearch.action.ActionResponse
+import org.opensearch.client.Client
+import org.opensearch.cluster.metadata.IndexNameExpressionResolver
+import org.opensearch.cluster.node.DiscoveryNodes
+import org.opensearch.cluster.service.ClusterService
+import org.opensearch.common.io.stream.NamedWriteableRegistry
+import org.opensearch.common.settings.ClusterSettings
+import org.opensearch.common.settings.IndexScopedSettings
+import org.opensearch.common.settings.Setting
+import org.opensearch.common.settings.Settings
+import org.opensearch.common.settings.SettingsFilter
+import org.opensearch.common.xcontent.NamedXContentRegistry
+import org.opensearch.env.Environment
+import org.opensearch.env.NodeEnvironment
+import org.opensearch.plugins.ActionPlugin
+import org.opensearch.plugins.Plugin
+import org.opensearch.repositories.RepositoriesService
+import org.opensearch.rest.RestController
+import org.opensearch.rest.RestHandler
+import org.opensearch.script.ScriptService
+import org.opensearch.threadpool.ThreadPool
+import org.opensearch.watcher.ResourceWatcherService
 import java.util.function.Supplier
 
 /**
- * Entry point of the OpenDistro for Elasticsearch Reports scheduler plugin.
+ * Entry point of the OpenDistro for OpenSearch Reports scheduler plugin.
  * This class initializes the rest handlers.
  */
 class ReportsSchedulerPlugin : Plugin(), ActionPlugin, JobSchedulerExtension {
@@ -153,7 +166,8 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, JobSchedulerExtension {
             ReportInstanceRestHandler(),
             ReportInstanceListRestHandler(),
             OnDemandReportRestHandler(),
-            ReportInstancePollRestHandler()
+            ReportInstancePollRestHandler(),
+            ReportStatsRestHandler()
         )
     }
 

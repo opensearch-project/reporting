@@ -1,5 +1,16 @@
 ---
 ##
+# SPDX-License-Identifier: Apache-2.0
+#
+# The OpenSearch Contributors require contributions made to
+# this file be licensed under the Apache-2.0 license or a
+# compatible open source license.
+#
+# Modifications Copyright OpenSearch Contributors. See
+# GitHub history for details.
+##
+
+##
 # Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License").
@@ -19,12 +30,12 @@
 opendistro.reports:
   general:
     operationTimeoutMs: 60000 # 60 seconds, Minimum 100ms
+    defaultItemsQueryCount: 100 # default number of items to query
   polling:
     jobLockDurationSeconds: 300 # 5 Minutes, Minimum 10 seconds
     minPollingDurationSeconds: 300 # 5 Minutes, Minimum 60 seconds
     maxPollingDurationSeconds: 900 # 15 Minutes, Minimum 5 Minutes
     maxLockRetries: 1 # Max number of retries to retry locking
-    defaultItemsQueryCount: 100 # default number of items to query
   access:
     adminAccess: "AllReports"
     # adminAccess values:
