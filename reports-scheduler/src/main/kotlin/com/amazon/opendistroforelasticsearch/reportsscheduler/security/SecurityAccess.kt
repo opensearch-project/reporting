@@ -27,7 +27,7 @@
 
 package com.amazon.opendistroforelasticsearch.reportsscheduler.security
 
-import org.elasticsearch.SpecialPermission
+import org.opensearch.SpecialPermission
 import java.security.AccessController
 import java.security.PrivilegedActionException
 import java.security.PrivilegedExceptionAction
@@ -35,7 +35,7 @@ import java.security.PrivilegedExceptionAction
 /**
  * Class for providing the elevated permission for the function call.
  * Ref:
- * https://www.elastic.co/guide/en/elasticsearch/plugins/current/plugin-authors.html#_java_security_permissions
+ * https://www.elastic.co/guide/en/opensearch/plugins/current/plugin-authors.html#_java_security_permissions
  */
 internal object SecurityAccess {
     /**
