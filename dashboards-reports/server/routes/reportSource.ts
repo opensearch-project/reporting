@@ -73,8 +73,13 @@ export default function (router: IRouter) {
           size: DEFAULT_MAX_SIZE,
         };
         responseParams = params;
-      }
-      try {
+      } else if (request.params.reportSourceType === 'notebooks') {
+        const params: RequestParams.Search = {
+          index: '.opendistro-notebooks',
+          size: DEFAULT_MAX_SIZE,
+        };
+        responseParams = params;
+      } try {
         const opensearchResp = await context.core.opensearch.legacy.client.callAsCurrentUser(
           'search',
           responseParams

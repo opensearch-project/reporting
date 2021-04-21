@@ -52,7 +52,7 @@ export const isValidRelativeUrl = (relativeUrl: string) => {
 export const regexDuration = /^(-?)P(?=\d|T\d)(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)([DW]))?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$/;
 export const regexEmailAddress = /\S+@\S+\.\S+/;
 export const regexReportName = /^[\w\-\s\(\)\[\]\,\_\-+]+$/;
-export const regexRelativeUrl = /^\/(_plugin\/kibana\/app|app)\/(dashboards|visualize|discover)(\?security_tenant=.+|)#\/(view|edit)\/[^\/]+$/;
+export const regexRelativeUrl = /^\/(_plugin\/kibana\/app|app)\/(dashboards|visualize|discover|notebooks-dashboards)(\?security_tenant=.+|)#\/(view\/|edit\/)?[^\/]+$/;
 
 export const validateReport = async (
   client: ILegacyScopedClusterClient,
@@ -120,17 +120,21 @@ const validateSavedObject = async (
         return 'search';
       case REPORT_TYPE.visualization:
         return 'visualization';
+      case REPORT_TYPE.notebook:
+        return 'notebook';
     }
   };
 
   const savedObjectId = `${getType(source)}:${getId(url)}`;
-  const params: RequestParams.Exists = {
-    index: '.opensearch_dashboards',
-    id: savedObjectId,
-  };
+  if (getType(source) != 'notebook') {
+    const params: RequestParams.Exists = {
+      index: '.opensearch_dashboards',
+      id: savedObjectId,
+    };
 
-  const exist = await client.callAsCurrentUser('exists', params);
-  if (!exist) {
-    throw Error(`saved object with id ${savedObjectId} does not exist`);
+    const exist = await client.callAsCurrentUser('exists', params);
+    if (!exist) {
+      throw Error(`saved object with id ${savedObjectId} does not exist`);
+    }
   }
 };
