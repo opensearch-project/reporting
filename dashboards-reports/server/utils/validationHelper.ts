@@ -125,16 +125,22 @@ const validateSavedObject = async (
     }
   };
 
-  const savedObjectId = `${getType(source)}:${getId(url)}`;
-  if (getType(source) != 'notebook') {
+  let exist = false;
+  let savedObjectId = '';
+  if (getType(source) === 'notebook') {
+
+
+    exist = await client.callAsCurrentUser('exists', params);
+  }
+  else {
+    savedObjectId = `${getType(source)}:${getId(url)}`;
     const params: RequestParams.Exists = {
       index: '.opensearch_dashboards',
       id: savedObjectId,
     };
-
-    const exist = await client.callAsCurrentUser('exists', params);
-    if (!exist) {
-      throw Error(`saved object with id ${savedObjectId} does not exist`);
-    }
+    exist = await client.callAsCurrentUser('exists', params);  
+  }
+  if (!exist) {
+    throw Error(`saved object with id ${savedObjectId} does not exist`);
   }
 };
