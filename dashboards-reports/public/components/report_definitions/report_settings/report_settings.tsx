@@ -190,6 +190,7 @@ export function ReportSettings(props: ReportSettingProps) {
       // set params to visual report params after switch from saved search
       handleDataToVisualReportSourceChange(reportDefinitionRequest);
       setFileFormat('pdf');
+    }
   };
 
   const handleDashboardSelect = (e: string | any[]) => {
