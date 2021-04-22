@@ -128,9 +128,8 @@ const validateSavedObject = async (
   let exist = false;
   let savedObjectId = '';
   if (getType(source) === 'notebook') {
-
-
-    exist = await client.callAsCurrentUser('exists', params);
+    // no backend check for notebooks because we would just be checking against the notebooks api again
+    exist = true;
   }
   else {
     savedObjectId = `${getType(source)}:${getId(url)}`;
