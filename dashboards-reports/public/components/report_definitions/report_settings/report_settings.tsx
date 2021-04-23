@@ -610,7 +610,7 @@ export function ReportSettings(props: ReportSettingProps) {
       });
 
     await httpClientProps
-      .get('/api/notebooks/')
+      .get('../api/notebooks/')
       .then(async (response: any) => {
         let notebooksOptions = getNotebooksOptions(response.data);
         reportSourceOptions.notebooks = notebooksOptions;
@@ -729,25 +729,23 @@ export function ReportSettings(props: ReportSettingProps) {
 
     const displayNotebooksSelect = 
     reportSourceId === 'notebooksReportSource' ? (
-      (
-        <div>
-          <EuiFormRow
-            label="Select notebook"
-            isInvalid={showSettingsReportSourceError}
-            error={settingsReportSourceErrorMessage}
-          >
-            <EuiComboBox
-              id="reportSourceNotebooksSelect"
-              placeholder="Select a notebook"
-              singleSelection={{ asPlainText: true }}
-              options={notebooks}
-              onChange={handleNotebooksSelect}
-              selectedOptions={notebooksSourceSelect}
-            />
-          </EuiFormRow>
-          <EuiSpacer />
-        </div>
-      )
+      <div>
+        <EuiFormRow
+          label="Select notebook"
+          isInvalid={showSettingsReportSourceError}
+          error={settingsReportSourceErrorMessage}
+        >
+          <EuiComboBox
+            id="reportSourceNotebooksSelect"
+            placeholder="Select a notebook"
+            singleSelection={{ asPlainText: true }}
+            options={notebooks}
+            onChange={handleNotebooksSelect}
+            selectedOptions={notebooksSourceSelect}
+          />
+        </EuiFormRow>
+        <EuiSpacer />
+      </div>
     ): null;
 
   const displayTimeRangeSelect = 
