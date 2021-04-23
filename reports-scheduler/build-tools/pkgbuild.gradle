@@ -54,7 +54,7 @@ afterEvaluate {
         maintainer 'OpenDistro for OpenSearch Team <opendistro@amazon.com>'
         url 'https://opendistro.github.io/opensearch/downloads'
         summary '''
-         OpenSearch Report scheduler.
+         OpenSearch Reports scheduler.
          Reference documentation can be found at https://opendistro.github.io/opensearch/docs.
     '''.stripIndent().replace('\n', ' ').trim()
     }
