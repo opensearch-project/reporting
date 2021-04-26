@@ -46,6 +46,6 @@ class ReportsSchedulerPluginIT : OpenSearchIntegTestCase() {
                 .anyMatch { pluginInfo: PluginInfo -> pluginInfo.name == "opendistro-job-scheduler" })
         assertTrue(
             pluginInfos.stream()
-                .anyMatch { pluginInfo: PluginInfo -> pluginInfo.name == "opendistro-reports-scheduler" })
+                .anyMatch { pluginInfo: PluginInfo -> pluginInfo.name == "opensearch-reports-scheduler" })
     }
 }
