@@ -1,11 +1,11 @@
 {
-  "name": "reports-dashboards",
-  "version": "1.15.0.0",
-  "description": "OpenSearch Dashboards Reporting Plugin",
+  "name": "reports_dashboards",
+  "version": "1.0.0.0",
+  "description": "OpenSearch Dashboards Reports Plugin",
   "license": "Apache-2.0",
   "main": "index.ts",
   "opensearchDashboards": {
-    "version": "7.10.2",
+    "version": "1.0.0",
     "templateVersion": "1.0.0"
   },
   "scripts": {
