@@ -7,4 +7,5 @@ Compatible with OpenSearch 1.0.0-alpha1
 * Change dashboards nav to use OpenSearch ([#6](https://github.com/opensearch-project/dashboards-reports/pull/6))
 * Add license headers for OpenSearch ([#8](https://github.com/opensearch-project/dashboards-reports/pull/8))
 * dashboards-reports version reset ([#23](https://github.com/opensearch-project/dashboards-reports/pull/23)) 
-* [Migration] Reports-scheduler renaming, version reset, fix CI ([#22](https://github.com/opensearch-project/dashboards-reports/pull/22))
+* [Migration] Reports-scheduler renaming, version reset, fix CI ([#22](https://github.com/opensearch-project/dashboards-reports/pull/22)) 
+* [Migration] Build reporting against OpenSearch 1.0.0-alpha2 ([#25](https://github.com/opensearch-project/dashboards-reports/pull/25))
