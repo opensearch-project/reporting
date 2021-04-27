@@ -30,10 +30,8 @@ import java.util.concurrent.Callable
 buildscript {
     ext {
         opensearch_group = "org.opensearch"
-        opensearch_version = System.getProperty("opensearch.version", "1.0.0-alpha1")
+        opensearch_version = System.getProperty("opensearch.version", "1.0.0-alpha2")
         kotlin_version = System.getProperty("kotlin.version", "1.4.0")
-        //TODO: temp, may need to change
-        plugin_version = "1.0.0.0"
     }
 
     repositories {
@@ -75,8 +73,7 @@ opensearchplugin {
     name 'opensearch-reports-scheduler'
     description 'Scheduler for Dashboards Reports Plugin'
     classname "com.amazon.opendistroforelasticsearch.reportsscheduler.ReportsSchedulerPlugin"
-    //TODO: rename after job-scheduler renames and publishes
-    extendedPlugins = ['opendistro-job-scheduler']
+    extendedPlugins = ['opensearch-job-scheduler']
 }
 
 allOpen {
@@ -110,6 +107,7 @@ ext {
     licenseFile = rootProject.file('LICENSE.txt')
     noticeFile = rootProject.file('NOTICE.txt')
     isSnapshot = "true" == System.getProperty("build.snapshot", "true")
+    opensearchVersion = "${version}.0-alpha2"
 }
 
 if (isSnapshot) {
@@ -126,7 +124,7 @@ plugins.withId('org.jetbrains.kotlin.jvm') {
 
 allprojects {
     group = "com.amazon.opendistroforelasticsearch"
-
+    version = "${opensearchVersion}"
     plugins.withId('java') {
         sourceCompatibility = targetCompatibility = "1.8"
     }
@@ -141,8 +139,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}"
     compile "org.jetbrains.kotlin:kotlin-stdlib-common:${kotlin_version}"
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9"
-    compile "${group}:common-utils:${plugin_version}"
-    compileOnly "${group}:opensearch-job-scheduler-spi:${plugin_version}-beta1"
+    compile "${group}:common-utils:${opensearchVersion}"
+    compileOnly "${group}:opensearch-job-scheduler-spi:${opensearchVersion}"
     compile group: 'com.google.guava', name: 'guava', version: '15.0'
     compile "org.json:json:20180813"
     compile group: 'com.github.wnameless', name: 'json-flattener', version: '0.1.0'
@@ -243,6 +241,7 @@ integTest.dependsOn(bundle)
 integTest.getClusters().forEach{c -> c.plugin(project.getObjects().fileProperty().value(bundle.getArchiveFile()))}
 
 testClusters.integTest {
+    testDistribution = "ARCHIVE"
     // need to install job-scheduler first, need to assemble job-scheduler first
     plugin(provider(new Callable<RegularFile>(){
         @Override
