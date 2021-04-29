@@ -95,7 +95,7 @@ internal data class ReportDefinition(
     val delivery: Delivery?
 ) : ToXContentObject {
 
-    internal enum class SourceType { Dashboard, Visualization, SavedSearch }
+    internal enum class SourceType { Dashboard, Visualization, SavedSearch, Notebook }
     internal enum class TriggerType { Download, OnDemand, CronSchedule, IntervalSchedule }
     internal enum class DeliveryFormat { LinkOnly, Attachment, Embedded }
     internal enum class FileFormat { Pdf, Png, Csv }

@@ -111,6 +111,31 @@ export const getSavedSearchBaseUrlCreate = (
   );
 };
 
+export const getNotebooksBaseUrlCreate = (
+  edit: boolean,
+  editDefinitionId: string,
+  fromInContext: boolean
+) => {
+  let baseUrl;
+  if (!fromInContext) {
+    baseUrl = location.pathname + location.hash;
+  } else {
+    baseUrl = '/app/notebooks-dashboards#/';
+  }
+  if (edit) {
+    return baseUrl.replace(
+      `reports-dashboards#/edit/${editDefinitionId}`,
+      'notebooks-dashboards#/'
+    );
+  } else if (fromInContext) {
+    return baseUrl;
+  }
+  return baseUrl.replace(
+    'reports-dashboards#/create',
+    'notebooks-dashboards#/'
+  );
+}
+
 export const getDashboardOptions = (data) => {
   let index;
   let dashboard_options = [];
@@ -149,6 +174,19 @@ export const getSavedSearchOptions = (data: string | any[]) => {
   }
   return options;
 };
+
+export const getNotebooksOptions = (data: any) => {
+  let index;
+  let options = [];
+  for (index = 0; index < data.length; ++index) {
+    let entry = {
+      value: data[index]['id'],
+      label: data[index]['path']
+    }
+    options.push(entry);
+  }
+  return options;
+}
 
 export const handleDataToVisualReportSourceChange = (
   reportDefinitionRequest

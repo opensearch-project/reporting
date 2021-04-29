@@ -65,6 +65,8 @@ import {
   getDashboardBaseUrlCreate,
   getDashboardOptions,
   handleDataToVisualReportSourceChange,
+  getNotebooksOptions,
+  getNotebooksBaseUrlCreate,
 } from './report_settings_helpers';
 import { TimeRangeSelect } from './time_range';
 import { converter } from '../utils';
@@ -110,6 +112,9 @@ export function ReportSettings(props: ReportSettingProps) {
   const [savedSearchSourceSelect, setSavedSearchSourceSelect] = useState([] as any);
   const [savedSearches, setSavedSearches] = useState([] as any);
 
+  const [notebooksSourceSelect, setNotebooksSourceSelect] = useState([] as any);
+  const [notebooks, setNotebooks] = useState([] as any);
+
   const [fileFormat, setFileFormat] = useState('pdf');
 
   const handleDashboards = (e) => {
@@ -123,6 +128,10 @@ export function ReportSettings(props: ReportSettingProps) {
   const handleSavedSearches = (e) => {
     setSavedSearches(e);
   };
+
+  const handleNotebooks = (e) => {
+    setNotebooks(e);
+  }
 
   const handleReportName = (e: {
     target: { value: React.SetStateAction<string> };
@@ -172,6 +181,15 @@ export function ReportSettings(props: ReportSettingProps) {
       reportDefinitionRequest.report_params.core_params.report_format = 'csv';
       reportDefinitionRequest.report_params.core_params.limit = 10000;
       reportDefinitionRequest.report_params.core_params.excel = true;
+    } else if (e === 'notebooksReportSource') {
+      reportDefinitionRequest.report_params.report_source = 'Notebook';
+      reportDefinitionRequest.report_params.core_params.base_url = 
+        getNotebooksBaseUrlCreate(edit, editDefinitionId, fromInContext) + 
+        notebooks[0].value;
+
+      // set params to visual report params after switch from saved search
+      handleDataToVisualReportSourceChange(reportDefinitionRequest);
+      setFileFormat('pdf');
     }
   };
 
@@ -228,6 +246,22 @@ export function ReportSettings(props: ReportSettingProps) {
       reportDefinitionRequest.report_params.core_params.base_url = "";
     }
   };
+
+  const handleNotebooksSelect = (e) => {
+    setNotebooksSourceSelect(e);
+    let fromInContext = false;
+    if (window.location.href.includes('?')) {
+      fromInContext = true;
+    }
+    if (e.length > 0) {
+      reportDefinitionRequest.report_params.core_params.base_url =
+        getNotebooksBaseUrlCreate(edit, editDefinitionId, fromInContext) + 
+        e[0].value;
+    }
+    else {
+      reportDefinitionRequest.report_params.core_params.base_url = "";
+    }
+  }
 
   const handleFileFormat = (e: React.SetStateAction<string>) => {
     setFileFormat(e);
@@ -532,6 +566,7 @@ export function ReportSettings(props: ReportSettingProps) {
       dashboard: [],
       visualizations: [],
       savedSearch: [],
+      notebooks: []
     };
     reportDefinitionRequest.report_params.core_params.report_format = fileFormat;
     await httpClientProps
@@ -572,6 +607,17 @@ export function ReportSettings(props: ReportSettingProps) {
       })
       .catch((error) => {
         console.log('error when fetching saved searches:', error);
+      });
+
+    await httpClientProps
+      .get('../api/notebooks/')
+      .then(async (response: any) => {
+        let notebooksOptions = getNotebooksOptions(response.data);
+        reportSourceOptions.notebooks = notebooksOptions;
+        await handleNotebooks(notebooksOptions);
+      })
+      .catch((error) => {
+        console.log('error when fetching notebooks:', error);
       });
     return reportSourceOptions;
   };
@@ -681,7 +727,41 @@ export function ReportSettings(props: ReportSettingProps) {
       </div>
     );
 
+    const displayNotebooksSelect = 
+    reportSourceId === 'notebooksReportSource' ? (
+      <div>
+        <EuiFormRow
+          label="Select notebook"
+          isInvalid={showSettingsReportSourceError}
+          error={settingsReportSourceErrorMessage}
+        >
+          <EuiComboBox
+            id="reportSourceNotebooksSelect"
+            placeholder="Select a notebook"
+            singleSelection={{ asPlainText: true }}
+            options={notebooks}
+            onChange={handleNotebooksSelect}
+            selectedOptions={notebooksSourceSelect}
+          />
+        </EuiFormRow>
+        <EuiSpacer />
+      </div>
+    ): null;
 
+  const displayTimeRangeSelect = 
+    reportSourceId != 'notebooksReportSource' ? (
+      <div>
+        <TimeRangeSelect
+          timeRange={timeRange}
+          reportDefinitionRequest={reportDefinitionRequest}
+          edit={edit}
+          id={editDefinitionId}
+          httpClientProps={httpClientProps}
+          showTimeRangeError={showTimeRangeError}
+        />
+        <EuiSpacer />
+      </div>
+    ): null;
 
   return (
     <EuiPageContent panelPaddingSize={'l'}>
@@ -736,7 +816,7 @@ export function ReportSettings(props: ReportSettingProps) {
         {displayDashboardSelect}
         {displayVisualizationSelect}
         {displaySavedSearchSelect}
-        <TimeRangeSelect
+        {/* <TimeRangeSelect
           timeRange={timeRange}
           reportDefinitionRequest={reportDefinitionRequest}
           edit={edit}
@@ -744,7 +824,9 @@ export function ReportSettings(props: ReportSettingProps) {
           httpClientProps={httpClientProps}
           showTimeRangeError={showTimeRangeError}
         />
-        <EuiSpacer />
+        <EuiSpacer /> */}
+        {displayNotebooksSelect}
+        {displayTimeRangeSelect}
         {displayVisualReportsFormatAndMarkdown}
       </EuiPageContentBody>
     </EuiPageContent>
