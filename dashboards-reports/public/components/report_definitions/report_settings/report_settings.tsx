@@ -67,6 +67,7 @@ import {
   handleDataToVisualReportSourceChange,
   getNotebooksOptions,
   getNotebooksBaseUrlCreate,
+  getReportSourceFromURL,
 } from './report_settings_helpers';
 import { TimeRangeSelect } from './time_range';
 import { converter } from '../utils';
@@ -489,11 +490,20 @@ export function ReportSettings(props: ReportSettingProps) {
       }
     }
   }
+
+  const setNotebookFromInContextMenu = (response, id) => {
+    for (let index = 0; index < response.notebooks.length; ++index) {
+      if (id === response.notebooks[index].value) {
+        setNotebooksSourceSelect([response.notebooks[index]]);
+      }
+    }
+  }
  
   const setInContextDefaultConfiguration = (response) => {
     const url = window.location.href;
+    const source = getReportSourceFromURL(url);
     const id = parseInContextUrl(url, 'id');
-    if (url.includes('dashboard')) {
+    if (source === 'dashboard') {
       setReportSourceId('dashboardReportSource');
       reportDefinitionRequest.report_params.report_source =
         REPORT_SOURCE_RADIOS[0].label;
@@ -501,7 +511,7 @@ export function ReportSettings(props: ReportSettingProps) {
       setDashboardFromInContextMenu(response, id);
       reportDefinitionRequest.report_params.core_params.base_url =
         getDashboardBaseUrlCreate(edit, id, true) + id;
-    } else if (url.includes('visualize')) {
+    } else if (source === 'visualize') {
       setReportSourceId('visualizationReportSource');
       reportDefinitionRequest.report_params.report_source =
         REPORT_SOURCE_RADIOS[1].label;
@@ -509,7 +519,7 @@ export function ReportSettings(props: ReportSettingProps) {
       setVisualizationFromInContextMenu(response, id);
       reportDefinitionRequest.report_params.core_params.base_url =
         getVisualizationBaseUrlCreate(edit, editDefinitionId, true) + id;
-    } else if (url.includes('discover')) {
+    } else if (source === 'discover') {
       setReportSourceId('savedSearchReportSource');
       reportDefinitionRequest.report_params.core_params.report_format = 'csv';
       reportDefinitionRequest.report_params.core_params.saved_search_id = id;
@@ -519,6 +529,16 @@ export function ReportSettings(props: ReportSettingProps) {
       setSavedSearchFromInContextMenu(response, id)
       reportDefinitionRequest.report_params.core_params.base_url =
         getSavedSearchBaseUrlCreate(edit, editDefinitionId, true) + id;
+    } else if (source === 'notebook') {
+      setReportSourceId('notebooksReportSource');
+      reportDefinitionRequest.report_params.report_source = 
+        REPORT_SOURCE_RADIOS[3].label;
+
+      setNotebookFromInContextMenu(response, id);
+      reportDefinitionRequest.report_params.core_params.base_url = 
+        getNotebooksBaseUrlCreate(edit, id, true) + id;
+      // set placeholder time range since notebooks doesn't use it
+      reportDefinitionRequest.report_params.core_params.time_duration = 'PT30M';
     }
   };
 
