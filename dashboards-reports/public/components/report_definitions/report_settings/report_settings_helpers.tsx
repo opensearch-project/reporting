@@ -197,7 +197,7 @@ export const handleDataToVisualReportSourceChange = (
   reportDefinitionRequest.report_params.core_params.report_format = 'pdf';
 };
 
-export const getReportSourceFromContextMenu = (url: string) => {
+export const getReportSourceFromURL = (url: string) => {
   const source = url.split('?')[1].match(/previous=(.*):/);
   return source![1];
 }

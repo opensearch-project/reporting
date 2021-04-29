@@ -67,7 +67,7 @@ import {
   handleDataToVisualReportSourceChange,
   getNotebooksOptions,
   getNotebooksBaseUrlCreate,
-  getReportSourceFromContextMenu,
+  getReportSourceFromURL,
 } from './report_settings_helpers';
 import { TimeRangeSelect } from './time_range';
 import { converter } from '../utils';
@@ -501,7 +501,7 @@ export function ReportSettings(props: ReportSettingProps) {
  
   const setInContextDefaultConfiguration = (response) => {
     const url = window.location.href;
-    const source = getReportSourceFromContextMenu(url);
+    const source = getReportSourceFromURL(url);
     const id = parseInContextUrl(url, 'id');
     if (source === 'dashboard') {
       setReportSourceId('dashboardReportSource');
