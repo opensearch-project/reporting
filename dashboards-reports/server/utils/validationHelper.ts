@@ -36,12 +36,15 @@ import {
 import { REPORT_TYPE } from '../../server/routes/utils/constants';
 
 export const isValidRelativeUrl = (relativeUrl: string) => {
-  const normalizedRelativeUrl = path.posix.normalize(relativeUrl);
+  let normalizedRelativeUrl = relativeUrl
+  if (!relativeUrl.includes('notebooks-dashboards')) {
+    normalizedRelativeUrl = path.posix.normalize(relativeUrl);
+  }
+  
   // check pattern
   // ODFE pattern: /app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g
   // AES pattern: /_plugin/kibana/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g
   const isValid = regexRelativeUrl.test(normalizedRelativeUrl);
-
   return isValid;
 };
 
@@ -52,7 +55,7 @@ export const isValidRelativeUrl = (relativeUrl: string) => {
 export const regexDuration = /^(-?)P(?=\d|T\d)(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)([DW]))?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$/;
 export const regexEmailAddress = /\S+@\S+\.\S+/;
 export const regexReportName = /^[\w\-\s\(\)\[\]\,\_\-+]+$/;
-export const regexRelativeUrl = /^\/(_plugin\/kibana\/app|app)\/(dashboards|visualize|discover|notebooks-dashboards)(\?security_tenant=.+|)#\/(view\/|edit\/)?[^\/]+$/;
+export const regexRelativeUrl = /^\/(_plugin\/kibana\/app|app)\/(dashboards|visualize|discover|notebooks-dashboards\?view=output_only)(\?security_tenant=.+|)#\/(view\/|edit\/)?[^\/]+$/;
 
 export const validateReport = async (
   client: ILegacyScopedClusterClient,
