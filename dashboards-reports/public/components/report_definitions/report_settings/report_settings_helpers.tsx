@@ -119,7 +119,6 @@ export const getNotebooksBaseUrlCreate = (
   let baseUrl;
   if (!fromInContext) {
     baseUrl = location.pathname + location.hash;
-    console.log('baseUrl in notebooks is', baseUrl);
   } else {
     baseUrl = '/app/notebooks-dashboards?view=output_only#/';
   }

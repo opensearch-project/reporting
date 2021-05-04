@@ -233,7 +233,6 @@ export function CreateReport(props) {
   ) => {
     const { httpClient } = props;
     //TODO: need better handle
-    console.log('create metadata is', metadata);
     if (
       metadata.trigger.trigger_type === 'On demand' &&
       metadata.trigger.trigger_params !== undefined
