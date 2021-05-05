@@ -111,7 +111,7 @@ export const buildQuery = (report, is_count) => {
                 }
               } else {
                 requestBody.should(
-                  esb.matchPhraseQuery(item.meta.key, item.meta.params.query)
+                  esb.matchPhraseQuery(item.meta.key, item.meta.value)
                 );
               }
               requestBody.minimumShouldMatch(1);
