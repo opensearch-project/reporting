@@ -57,29 +57,29 @@ jobs:
           yarn build
 
           cd build
-          mkdir -p ./{linux-x64,linux-arm64,windows-x64}/OpenSearch-Dashboards/${{ env.PLUGIN_NAME }}
+          mkdir -p ./{linux-x64,linux-arm64,windows-x64}/opensearch-dashboards/${{ env.PLUGIN_NAME }}
           cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-x64/${{ env.PLUGIN_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-x64.zip
           cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-arm64/${{ env.PLUGIN_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-arm64.zip
           mv ./${{ env.PLUGIN_NAME }}-*.zip ./windows-x64/${{ env.PLUGIN_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-windows-x64.zip
 
           cd linux-x64
           wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip
-          unzip chromium-linux-x64.zip -d ./OpenSearch-Dashboards/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./OpenSearch-Dashboards
+          unzip chromium-linux-x64.zip -d ./opensearch-dashboards/${{ env.PLUGIN_NAME }}
+          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./opensearch-dashboards
           mv ./${{ env.PLUGIN_NAME }}-*.zip ..
           cd ..
 
           cd linux-arm64
           wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-arm64.zip
-          unzip chromium-linux-arm64.zip -d ./OpenSearch-Dashboards/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./OpenSearch-Dashboards
+          unzip chromium-linux-arm64.zip -d ./opensearch-dashboards/${{ env.PLUGIN_NAME }}
+          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./opensearch-dashboards
           mv ./${{ env.PLUGIN_NAME }}-*.zip ..
           cd ..
 
           cd windows-x64
           wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip
-          unzip chromium-windows-x64.zip -d ./OpenSearch-Dashboards/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./OpenSearch-Dashboards
+          unzip chromium-windows-x64.zip -d ./opensearch-dashboards/${{ env.PLUGIN_NAME }}
+          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./opensearch-dashboards
           mv ./${{ env.PLUGIN_NAME }}-*.zip ..
           cd ..
 
