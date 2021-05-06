@@ -87,7 +87,6 @@ export const createVisualReport = async (
       '--font-render-hinting=none',
     ],
     executablePath: CHROMIUM_PATH,
-    ignoreHTTPSErrors: true,
     env: {
       TZ: timezone || 'UTC',
     },
