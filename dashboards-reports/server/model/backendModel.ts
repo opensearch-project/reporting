@@ -29,6 +29,7 @@ import {
   REPORT_STATE,
   REPORT_TYPE,
   TRIGGER_TYPE,
+  BASE_PATH,
 } from '../routes/utils/constants';
 
 export type BackendReportInstanceType = {
@@ -163,7 +164,7 @@ export const TRIGGER_TYPE_DICT = {
 };
 
 export const URL_PREFIX_DICT = {
-  [BACKEND_REPORT_SOURCE.dashboard]: '/app/dashboards#/view/',
-  [BACKEND_REPORT_SOURCE.savedSearch]: '/app/discover#/view/',
-  [BACKEND_REPORT_SOURCE.visualization]: '/app/visualize#/edit/',
+  [BACKEND_REPORT_SOURCE.dashboard]: `${BASE_PATH}/app/dashboards#/view/`,
+  [BACKEND_REPORT_SOURCE.savedSearch]: `${BASE_PATH}/app/discover#/view/`,
+  [BACKEND_REPORT_SOURCE.visualization]: `${BASE_PATH}/app/visualize#/edit/`,
 };
