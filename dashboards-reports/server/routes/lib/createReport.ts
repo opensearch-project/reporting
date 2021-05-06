@@ -29,6 +29,7 @@ import {
   REPORT_STATE,
   DELIVERY_TYPE,
   SECURITY_CONSTANTS,
+  LOCAL_HOST,
 } from '../utils/constants';
 
 import {
@@ -46,13 +47,11 @@ import { deliverReport } from './deliverReport';
 import { updateReportState } from './updateReportState';
 import { saveReport } from './saveReport';
 import { SemaphoreInterface } from 'async-mutex';
-import { AccessInfoType } from 'server';
 
 export const createReport = async (
   request: OpenSearchDashboardsRequest,
   context: RequestHandlerContext,
   report: ReportSchemaType,
-  accessInfo: AccessInfoType,
   savedReportId?: string
 ): Promise<CreateReportResultType> => {
   const isScheduledTask = false;
@@ -71,10 +70,6 @@ export const createReport = async (
   const opensearchClient = context.core.opensearch.legacy.client;
   // @ts-ignore
   const timezone = request.query.timezone;
-  const {
-    basePath,
-    serverInfo: { protocol, port, hostname },
-  } = accessInfo;
 
   let createReportResult: CreateReportResultType;
   let reportId;
@@ -105,10 +100,7 @@ export const createReport = async (
     } else {
       // report source can only be one of [saved search, visualization, dashboard, notebook]
       // compose url
-      const relativeUrl = report.query_url.startsWith(basePath)
-        ? report.query_url
-        : `${basePath}${report.query_url}`;
-      const completeQueryUrl = `${protocol}://${hostname}:${port}${relativeUrl}`;
+      const completeQueryUrl = `${LOCAL_HOST}${report.query_url}`;
       // Check if security is enabled. TODO: is there a better way to check?
       let cookieObject: SetCookie | undefined;
       if (request.headers.cookie) {
@@ -120,7 +112,6 @@ export const createReport = async (
               name: cookie[0],
               value: cookie[1],
               url: completeQueryUrl,
-              path: basePath,
             };
           }
         });
@@ -128,11 +119,14 @@ export const createReport = async (
       // If header exists assuming that it needs forwarding
       let additionalHeaders: Headers | undefined;
       if (request.headers[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER]) {
-        additionalHeaders = {}
-        additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER] = request.headers[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER];
-        additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_IP_HEADER] = request.headers[SECURITY_CONSTANTS.PROXY_AUTH_IP_HEADER];
+        additionalHeaders = {};
+        additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER] =
+          request.headers[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER];
+        additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_IP_HEADER] =
+          request.headers[SECURITY_CONSTANTS.PROXY_AUTH_IP_HEADER];
         if (request.headers[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER]) {
-          additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER] = request.headers[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER]
+          additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER] =
+            request.headers[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER];
         }
       }
       const [value, release] = await semaphore.acquire();

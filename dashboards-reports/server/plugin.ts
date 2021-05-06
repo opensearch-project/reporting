@@ -43,7 +43,6 @@ import {
 import registerRoutes from './routes';
 import { pollAndExecuteJob } from './executor/executor';
 import { POLL_INTERVAL } from './utils/constants';
-import { AccessInfoType } from 'server';
 
 export interface ReportsPluginRequestContext {
   logger: Logger;
@@ -58,10 +57,7 @@ declare module 'kibana/server' {
 
 export class ReportsDashboardsPlugin
   implements
-    Plugin<
-      ReportsDashboardsPluginSetup,
-      ReportsDashboardsPluginStart
-    > {
+    Plugin<ReportsDashboardsPluginSetup, ReportsDashboardsPluginStart> {
   private readonly logger: Logger;
   private readonly semaphore: SemaphoreInterface;
 
@@ -75,14 +71,6 @@ export class ReportsDashboardsPlugin
 
   public setup(core: CoreSetup) {
     this.logger.debug('reports-dashboards: Setup');
-
-    const config = core.http.getServerInfo();
-    const serverBasePath = core.http.basePath.serverBasePath;
-    const accessInfo: AccessInfoType = {
-      basePath: serverBasePath,
-      serverInfo: config,
-    };
-
     const router = core.http.createRouter();
     // Deprecated API. Switch to the new opensearch client as soon as https://github.com/elastic/kibana/issues/35508 done.
     const opensearchReportsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
@@ -98,8 +86,9 @@ export class ReportsDashboardsPlugin
         plugins: [notificationPlugin],
       }
     );
+
     // Register server side APIs
-    registerRoutes(router, accessInfo);
+    registerRoutes(router);
 
     // put logger into route handler context, so that we don't need to pass through parameters
     core.http.registerRouteHandlerContext(
@@ -133,7 +122,8 @@ export class ReportsDashboardsPlugin
         plugins: [notificationPlugin],
       }
     );
-    const opensearchClient: ILegacyClusterClient = core.opensearch.legacy.client;
+    const opensearchClient: ILegacyClusterClient =
+      core.opensearch.legacy.client;
     /*
     setIntervalAsync provides the same familiar interface as built-in setInterval for asynchronous functions,
     while preventing multiple executions from overlapping in time.
