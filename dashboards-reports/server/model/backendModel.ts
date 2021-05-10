@@ -168,5 +168,5 @@ export const URL_PREFIX_DICT = {
   [BACKEND_REPORT_SOURCE.dashboard]: '/app/dashboards#/view/',
   [BACKEND_REPORT_SOURCE.savedSearch]: '/app/discover#/view/',
   [BACKEND_REPORT_SOURCE.visualization]: '/app/visualize#/edit/',
-  [BACKEND_REPORT_SOURCE.notebook]: '/app/notebooks-dashboards#/'
+  [BACKEND_REPORT_SOURCE.notebook]: '/app/notebooks-dashboards?view=output_only#/'
 };

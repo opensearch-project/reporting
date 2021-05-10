@@ -120,19 +120,19 @@ export const getNotebooksBaseUrlCreate = (
   if (!fromInContext) {
     baseUrl = location.pathname + location.hash;
   } else {
-    baseUrl = '/app/notebooks-dashboards#/';
+    baseUrl = '/app/notebooks-dashboards?view=output_only#/';
   }
   if (edit) {
     return baseUrl.replace(
       `reports-dashboards#/edit/${editDefinitionId}`,
-      'notebooks-dashboards#/'
+      'notebooks-dashboards?view=output_only#/'
     );
   } else if (fromInContext) {
     return baseUrl;
   }
   return baseUrl.replace(
     'reports-dashboards#/create',
-    'notebooks-dashboards#/'
+    'notebooks-dashboards?view=output_only#/'
   );
 }
 
