@@ -31,13 +31,12 @@ import { AppPluginStartDependencies } from './types';
 import { ReportsDashboardsApp } from './components/app';
 
 export const renderApp = (
-  { notifications, http, chrome, uiSettings }: CoreStart,
+  { http, chrome, uiSettings }: CoreStart,
   { appBasePath, element }: AppMountParameters
 ) => {
   ReactDOM.render(
     <ReportsDashboardsApp
       basename={appBasePath}
-      notifications={notifications}
       http={http}
       uiSettings={uiSettings}
       chrome={chrome}

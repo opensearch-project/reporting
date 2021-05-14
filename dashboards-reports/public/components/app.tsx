@@ -57,7 +57,6 @@ export interface CoreInterface {
 
 interface ReportsDashboardsAppDeps {
   basename: string;
-  notifications: CoreStart['notifications'];
   http: CoreStart['http'];
   chrome: CoreStart['chrome'];
   uiSettings: IUiSettingsClient
