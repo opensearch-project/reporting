@@ -31,8 +31,7 @@ import { AppPluginStartDependencies } from './types';
 import { ReportsDashboardsApp } from './components/app';
 
 export const renderApp = (
-  { notifications, http, chrome }: CoreStart,
-  { navigation }: AppPluginStartDependencies,
+  { notifications, http, chrome, uiSettings }: CoreStart,
   { appBasePath, element }: AppMountParameters
 ) => {
   ReactDOM.render(
@@ -40,7 +39,7 @@ export const renderApp = (
       basename={appBasePath}
       notifications={notifications}
       http={http}
-      navigation={navigation}
+      uiSettings={uiSettings}
       chrome={chrome}
     />,
     element
