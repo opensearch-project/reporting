@@ -184,7 +184,6 @@ export const getOpenSearchData = (arrayHits, report, params) => {
       } else {
         hits.push(params.excel ? sanitize(data) : data);
       }
-
       // Truncate to expected limit size
       if (hits.length >= params.limit) {
         return hits;
@@ -236,7 +235,7 @@ function sanitize(doc: any) {
   for (const field in doc) {
     if (
       doc[field].toString().startsWith('+') ||
-      doc[field].toString().startsWith('-') ||
+      (doc[field].toString().startsWith('-') && typeof doc[field] !== "number") ||
       doc[field].toString().startsWith('=') ||
       doc[field].toString().startsWith('@')
     ) {
