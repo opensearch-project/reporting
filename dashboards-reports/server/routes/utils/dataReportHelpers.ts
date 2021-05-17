@@ -86,7 +86,7 @@ export const buildQuery = (report, is_count) => {
                 }
               } else {
                 requestBody.should(
-                  esb.matchPhraseQuery(item.meta.key, item.meta.params.query)
+                  esb.matchPhraseQuery(item.meta.key, item.meta.value)
                 );
               }
               requestBody.minimumShouldMatch(1);
@@ -104,17 +104,19 @@ export const buildQuery = (report, is_count) => {
               requestBody.mustNot(esb.existsQuery(item.meta.key));
               break;
             case 'phrases':
+              let negatedBody = esb.boolQuery();
               if (item.meta.value.indexOf(',') > -1) {
                 const valueSplit = item.meta.value.split(', ');
                 for (const [key, incr] of valueSplit.entries()) {
-                  requestBody.should(esb.matchPhraseQuery(item.meta.key, incr));
+                  negatedBody.should(esb.matchPhraseQuery(item.meta.key, incr));
                 }
               } else {
-                requestBody.should(
-                  esb.matchPhraseQuery(item.meta.key, item.meta.params.query)
+                negatedBody.should(
+                  esb.matchPhraseQuery(item.meta.key, item.meta.value)
                 );
               }
-              requestBody.minimumShouldMatch(1);
+              negatedBody.minimumShouldMatch(1);
+              requestBody.mustNot(negatedBody);
               break;
           }
           break;
