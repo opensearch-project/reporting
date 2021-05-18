@@ -1,7 +1,7 @@
 [![OpenSearch Dashboards Reports CI](https://github.com/opensearch-project/dashboards-reports/workflows/Test%20and%20Build%20OpenSearch%20Dashboards%20Reports/badge.svg)](https://github.com/opensearch-project/dashboards-reports/actions?query=workflow%3A%22Test+and+Build+OpenSearch+Dashboards+Reports%22)
 [![Reports Scheduler CI](https://github.com/opensearch-project/dashboards-reports/workflows/Test%20and%20Build%20Reports%20Scheduler/badge.svg)](https://github.com/opensearch-project/dashboards-reports/actions?query=workflow%3A%22Test+and+Build+Reports+Scheduler%22)
 [![codecov](https://codecov.io/gh/opensearch-project/dashboards-reports/branch/dev/graph/badge.svg?token=FBVYQSZD3B)](https://codecov.io/gh/opensearch-project/dashboards-reports)
-[![Documentation](https://img.shields.io/badge/documentation-blue.svg)](https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/reporting/)
+[![Documentation](https://img.shields.io/badge/documentation-blue.svg)](https://docs-beta.opensearch.org/docs/opensearch-dashboards/reporting/)
 ![PRs welcome!](https://img.shields.io/badge/PRs-welcome!-success)
 
 # OpenSearch Dashboards Reports for Open Distro
@@ -35,7 +35,7 @@ We welcome you to get involved in development, documentation, testing the OpenSe
 
 ## Code of Conduct
 
-This project has adopted an [Open Source Code of Conduct](https://opendistro.github.io/for-elasticsearch/codeofconduct.html).
+This project has adopted an [Open Source Code of Conduct](https://github.com/opensearch-project/project-website/blob/main/CONTRIBUTING.md#code-of-conduct).
 
 ## Security issue notifications
 

@@ -45,7 +45,7 @@ const emptyMessageReportDefinitions = (
         <EuiText>
           To learn more, see{' '}
           <EuiLink
-            href="https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/reporting/"
+            href="https://docs-beta.opensearch.org/docs/opensearch-dashboards/reporting/"
             target="_blank"
           >
             Get started with OpenSearch Dashboards reporting <EuiIcon type="popout" />

@@ -192,10 +192,10 @@ List of curated headless browsers https://github.com/dhamaniasad/HeadlessBrowser
 |Java	|[Selenium](https://www.selenium.dev/)	|No support for PDF generation	|
 |	|[jBrowserDriver](https://github.com/MachinePublishers/jBrowserDriver)	|No support for PDF generation	|
 
-**(II)** To generate CSV reports based on SQL queries, we will be leveraging OpenDistro SQL plugin with **`format=csv`**
+**(II)** To generate CSV reports based on SQL queries, we will be leveraging OpenSearch SQL plugin with **`format=csv`**
 
 ```
-POST _opendistro/_sql?format=csv
+POST _opensearch/_sql?format=csv
 {
     "query" : "SELECT ... FROM ... WHERE ... ORDER BY ..."
 }
@@ -423,7 +423,7 @@ listReportEvents()
 
 ### 4.3 Job Scheduler APIs
 
-https://github.com/opendistro-for-elasticsearch/job-scheduler
+https://github.com/opensearch-project/job-scheduler
 
 **(A) createSchedule**
 
@@ -439,12 +439,12 @@ Scheduled Report Creation workflow
 
 ### 4.4 Alerting Integration
 
-https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/
+https://docs-beta.opensearch.org/docs/alerting/
 
 ODFE Alerting can be used as an external trigger. To generate the report the `generateReport()` API can be utilized as `custom_webhook` destination.
 
 ```
-POST _opendistro/_alerting/destinations
+POST _opensearch/_alerting/destinations
 
 {
   "type": "custom_webhook",
@@ -486,7 +486,7 @@ TODO
 
 ### (II) Security reference
 
-* https://opendistro.github.io/for-elasticsearch-docs/docs/security-configuration/concepts/
-* https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/
-* https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/api/
+* https://docs-beta.opensearch.org/docs/security/configuration/
+* https://docs-beta.opensearch.org/docs/security/access-control/
+* https://docs-beta.opensearch.org/docs/security/access-control/api/
 

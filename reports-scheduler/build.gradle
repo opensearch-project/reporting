@@ -72,12 +72,12 @@ check.dependsOn jacocoTestReport
 opensearchplugin {
     name 'opensearch-reports-scheduler'
     description 'Scheduler for Dashboards Reports Plugin'
-    classname "com.amazon.opendistroforelasticsearch.reportsscheduler.ReportsSchedulerPlugin"
+    classname "org.opensearch.reportsscheduler.ReportsSchedulerPlugin"
     extendedPlugins = ['opensearch-job-scheduler']
 }
 
 allOpen {
-    annotation("com.amazon.opendistroforelasticsearch.reportsscheduler.util.OpenForTesting")
+    annotation("org.opensearch.reportsscheduler.util.OpenForTesting")
 }
 
 configurations {
@@ -123,7 +123,7 @@ plugins.withId('org.jetbrains.kotlin.jvm') {
 }
 
 allprojects {
-    group = "com.amazon.opendistroforelasticsearch"
+    group = "org.opensearch"
     version = "${opensearchVersion}"
     plugins.withId('java') {
         sourceCompatibility = targetCompatibility = "1.8"
