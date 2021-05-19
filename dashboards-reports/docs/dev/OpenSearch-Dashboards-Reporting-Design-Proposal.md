@@ -195,7 +195,7 @@ List of curated headless browsers https://github.com/dhamaniasad/HeadlessBrowser
 **(II)** To generate CSV reports based on SQL queries, we will be leveraging OpenSearch SQL plugin with **`format=csv`**
 
 ```
-POST _opensearch/_sql?format=csv
+POST _plugins/_sql?format=csv
 {
     "query" : "SELECT ... FROM ... WHERE ... ORDER BY ..."
 }
@@ -444,7 +444,7 @@ https://docs-beta.opensearch.org/docs/alerting/
 ODFE Alerting can be used as an external trigger. To generate the report the `generateReport()` API can be utilized as `custom_webhook` destination.
 
 ```
-POST _opensearch/_alerting/destinations
+POST _plugins/_alerting/destinations
 
 {
   "type": "custom_webhook",

@@ -31,7 +31,7 @@ import com.github.wnameless.json.unflattener.JsonUnflattener;
 import org.json.JSONObject;
 
 /**
- * Enum to hold all the metrics that need to be logged into _opensearch/_reports/l_ocal/stats API
+ * Enum to hold all the metrics that need to be logged into _plugins/_reports/l_ocal/stats API
  */
 public enum Metrics {
 
@@ -57,14 +57,14 @@ public enum Metrics {
 
     // ==== Per REST endpoint metrics ==== //
 
-    // POST _opensearch/_reports/definition
+    // POST _plugins/_reports/definition
     REPORT_DEFINITION_CREATE_TOTAL("report_definition.create.total", new BasicCounter()),
     REPORT_DEFINITION_CREATE_INTERVAL_COUNT("report_definition.create.count", new RollingCounter()),
     REPORT_DEFINITION_CREATE_USER_ERROR("report_definition.create.user_error", new RollingCounter()),
     REPORT_DEFINITION_CREATE_SYSTEM_ERROR("report_definition.create.system_error", new RollingCounter()),
 
 
-    // PUT _opensearch/_reports/definition/{reportDefinitionId}
+    // PUT _plugins/_reports/definition/{reportDefinitionId}
     REPORT_DEFINITION_UPDATE_TOTAL("report_definition.update.total", new BasicCounter()),
     REPORT_DEFINITION_UPDATE_INTERVAL_COUNT("report_definition.update.count", new RollingCounter()),
     REPORT_DEFINITION_UPDATE_USER_ERROR_MISSING_REPORT_DEF_DETAILS(
@@ -76,7 +76,7 @@ public enum Metrics {
     REPORT_DEFINITION_UPDATE_SYSTEM_ERROR("report_definition.update.system_error", new RollingCounter()),
 
 
-    // GET _opensearch/_reports/definition/{reportDefinitionId}
+    // GET _plugins/_reports/definition/{reportDefinitionId}
     REPORT_DEFINITION_INFO_TOTAL("report_definition.info.total", new BasicCounter()),
     REPORT_DEFINITION_INFO_INTERVAL_COUNT("report_definition.info.count", new RollingCounter()),
     REPORT_DEFINITION_INFO_USER_ERROR_MISSING_REPORT_DEF_DETAILS(
@@ -86,7 +86,7 @@ public enum Metrics {
     REPORT_DEFINITION_INFO_SYSTEM_ERROR("report_definition.info.system_error", new RollingCounter()),
 
 
-    // DELETE _opensearch/_reports/definition/{reportDefinitionId}
+    // DELETE _plugins/_reports/definition/{reportDefinitionId}
     REPORT_DEFINITION_DELETE_TOTAL("report_definition.delete.total", new BasicCounter()),
     REPORT_DEFINITION_DELETE_INTERVAL_COUNT("report_definition.delete.count", new RollingCounter()),
     REPORT_DEFINITION_DELETE_USER_ERROR_MISSING_REPORT_DEF_DETAILS(
@@ -96,7 +96,7 @@ public enum Metrics {
     REPORT_DEFINITION_DELETE_SYSTEM_ERROR("report_definition.delete.system_error", new RollingCounter()),
 
 
-    // GET _opensearch/_reports/definitions/[?[fromIndex=0]&[maxItems=100]]
+    // GET _plugins/_reports/definitions/[?[fromIndex=0]&[maxItems=100]]
     REPORT_DEFINITION_LIST_TOTAL("report_definition.list.total",new BasicCounter()),
     REPORT_DEFINITION_LIST_INTERVAL_COUNT("report_definition.list.count", new RollingCounter()),
     REPORT_DEFINITION_LIST_USER_ERROR_INVALID_FROM_INDEX(
@@ -104,7 +104,7 @@ public enum Metrics {
     REPORT_DEFINITION_LIST_SYSTEM_ERROR("report_definition.list.system_error", new RollingCounter()),
 
 
-    // POST _opensearch/_reports/instance/{reportInstanceId}
+    // POST _plugins/_reports/instance/{reportInstanceId}
     REPORT_INSTANCE_UPDATE_TOTAL("report_instance.update.total", new BasicCounter()),
     REPORT_INSTANCE_UPDATE_INTERVAL_COUNT("report_instance.update.count", new RollingCounter()),
     REPORT_INSTANCE_UPDATE_USER_ERROR_MISSING_REPORT_INSTANCE(
@@ -116,7 +116,7 @@ public enum Metrics {
     REPORT_INSTANCE_UPDATE_SYSTEM_ERROR("report_instance.update.system_error", new RollingCounter()),
 
 
-    // GET _opensearch/_reports/instance/{reportInstanceId}
+    // GET _plugins/_reports/instance/{reportInstanceId}
     REPORT_INSTANCE_INFO_TOTAL("report_instance.info.total", new BasicCounter()),
     REPORT_INSTANCE_INFO_INTERVAL_COUNT("report_instance.info.count", new RollingCounter()),
     REPORT_INSTANCE_INFO_USER_ERROR_MISSING_REPORT_INSTANCE(
@@ -128,7 +128,7 @@ public enum Metrics {
     REPORT_INSTANCE_INFO_SYSTEM_ERROR("report_instance.info.system_error", new RollingCounter()),
 
 
-    // GET _opensearch/_reports/instances
+    // GET _plugins/_reports/instances
     REPORT_INSTANCE_LIST_TOTAL("report_instance.list.total", new BasicCounter()),
     REPORT_INSTANCE_LIST_INTERVAL_COUNT("report_instance.list.count", new RollingCounter()),
     REPORT_INSTANCE_LIST_USER_ERROR_INVALID_FROM_INDEX(
@@ -136,7 +136,7 @@ public enum Metrics {
     REPORT_INSTANCE_LIST_SYSTEM_ERROR("report_instance.list.system_error", new RollingCounter()),
 
 
-    // PUT _opensearch/_reports/on_demand
+    // PUT _plugins/_reports/on_demand
     REPORT_FROM_DEFINITION_TOTAL("on_demand.create.total", new BasicCounter()),
     REPORT_FROM_DEFINITION_INTERVAL_COUNT("on_demand.create.count", new RollingCounter()),
     REPORT_FROM_DEFINITION_USER_ERROR_INVALID_BEGIN_TIME(
@@ -148,7 +148,7 @@ public enum Metrics {
     REPORT_FROM_DEFINITION_SYSTEM_ERROR("on_demand.create.system_error", new RollingCounter()),
 
 
-    // POST _opensearch/_reports/on_demand/{reportDefinitionId}
+    // POST _plugins/_reports/on_demand/{reportDefinitionId}
     REPORT_FROM_DEFINITION_ID_TOTAL("on_demand_from_definition.create.total", new BasicCounter()),
     REPORT_FROM_DEFINITION_ID_INTERVAL_COUNT("on_demand_from_definition.create.count", new RollingCounter()),
     REPORT_FROM_DEFINITION_ID_USER_ERROR_INVALID_REPORT_DEF_ID(

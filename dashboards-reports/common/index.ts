@@ -30,10 +30,10 @@ export const PLUGIN_NAME = 'reports-dashboards';
 export const API_PREFIX = '/api/reporting';
 
 export const NOTIFICATION_API = {
-  SEND: '/_opensearch/_notifications/send',
+  SEND: '/_plugins/_notifications/send',
 };
 
-const BASE_REPORTS_URI = '/_opensearch/_reports';
+const BASE_REPORTS_URI = '/_plugins/_reports';
 
 export const OPENSEARCH_REPORTS_API = {
   ON_DEMAND_REPORT: `${BASE_REPORTS_URI}/on_demand`,
