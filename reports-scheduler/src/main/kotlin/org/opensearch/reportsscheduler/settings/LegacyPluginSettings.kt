@@ -35,6 +35,7 @@ import org.opensearch.cluster.service.ClusterService
 import org.opensearch.common.settings.Setting
 import org.opensearch.common.settings.Setting.Property.Dynamic
 import org.opensearch.common.settings.Setting.Property.NodeScope
+import org.opensearch.common.settings.Setting.Property.Deprecated
 import org.opensearch.common.settings.Settings
 import java.io.IOException
 import java.nio.file.Path
@@ -42,12 +43,12 @@ import java.nio.file.Path
 /**
  * settings specific to reports scheduler Plugin.
  */
-internal object PluginSettings {
+internal object LegacyPluginSettings {
 
     /**
      * Settings Key prefix for this plugin.
      */
-    private const val KEY_PREFIX = "opensearch.reports"
+    private const val KEY_PREFIX = "opendistro.reports"
 
     /**
      * General settings Key prefix.
@@ -300,59 +301,65 @@ internal object PluginSettings {
         )
     }
 
-    private val OPERATION_TIMEOUT_MS: Setting<Long> = Setting.longSetting(
+    public val OPERATION_TIMEOUT_MS: Setting<Long> = Setting.longSetting(
         OPERATION_TIMEOUT_MS_KEY,
-        LegacyPluginSettings.OPERATION_TIMEOUT_MS,
-        NodeScope, Dynamic
+        defaultSettings[OPERATION_TIMEOUT_MS_KEY]!!.toLong(),
+        MINIMUM_OPERATION_TIMEOUT_MS,
+        NodeScope, Dynamic, Deprecated
     )
 
-    private val DEFAULT_ITEMS_QUERY_COUNT: Setting<Int> = Setting.intSetting(
+    public val DEFAULT_ITEMS_QUERY_COUNT: Setting<Int> = Setting.intSetting(
         DEFAULT_ITEMS_QUERY_COUNT_KEY,
-        LegacyPluginSettings.DEFAULT_ITEMS_QUERY_COUNT,
-        NodeScope, Dynamic
+        defaultSettings[DEFAULT_ITEMS_QUERY_COUNT_KEY]!!.toInt(),
+        MINIMUM_ITEMS_QUERY_COUNT,
+        NodeScope, Dynamic, Deprecated
     )
 
-    private val JOB_LOCK_DURATION_S: Setting<Int> = Setting.intSetting(
+    public val JOB_LOCK_DURATION_S: Setting<Int> = Setting.intSetting(
         JOB_LOCK_DURATION_S_KEY,
-        LegacyPluginSettings.JOB_LOCK_DURATION_S,
-        NodeScope, Dynamic
+        defaultSettings[JOB_LOCK_DURATION_S_KEY]!!.toInt(),
+        MINIMUM_JOB_LOCK_DURATION_S,
+        NodeScope, Dynamic, Deprecated
     )
 
-    private val MIN_POLLING_DURATION_S: Setting<Int> = Setting.intSetting(
+    public val MIN_POLLING_DURATION_S: Setting<Int> = Setting.intSetting(
         MIN_POLLING_DURATION_S_KEY,
-        LegacyPluginSettings.MIN_POLLING_DURATION_S,
-        NodeScope, Dynamic
+        defaultSettings[MIN_POLLING_DURATION_S_KEY]!!.toInt(),
+        MINIMUM_MIN_POLLING_DURATION_S,
+        NodeScope, Dynamic, Deprecated
     )
 
-    private val MAX_POLLING_DURATION_S: Setting<Int> = Setting.intSetting(
+    public val MAX_POLLING_DURATION_S: Setting<Int> = Setting.intSetting(
         MAX_POLLING_DURATION_S_KEY,
-        LegacyPluginSettings.MAX_POLLING_DURATION_S,
-        NodeScope, Dynamic
+        defaultSettings[MAX_POLLING_DURATION_S_KEY]!!.toInt(),
+        MINIMUM_MAX_POLLING_DURATION_S,
+        NodeScope, Dynamic, Deprecated
     )
 
-    private val MAX_LOCK_RETRIES: Setting<Int> = Setting.intSetting(
+    public val MAX_LOCK_RETRIES: Setting<Int> = Setting.intSetting(
         MAX_LOCK_RETRIES_KEY,
-        LegacyPluginSettings.MAX_LOCK_RETRIES,
-        NodeScope, Dynamic
+        defaultSettings[MAX_LOCK_RETRIES_KEY]!!.toInt(),
+        MINIMUM_LOCK_RETRIES,
+        NodeScope, Dynamic, Deprecated
     )
 
-    private val ADMIN_ACCESS: Setting<String> = Setting.simpleString(
+    public val ADMIN_ACCESS: Setting<String> = Setting.simpleString(
         ADMIN_ACCESS_KEY,
-        LegacyPluginSettings.ADMIN_ACCESS,
-        NodeScope, Dynamic
+        defaultSettings[ADMIN_ACCESS_KEY]!!,
+        NodeScope, Dynamic, Deprecated
     )
 
-    private val FILTER_BY: Setting<String> = Setting.simpleString(
+    public val FILTER_BY: Setting<String> = Setting.simpleString(
         FILTER_BY_KEY,
-        LegacyPluginSettings.FILTER_BY,
-        NodeScope, Dynamic
+        defaultSettings[FILTER_BY_KEY]!!,
+        NodeScope, Dynamic, Deprecated
     )
 
-    private val IGNORED_ROLES: Setting<List<String>> = Setting.listSetting(
+    public val IGNORED_ROLES: Setting<List<String>> = Setting.listSetting(
         IGNORE_ROLE_KEY,
-        LegacyPluginSettings.IGNORED_ROLES,
+        DEFAULT_IGNORED_ROLES,
         { it },
-        NodeScope, Dynamic
+        NodeScope, Dynamic, Deprecated
     )
 
     /**

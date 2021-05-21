@@ -52,6 +52,7 @@ import org.opensearch.reportsscheduler.resthandler.ReportInstanceRestHandler
 import org.opensearch.reportsscheduler.resthandler.ReportStatsRestHandler
 import org.opensearch.reportsscheduler.scheduler.ReportDefinitionJobParser
 import org.opensearch.reportsscheduler.scheduler.ReportDefinitionJobRunner
+import org.opensearch.reportsscheduler.settings.LegacyPluginSettings
 import org.opensearch.reportsscheduler.settings.PluginSettings
 
 import org.opensearch.action.ActionRequest
@@ -95,7 +96,10 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, JobSchedulerExtension {
      * {@inheritDoc}
      */
     override fun getSettings(): List<Setting<*>> {
-        return PluginSettings.getAllSettings()
+        val settingList = arrayListOf<Setting<*>>()
+        settingList.addAll(PluginSettings.getAllSettings())
+        settingList.addAll(LegacyPluginSettings.getAllSettings())
+        return settingList
     }
 
     /**
