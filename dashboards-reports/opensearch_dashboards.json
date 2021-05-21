@@ -2,7 +2,7 @@
   "id": "reportsDashboards",
   "version": "1.0.0.0-beta1",
   "opensearchDashboardsVersion": "1.0.0-beta1",
-  "requiredPlugins": ["navigation", "data"],
+  "requiredPlugins": ["navigation", "data", "opensearchDashboardsUtils"],
   "optionalPlugins": ["share"],
   "server": true,
   "ui": true
