@@ -2,7 +2,7 @@
   "id": "opendistro_kibana_reports",
   "version": "1.11.0.0",
   "kibanaVersion": "7.9.1",
-  "requiredPlugins": ["navigation", "data"],
+  "requiredPlugins": ["navigation", "data", "kibanaUtils"],
   "optionalPlugins": ["share"],
   "server": true,
   "ui": true
