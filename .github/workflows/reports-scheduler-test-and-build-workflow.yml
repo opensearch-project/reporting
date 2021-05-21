@@ -32,7 +32,7 @@ jobs:
           path: common-utils
       - name: Build common-utils
         working-directory: ./common-utils
-        run: ./gradlew publishToMavenLocal -Dopensearch.version=1.0.0-beta1
+        run: ./gradlew publishToMavenLocal -Dopensearch.version=1.0.0-rc1
 
       # dependencies: job-scheduler
       - name: Checkout job-scheduler
