@@ -51,7 +51,7 @@ internal class DeleteReportDefinitionAction @Inject constructor(
     actionFilters,
     ::DeleteReportDefinitionRequest) {
     companion object {
-        private const val NAME = "cluster:admin/opensearch/reports/definition/delete"
+        private const val NAME = "cluster:admin/opendistro/reports/definition/delete"
         internal val ACTION_TYPE = ActionType(NAME, ::DeleteReportDefinitionResponse)
     }
 
