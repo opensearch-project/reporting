@@ -84,11 +84,17 @@ describe('test create saved search report', () => {
   }, 20000);
 
   test('create report with expected file name extension', async () => {
-    const csvReport = await createSavedSearchReport(input, mockOpenSearchClient([]));
+    const csvReport = await createSavedSearchReport(
+      input,
+      mockOpenSearchClient([])
+    );
     expect(csvReport.fileName).toContain('.csv');
 
     input.report_definition.report_params.core_params.report_format = 'xlsx';
-    const xlsxReport = await createSavedSearchReport(input, mockOpenSearchClient([]));
+    const xlsxReport = await createSavedSearchReport(
+      input,
+      mockOpenSearchClient([])
+    );
     expect(xlsxReport.fileName).toContain('.xlsx');
   }, 20000);
 
@@ -288,6 +294,20 @@ describe('test create saved search report', () => {
     );
   }, 20000);
 });
+
+test('create report for data set contains null field value', async () => {
+  const hits = [
+    hit({ category: 'c1', customer_gender: 'Ma' }),
+    hit({ category: 'c2', customer_gender: 'le' }),
+    hit({ category: 'c3', customer_gender: null }),
+  ];
+  const client = mockOpenSearchClient(hits);
+  const { dataUrl } = await createSavedSearchReport(input, client);
+
+  expect(dataUrl).toEqual(
+    'category,customer_gender\n' + 'c1,Ma\n' + 'c2,le\n' + 'c3, '
+  );
+}, 20000);
 
 /**
  * Mock Elasticsearch client and return different mock objects based on endpoint and parameters.

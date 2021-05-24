@@ -40,10 +40,7 @@ import { PLUGIN_NAME } from '../common';
 
 export class ReportsDashboardsPlugin
   implements
-    Plugin<
-      ReportsDashboardsPluginSetup,
-      ReportsDashboardsPluginStart
-    > {
+    Plugin<ReportsDashboardsPluginSetup, ReportsDashboardsPluginStart> {
   public setup(core: CoreSetup): ReportsDashboardsPluginSetup {
     // Register an application into the side navigation menu
     core.application.register({
