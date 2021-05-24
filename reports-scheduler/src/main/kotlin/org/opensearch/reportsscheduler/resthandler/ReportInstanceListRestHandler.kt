@@ -27,6 +27,7 @@
 package org.opensearch.reportsscheduler.resthandler
 
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.action.GetAllReportInstancesAction
 import org.opensearch.reportsscheduler.action.ReportInstanceActions
 import org.opensearch.reportsscheduler.metrics.Metrics
@@ -38,6 +39,7 @@ import org.opensearch.client.node.NodeClient
 import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
 import org.opensearch.rest.BytesRestResponse
 import org.opensearch.rest.RestHandler.Route
+import org.opensearch.rest.RestHandler.ReplacedRoute
 import org.opensearch.rest.RestRequest
 import org.opensearch.rest.RestRequest.Method.GET
 import org.opensearch.rest.RestStatus
@@ -50,6 +52,7 @@ internal class ReportInstanceListRestHandler : PluginBaseHandler() {
     companion object {
         private const val REPORT_INSTANCE_LIST_ACTION = "report_instance_list_actions"
         private const val LIST_REPORT_INSTANCES_URL = "$BASE_REPORTS_URI/instances"
+        private const val LEGACY_LIST_REPORT_INSTANCES_URL = "$LEGACY_BASE_REPORTS_URI/instances"
     }
 
     /**
@@ -63,6 +66,13 @@ internal class ReportInstanceListRestHandler : PluginBaseHandler() {
      * {@inheritDoc}
      */
     override fun routes(): List<Route> {
+        return listOf()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun replacedRoutes(): List<ReplacedRoute> {
         return listOf(
             /**
              * Get all report instances (from optional fromIndex)
@@ -70,7 +80,12 @@ internal class ReportInstanceListRestHandler : PluginBaseHandler() {
              * Request body: None
              * Response body: Ref [org.opensearch.reportsscheduler.model.GetAllReportInstancesResponse]
              */
-            Route(GET, LIST_REPORT_INSTANCES_URL)
+            ReplacedRoute(
+                GET,
+                LIST_REPORT_INSTANCES_URL,
+                GET,
+                LEGACY_LIST_REPORT_INSTANCES_URL
+            )
         )
     }
 

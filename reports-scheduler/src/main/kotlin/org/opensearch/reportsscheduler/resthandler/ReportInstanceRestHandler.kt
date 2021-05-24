@@ -27,6 +27,7 @@
 package org.opensearch.reportsscheduler.resthandler
 
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.action.GetReportInstanceAction
 import org.opensearch.reportsscheduler.action.ReportInstanceActions
 import org.opensearch.reportsscheduler.action.UpdateReportInstanceStatusAction
@@ -39,6 +40,7 @@ import org.opensearch.client.node.NodeClient
 import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
 import org.opensearch.rest.BytesRestResponse
 import org.opensearch.rest.RestHandler.Route
+import org.opensearch.rest.RestHandler.ReplacedRoute
 import org.opensearch.rest.RestRequest
 import org.opensearch.rest.RestRequest.Method.GET
 import org.opensearch.rest.RestRequest.Method.POST
@@ -52,6 +54,7 @@ internal class ReportInstanceRestHandler : PluginBaseHandler() {
     companion object {
         private const val REPORT_INSTANCE_LIST_ACTION = "report_instance_actions"
         private const val REPORT_INSTANCE_URL = "$BASE_REPORTS_URI/instance"
+        private const val LEGACY_REPORT_INSTANCE_URL = "$LEGACY_BASE_REPORTS_URI/instance"
     }
 
     /**
@@ -65,6 +68,13 @@ internal class ReportInstanceRestHandler : PluginBaseHandler() {
      * {@inheritDoc}
      */
     override fun routes(): List<Route> {
+        return listOf()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun replacedRoutes(): List<ReplacedRoute> {
         return listOf(
             /**
              * Update report instance status
@@ -72,14 +82,24 @@ internal class ReportInstanceRestHandler : PluginBaseHandler() {
              * Request body: Ref [org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusRequest]
              * Response body: Ref [org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusResponse]
              */
-            Route(POST, "$REPORT_INSTANCE_URL/{$REPORT_INSTANCE_ID_FIELD}"),
+            ReplacedRoute(
+                POST,
+                "$REPORT_INSTANCE_URL/{$REPORT_INSTANCE_ID_FIELD}",
+                POST,
+                "$LEGACY_REPORT_INSTANCE_URL/{$REPORT_INSTANCE_ID_FIELD}"
+            ),
             /**
              * Get a report instance information
              * Request URL: GET REPORT_INSTANCE_URL/{reportInstanceId}
              * Request body: None
              * Response body: Ref [org.opensearch.reportsscheduler.model.GetReportInstanceResponse]
              */
-            Route(GET, "$REPORT_INSTANCE_URL/{$REPORT_INSTANCE_ID_FIELD}")
+            ReplacedRoute(
+                GET,
+                "$REPORT_INSTANCE_URL/{$REPORT_INSTANCE_ID_FIELD}",
+                GET,
+                "$LEGACY_REPORT_INSTANCE_URL/{$REPORT_INSTANCE_ID_FIELD}"
+            )
         )
     }
 

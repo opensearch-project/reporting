@@ -27,6 +27,7 @@
 package org.opensearch.reportsscheduler.resthandler
 
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.action.CreateReportDefinitionAction
 import org.opensearch.reportsscheduler.action.DeleteReportDefinitionAction
 import org.opensearch.reportsscheduler.action.GetReportDefinitionAction
@@ -43,6 +44,7 @@ import org.opensearch.client.node.NodeClient
 import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
 import org.opensearch.rest.BytesRestResponse
 import org.opensearch.rest.RestHandler.Route
+import org.opensearch.rest.RestHandler.ReplacedRoute
 import org.opensearch.rest.RestRequest
 import org.opensearch.rest.RestRequest.Method.DELETE
 import org.opensearch.rest.RestRequest.Method.GET
@@ -58,6 +60,7 @@ internal class ReportDefinitionRestHandler : PluginBaseHandler() {
     companion object {
         private const val REPORT_DEFINITION_ACTION = "report_definition_actions"
         private const val REPORT_DEFINITION_URL = "$BASE_REPORTS_URI/definition"
+        private const val LEGACY_REPORT_DEFINITION_URL = "$LEGACY_BASE_REPORTS_URI/definition"
     }
 
     /**
@@ -71,6 +74,13 @@ internal class ReportDefinitionRestHandler : PluginBaseHandler() {
      * {@inheritDoc}
      */
     override fun routes(): List<Route> {
+        return listOf()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun replacedRoutes(): List<ReplacedRoute> {
         return listOf(
             /**
              * Create a new report definition
@@ -78,28 +88,48 @@ internal class ReportDefinitionRestHandler : PluginBaseHandler() {
              * Request body: Ref [org.opensearch.reportsscheduler.model.CreateReportDefinitionRequest]
              * Response body: Ref [org.opensearch.reportsscheduler.model.CreateReportDefinitionResponse]
              */
-            Route(POST, REPORT_DEFINITION_URL),
+            ReplacedRoute(
+                POST,
+                REPORT_DEFINITION_URL,
+                POST,
+                LEGACY_REPORT_DEFINITION_URL
+            ),
             /**
              * Update report definition
              * Request URL: PUT REPORT_DEFINITION_URL/{reportDefinitionId}
              * Request body: Ref [org.opensearch.reportsscheduler.model.UpdateReportDefinitionRequest]
              * Response body: Ref [org.opensearch.reportsscheduler.model.UpdateReportDefinitionResponse]
              */
-            Route(PUT, "$REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}"),
+            ReplacedRoute(
+                PUT,
+                "$REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}",
+                PUT,
+                "$LEGACY_REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}"
+            ),
             /**
              * Get a report definition
              * Request URL: GET REPORT_DEFINITION_URL/{reportDefinitionId}
              * Request body: Ref [org.opensearch.reportsscheduler.model.GetReportDefinitionRequest]
              * Response body: Ref [org.opensearch.reportsscheduler.model.GetReportDefinitionResponse]
              */
-            Route(GET, "$REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}"),
+            ReplacedRoute(
+                GET,
+                "$REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}",
+                GET,
+                "$LEGACY_REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}"
+            ),
             /**
              * Delete report definition
              * Request URL: DELETE REPORT_DEFINITION_URL/{reportDefinitionId}
              * Request body: Ref [org.opensearch.reportsscheduler.model.DeleteReportDefinitionRequest]
              * Response body: Ref [org.opensearch.reportsscheduler.model.DeleteReportDefinitionResponse]
              */
-            Route(DELETE, "$REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}")
+            ReplacedRoute(
+                DELETE,
+                "$REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}",
+                DELETE,
+                "$LEGACY_REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}"
+            )
         )
     }
 

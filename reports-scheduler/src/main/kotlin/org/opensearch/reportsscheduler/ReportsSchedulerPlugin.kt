@@ -90,6 +90,7 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, JobSchedulerExtension {
         const val PLUGIN_NAME = "opensearch-reports-scheduler"
         const val LOG_PREFIX = "reports"
         const val BASE_REPORTS_URI = "/_plugins/_reports"
+        const val LEGACY_BASE_REPORTS_URI = "/_opendistro/_reports"
     }
 
     /**

@@ -27,6 +27,7 @@
 package org.opensearch.reportsscheduler.resthandler
 
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.action.PollReportInstanceAction
 import org.opensearch.reportsscheduler.action.ReportInstanceActions
 import org.opensearch.reportsscheduler.model.PollReportInstanceRequest
@@ -34,6 +35,7 @@ import org.opensearch.client.node.NodeClient
 import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
 import org.opensearch.rest.BytesRestResponse
 import org.opensearch.rest.RestHandler.Route
+import org.opensearch.rest.RestHandler.ReplacedRoute
 import org.opensearch.rest.RestRequest
 import org.opensearch.rest.RestRequest.Method.GET
 import org.opensearch.rest.RestStatus
@@ -46,6 +48,7 @@ internal class ReportInstancePollRestHandler : PluginBaseHandler() {
     companion object {
         private const val REPORT_INSTANCE_POLL_ACTION = "report_instance_poll_actions"
         private const val POLL_REPORT_INSTANCE_URL = "$BASE_REPORTS_URI/poll_instance"
+        private const val LEGACY_POLL_REPORT_INSTANCE_URL = "$LEGACY_BASE_REPORTS_URI/poll_instance"
     }
 
     /**
@@ -59,6 +62,13 @@ internal class ReportInstancePollRestHandler : PluginBaseHandler() {
      * {@inheritDoc}
      */
     override fun routes(): List<Route> {
+        return listOf()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun replacedRoutes(): List<ReplacedRoute> {
         return listOf(
             /**
              * Poll report instances for pending job
@@ -66,7 +76,12 @@ internal class ReportInstancePollRestHandler : PluginBaseHandler() {
              * Request body: None
              * Response body: Ref [org.opensearch.reportsscheduler.model.PollReportInstanceResponse]
              */
-            Route(GET, POLL_REPORT_INSTANCE_URL)
+            ReplacedRoute(
+                GET,
+                POLL_REPORT_INSTANCE_URL,
+                GET,
+                LEGACY_POLL_REPORT_INSTANCE_URL
+            )
         )
     }
 

@@ -27,6 +27,7 @@
 package org.opensearch.reportsscheduler.resthandler
 
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.action.InContextReportCreateAction
 import org.opensearch.reportsscheduler.action.OnDemandReportCreateAction
 import org.opensearch.reportsscheduler.action.ReportInstanceActions
@@ -39,6 +40,7 @@ import org.opensearch.client.node.NodeClient
 import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
 import org.opensearch.rest.BytesRestResponse
 import org.opensearch.rest.RestHandler.Route
+import org.opensearch.rest.RestHandler.ReplacedRoute
 import org.opensearch.rest.RestRequest
 import org.opensearch.rest.RestRequest.Method.POST
 import org.opensearch.rest.RestRequest.Method.PUT
@@ -52,6 +54,7 @@ internal class OnDemandReportRestHandler : PluginBaseHandler() {
     companion object {
         private const val REPORT_INSTANCE_LIST_ACTION = "on_demand_report_actions"
         private const val ON_DEMAND_REPORT_URL = "$BASE_REPORTS_URI/on_demand"
+        private const val LEGACY_ON_DEMAND_REPORT_URL = "$LEGACY_BASE_REPORTS_URI/on_demand"
     }
 
     /**
@@ -65,6 +68,13 @@ internal class OnDemandReportRestHandler : PluginBaseHandler() {
      * {@inheritDoc}
      */
     override fun routes(): List<Route> {
+        return listOf()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun replacedRoutes(): List<ReplacedRoute> {
         return listOf(
             /**
              * Create a new report instance from provided definition
@@ -72,7 +82,12 @@ internal class OnDemandReportRestHandler : PluginBaseHandler() {
              * Request body: Ref [org.opensearch.reportsscheduler.model.InContextReportCreateRequest]
              * Response body: Ref [org.opensearch.reportsscheduler.model.InContextReportCreateResponse]
              */
-            Route(PUT, ON_DEMAND_REPORT_URL),
+            ReplacedRoute(
+                PUT,
+                ON_DEMAND_REPORT_URL,
+                PUT,
+                LEGACY_ON_DEMAND_REPORT_URL
+            ),
 
             /**
              * Create a new report from definition and return instance
@@ -80,7 +95,12 @@ internal class OnDemandReportRestHandler : PluginBaseHandler() {
              * Request body: Ref [org.opensearch.reportsscheduler.model.OnDemandReportCreateRequest]
              * Response body: Ref [org.opensearch.reportsscheduler.model.OnDemandReportCreateResponse]
              */
-            Route(POST, "$ON_DEMAND_REPORT_URL/{$REPORT_DEFINITION_ID_FIELD}")
+            ReplacedRoute(
+                POST,
+                "$ON_DEMAND_REPORT_URL/{$REPORT_DEFINITION_ID_FIELD}",
+                POST,
+                "$LEGACY_ON_DEMAND_REPORT_URL/{$REPORT_DEFINITION_ID_FIELD}"
+            )
         )
     }
 

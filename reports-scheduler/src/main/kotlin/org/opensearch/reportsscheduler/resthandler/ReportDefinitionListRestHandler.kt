@@ -27,6 +27,7 @@
 package org.opensearch.reportsscheduler.resthandler
 
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.action.GetAllReportDefinitionsAction
 import org.opensearch.reportsscheduler.action.ReportDefinitionActions
 import org.opensearch.reportsscheduler.metrics.Metrics
@@ -39,6 +40,7 @@ import org.opensearch.client.node.NodeClient
 import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
 import org.opensearch.rest.BytesRestResponse
 import org.opensearch.rest.RestHandler.Route
+import org.opensearch.rest.RestHandler.ReplacedRoute
 import org.opensearch.rest.RestRequest
 import org.opensearch.rest.RestRequest.Method.GET
 import org.opensearch.rest.RestStatus
@@ -51,6 +53,7 @@ internal class ReportDefinitionListRestHandler : PluginBaseHandler() {
     companion object {
         private const val REPORT_DEFINITION_LIST_ACTION = "report_definition_list_actions"
         private const val LIST_REPORT_DEFINITIONS_URL = "$BASE_REPORTS_URI/definitions"
+        private const val LEGACY_LIST_REPORT_DEFINITIONS_URL = "$LEGACY_BASE_REPORTS_URI/definitions"
     }
 
     /**
@@ -64,6 +67,13 @@ internal class ReportDefinitionListRestHandler : PluginBaseHandler() {
      * {@inheritDoc}
      */
     override fun routes(): List<Route> {
+        return listOf()
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun replacedRoutes(): List<ReplacedRoute> {
         return listOf(
             /**
              * Get all report definitions (from optional fromIndex)
@@ -71,7 +81,12 @@ internal class ReportDefinitionListRestHandler : PluginBaseHandler() {
              * Request body: None
              * Response body: Ref [org.opensearch.reportsscheduler.model.GetAllReportDefinitionsResponse]
              */
-            Route(GET, LIST_REPORT_DEFINITIONS_URL)
+            ReplacedRoute(
+                GET,
+                LIST_REPORT_DEFINITIONS_URL,
+                GET,
+                LEGACY_LIST_REPORT_DEFINITIONS_URL
+            )
         )
     }
 

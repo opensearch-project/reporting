@@ -29,6 +29,7 @@ package org.opensearch.reportsscheduler.rest
 
 import org.opensearch.reportsscheduler.PluginRestTestCase
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.jsonify
 import org.opensearch.reportsscheduler.validateErrorResponse
 import org.opensearch.reportsscheduler.validateTimeRecency
@@ -108,6 +109,43 @@ class InContextMenuReportGenerationIT : PluginRestTestCase() {
         )
         validateTimeRecency(Instant.ofEpochMilli(reportInstance.get("lastUpdatedTimeMs").asLong))
         validateTimeRecency(Instant.ofEpochMilli(reportInstance.get("createdTimeMs").asLong))
+
+        // legacy test
+        val legacyDownloadResponse = executeRequest(
+            RestRequest.Method.PUT.name,
+            "$LEGACY_BASE_REPORTS_URI/on_demand",
+            downloadRequest,
+            RestStatus.OK.status
+        )
+        Assert.assertNotNull("reportInstance should be generated", legacyDownloadResponse)
+        val legacyReportInstance = legacyDownloadResponse.get("reportInstance").asJsonObject
+        val legacyReportDefinitionDetails = legacyReportInstance.get("reportDefinitionDetails").asJsonObject
+        Assert.assertEquals(
+            TEST_REPORT_DEFINITION_ID,
+            legacyReportDefinitionDetails.get("id").asString
+        )
+        Assert.assertEquals(
+            jsonify(downloadRequest).get("beginTimeMs").asString,
+            legacyReportInstance.get("beginTimeMs").asString
+        )
+        Assert.assertEquals(
+            jsonify(downloadRequest).get("endTimeMs").asString,
+            legacyReportInstance.get("endTimeMs").asString
+        )
+        Assert.assertEquals(
+            jsonify(downloadRequest).get("status").asString,
+            legacyReportInstance.get("status").asString
+        )
+        Assert.assertEquals(
+            jsonify(downloadRequest).get("statusText").asString,
+            legacyReportInstance.get("statusText").asString
+        )
+        Assert.assertEquals(
+            jsonify(downloadRequest).get("inContextDownloadUrlPath").asString,
+            legacyReportInstance.get("inContextDownloadUrlPath").asString
+        )
+        validateTimeRecency(Instant.ofEpochMilli(legacyReportInstance.get("lastUpdatedTimeMs").asLong))
+        validateTimeRecency(Instant.ofEpochMilli(legacyReportInstance.get("createdTimeMs").asLong))
     }
 
     fun `test create in-context-menu report from invalid source request`() {
@@ -149,6 +187,15 @@ class InContextMenuReportGenerationIT : PluginRestTestCase() {
             RestStatus.BAD_REQUEST.status
         )
         validateErrorResponse(downloadResponse, RestStatus.BAD_REQUEST.status, "illegal_argument_exception")
+
+        // legacy test
+        val legacyDownloadResponse = executeRequest(
+            RestRequest.Method.PUT.name,
+            "$LEGACY_BASE_REPORTS_URI/on_demand",
+            downloadRequest,
+            RestStatus.BAD_REQUEST.status
+        )
+        validateErrorResponse(legacyDownloadResponse, RestStatus.BAD_REQUEST.status, "illegal_argument_exception")
     }
 
     fun `test create in-context-menu report from invalid trigger request`() {
@@ -190,6 +237,15 @@ class InContextMenuReportGenerationIT : PluginRestTestCase() {
             RestStatus.BAD_REQUEST.status
         )
         validateErrorResponse(downloadResponse, RestStatus.BAD_REQUEST.status, "illegal_argument_exception")
+
+        // legacy test
+        val legacyDownloadResponse = executeRequest(
+            RestRequest.Method.PUT.name,
+            "$LEGACY_BASE_REPORTS_URI/on_demand",
+            downloadRequest,
+            RestStatus.BAD_REQUEST.status
+        )
+        validateErrorResponse(legacyDownloadResponse, RestStatus.BAD_REQUEST.status, "illegal_argument_exception")
     }
 
     fun `test create in-context-menu report from invalid format request`() {
@@ -230,6 +286,15 @@ class InContextMenuReportGenerationIT : PluginRestTestCase() {
             RestStatus.BAD_REQUEST.status
         )
         validateErrorResponse(downloadResponse, RestStatus.BAD_REQUEST.status, "illegal_argument_exception")
+
+        // legacy test
+        val legacyDownloadResponse = executeRequest(
+            RestRequest.Method.PUT.name,
+            "$LEGACY_BASE_REPORTS_URI/on_demand",
+            downloadRequest,
+            RestStatus.BAD_REQUEST.status
+        )
+        validateErrorResponse(legacyDownloadResponse, RestStatus.BAD_REQUEST.status, "illegal_argument_exception")
     }
 
     fun `test create in-context-menu report without time request`() {
@@ -269,6 +334,15 @@ class InContextMenuReportGenerationIT : PluginRestTestCase() {
             RestStatus.BAD_REQUEST.status
         )
         validateErrorResponse(downloadResponse, RestStatus.BAD_REQUEST.status, "illegal_argument_exception")
+
+        // legacy test
+        val legacyDownloadResponse = executeRequest(
+            RestRequest.Method.PUT.name,
+            "$LEGACY_BASE_REPORTS_URI/on_demand",
+            downloadRequest,
+            RestStatus.BAD_REQUEST.status
+        )
+        validateErrorResponse(legacyDownloadResponse, RestStatus.BAD_REQUEST.status, "illegal_argument_exception")
     }
 
     fun `test create in-context-menu report without status request`() {
@@ -309,6 +383,15 @@ class InContextMenuReportGenerationIT : PluginRestTestCase() {
             RestStatus.BAD_REQUEST.status
         )
         validateErrorResponse(downloadResponse, RestStatus.BAD_REQUEST.status, "illegal_argument_exception")
+
+        // legacy test
+        val legacyDownloadResponse = executeRequest(
+            RestRequest.Method.PUT.name,
+            "$LEGACY_BASE_REPORTS_URI/on_demand",
+            downloadRequest,
+            RestStatus.BAD_REQUEST.status
+        )
+        validateErrorResponse(legacyDownloadResponse, RestStatus.BAD_REQUEST.status, "illegal_argument_exception")
     }
 
     fun `test create in-context-menu report without report definition request`() {
@@ -333,5 +416,14 @@ class InContextMenuReportGenerationIT : PluginRestTestCase() {
             RestStatus.BAD_REQUEST.status
         )
         validateErrorResponse(downloadResponse, RestStatus.BAD_REQUEST.status, "illegal_argument_exception")
+
+        // legacy test
+        val legacyDownloadResponse = executeRequest(
+            RestRequest.Method.PUT.name,
+            "$LEGACY_BASE_REPORTS_URI/on_demand",
+            downloadRequest,
+            RestStatus.BAD_REQUEST.status
+        )
+        validateErrorResponse(legacyDownloadResponse, RestStatus.BAD_REQUEST.status, "illegal_argument_exception")
     }
 }
