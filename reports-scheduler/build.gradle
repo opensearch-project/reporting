@@ -107,7 +107,7 @@ ext {
     licenseFile = rootProject.file('LICENSE.txt')
     noticeFile = rootProject.file('NOTICE.txt')
     isSnapshot = "true" == System.getProperty("build.snapshot", "true")
-    opensearchVersion = "${version}.0-beta1"
+    opensearchVersion = "${version}.0-rc1"
 }
 
 if (isSnapshot) {
