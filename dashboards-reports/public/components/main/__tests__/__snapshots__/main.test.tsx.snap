@@ -427,7 +427,7 @@ exports[`<Main /> panel render component 1`] = `
                                  
                                 <a
                                   class="euiLink euiLink--primary"
-                                  href="https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/reporting/"
+                                  href="https://docs-beta.opensearch.org/docs/opensearch-dashboards/reporting/"
                                   rel="noopener noreferrer"
                                   target="_blank"
                                 >
@@ -827,7 +827,7 @@ exports[`<Main /> panel render component 1`] = `
                                    
                                   <a
                                     class="euiLink euiLink--primary"
-                                    href="https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/reporting/"
+                                    href="https://docs-beta.opensearch.org/docs/opensearch-dashboards/reporting/"
                                     rel="noopener noreferrer"
                                     target="_blank"
                                   >
@@ -1339,7 +1339,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                                  
                                 <a
                                   class="euiLink euiLink--primary"
-                                  href="https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/reporting/"
+                                  href="https://docs-beta.opensearch.org/docs/opensearch-dashboards/reporting/"
                                   rel="noopener noreferrer"
                                   target="_blank"
                                 >
@@ -1756,7 +1756,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                                    
                                   <a
                                     class="euiLink euiLink--primary"
-                                    href="https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/reporting/"
+                                    href="https://docs-beta.opensearch.org/docs/opensearch-dashboards/reporting/"
                                     rel="noopener noreferrer"
                                     target="_blank"
                                   >
@@ -2321,7 +2321,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                                  
                                 <a
                                   class="euiLink euiLink--primary"
-                                  href="https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/reporting/"
+                                  href="https://docs-beta.opensearch.org/docs/opensearch-dashboards/reporting/"
                                   rel="noopener noreferrer"
                                   target="_blank"
                                 >
@@ -2738,7 +2738,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                                    
                                   <a
                                     class="euiLink euiLink--primary"
-                                    href="https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/reporting/"
+                                    href="https://docs-beta.opensearch.org/docs/opensearch-dashboards/reporting/"
                                     rel="noopener noreferrer"
                                     target="_blank"
                                   >
@@ -3312,7 +3312,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                                  
                                 <a
                                   class="euiLink euiLink--primary"
-                                  href="https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/reporting/"
+                                  href="https://docs-beta.opensearch.org/docs/opensearch-dashboards/reporting/"
                                   rel="noopener noreferrer"
                                   target="_blank"
                                 >
@@ -3729,7 +3729,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                                    
                                   <a
                                     class="euiLink euiLink--primary"
-                                    href="https://opendistro.github.io/for-elasticsearch-docs/docs/kibana/reporting/"
+                                    href="https://docs-beta.opensearch.org/docs/opensearch-dashboards/reporting/"
                                     rel="noopener noreferrer"
                                     target="_blank"
                                   >

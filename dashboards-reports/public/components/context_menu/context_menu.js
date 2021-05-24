@@ -359,7 +359,7 @@ async function getTenantInfoIfExists() {
 // helper function to add tenant info to url(if tenant is available)
 function addTenantToURL(url, userRequestedTenant) {
   // build fake url from relative url
-  const fakeUrl = `http://opendistro.com${url}`;
+  const fakeUrl = `http://opensearch.com${url}`;
   const tenantKey = 'security_tenant';
   const tenantKeyAndValue =
     tenantKey + '=' + encodeURIComponent(userRequestedTenant);

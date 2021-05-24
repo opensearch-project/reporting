@@ -28,8 +28,8 @@ headless-chrome.sh chrome-version-SHA (arch_name (arm64))
 . Linux arm64: ./build_headless_chrome.sh <chrome-version-SHA> arm64
 
 # How to call in Command line:
-. PNG report: ./headless_shell --headless --disable-gpu --screenshot=test.png https://opendistro.github.io/for-elasticsearch
-. PDF report: ./headless_shell --headless --disable-gpu --print-to-pdf=test.pdf https://opendistro.github.io/for-elasticsearch
+. PNG report: ./headless_shell --headless --disable-gpu --screenshot=test.png https://docs-beta.opensearch.org/
+. PDF report: ./headless_shell --headless --disable-gpu --print-to-pdf=test.pdf https://docs-beta.opensearch.org/
 
 ## Headless Chromium for MAC
 # Files:

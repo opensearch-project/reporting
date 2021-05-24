@@ -18,32 +18,32 @@ jobs:
         with:
           repository: 'opensearch-project/OpenSearch'
           path: OpenSearch
-          ref: '1.0.0-beta1'
+          ref: '1.x'
       - name: Build OpenSearch
         working-directory: ./OpenSearch
-        run: ./gradlew publishToMavenLocal -Dbuild.version_qualifier=beta1 -Dbuild.snapshot=false
+        run: ./gradlew publishToMavenLocal -Dbuild.version_qualifier=rc1 -Dbuild.snapshot=false
 
       # dependencies: common-utils
       - name: Checkout common-utils
         uses: actions/checkout@v2
         with:
           repository: 'opensearch-project/common-utils'
-          ref: '1.0.0-beta1'
+          ref: 'main'
           path: common-utils
       - name: Build common-utils
         working-directory: ./common-utils
-        run: ./gradlew publishToMavenLocal -Dopensearch.version=1.0.0-beta1
+        run: ./gradlew publishToMavenLocal -Dopensearch.version=1.0.0-rc1
 
       # dependencies: job-scheduler
       - name: Checkout job-scheduler
         uses: actions/checkout@v2
         with:
           repository: 'opensearch-project/job-scheduler'
-          ref: '1.0.0-beta1'
+          ref: 'main'
           path: job-scheduler
       - name: Build job-scheduler
         working-directory: ./job-scheduler
-        run: ./gradlew publishToMavenLocal -Dopensearch.version=1.0.0-beta1 -Dbuild.snapshot=false
+        run: ./gradlew publishToMavenLocal -Dopensearch.version=1.0.0-rc1 -Dbuild.snapshot=false
 
       # reports-scheduler
       - name: Checkout Reports Scheduler
@@ -52,7 +52,7 @@ jobs:
       - name: Build with Gradle
         run: |
           cd reports-scheduler
-          ./gradlew build -Dopensearch.version=1.0.0-beta1
+          ./gradlew build -Dopensearch.version=1.0.0-rc1
 
       - name: Create Artifact Path
         run: |

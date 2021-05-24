@@ -100,7 +100,7 @@ export const visualReportSchema = schema.object({
 export const intervalSchema = schema.object({
   interval: schema.object({
     period: schema.number({ min: 0 }),
-    // Refer to job scheduler SPI https://github.com/opendistro-for-elasticsearch/job-scheduler/blob/b333469c183a15ddbf496a690300cc9e34d937fb/spi/src/main/java/com/amazon/opendistroforelasticsearch/jobscheduler/spi/schedule/IntervalSchedule.java
+    // Refer to job scheduler SPI https://github.com/opensearch-project/job-scheduler/blob/main/spi/src/main/java/org/opensearch/jobscheduler/spi/schedule/IntervalSchedule.java
     unit: schema.oneOf([
       schema.literal('MINUTES'),
       schema.literal('HOURS'),
