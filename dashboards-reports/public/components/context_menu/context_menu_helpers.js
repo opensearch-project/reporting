@@ -158,6 +158,5 @@ export const replaceQueryURL = (pageUrl) => {
     toDateString + '))',
     "'" + toDateFormat.toISOString() + "'))"
   );
-  console.log(`log output queryUrl\n` + queryUrl);
   return queryUrl;
 };
