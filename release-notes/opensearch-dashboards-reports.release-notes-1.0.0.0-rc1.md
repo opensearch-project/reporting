@@ -20,7 +20,6 @@ Compatible with OpenSearch 1.0.0-rc1
 * Bump path-parse version to 1.0.7 to address CVE ([#59](https://github.com/opensearch-project/dashboards-reports/pull/59))
 * Update README CoC Link ([#56](https://github.com/opensearch-project/dashboards-reports/pull/56))
 
-
 ### OpenSearch Migration
 * Change opendistro to opensearch in email template ([#31](https://github.com/opensearch-project/dashboards-reports/pull/31))
 * Update Namespaces/API/Documentation for OpenSearch ([#55](https://github.com/opensearch-project/dashboards-reports/pull/55))
