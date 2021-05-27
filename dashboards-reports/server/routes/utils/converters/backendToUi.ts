@@ -394,7 +394,7 @@ const getUiDeliveryParams = (
 // helper function to add tenant info to url(if tenant is available)
 const addTenantToURL = (url: string, userRequestedTenant: string) => {
   // build fake url from relative url
-  const fakeUrl = `http://opendistro.com${url}`;
+  const fakeUrl = `http://opensearch.com${url}`;
   const tenantKey = 'security_tenant';
   const tenantKeyAndValue =
     tenantKey + '=' + encodeURIComponent(userRequestedTenant);

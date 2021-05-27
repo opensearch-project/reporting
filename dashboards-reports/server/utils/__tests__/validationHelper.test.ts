@@ -65,6 +65,31 @@ const createReportInput: ReportSchemaType = {
   report_definition: createReportDefinitionInput,
 };
 
+const createReportDefinitionNotebookInput: ReportDefinitionSchemaType = {
+  report_params: {
+    report_name: 'test notebooks report',
+    report_source: REPORT_TYPE.notebook,
+    description: 'Hi this is your Notebook on demand',
+    core_params: {
+      base_url: `/app/notebooks-dashboards?view=output_only#/${SAMPLE_SAVED_OBJECT_ID}`,
+      window_width: 1300,
+      window_height: 900,
+      report_format: FORMAT.pdf,
+      time_duration: 'PT5M',
+      origin: 'http://localhost:5601',
+    },
+  },
+  delivery: {
+    delivery_type: DELIVERY_TYPE.opensearchDashboardsUser,
+    delivery_params: {
+      opensearch_dashboards_recipients: [],
+    },
+  },
+  trigger: {
+    trigger_type: TRIGGER_TYPE.onDemand,
+  },
+}
+
 describe('test input validation', () => {
   test('create report with correct saved object id', async () => {
     const savedObjectIds = [`dashboard:${SAMPLE_SAVED_OBJECT_ID}`];
@@ -89,6 +114,16 @@ describe('test input validation', () => {
     const report = await validateReportDefinition(
       client,
       createReportDefinitionInput
+    );
+    expect(report).toBeDefined();
+  });
+
+  test('create notebook report definition with correct base url format', async () => {
+    const savedObjectIds = [`notebook:${SAMPLE_SAVED_OBJECT_ID}`];
+    const client = mockOpenSearchClient(savedObjectIds);
+    const report = await validateReportDefinition(
+      client,
+      createReportDefinitionNotebookInput
     );
     expect(report).toBeDefined();
   });

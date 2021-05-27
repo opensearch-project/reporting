@@ -51,11 +51,11 @@ afterEvaluate {
         prefix '/usr'
 
         license 'ASL-2.0'
-        maintainer 'OpenDistro for OpenSearch Team <opendistro@amazon.com>'
-        url 'https://opendistro.github.io/opensearch/downloads'
+        maintainer 'OpenSearch Team <opensearch@amazon.com>'
+        url 'https://opensearch.org/downloads.html'
         summary '''
-         OpenSearch Reports scheduler.
-         Reference documentation can be found at https://opendistro.github.io/opensearch/docs.
+         OpenSearch reports scheduler.
+         Reference documentation can be found at https://docs-beta.opensearch.org/.
     '''.stripIndent().replace('\n', ' ').trim()
     }
 

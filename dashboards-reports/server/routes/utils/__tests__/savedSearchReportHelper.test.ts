@@ -84,11 +84,17 @@ describe('test create saved search report', () => {
   }, 20000);
 
   test('create report with expected file name extension', async () => {
-    const csvReport = await createSavedSearchReport(input, mockOpenSearchClient([]));
+    const csvReport = await createSavedSearchReport(
+      input,
+      mockOpenSearchClient([])
+    );
     expect(csvReport.fileName).toContain('.csv');
 
     input.report_definition.report_params.core_params.report_format = 'xlsx';
-    const xlsxReport = await createSavedSearchReport(input, mockOpenSearchClient([]));
+    const xlsxReport = await createSavedSearchReport(
+      input,
+      mockOpenSearchClient([])
+    );
     expect(xlsxReport.fileName).toContain('.xlsx');
   }, 20000);
 
@@ -243,6 +249,31 @@ describe('test create saved search report', () => {
     );
   }, 20000);
 
+  test('create report for data set with nested fields', async () => {
+    const hits = [
+      hit({
+        'geoip.country_iso_code': 'GB',
+        'geoip.location': { lon: -0.1, lat: 51.5 },
+      }),
+      hit({
+        'geoip.country_iso_code': 'US',
+        'geoip.city_name': 'New York',
+        'geoip.location': { lon: -74, lat: 40.8 },
+      }),
+    ];
+    const client = mockOpenSearchClient(
+      hits,
+      '"geoip.country_iso_code", "geoip.city_name", "geoip.location"'
+    );
+    const { dataUrl } = await createSavedSearchReport(input, client);
+
+    expect(dataUrl).toEqual(
+      'geoip.country_iso_code,geoip.location.lon,geoip.location.lat,geoip.city_name\n' +
+        'GB,-0.1,51.5, \n' +
+        'US,-74,40.8,New York'
+    );
+  }, 20000);
+
   test('create report by sanitizing data set for Excel', async () => {
     const hits = [
       hit({ category: 'c1', customer_gender: '=Male' }),
@@ -289,10 +320,27 @@ describe('test create saved search report', () => {
   }, 20000);
 });
 
+test('create report for data set contains null field value', async () => {
+  const hits = [
+    hit({ category: 'c1', customer_gender: 'Ma' }),
+    hit({ category: 'c2', customer_gender: 'le' }),
+    hit({ category: 'c3', customer_gender: null }),
+  ];
+  const client = mockOpenSearchClient(hits);
+  const { dataUrl } = await createSavedSearchReport(input, client);
+
+  expect(dataUrl).toEqual(
+    'category,customer_gender\n' + 'c1,Ma\n' + 'c2,le\n' + 'c3, '
+  );
+}, 20000);
+
 /**
  * Mock Elasticsearch client and return different mock objects based on endpoint and parameters.
  */
-function mockOpenSearchClient(mockHits: Array<{ _source: any }>) {
+function mockOpenSearchClient(
+  mockHits: Array<{ _source: any }>,
+  columns = '"category", "customer_gender"'
+) {
   let call = 0;
   const client = jest.fn();
   client.callAsInternalUser = jest
@@ -303,7 +351,7 @@ function mockOpenSearchClient(mockHits: Array<{ _source: any }>) {
           return {
             _source: params.id.startsWith('index-pattern:')
               ? mockIndexPattern()
-              : mockSavedSearch(),
+              : mockSavedSearch(columns),
           };
         case 'indices.getSettings':
           return mockIndexSettings();
@@ -337,9 +385,9 @@ function mockOpenSearchClient(mockHits: Array<{ _source: any }>) {
 }
 
 /**
- * Mock a saved search for opensearch_dashboards_sample_data_ecommerce with 2 selected fields: category and customer_gender.
+ * Mock a saved search for opensearch_dashboards_sample_data_ecommerce with 2 default selected fields: category and customer_gender.
  */
-function mockSavedSearch() {
+function mockSavedSearch(columns = '"category", "customer_gender"') {
   return JSON.parse(`
   {
     "type": "search",
@@ -348,10 +396,7 @@ function mockSavedSearch() {
       "title": "Show category and gender",
       "description": "",
       "hits": 0,
-      "columns": [
-        "category",
-        "customer_gender"
-      ],
+      "columns": [ ${columns} ],
       "sort": [],
       "version": 1,
       "opensearchDashboardsSavedObjectMeta": {

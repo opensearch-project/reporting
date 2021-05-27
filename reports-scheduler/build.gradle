@@ -30,7 +30,7 @@ import java.util.concurrent.Callable
 buildscript {
     ext {
         opensearch_group = "org.opensearch"
-        opensearch_version = System.getProperty("opensearch.version", "1.0.0-beta1")
+        opensearch_version = System.getProperty("opensearch.version", "1.0.0-rc1")
         kotlin_version = System.getProperty("kotlin.version", "1.4.0")
     }
 
@@ -72,12 +72,12 @@ check.dependsOn jacocoTestReport
 opensearchplugin {
     name 'opensearch-reports-scheduler'
     description 'Scheduler for Dashboards Reports Plugin'
-    classname "com.amazon.opendistroforelasticsearch.reportsscheduler.ReportsSchedulerPlugin"
+    classname "org.opensearch.reportsscheduler.ReportsSchedulerPlugin"
     extendedPlugins = ['opensearch-job-scheduler']
 }
 
 allOpen {
-    annotation("com.amazon.opendistroforelasticsearch.reportsscheduler.util.OpenForTesting")
+    annotation("org.opensearch.reportsscheduler.util.OpenForTesting")
 }
 
 configurations {
@@ -107,7 +107,7 @@ ext {
     licenseFile = rootProject.file('LICENSE.txt')
     noticeFile = rootProject.file('NOTICE.txt')
     isSnapshot = "true" == System.getProperty("build.snapshot", "true")
-    opensearchVersion = "${version}.0-beta1"
+    opensearchVersion = "${version}.0-rc1"
 }
 
 if (isSnapshot) {
@@ -123,7 +123,7 @@ plugins.withId('org.jetbrains.kotlin.jvm') {
 }
 
 allprojects {
-    group = "com.amazon.opendistroforelasticsearch"
+    group = "org.opensearch"
     version = "${opensearchVersion}"
     plugins.withId('java') {
         sourceCompatibility = targetCompatibility = "1.8"
@@ -241,7 +241,7 @@ integTest.dependsOn(bundle)
 integTest.getClusters().forEach{c -> c.plugin(project.getObjects().fileProperty().value(bundle.getArchiveFile()))}
 
 testClusters.integTest {
-    testDistribution = "ARCHIVE"
+    testDistribution = "INTEG_TEST"
     // need to install job-scheduler first, need to assemble job-scheduler first
     plugin(provider(new Callable<RegularFile>(){
         @Override

@@ -33,6 +33,7 @@ import {
   permissionsMissingOnGeneration,
 } from './context_menu_ui';
 import { timeRangeMatcher } from '../utils/utils';
+import { unhashUrl } from '../../../../../src/plugins/opensearch_dashboards_utils/public';
 
 const getReportSourceURL = (baseURI) => {
   const url = baseURI.substr(0, baseURI.indexOf('?'));
@@ -44,7 +45,7 @@ export const contextMenuViewReports = () =>
   window.location.assign('reports-dashboards#/');
 
 export const getTimeFieldsFromUrl = () => {
-  const url = window.location.href;
+  const url = unhashUrl(window.location.href);
 
   let [, fromDateString, toDateString] = url.match(timeRangeMatcher);
   fromDateString = fromDateString.replace(/[']+/g, '');
@@ -84,7 +85,9 @@ export const contextMenuCreateReportDefinition = (baseURI) => {
 };
 
 export const displayLoadingModal = () => {
-  const opensearchDashboardsBody = document.getElementById('opensearch-dashboards-body');
+  const opensearchDashboardsBody = document.getElementById(
+    'opensearch-dashboards-body'
+  );
   if (opensearchDashboardsBody) {
     try {
       const loadingModal = document.createElement('div');
@@ -132,4 +135,28 @@ export const addSuccessOrFailureToast = (status, reportSource) => {
       console.log('error displaying toast', e);
     }
   }
+};
+
+export const replaceQueryURL = (pageUrl) => {
+  // we unhash the url in case OpenSearch Dashboards advanced UI setting 'state:storeInSessionStorage' is turned on
+  const unhashedUrl = new URL(unhashUrl(pageUrl));
+  let queryUrl = unhashedUrl.pathname + unhashedUrl.hash;
+  let [, fromDateString, toDateString] = queryUrl.match(timeRangeMatcher);
+  fromDateString = fromDateString.replace(/[']+/g, '');
+
+  // convert time range to from date format in case time range is relative
+  const fromDateFormat = dateMath.parse(fromDateString);
+  toDateString = toDateString.replace(/[']+/g, '');
+  const toDateFormat = dateMath.parse(toDateString);
+
+  // replace to and from dates with absolute date
+  queryUrl = queryUrl.replace(
+    fromDateString,
+    "'" + fromDateFormat.toISOString() + "'"
+  );
+  queryUrl = queryUrl.replace(
+    toDateString + '))',
+    "'" + toDateFormat.toISOString() + "'))"
+  );
+  return queryUrl;
 };

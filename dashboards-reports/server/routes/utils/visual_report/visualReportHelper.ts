@@ -71,24 +71,34 @@ export const createVisualReport = async (
     ? DOMPurify.sanitize(header)
     : DEFAULT_REPORT_HEADER;
   const reportFooter = footer ? DOMPurify.sanitize(footer) : '';
-  
+
   // add waitForDynamicContent function
-  const waitForDynamicContent = async(page, timeout = 30000, interval = 1000, checks = 5) => {
-    const maxChecks    = timeout / interval;
-    let passedChecks   = 0;
+  const waitForDynamicContent = async (
+    page,
+    timeout = 30000,
+    interval = 1000,
+    checks = 5
+  ) => {
+    const maxChecks = timeout / interval;
+    let passedChecks = 0;
     let previousLength = 0;
-    
-    let i=0; while(i++ <= maxChecks){
-      let pageContent   = await page.content();
+
+    let i = 0;
+    while (i++ <= maxChecks) {
+      let pageContent = await page.content();
       let currentLength = pageContent.length;
-      
-      (previousLength === 0 || previousLength != currentLength) ? passedChecks = 0 : passedChecks++;
-      if (passedChecks >= checks) { break; }
-      
+
+      previousLength === 0 || previousLength != currentLength
+        ? (passedChecks = 0)
+        : passedChecks++;
+      if (passedChecks >= checks) {
+        break;
+      }
+
       previousLength = currentLength;
       await page.waitFor(interval);
     }
-  }
+  };
 
   // set up puppeteer
   const browser = await puppeteer.launch({
@@ -112,7 +122,7 @@ export const createVisualReport = async (
   });
   const page = await browser.newPage();
   page.setDefaultNavigationTimeout(0);
-  page.setDefaultTimeout(60000); // use 60s timeout instead of default 30s
+  page.setDefaultTimeout(100000); // use 100s timeout instead of default 30s
   if (cookie) {
     logger.info('domain enables security, use session cookie to access');
     await page.setCookie(cookie);
@@ -140,10 +150,10 @@ export const createVisualReport = async (
   });
 
   let buffer: Buffer;
-  // remove top nav bar
+  // remove unwanted elements
   await page.evaluate(
     /* istanbul ignore next */
-    () => {
+    (reportSource, REPORT_TYPE) => {
       // remove buttons
       document
         .querySelectorAll("[class^='euiButton']")
@@ -152,8 +162,17 @@ export const createVisualReport = async (
       document
         .querySelectorAll("[class^='euiHeader']")
         .forEach((e) => e.remove());
+      // remove visualization editor
+      if (reportSource === REPORT_TYPE.visualization) {
+        document
+          .querySelector('[data-test-subj="splitPanelResizer"]')
+          ?.remove();
+        document.querySelector('.visEditor__collapsibleSidebar')?.remove();
+      }
       document.body.style.paddingTop = '0px';
-    }
+    },
+    reportSource,
+    REPORT_TYPE
   );
   // force wait for any resize to load after the above DOM modification
   await page.waitFor(1000);
@@ -169,12 +188,17 @@ export const createVisualReport = async (
         visible: true,
       });
       break;
+    case REPORT_TYPE.notebook:
+      await page.waitForSelector(SELECTOR.notebook, {
+        visible: true,
+      });
+      break;
     default:
       throw Error(
         `report source can only be one of [Dashboard, Visualization]`
       );
   }
-  
+
   // wait for dynamic page content to render
   await waitForDynamicContent(page);
 

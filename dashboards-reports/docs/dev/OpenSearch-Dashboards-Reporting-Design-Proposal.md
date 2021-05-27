@@ -15,7 +15,7 @@ This plugin will introduce the ability to generate reports, as well as enable th
 
 ### 1.2 Introduction
 
-OpenSearch Dashboards Reports for Open Distro allows ‘Report Owner’ (engineers, including but not limited to developers, DevOps, IT Engineer, and IT admin) export and share reports from OpenSearch Dashboards dashboards, saved search, alerts and visualizations. It helps automate the process of scheduling reports on an on-demand or a periodical basis (on cron schedules as well). Further, it also automates the process of exporting and sharing reports triggered for various alerts. The feature is present in the Dashboard, Discover, and Visualization tabs. Scheduled reports can be sent to (shared with) self or various stakeholders within the organization such as, including but not limited to, executives, managers, engineers (developers, DevOps, IT Engineer) in the form of pdf, hyperlinks, csv, excel via various channels such as email, slack, Amazon Chime. However, in order to export, schedule and share reports, report owners should have the necessary permissions as defined under Roles and Privileges.
+OpenSearch Dashboards Reports allows ‘Report Owner’ (engineers, including but not limited to developers, DevOps, IT Engineer, and IT admin) export and share reports from OpenSearch Dashboards dashboards, saved search, alerts and visualizations. It helps automate the process of scheduling reports on an on-demand or a periodical basis (on cron schedules as well). Further, it also automates the process of exporting and sharing reports triggered for various alerts. The feature is present in the Dashboard, Discover, and Visualization tabs. Scheduled reports can be sent to (shared with) self or various stakeholders within the organization such as, including but not limited to, executives, managers, engineers (developers, DevOps, IT Engineer) in the form of pdf, hyperlinks, csv, excel via various channels such as email, slack, Amazon Chime. However, in order to export, schedule and share reports, report owners should have the necessary permissions as defined under Roles and Privileges.
 
 
 ## 2. Requirements
@@ -192,10 +192,10 @@ List of curated headless browsers https://github.com/dhamaniasad/HeadlessBrowser
 |Java	|[Selenium](https://www.selenium.dev/)	|No support for PDF generation	|
 |	|[jBrowserDriver](https://github.com/MachinePublishers/jBrowserDriver)	|No support for PDF generation	|
 
-**(II)** To generate CSV reports based on SQL queries, we will be leveraging OpenDistro SQL plugin with **`format=csv`**
+**(II)** To generate CSV reports based on SQL queries, we will be leveraging OpenSearch SQL plugin with **`format=csv`**
 
 ```
-POST _opendistro/_sql?format=csv
+POST _plugins/_sql?format=csv
 {
     "query" : "SELECT ... FROM ... WHERE ... ORDER BY ..."
 }
@@ -423,7 +423,7 @@ listReportEvents()
 
 ### 4.3 Job Scheduler APIs
 
-https://github.com/opendistro-for-elasticsearch/job-scheduler
+https://github.com/opensearch-project/job-scheduler
 
 **(A) createSchedule**
 
@@ -439,12 +439,12 @@ Scheduled Report Creation workflow
 
 ### 4.4 Alerting Integration
 
-https://opendistro.github.io/for-elasticsearch-docs/docs/alerting/
+https://docs-beta.opensearch.org/docs/alerting/
 
 ODFE Alerting can be used as an external trigger. To generate the report the `generateReport()` API can be utilized as `custom_webhook` destination.
 
 ```
-POST _opendistro/_alerting/destinations
+POST _plugins/_alerting/destinations
 
 {
   "type": "custom_webhook",
@@ -486,7 +486,7 @@ TODO
 
 ### (II) Security reference
 
-* https://opendistro.github.io/for-elasticsearch-docs/docs/security-configuration/concepts/
-* https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/
-* https://opendistro.github.io/for-elasticsearch-docs/docs/security-access-control/api/
+* https://docs-beta.opensearch.org/docs/security/configuration/
+* https://docs-beta.opensearch.org/docs/security/access-control/
+* https://docs-beta.opensearch.org/docs/security/access-control/api/
 

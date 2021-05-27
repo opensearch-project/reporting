@@ -34,6 +34,7 @@ import {
   displayLoadingModal,
   addSuccessOrFailureToast,
   contextMenuViewReports,
+  replaceQueryURL,
 } from './context_menu_helpers';
 import {
   popoverMenu,
@@ -42,25 +43,7 @@ import {
 } from './context_menu_ui';
 import { timeRangeMatcher } from '../utils/utils';
 import { parse } from 'url';
-
-const replaceQueryURL = () => {
-  let url = location.pathname + location.hash;
-  let [, fromDateString, toDateString] = url.match(timeRangeMatcher);
-  fromDateString = fromDateString.replace(/[']+/g, '');
-
-  // convert time range to from date format in case time range is relative
-  const fromDateFormat = dateMath.parse(fromDateString);
-  toDateString = toDateString.replace(/[']+/g, '');
-  const toDateFormat = dateMath.parse(toDateString);
-
-  // replace to and from dates with absolute date
-  url = url.replace(fromDateString, "'" + fromDateFormat.toISOString() + "'");
-  url = url.replace(
-    toDateString + '))',
-    "'" + toDateFormat.toISOString() + "'))"
-  );
-  return url;
-};
+import { unhashUrl } from '../../../../../src/plugins/opensearch_dashboards_utils/public';
 
 const generateInContextReport = async (
   timeRanges,
@@ -126,7 +109,7 @@ const generateInContextReport = async (
     {
       headers: {
         'Content-Type': 'application/json',
-        'osd-version': '1.0.0-beta1',
+        'osd-xsrf': 'reporting',
         accept: '*/*',
         'accept-language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7,zh-TW;q=0.6',
         pragma: 'no-cache',
@@ -190,21 +173,21 @@ $(function () {
   // generate PDF onclick
   $(document).on('click', '#generatePDF', function () {
     const timeRanges = getTimeFieldsFromUrl();
-    const queryUrl = replaceQueryURL();
+    const queryUrl = replaceQueryURL(location.href);
     generateInContextReport(timeRanges, queryUrl, 'pdf');
   });
 
   // generate PNG onclick
   $(document).on('click', '#generatePNG', function () {
     const timeRanges = getTimeFieldsFromUrl();
-    const queryUrl = replaceQueryURL();
+    const queryUrl = replaceQueryURL(location.href);
     generateInContextReport(timeRanges, queryUrl, 'png');
   });
 
   // generate CSV onclick
   $(document).on('click', '#generateCSV', function () {
     const timeRanges = getTimeFieldsFromUrl();
-    const queryUrl = replaceQueryURL();
+    const queryUrl = replaceQueryURL(location.href);
     const saved_search_id = getUuidFromUrl()[1];
     generateInContextReport(timeRanges, queryUrl, 'csv', { saved_search_id });
   });
@@ -340,7 +323,7 @@ async function getTenantInfoIfExists() {
   const res = await fetch(`../api/v1/multitenancy/tenant`, {
     headers: {
       'Content-Type': 'application/json',
-      'osd-version': '1.0.0-beta1',
+      'osd-xsrf': 'reporting',
       accept: '*/*',
       'accept-language': 'en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7,zh-TW;q=0.6',
       pragma: 'no-cache',
@@ -376,7 +359,7 @@ async function getTenantInfoIfExists() {
 // helper function to add tenant info to url(if tenant is available)
 function addTenantToURL(url, userRequestedTenant) {
   // build fake url from relative url
-  const fakeUrl = `http://opendistro.com${url}`;
+  const fakeUrl = `http://opensearch.com${url}`;
   const tenantKey = 'security_tenant';
   const tenantKeyAndValue =
     tenantKey + '=' + encodeURIComponent(userRequestedTenant);

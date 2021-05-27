@@ -68,7 +68,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
       reportDefinitionRequest.delivery.delivery_type =
         DELIVERY_TYPE_OPTIONS[1].id;
     } else {
-      // uncheck email checkbox means to use default setting, which is opendistro dashboards user
+      // uncheck email checkbox means to use default setting, which is opensearch dashboards user
       defaultCreateDeliveryParams();
     }
   };

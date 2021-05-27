@@ -90,7 +90,7 @@ describe('test create visual report', () => {
     expect(fileName).toContain(`${reportParams.report_name}`);
     expect(fileName).toContain('.png');
     expect(dataUrl).toBeDefined();
-  }, 30000);
+  }, 60000);
 
   test('create pdf report', async () => {
     expect.assertions(3);
@@ -105,5 +105,5 @@ describe('test create visual report', () => {
     expect(fileName).toContain(`${reportParams.report_name}`);
     expect(fileName).toContain('.pdf');
     expect(dataUrl).toBeDefined();
-  }, 30000);
+  }, 60000);
 });

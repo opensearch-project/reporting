@@ -29,6 +29,7 @@ import { DATA_REPORT_CONFIG } from './constants';
 import esb from 'elastic-builder';
 import moment from 'moment';
 import converter from 'json-2-csv';
+import _ from 'lodash';
 
 export var metaData = {
   saved_search_id: <string>null,
@@ -86,7 +87,7 @@ export const buildQuery = (report, is_count) => {
                 }
               } else {
                 requestBody.should(
-                  esb.matchPhraseQuery(item.meta.key, item.meta.params.query)
+                  esb.matchPhraseQuery(item.meta.key, item.meta.value)
                 );
               }
               requestBody.minimumShouldMatch(1);
@@ -104,17 +105,19 @@ export const buildQuery = (report, is_count) => {
               requestBody.mustNot(esb.existsQuery(item.meta.key));
               break;
             case 'phrases':
+              let negatedBody = esb.boolQuery();
               if (item.meta.value.indexOf(',') > -1) {
                 const valueSplit = item.meta.value.split(', ');
                 for (const [key, incr] of valueSplit.entries()) {
-                  requestBody.should(esb.matchPhraseQuery(item.meta.key, incr));
+                  negatedBody.should(esb.matchPhraseQuery(item.meta.key, incr));
                 }
               } else {
-                requestBody.should(
-                  esb.matchPhraseQuery(item.meta.key, item.meta.params.query)
+                negatedBody.should(
+                  esb.matchPhraseQuery(item.meta.key, item.meta.value)
                 );
               }
-              requestBody.minimumShouldMatch(1);
+              negatedBody.minimumShouldMatch(1);
+              requestBody.mustNot(negatedBody);
               break;
           }
           break;
@@ -179,12 +182,11 @@ export const getOpenSearchData = (arrayHits, report, params) => {
       }
       delete data['fields'];
       if (report._source.fields_exist === true) {
-        let result = traverse(data, report._source.selectedFields);
+        let result = traverse(data._source, report._source.selectedFields);
         hits.push(params.excel ? sanitize(result) : result);
       } else {
         hits.push(params.excel ? sanitize(data) : data);
       }
-
       // Truncate to expected limit size
       if (hits.length >= params.limit) {
         return hits;
@@ -207,23 +209,36 @@ export const convertToCSV = async (dataset) => {
   return convertedData;
 };
 
-//Return only the selected fields
-function traverse(data, keys, result = {}) {
-  for (let k of Object.keys(data)) {
-    if (keys.includes(k)) {
-      result = Object.assign({}, result, {
-        [k]: data[k],
-      });
-      continue;
-    }
+function flattenHits(hits, result = {}, prefix = '') {
+  for (const [key, value] of Object.entries(hits)) {
+    if (!hits.hasOwnProperty(key)) continue;
     if (
-      data[k] &&
-      typeof data[k] === 'object' &&
-      Object.keys(data[k]).length > 0
+      value != null &&
+      typeof value === 'object' &&
+      !Array.isArray(value) &&
+      Object.keys(value).length > 0
     ) {
-      result = traverse(data[k], keys, result);
+      flattenHits(value, result, prefix + key + '.');
+    } else {
+      result[prefix + key] = value;
     }
   }
+  return result;
+}
+
+//Return only the selected fields
+function traverse(data, keys, result = {}) {
+  data = flattenHits(data);
+  const sourceKeys = Object.keys(data);
+  keys.forEach((key) => {
+    const value = _.get(data, key, undefined);
+    if (value !== undefined) result[key] = value;
+    else {
+      Object.keys(data)
+        .filter((sourceKey) => sourceKey.startsWith(key + '.'))
+        .forEach((sourceKey) => (result[sourceKey] = data[sourceKey]));
+    }
+  });
   return result;
 }
 
@@ -234,9 +249,11 @@ function traverse(data, keys, result = {}) {
  */
 function sanitize(doc: any) {
   for (const field in doc) {
+    if (doc[field] == null)
+      continue
     if (
       doc[field].toString().startsWith('+') ||
-      doc[field].toString().startsWith('-') ||
+      (doc[field].toString().startsWith('-') && typeof doc[field] !== "number") ||
       doc[field].toString().startsWith('=') ||
       doc[field].toString().startsWith('@')
     ) {

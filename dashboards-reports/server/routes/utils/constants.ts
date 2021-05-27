@@ -60,6 +60,7 @@ export enum REPORT_TYPE {
   savedSearch = 'Saved search',
   dashboard = 'Dashboard',
   visualization = 'Visualization',
+  notebook = 'Notebook'
 }
 
 export enum DATA_REPORT_CONFIG {
@@ -79,6 +80,7 @@ export enum DELIVERY_TYPE {
 export enum SELECTOR {
   dashboard = '#dashboardViewport',
   visualization = '.visEditor__content',
+  notebook = '.euiPageBody'
 }
 
 // https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-request-from-size.html
@@ -167,6 +169,18 @@ export const GLOBAL_BASIC_COUNTER: CountersType = {
       },
     },
   },
+  notebook: {
+    pdf: {
+      download: {
+        count: 0,
+      },
+    },
+    png: {
+      download: {
+        count: 0,
+      },
+    },
+  },
   saved_search: {
     csv: {
       download: {
@@ -251,6 +265,18 @@ export const DEFAULT_ROLLING_COUNTER: CountersType = {
     },
   },
   visualization: {
+    pdf: {
+      download: {
+        count: 0,
+      },
+    },
+    png: {
+      download: {
+        count: 0,
+      },
+    },
+  },
+  notebook: {
     pdf: {
       download: {
         count: 0,
