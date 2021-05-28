@@ -137,7 +137,7 @@ const validateSavedObject = async (
   else {
     savedObjectId = `${getType(source)}:${getId(url)}`;
     const params: RequestParams.Exists = {
-      index: '.opensearch_dashboards',
+      index: '.kibana',
       id: savedObjectId,
     };
     exist = await client.callAsCurrentUser('exists', params);  
