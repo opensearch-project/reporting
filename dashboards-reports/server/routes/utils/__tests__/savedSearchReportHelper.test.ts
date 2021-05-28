@@ -399,13 +399,13 @@ function mockSavedSearch(columns = '"category", "customer_gender"') {
       "columns": [ ${columns} ],
       "sort": [],
       "version": 1,
-      "opensearchDashboardsSavedObjectMeta": {
-        "searchSourceJSON": "{\\"highlightAll\\":true,\\"version\\":true,\\"query\\":{\\"query\\":\\"\\",\\"language\\":\\"kuery\\"},\\"indexRefName\\":\\"opensearchDashboardsSavedObjectMeta.searchSourceJSON.index\\",\\"filter\\":[]}"
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\\"highlightAll\\":true,\\"version\\":true,\\"query\\":{\\"query\\":\\"\\",\\"language\\":\\"kuery\\"},\\"indexRefName\\":\\"kibanaSavedObjectMeta.searchSourceJSON.index\\",\\"filter\\":[]}"
       }
     },
     "references": [
       {
-        "name": "opensearchDashboardsSavedObjectMeta.searchSourceJSON.index",
+        "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
         "type": "index-pattern",
         "id": "ff959d40-b880-11e8-a6d9-e546fe2bba5f"
       }

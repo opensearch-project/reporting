@@ -89,7 +89,7 @@ async function populateMetaData(
   // Get saved search info
   let resIndexPattern: any = {};
   const ssParams = {
-    index: '.opensearch_dashboards',
+    index: '.kibana',
     id: 'search:' + metaData.saved_search_id,
   };
   const ssInfos = await callCluster(client, 'get', ssParams, isScheduledTask);
@@ -97,7 +97,7 @@ async function populateMetaData(
   metaData.sorting = ssInfos._source.search.sort;
   metaData.type = ssInfos._source.type;
   metaData.filters =
-    ssInfos._source.search.opensearchDashboardsSavedObjectMeta.searchSourceJSON;
+    ssInfos._source.search.kibanaSavedObjectMeta.searchSourceJSON;
 
   // Get the list of selected columns in the saved search.Otherwise select all the fields under the _source
   await getSelectedFields(ssInfos._source.search.columns);
@@ -110,7 +110,7 @@ async function populateMetaData(
         client,
         'get',
         {
-          index: '.opensearch_dashboards',
+          index: '.kibana',
           id: 'index-pattern:' + item.id,
         },
         isScheduledTask
