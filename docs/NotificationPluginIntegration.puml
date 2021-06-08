@@ -13,9 +13,9 @@ package "Reporting Plugins" {
 }
 
 package "Notification Plugins" {
-  component [Notification Dashboard] as nd
-  component [Notification OpenSearch] as nos
-  component [Notification SPI] as nspi
+  component [Notifications Dashboards] as nd
+  component [Notifications OpenSearch] as nos
+  component [Notifications SPI] as nspi
   nd --> nos : CRUD operations on \n notification configurations
   nos --> nspi : Send notification operations
 }

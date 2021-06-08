@@ -4,7 +4,7 @@ actor "UI" as ui
 participant "Reporting Dashboards" as rd
 participant "Reporting OpenSearch" as ros
 participant "Reporting JobScheduler" as rjs
-participant "Notification OpenSearch Plugin" as nos
+participant "Notifications OpenSearch Plugin" as nos
 
 activate rjs
 
