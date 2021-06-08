@@ -1,0 +1,79 @@
+@startuml
+
+actor "UI" as ui
+participant "Reporting Dashboards" as rd
+participant "Reporting OpenSearch" as ros
+participant "Reporting JobScheduler" as rjs
+participant "Notifications OpenSearch Plugin" as nos
+
+activate rjs
+
+group Schedule Report
+activate ui
+ui -> rd : Create/update Report Definitions UX info
+activate rd
+rd -> nos : GetNotificationFeatureChannelList
+activate nos
+nos --> rd : GetNotificationFeatureChannelList response
+deactivate nos
+rd --> ui : UX info with Available Channel list for reporting feature
+deactivate rd
+ui -> rd : save Report Definition
+activate rd
+rd -> ros : save Report Definition
+activate ros
+ros --> rd : Report Definition saved
+deactivate ros
+rd --> ui : Report Definition saved
+deactivate rd
+deactivate ui
+end
+
+group Job scheduler invokes executeJob
+rjs -> ros : executeJob
+activate ros
+ros -> ros : create Report Instance
+activate ros
+deactivate ros
+ros -> ros : create notification message
+activate ros
+deactivate ros
+ros -> nos : Send notification
+activate nos
+nos --> ros : Send notification response
+deactivate nos
+ros -> ros : Update report instance with status
+activate ros
+deactivate ros
+deactivate ros
+end
+
+group on-demand executeJob
+activate ui
+ui -> rd : Create on-demand Report
+activate rd
+rd -> ros : Create on-demand Report
+activate ros
+ros -> ros : create Report Instance
+activate ros
+deactivate ros
+ros -> ros : create notification message
+activate ros
+deactivate ros
+ros -> nos : Send notification
+activate nos
+nos --> ros : Send notification response
+deactivate nos
+ros -> ros : Update report instance with status
+activate ros
+deactivate ros
+ros --> rd : Create on-demand Report response
+deactivate ros
+rd --> ui : Create on-demand Report response
+deactivate
+deactivate ui
+end
+
+deactivate rjs
+
+@enduml
