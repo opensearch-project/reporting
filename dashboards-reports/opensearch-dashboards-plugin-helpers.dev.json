@@ -3,8 +3,10 @@
     "package.json",
     "tsconfig.json",
     "yarn.lock",
+    ".i18nrc.json",
     "common/**/*",
     "public/**/*",
-    "server/**/*"
+    "server/**/*",
+    "translations/**/*"
   ]
 }

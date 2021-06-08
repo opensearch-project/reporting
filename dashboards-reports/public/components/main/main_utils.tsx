@@ -25,6 +25,7 @@
  */
 
 import 'babel-polyfill';
+import { i18n } from '@osd/i18n';
 import { HttpFetchOptions, HttpSetup } from '../../../../../src/core/public';
 
 export const fileFormatsUpper = {
@@ -211,8 +212,15 @@ export const generateReportById = async (
         handlePermissionsMissingToast();
       } else if (error.body.statusCode === 503) {
         handleErrorToast(
-          'Error generating report.',
-          `Timed out generating report ID ${reportId}. Try again later.`
+          i18n.translate('opensearch.reports.utils.errorTitle', {
+            defaultMessage: 'Error generating report.',
+          }),
+          i18n.translate('opensearch.reports.utils.errorText', {
+            defaultMessage:
+              'Timed out generating report ID {reportId}. Try again later.',
+            values: { reportId: reportId },
+            description: 'Error number toast',
+          })
         );
       } else {
         handleErrorToast();

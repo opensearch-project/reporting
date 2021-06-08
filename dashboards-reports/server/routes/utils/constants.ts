@@ -60,7 +60,7 @@ export enum REPORT_TYPE {
   savedSearch = 'Saved search',
   dashboard = 'Dashboard',
   visualization = 'Visualization',
-  notebook = 'Notebook'
+  notebook = 'Notebook',
 }
 
 export enum DATA_REPORT_CONFIG {
@@ -80,7 +80,7 @@ export enum DELIVERY_TYPE {
 export enum SELECTOR {
   dashboard = '#dashboardViewport',
   visualization = '.visEditor__content',
-  notebook = '.euiPageBody'
+  notebook = '.euiPageBody',
 }
 
 // https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-request-from-size.html
@@ -90,7 +90,7 @@ export const DEFAULT_REPORT_HEADER = '<h1>OpenSearch Dashboards Reports</h1>';
 
 export const SECURITY_CONSTANTS = {
   AUTH_COOKIE_NAME: 'security_authentication',
-  TENANT_LOCAL_STORAGE_KEY: 'opendistro::security::tenant::show_popup',
+  TENANT_LOCAL_STORAGE_KEY: 'opensearch::security::tenant::show_popup',
   PROXY_AUTH_USER_HEADER: 'x-proxy-user',
   PROXY_AUTH_ROLES_HEADER: 'x-proxy-roles',
   PROXY_AUTH_IP_HEADER: 'x-forwarded-for',

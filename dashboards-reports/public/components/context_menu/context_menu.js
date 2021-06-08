@@ -27,6 +27,7 @@
 /* eslint-disable no-restricted-globals */
 import $ from 'jquery';
 import dateMath from '@elastic/datemath';
+import { i18n } from '@osd/i18n';
 import { readStreamToFile } from '../main/main_utils';
 import {
   contextMenuCreateReportDefinition,
@@ -280,7 +281,11 @@ function locationHashChanged() {
           return;
         }
         const menuItem = document.createElement('div');
-        menuItem.innerHTML = getMenuItem('Reporting');
+        menuItem.innerHTML = getMenuItem(
+          i18n.translate('opensearch.reports.menu.name', {
+            defaultMessage: 'Reporting',
+          })
+        );
         navMenu[0].insertBefore(menuItem.children[0], navMenu[0].lastChild);
       } catch (e) {
         console.log(e);

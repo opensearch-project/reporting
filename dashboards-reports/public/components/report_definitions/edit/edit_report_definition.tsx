@@ -25,6 +25,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
+import { i18n } from '@osd/i18n';
 import {
   EuiButtonEmpty,
   EuiFlexGroup,
@@ -62,21 +63,20 @@ export function EditReportDefinition(props) {
   ] = useState('');
   const [
     showSettingsReportSourceError,
-    setShowSettingsReportSourceError
+    setShowSettingsReportSourceError,
   ] = useState(false);
   const [
     settingsReportSourceErrorMessage,
-    setSettingsReportSourceErrorMessage
+    setSettingsReportSourceErrorMessage,
   ] = useState('');
   const [
     showTriggerIntervalNaNError,
     setShowTriggerIntervalNaNError,
   ] = useState(false);
   const [showCronError, setShowCronError] = useState(false);
-  const [
-    showEmailRecipientsError, 
-    setShowEmailRecipientsError
-  ] = useState(false);
+  const [showEmailRecipientsError, setShowEmailRecipientsError] = useState(
+    false
+  );
   const [
     emailRecipientsErrorMessage,
     setEmailRecipientsErrorMessage,
@@ -91,7 +91,10 @@ export function EditReportDefinition(props) {
       );
     } else if (errorType === 'API') {
       toast = {
-        title: 'Error loading report definition values.',
+        title: i18n.translate(
+          'opensearch.reports.editReportDefinition.errorLoading',
+          { defaultMessage: 'Error loading report definition values.' }
+        ),
         color: 'danger',
         iconType: 'alert',
         id: 'errorToast',
@@ -106,7 +109,13 @@ export function EditReportDefinition(props) {
 
   const addInputValidationErrorToastHandler = () => {
     const errorToast = {
-      title: 'One or more fields have an error. Please check and try again.',
+      title: i18n.translate(
+        'opensearch.reports.editReportDefinition.fieldsHaveAnError',
+        {
+          defaultMessage:
+            'One or more fields have an error. Please check and try again.',
+        }
+      ),
       color: 'danger',
       iconType: 'alert',
       id: 'errorToast',
@@ -126,7 +135,10 @@ export function EditReportDefinition(props) {
       );
     } else if (errorType === 'API') {
       toast = {
-        title: 'Error updating report definition.',
+        title: i18n.translate(
+          'opensearch.reports.editReportDefinition.errorUpdating',
+          { defaultMessage: 'Error updating report definition.' }
+        ),
         color: 'danger',
         iconType: 'alert',
         id: 'errorToast',
@@ -141,7 +153,10 @@ export function EditReportDefinition(props) {
 
   const addErrorDeletingReportDefinitionToastHandler = () => {
     const errorToast = {
-      title: 'Error deleting old scheduled report definition.',
+      title: i18n.translate(
+        'opensearch.reports.editReportDefinition.errorDeleting',
+        { defaultMessage: 'Error deleting old scheduled report definition.' }
+      ),
       color: 'danger',
       iconType: 'alert',
       id: 'errorDeleteToast',
@@ -227,7 +242,7 @@ export function EditReportDefinition(props) {
         metadata.report_params.core_params.footer
       );
     }
-    
+
     // client-side input validation
     let error = false;
     await definitionInputValidation(
@@ -304,7 +319,11 @@ export function EditReportDefinition(props) {
     <EuiPage>
       <EuiPageBody>
         <EuiTitle>
-          <h1>Edit report definition</h1>
+          <h1>
+            {i18n.translate('opensearch.reports.editReportDefinition.title', {
+              defaultMessage: 'Edit report definition',
+            })}
+          </h1>
         </EuiTitle>
         <EuiSpacer />
         <ReportSettings
@@ -347,7 +366,10 @@ export function EditReportDefinition(props) {
                 window.location.assign('reports-dashboards#/');
               }}
             >
-              Cancel
+              {i18n.translate(
+                'opensearch.reports.editReportDefinition.cancel',
+                { defaultMessage: 'Cancel' }
+              )}
             </EuiButtonEmpty>
           </EuiFlexItem>
           <EuiFlexItem grow={false}>
@@ -356,7 +378,9 @@ export function EditReportDefinition(props) {
               onClick={() => editReportDefinition(editReportDefinitionRequest)}
               id={'editReportDefinitionButton'}
             >
-              Save Changes
+              {i18n.translate('opensearch.reports.editReportDefinition.save', {
+                defaultMessage: 'Save Changes',
+              })}
             </EuiButton>
           </EuiFlexItem>
         </EuiFlexGroup>

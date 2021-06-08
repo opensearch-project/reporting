@@ -25,6 +25,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
+import { i18n } from '@osd/i18n';
 import {
   EuiFieldText,
   EuiFlexGroup,
@@ -41,7 +42,7 @@ import {
   EuiSelect,
   EuiTextArea,
   EuiCheckboxGroup,
-  EuiComboBox
+  EuiComboBox,
 } from '@elastic/eui';
 import {
   REPORT_SOURCE_RADIOS,
@@ -107,10 +108,14 @@ export function ReportSettings(props: ReportSettingProps) {
   const [dashboardSourceSelect, setDashboardSourceSelect] = useState([] as any);
   const [dashboards, setDashboards] = useState([] as any);
 
-  const [visualizationSourceSelect, setVisualizationSourceSelect] = useState([] as any);
+  const [visualizationSourceSelect, setVisualizationSourceSelect] = useState(
+    [] as any
+  );
   const [visualizations, setVisualizations] = useState([] as any);
 
-  const [savedSearchSourceSelect, setSavedSearchSourceSelect] = useState([] as any);
+  const [savedSearchSourceSelect, setSavedSearchSourceSelect] = useState(
+    [] as any
+  );
   const [savedSearches, setSavedSearches] = useState([] as any);
 
   const [notebooksSourceSelect, setNotebooksSourceSelect] = useState([] as any);
@@ -132,7 +137,7 @@ export function ReportSettings(props: ReportSettingProps) {
 
   const handleNotebooks = (e) => {
     setNotebooks(e);
-  }
+  };
 
   const handleReportName = (e: {
     target: { value: React.SetStateAction<string> };
@@ -184,8 +189,8 @@ export function ReportSettings(props: ReportSettingProps) {
       reportDefinitionRequest.report_params.core_params.excel = true;
     } else if (e === 'notebooksReportSource') {
       reportDefinitionRequest.report_params.report_source = 'Notebook';
-      reportDefinitionRequest.report_params.core_params.base_url = 
-        getNotebooksBaseUrlCreate(edit, editDefinitionId, fromInContext) + 
+      reportDefinitionRequest.report_params.core_params.base_url =
+        getNotebooksBaseUrlCreate(edit, editDefinitionId, fromInContext) +
         notebooks[0].value;
 
       // set params to visual report params after switch from saved search
@@ -195,20 +200,19 @@ export function ReportSettings(props: ReportSettingProps) {
   };
 
   const handleDashboardSelect = (e: string | any[]) => {
-      setDashboardSourceSelect(e);
-  
+    setDashboardSourceSelect(e);
+
     let fromInContext = false;
     if (window.location.href.includes('?')) {
       fromInContext = true;
     }
-    
+
     if (e.length > 0) {
       reportDefinitionRequest.report_params.core_params.base_url =
         getDashboardBaseUrlCreate(edit, editDefinitionId, fromInContext) +
         e[0].value;
-    }
-    else {
-      reportDefinitionRequest.report_params.core_params.base_url = "";
+    } else {
+      reportDefinitionRequest.report_params.core_params.base_url = '';
     }
   };
 
@@ -222,10 +226,9 @@ export function ReportSettings(props: ReportSettingProps) {
     if (e.length > 0) {
       reportDefinitionRequest.report_params.core_params.base_url =
         getVisualizationBaseUrlCreate(edit, editDefinitionId, fromInContext) +
-        e[0].value;      
-    }
-    else {
-      reportDefinitionRequest.report_params.core_params.base_url = "";
+        e[0].value;
+    } else {
+      reportDefinitionRequest.report_params.core_params.base_url = '';
     }
   };
 
@@ -242,9 +245,8 @@ export function ReportSettings(props: ReportSettingProps) {
       reportDefinitionRequest.report_params.core_params.base_url =
         getSavedSearchBaseUrlCreate(edit, editDefinitionId, fromInContext) +
         e[0].value;
-    }
-    else {
-      reportDefinitionRequest.report_params.core_params.base_url = "";
+    } else {
+      reportDefinitionRequest.report_params.core_params.base_url = '';
     }
   };
 
@@ -256,13 +258,12 @@ export function ReportSettings(props: ReportSettingProps) {
     }
     if (e.length > 0) {
       reportDefinitionRequest.report_params.core_params.base_url =
-        getNotebooksBaseUrlCreate(edit, editDefinitionId, fromInContext) + 
+        getNotebooksBaseUrlCreate(edit, editDefinitionId, fromInContext) +
         e[0].value;
+    } else {
+      reportDefinitionRequest.report_params.core_params.base_url = '';
     }
-    else {
-      reportDefinitionRequest.report_params.core_params.base_url = "";
-    }
-  }
+  };
 
   const handleFileFormat = (e: React.SetStateAction<string>) => {
     setFileFormat(e);
@@ -272,7 +273,14 @@ export function ReportSettings(props: ReportSettingProps) {
   const PDFandPNGFileFormats = () => {
     return (
       <div>
-        <EuiFormRow label="File format">
+        <EuiFormRow
+          label={i18n.translate(
+            'opensearch.reports.reportSettingProps.fileFormat',
+            {
+              defaultMessage: 'File format',
+            }
+          )}
+        >
           <EuiRadioGroup
             options={PDF_PNG_FILE_FORMAT_OPTIONS}
             idSelected={fileFormat}
@@ -320,7 +328,12 @@ export function ReportSettings(props: ReportSettingProps) {
     };
 
     const showFooter = checkboxIdSelectHeaderFooter.footer ? (
-      <EuiFormRow label="Footer" fullWidth={true}>
+      <EuiFormRow
+        label={i18n.translate('opensearch.reports.reportSettingProps.footer', {
+          defaultMessage: 'Footer',
+        })}
+        fullWidth={true}
+      >
         <ReactMde
           value={footer}
           onChange={handleFooter}
@@ -338,7 +351,12 @@ export function ReportSettings(props: ReportSettingProps) {
     ) : null;
 
     const showHeader = checkboxIdSelectHeaderFooter.header ? (
-      <EuiFormRow label="Header" fullWidth={true}>
+      <EuiFormRow
+        label={i18n.translate('opensearch.reports.reportSettingProps.header', {
+          defaultMessage: 'Header',
+        })}
+        fullWidth={true}
+      >
         <ReactMde
           value={header}
           onChange={handleHeader}
@@ -412,7 +430,12 @@ export function ReportSettings(props: ReportSettingProps) {
           options={HEADER_FOOTER_CHECKBOX}
           idToSelectedMap={checkboxIdSelectHeaderFooter}
           onChange={handleCheckboxHeaderFooter}
-          legend={{ children: 'Header and footer' }}
+          legend={{
+            children: i18n.translate(
+              'opensearch.reports.reportSettingProps.headerAndFooter',
+              { defaultMessage: 'Header and footer' }
+            ),
+          }}
         />
         <EuiSpacer />
         {showHeader}
@@ -471,7 +494,7 @@ export function ReportSettings(props: ReportSettingProps) {
         setDashboardSourceSelect([response.dashboard[index]]);
       }
     }
-  }
+  };
 
   const setVisualizationFromInContextMenu = (response, id) => {
     let index;
@@ -480,7 +503,7 @@ export function ReportSettings(props: ReportSettingProps) {
         setVisualizationSourceSelect([response.visualizations[index]]);
       }
     }
-  }
+  };
 
   const setSavedSearchFromInContextMenu = (response, id) => {
     let index;
@@ -489,7 +512,7 @@ export function ReportSettings(props: ReportSettingProps) {
         setSavedSearchSourceSelect([response.savedSearch[index]]);
       }
     }
-  }
+  };
 
   const setNotebookFromInContextMenu = (response, id) => {
     for (let index = 0; index < response.notebooks.length; ++index) {
@@ -497,8 +520,8 @@ export function ReportSettings(props: ReportSettingProps) {
         setNotebooksSourceSelect([response.notebooks[index]]);
       }
     }
-  }
- 
+  };
+
   const setInContextDefaultConfiguration = (response) => {
     const url = window.location.href;
     const source = getReportSourceFromURL(url);
@@ -526,16 +549,16 @@ export function ReportSettings(props: ReportSettingProps) {
       reportDefinitionRequest.report_params.report_source =
         REPORT_SOURCE_RADIOS[2].label;
 
-      setSavedSearchFromInContextMenu(response, id)
+      setSavedSearchFromInContextMenu(response, id);
       reportDefinitionRequest.report_params.core_params.base_url =
         getSavedSearchBaseUrlCreate(edit, editDefinitionId, true) + id;
     } else if (source === 'notebook') {
       setReportSourceId('notebooksReportSource');
-      reportDefinitionRequest.report_params.report_source = 
+      reportDefinitionRequest.report_params.report_source =
         REPORT_SOURCE_RADIOS[3].label;
 
       setNotebookFromInContextMenu(response, id);
-      reportDefinitionRequest.report_params.core_params.base_url = 
+      reportDefinitionRequest.report_params.core_params.base_url =
         getNotebooksBaseUrlCreate(edit, id, true) + id;
       // set placeholder time range since notebooks doesn't use it
       reportDefinitionRequest.report_params.core_params.time_duration = 'PT30M';
@@ -586,7 +609,7 @@ export function ReportSettings(props: ReportSettingProps) {
       dashboard: [],
       visualizations: [],
       savedSearch: [],
-      notebooks: []
+      notebooks: [],
     };
     reportDefinitionRequest.report_params.core_params.report_format = fileFormat;
     await httpClientProps
@@ -664,71 +687,83 @@ export function ReportSettings(props: ReportSettingProps) {
 
   const displayDashboardSelect =
     reportSourceId === 'dashboardReportSource' ? (
-      (
-        <div>
-          <EuiFormRow 
-            label="Select dashboard"
-            isInvalid={showSettingsReportSourceError}
-            error={settingsReportSourceErrorMessage}
-          >
-            <EuiComboBox
-              id="reportSourceDashboardSelect"
-              placeholder="Select a dashboard"
-              singleSelection={{ asPlainText: true }}
-              options={dashboards}
-              onChange={handleDashboardSelect}
-              selectedOptions={dashboardSourceSelect}
-            />
-          </EuiFormRow>
-          <EuiSpacer />
-        </div>
-      )
+      <div>
+        <EuiFormRow
+          label={i18n.translate(
+            'opensearch.reports.reportSettingProps.selectDashboard',
+            { defaultMessage: 'Select dashboard' }
+          )}
+          isInvalid={showSettingsReportSourceError}
+          error={settingsReportSourceErrorMessage}
+        >
+          <EuiComboBox
+            id="reportSourceDashboardSelect"
+            placeholder={i18n.translate(
+              'opensearch.reports.reportSettingProps.placeholder.selectDashboard',
+              { defaultMessage: 'Select a dashboard' }
+            )}
+            singleSelection={{ asPlainText: true }}
+            options={dashboards}
+            onChange={handleDashboardSelect}
+            selectedOptions={dashboardSourceSelect}
+          />
+        </EuiFormRow>
+        <EuiSpacer />
+      </div>
     ) : null;
 
   const displayVisualizationSelect =
     reportSourceId === 'visualizationReportSource' ? (
-      (
-        <div>
-          <EuiFormRow 
-            label="Select visualization"
-            isInvalid={showSettingsReportSourceError}
-            error={settingsReportSourceErrorMessage}
-          >
-            <EuiComboBox
-              id="reportSourceVisualizationSelect"
-              placeholder="Select a visualization"
-              singleSelection={{ asPlainText: true }}
-              options={visualizations}
-              onChange={handleVisualizationSelect}
-              selectedOptions={visualizationSourceSelect}
-            />
-          </EuiFormRow>
-          <EuiSpacer />
-        </div>
-      )
+      <div>
+        <EuiFormRow
+          label={i18n.translate(
+            'opensearch.reports.reportSettingProps.form.selectVisualization',
+            { defaultMessage: 'Select visualization' }
+          )}
+          isInvalid={showSettingsReportSourceError}
+          error={settingsReportSourceErrorMessage}
+        >
+          <EuiComboBox
+            id="reportSourceVisualizationSelect"
+            placeholder={i18n.translate(
+              'opensearch.reports.reportSettingProps.form.placeholder.selectAVisualization',
+              { defaultMessage: 'Select a visualization' }
+            )}
+            singleSelection={{ asPlainText: true }}
+            options={visualizations}
+            onChange={handleVisualizationSelect}
+            selectedOptions={visualizationSourceSelect}
+          />
+        </EuiFormRow>
+        <EuiSpacer />
+      </div>
     ) : null;
 
   const displaySavedSearchSelect =
     reportSourceId === 'savedSearchReportSource' ? (
-      (
-        <div>
-          <EuiFormRow
-            label="Select saved search"
-            isInvalid={showSettingsReportSourceError}
-            error={settingsReportSourceErrorMessage}
-          >
-            <EuiComboBox
-              id="reportSourceSavedSearchSelect"
-              placeholder="Select a saved search"
-              singleSelection={{ asPlainText: true }}
-              options={savedSearches}
-              onChange={handleSavedSearchSelect}
-              selectedOptions={savedSearchSourceSelect}
-            />
-          </EuiFormRow>
-          <EuiSpacer />
-        </div>
-      )
+      <div>
+        <EuiFormRow
+          label={i18n.translate(
+            'opensearch.reports.reportSettingProps.form.selectSavedSearch',
+            { defaultMessage: 'Select saved search' }
+          )}
+          isInvalid={showSettingsReportSourceError}
+          error={settingsReportSourceErrorMessage}
+        >
+          <EuiComboBox
+            id="reportSourceSavedSearchSelect"
+            placeholder={i18n.translate(
+              'opensearch.reports.reportSettingProps.form.placeholder.selectASavedSearch',
+              { defaultMessage: 'Select a saved search' }
+            )}
+            singleSelection={{ asPlainText: true }}
+            options={savedSearches}
+            onChange={handleSavedSearchSelect}
+            selectedOptions={savedSearchSourceSelect}
+          />
+        </EuiFormRow>
+        <EuiSpacer />
+      </div>
     ) : null;
 
   const displayVisualReportsFormatAndMarkdown =
@@ -739,7 +774,12 @@ export function ReportSettings(props: ReportSettingProps) {
       </div>
     ) : (
       <div>
-        <EuiFormRow label="File format">
+        <EuiFormRow
+          label={i18n.translate(
+            'opensearch.reports.reportSettingProps.form.fileFormat',
+            { defaultMessage: 'File format' }
+          )}
+        >
           <EuiText>
             <p>CSV</p>
           </EuiText>
@@ -747,7 +787,7 @@ export function ReportSettings(props: ReportSettingProps) {
       </div>
     );
 
-    const displayNotebooksSelect = 
+  const displayNotebooksSelect =
     reportSourceId === 'notebooksReportSource' ? (
       <div>
         <EuiFormRow
@@ -766,9 +806,9 @@ export function ReportSettings(props: ReportSettingProps) {
         </EuiFormRow>
         <EuiSpacer />
       </div>
-    ): null;
+    ) : null;
 
-  const displayTimeRangeSelect = 
+  const displayTimeRangeSelect =
     reportSourceId != 'notebooksReportSource' ? (
       <div>
         <TimeRangeSelect
@@ -781,13 +821,18 @@ export function ReportSettings(props: ReportSettingProps) {
         />
         <EuiSpacer />
       </div>
-    ): null;
+    ) : null;
 
   return (
     <EuiPageContent panelPaddingSize={'l'}>
       <EuiPageHeader>
         <EuiTitle>
-          <h2>Report Settings</h2>
+          <h2>
+            {i18n.translate(
+              'opensearch.reports.reportSettingProps.form.reportSettings',
+              { defaultMessage: 'Report Settings' }
+            )}
+          </h2>
         </EuiTitle>
       </EuiPageHeader>
       <EuiHorizontalRule />
@@ -795,14 +840,29 @@ export function ReportSettings(props: ReportSettingProps) {
         <EuiFlexGroup>
           <EuiFlexItem>
             <EuiFormRow
-              label="Name"
-              helpText="Valid characters are a-z, A-Z, 0-9, (), [], _ (underscore), - (hyphen) and (space)."
+              label={i18n.translate(
+                'opensearch.reports.reportSettingProps.form.name',
+                { defaultMessage: 'Name' }
+              )}
+              helpText={i18n.translate(
+                'opensearch.reports.reportSettingProps.form.help.name',
+                {
+                  defaultMessage:
+                    'Valid characters are a-z, A-Z, 0-9, (), [], _ (underscore), - (hyphen) and (space).',
+                }
+              )}
               isInvalid={showSettingsReportNameError}
               error={settingsReportNameErrorMessage}
               id={'reportSettingsName'}
             >
               <EuiFieldText
-                placeholder="Report name (e.g Log Traffic Daily Report)"
+                placeholder={i18n.translate(
+                  'opensearch.reports.reportSettingProps.form.placeholder.reportName',
+                  {
+                    defaultMessage:
+                      'Report name (e.g Log Traffic Daily Report)',
+                  }
+                )}
                 value={reportName}
                 onChange={handleReportName}
               />
@@ -812,11 +872,20 @@ export function ReportSettings(props: ReportSettingProps) {
         <EuiFlexGroup style={{ maxWidth: 600 }}>
           <EuiFlexItem>
             <EuiFormRow
-              label="Description (optional)"
+              label={i18n.translate(
+                'opensearch.reports.reportSettingProps.form.description',
+                { defaultMessage: 'Description (optional)' }
+              )}
               id={'reportSettingsDescription'}
             >
               <EuiTextArea
-                placeholder="Describe this report (e.g Morning daily reports for log traffic)"
+                placeholder={i18n.translate(
+                  'opensearch.reports.reportSettingProps.form.placeholder.description',
+                  {
+                    defaultMessage:
+                      'Describe this report (e.g Morning daily reports for log traffic)',
+                  }
+                )}
                 value={reportDescription}
                 onChange={handleReportDescription}
               />
@@ -824,7 +893,12 @@ export function ReportSettings(props: ReportSettingProps) {
           </EuiFlexItem>
         </EuiFlexGroup>
         <EuiSpacer />
-        <EuiFormRow label="Report source">
+        <EuiFormRow
+          label={i18n.translate(
+            'opensearch.reports.reportSettingProps.form.reportSource',
+            { defaultMessage: 'Report source' }
+          )}
+        >
           <EuiRadioGroup
             options={REPORT_SOURCE_RADIOS}
             idSelected={reportSourceId}
