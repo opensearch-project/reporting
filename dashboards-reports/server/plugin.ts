@@ -34,7 +34,7 @@ import {
 } from '../../../src/core/server';
 import { setIntervalAsync } from 'set-interval-async/dynamic';
 import { Semaphore, SemaphoreInterface, withTimeout } from 'async-mutex';
-import opensearchReportsPlugin from './backend/opendistro-opensearch-reports-plugin';
+import opensearchReportsPlugin from './backend/opensearch-reports-plugin';
 import notificationPlugin from './backend/opendistro-notification-plugin';
 import {
   ReportsDashboardsPluginSetup,
@@ -58,10 +58,7 @@ declare module 'kibana/server' {
 
 export class ReportsDashboardsPlugin
   implements
-    Plugin<
-      ReportsDashboardsPluginSetup,
-      ReportsDashboardsPluginStart
-    > {
+    Plugin<ReportsDashboardsPluginSetup, ReportsDashboardsPluginStart> {
   private readonly logger: Logger;
   private readonly semaphore: SemaphoreInterface;
 
@@ -133,7 +130,8 @@ export class ReportsDashboardsPlugin
         plugins: [notificationPlugin],
       }
     );
-    const opensearchClient: ILegacyClusterClient = core.opensearch.legacy.client;
+    const opensearchClient: ILegacyClusterClient =
+      core.opensearch.legacy.client;
     /*
     setIntervalAsync provides the same familiar interface as built-in setInterval for asynchronous functions,
     while preventing multiple executions from overlapping in time.

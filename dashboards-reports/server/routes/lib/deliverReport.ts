@@ -100,12 +100,12 @@ export const deliverReport = async (
           "refTag": "jeWuU3UBp8p83fn6xwzB",
           "recipients": [
             {
-              "recipient": "odfe@amazon.com",
+              "recipient": "opensearch@amazon.com",
               "statusCode": 200,
               "statusText": "Success"
             },
             {
-              "recipient": "wrong.odfe@amazon.com",
+              "recipient": "wrong.opensearch@amazon.com",
               "statusCode": 503,
               "statusText": "sendEmail Error, SES status:400:Optional[Bad Request]"
             }

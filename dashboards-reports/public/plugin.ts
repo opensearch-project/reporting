@@ -35,6 +35,7 @@ import {
   ReportsDashboardsPluginStart,
   AppPluginStartDependencies,
 } from './types';
+import { i18n } from '@osd/i18n';
 import './components/context_menu/context_menu';
 import { PLUGIN_NAME } from '../common';
 
@@ -45,10 +46,14 @@ export class ReportsDashboardsPlugin
     // Register an application into the side navigation menu
     core.application.register({
       id: PLUGIN_NAME,
-      title: 'Reporting',
+      title: i18n.translate('opensearch.reports.pluginName', {
+        defaultMessage: 'Reporting',
+      }),
       category: {
         id: 'opensearch',
-        label: 'OpenSearch Plugins',
+        label: i18n.translate('opensearch.reports.categoryName', {
+          defaultMessage: 'OpenSearch Plugins',
+        }),
         order: 2000,
       },
       order: 2000,

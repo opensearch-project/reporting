@@ -977,7 +977,7 @@ exports[`<ReportsTable /> panel render empty component 1`] = `
                               rel="noopener noreferrer"
                               target="_blank"
                             >
-                              Get started with OpenSearch Dashboards reporting 
+                              Get started with OpenSearch Dashboards reporting
                               <svg
                                 aria-hidden="true"
                                 class="euiIcon euiIcon--medium euiIcon-isLoading"
