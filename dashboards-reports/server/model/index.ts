@@ -187,16 +187,10 @@ export const triggerSchema = schema.object({
 });
 
 export const deliverySchema = schema.object({
-  delivery_type: schema.oneOf([
-    schema.literal(DELIVERY_TYPE.opensearchDashboardsUser),
-    schema.literal(DELIVERY_TYPE.channel),
-  ]),
-  delivery_params: schema.conditional(
-    schema.siblingRef('delivery_type'),
-    DELIVERY_TYPE.opensearchDashboardsUser,
-    opensearchDashboardsUserSchema,
-    channelSchema
-  ),
+  configIds: schema.maybe(schema.arrayOf(schema.string())),
+  title: schema.string(),
+  text_description: schema.string(),
+  html_description: schema.string()
 });
 
 export const reportParamsSchema = schema.object({

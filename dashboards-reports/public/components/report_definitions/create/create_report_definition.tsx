@@ -72,8 +72,10 @@ interface triggerType {
 }
 
 interface deliveryType {
-  delivery_type: string;
-  delivery_params: any;
+  configIds: Array<string>;
+  title: string;
+  text_description: string;
+  html_description: string;
 }
 
 export interface TriggerParamsType {
@@ -122,8 +124,10 @@ export function CreateReport(props) {
       },
     },
     delivery: {
-      delivery_type: '',
-      delivery_params: {},
+      configIds: [],
+      title: '',
+      text_description: '',
+      html_description: ''
     },
     trigger: {
       trigger_type: '',
@@ -232,6 +236,7 @@ export function CreateReport(props) {
     timeRange: timeRangeParams
   ) => {
     const { httpClient } = props;
+    console.log('metadata is', metadata);
     //TODO: need better handle
     if (
       metadata.trigger.trigger_type === 'On demand' &&

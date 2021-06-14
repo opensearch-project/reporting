@@ -181,13 +181,11 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         fromIndex: number;
         maxItems: number;
       };
-
       try {
         // @ts-ignore
         const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
           request
         );
-
         const opensearchResp = await opensearchReportsClient.callAsCurrentUser(
           'opensearch_reports.getReportDefinitions',
           {
@@ -195,12 +193,10 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
             maxItems: maxItems || DEFAULT_MAX_SIZE,
           }
         );
-
         const reportDefinitionsList = backendToUiReportDefinitionsList(
           opensearchResp.reportDefinitionDetailsList,
           basePath
         );
-
         return response.ok({
           body: {
             data: reportDefinitionsList,

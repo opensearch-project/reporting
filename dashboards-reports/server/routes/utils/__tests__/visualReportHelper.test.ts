@@ -59,10 +59,10 @@ const input = {
       },
     },
     delivery: {
-      delivery_type: 'OpenSearch Dashboards user',
-      delivery_params: {
-        opensearch_dashboards_recipients: [],
-      },
+      configIds: [],
+      title: 'title',
+      text_description: 'text description',
+      html_description: 'html description'
     },
     trigger: {
       trigger_type: 'On demand',
