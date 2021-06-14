@@ -53,8 +53,8 @@ const input = {
     delivery: {
       configIds: [],
       title: 'title',
-      text_description: 'text description',
-      html_description: 'html description'
+      textDescription: 'text description',
+      htmlDescription: 'html description'
     },
     trigger: {
       trigger_type: 'On demand',

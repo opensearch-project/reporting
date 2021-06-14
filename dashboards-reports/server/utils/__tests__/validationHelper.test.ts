@@ -51,8 +51,8 @@ const createReportDefinitionInput: ReportDefinitionSchemaType = {
   delivery: {
     configIds: [],
     title: 'title',
-    text_description: 'text description',
-    html_description: 'html description'
+    textDescription: 'text description',
+    htmlDescription: 'html description'
   },
   trigger: {
     trigger_type: TRIGGER_TYPE.onDemand,
@@ -82,8 +82,8 @@ const createReportDefinitionNotebookInput: ReportDefinitionSchemaType = {
   delivery: {
     configIds: [],
     title: 'title',
-    text_description: 'text description',
-    html_description: 'html description'
+    textDescription: 'text description',
+    htmlDescription: 'html description'
   },
   trigger: {
     trigger_type: TRIGGER_TYPE.onDemand,

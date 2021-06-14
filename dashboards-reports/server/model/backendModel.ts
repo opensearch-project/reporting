@@ -94,8 +94,8 @@ export type IntervalType = {
 export type DeliveryType = {
   configIds: string[];
   title: string;
-  text_description: string;
-  html_description?: string;
+  textDescription: string;
+  htmlDescription?: string;
 };
 
 export enum BACKEND_DELIVERY_FORMAT {

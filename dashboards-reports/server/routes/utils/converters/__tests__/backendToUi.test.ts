@@ -73,8 +73,8 @@ const input: BackendReportInstanceType = {
       },
       delivery: {
         title: 'test email subject',
-        text_description: '- test\n- optional\n- message',
-        html_description:
+        textDescription: '- test\n- optional\n- message',
+        htmlDescription:
           '<ul>\n<li>test</li>\n<li>optional</li>\n<li>message</li>\n</ul>',
         configIds: [],
       },
@@ -128,8 +128,8 @@ const output = {
     },
     delivery: {
       title: 'test email subject',
-      text_description: '- test\n- optional\n- message',
-      html_description:
+      textDescription: '- test\n- optional\n- message',
+      htmlDescription:
         '<ul>\n<li>test</li>\n<li>optional</li>\n<li>message</li>\n</ul>',
       configIds: [],
     },

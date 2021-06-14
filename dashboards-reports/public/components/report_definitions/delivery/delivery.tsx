@@ -79,8 +79,8 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     reportDefinitionRequest.delivery = {
       configIds: [],
       title: '',
-      text_description: '',
-      html_description: ''
+      textDescription: '',
+      htmlDescription: ''
     };
   };
 

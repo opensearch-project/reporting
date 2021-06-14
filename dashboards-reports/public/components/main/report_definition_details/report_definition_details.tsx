@@ -317,8 +317,8 @@ export function ReportDefinitionDetails(props) {
     const {
       configIds: configIds,
       title: title,
-      text_description: textDescription,
-      html_description: htmlDescription
+      textDescription: textDescription,
+      htmlDescription: htmlDescription
     } = delivery;
     const {
       core_params: {

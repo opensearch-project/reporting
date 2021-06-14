@@ -136,7 +136,7 @@ export const backendToUiReportDefinition = (
       delivery,
     },
   } = backendReportDefinitionDetails;
-  
+
   const baseUrl = getBaseUrl(sourceType, sourceId);
   const reportSource = getUiReportSource(sourceType);
   let uiReportDefinition: ReportDefinitionSchemaType = {
@@ -370,8 +370,8 @@ const getUiDeliveryParams = (
   const opensearchDashboardsUserDeliveryParams = {
     configIds: [],
     title: '',
-    text_description: '',
-    html_description: ''
+    textDescription: '',
+    htmlDescription: ''
   };
 
   let params: any;
