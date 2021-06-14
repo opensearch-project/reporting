@@ -92,13 +92,10 @@ export type IntervalType = {
 };
 
 export type DeliveryType = {
-  // recipients: string[];
   configIds: string[];
-  // deliveryFormat: BACKEND_DELIVERY_FORMAT;
   title: string;
-  textDescription: string;
-  htmlDescription?: string;
-  // channelIds?: string[];
+  text_description: string;
+  html_description?: string;
 };
 
 export enum BACKEND_DELIVERY_FORMAT {

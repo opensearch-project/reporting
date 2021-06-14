@@ -236,7 +236,6 @@ export function CreateReport(props) {
     timeRange: timeRangeParams
   ) => {
     const { httpClient } = props;
-    console.log('metadata is', metadata);
     //TODO: need better handle
     if (
       metadata.trigger.trigger_type === 'On demand' &&
