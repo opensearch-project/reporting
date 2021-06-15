@@ -33,6 +33,10 @@ There could be two reasons for this problem
 
 We welcome you to get involved in development, documentation, testing the OpenSearch Dashboards reports plugin. See our [CONTRIBUTING.md](./CONTRIBUTING.md) and join in.
 
+## Notifications Integration
+
+OpenSearch Dashboards Reports integration with [Notifications](https://github.com/opensearch-project/notifications) is currently in progress, tracking for the 8/30 OpenSearch 1.1 release.
+
 ## Code of Conduct
 
 This project has adopted an [Open Source Code of Conduct](https://opensearch.org/codeofconduct.html).
