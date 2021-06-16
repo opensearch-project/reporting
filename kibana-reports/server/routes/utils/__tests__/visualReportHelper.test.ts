@@ -68,7 +68,7 @@ describe('test create visual report', () => {
     reportSchema.validate(input);
   }, 20000);
 
-  test('create png report', async () => {
+  test.skip('create png report', async () => {
     expect.assertions(3);
     const reportParams = input.report_definition.report_params;
     const { dataUrl, fileName } = await createVisualReport(
@@ -81,7 +81,7 @@ describe('test create visual report', () => {
     expect(dataUrl).toBeDefined();
   }, 60000);
 
-  test('create pdf report', async () => {
+  test.skip('create pdf report', async () => {
     expect.assertions(3);
     const reportParams = input.report_definition.report_params;
     reportParams.core_params.report_format = 'pdf';
