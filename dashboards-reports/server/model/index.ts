@@ -187,7 +187,7 @@ export const triggerSchema = schema.object({
 });
 
 export const deliverySchema = schema.object({
-  configIds: schema.maybe(schema.arrayOf(schema.string())),
+  configIds: schema.arrayOf(schema.string()),
   title: schema.string(),
   textDescription: schema.string(),
   htmlDescription: schema.string()
