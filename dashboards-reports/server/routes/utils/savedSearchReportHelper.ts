@@ -202,16 +202,17 @@ async function generateReportData(
   }
 
   async function getOpenSearchDataByScroll() {
+    const searchParams: RequestParams.Search = {
+      index: report._source.paternName,
+      scroll: scrollTimeout,
+      body: reqBody,
+      size: maxResultSize,
+    };
     // Open scroll context by fetching first batch
     opensearchData = await callCluster(
       client,
       'search',
-      {
-        index: report._source.paternName,
-        scroll: scrollTimeout,
-        body: reqBody,
-        size: maxResultSize,
-      },
+      searchParams,
       isScheduledTask
     );
     arrayHits.push(opensearchData.hits);
