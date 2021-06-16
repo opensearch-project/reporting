@@ -49,10 +49,10 @@ const createReportDefinitionInput: ReportDefinitionSchemaType = {
     },
   },
   delivery: {
-    delivery_type: DELIVERY_TYPE.opensearchDashboardsUser,
-    delivery_params: {
-      opensearch_dashboards_recipients: [],
-    },
+    configIds: [],
+    title: 'title',
+    textDescription: 'text description',
+    htmlDescription: 'html description'
   },
   trigger: {
     trigger_type: TRIGGER_TYPE.onDemand,
@@ -80,10 +80,10 @@ const createReportDefinitionNotebookInput: ReportDefinitionSchemaType = {
     },
   },
   delivery: {
-    delivery_type: DELIVERY_TYPE.opensearchDashboardsUser,
-    delivery_params: {
-      opensearch_dashboards_recipients: [],
-    },
+    configIds: [],
+    title: 'title',
+    textDescription: 'text description',
+    htmlDescription: 'html description'
   },
   trigger: {
     trigger_type: TRIGGER_TYPE.onDemand,

@@ -373,8 +373,10 @@ export function ReportDefinitionDetails(props) {
       trigger_params: triggerParams,
     } = trigger;
     const {
-      delivery_type: deliveryType,
-      delivery_params: deliveryParams,
+      configIds: configIds,
+      title: title,
+      textDescription: textDescription,
+      htmlDescription: htmlDescription
     } = delivery;
     const {
       core_params: {
@@ -419,17 +421,11 @@ export function ReportDefinitionDetails(props) {
       scheduleDetails: triggerParams
         ? humanReadableScheduleDetails(data.report_definition.trigger)
         : `\u2014`,
-      channel: deliveryType,
       status: reportDefinition.status,
-      opensearchDashboardsRecipients: deliveryParams.opensearch_dashboards_recipients
-        ? deliveryParams.opensearch_dashboards_recipients
-        : `\u2014`,
-      emailRecipients:
-        deliveryType === 'Channel' ? deliveryParams.recipients : `\u2014`,
-      emailSubject:
-        deliveryType === 'Channel' ? deliveryParams.title : `\u2014`,
-      emailBody:
-        deliveryType === 'Channel' ? deliveryParams.textDescription : `\u2014`,
+      configIds: configIds,
+      title: title,
+      textDescription: textDescription,
+      htmlDescription: htmlDescription
     };
     return reportDefinitionDetails;
   };

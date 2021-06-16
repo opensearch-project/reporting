@@ -72,13 +72,11 @@ const input: BackendReportInstanceType = {
         },
       },
       delivery: {
-        recipients: ['szhongna@amazon.com'],
-        deliveryFormat: BACKEND_DELIVERY_FORMAT.embedded,
         title: 'test email subject',
         textDescription: '- test\n- optional\n- message',
         htmlDescription:
           '<ul>\n<li>test</li>\n<li>optional</li>\n<li>message</li>\n</ul>',
-        channelIds: [],
+        configIds: [],
       },
     },
   },
@@ -129,15 +127,11 @@ const output = {
       },
     },
     delivery: {
-      delivery_type: 'Channel',
-      delivery_params: {
-        recipients: ['szhongna@amazon.com'],
-        title: 'test email subject',
-        textDescription: '- test\n- optional\n- message',
-        htmlDescription:
-          '<ul>\n<li>test</li>\n<li>optional</li>\n<li>message</li>\n</ul>',
-        channelIds: [],
-      },
+      title: 'test email subject',
+      textDescription: '- test\n- optional\n- message',
+      htmlDescription:
+        '<ul>\n<li>test</li>\n<li>optional</li>\n<li>message</li>\n</ul>',
+      configIds: [],
     },
     time_created: 1605056426053,
     last_updated: 1605056426053,

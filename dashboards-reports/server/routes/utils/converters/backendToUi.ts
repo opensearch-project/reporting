@@ -139,7 +139,6 @@ export const backendToUiReportDefinition = (
 
   const baseUrl = getBaseUrl(sourceType, sourceId);
   const reportSource = getUiReportSource(sourceType);
-
   let uiReportDefinition: ReportDefinitionSchemaType = {
     report_params: {
       report_name: name,
@@ -175,7 +174,6 @@ export const backendToUiReportDefinition = (
     last_updated: lastUpdatedTimeMs,
     status: getUiReportDefinitionStatus(isEnabled),
   };
-
   // validate to assign default values to some fields for UI model
   uiReportDefinition = reportDefinitionSchema.validate(uiReportDefinition);
   uiReportDefinition.report_params.core_params.base_url =
@@ -370,20 +368,17 @@ const getUiDeliveryParams = (
   delivery: DeliveryType | undefined
 ): DeliverySchemaType => {
   const opensearchDashboardsUserDeliveryParams = {
-    delivery_type: DELIVERY_TYPE.opensearchDashboardsUser,
-    delivery_params: {
-      opensearch_dashboards_recipients: [],
-    },
+    configIds: [],
+    title: '',
+    textDescription: '',
+    htmlDescription: ''
   };
 
   let params: any;
   if (delivery) {
-    const { deliveryFormat, ...rest } = delivery;
+    const { ...rest } = delivery;
     params = {
-      delivery_type: DELIVERY_TYPE.channel,
-      delivery_params: {
-        ...rest,
-      },
+      ...rest
     };
   } else {
     params = opensearchDashboardsUserDeliveryParams;

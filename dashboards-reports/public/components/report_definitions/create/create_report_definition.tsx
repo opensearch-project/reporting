@@ -73,8 +73,10 @@ interface triggerType {
 }
 
 interface deliveryType {
-  delivery_type: string;
-  delivery_params: any;
+  configIds: Array<string>;
+  title: string;
+  textDescription: string;
+  htmlDescription: string;
 }
 
 export interface TriggerParamsType {
@@ -123,8 +125,10 @@ export function CreateReport(props) {
       },
     },
     delivery: {
-      delivery_type: '',
-      delivery_params: {},
+      configIds: [],
+      title: '',
+      textDescription: '',
+      htmlDescription: ''
     },
     trigger: {
       trigger_type: '',

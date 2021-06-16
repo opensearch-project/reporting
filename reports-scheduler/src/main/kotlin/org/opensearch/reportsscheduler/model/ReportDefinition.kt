@@ -381,15 +381,12 @@ internal data class ReportDefinition(
      * Report definition delivery data class
      */
     internal data class Delivery(
-        val recipients: List<String>,
-        val deliveryFormat: DeliveryFormat,
         val title: String,
         val textDescription: String,
         val htmlDescription: String?,
-        val channelIds: List<String>
+        val configIds: List<String>
     ) : ToXContentObject {
         internal companion object {
-            private const val RECIPIENTS_TAG = "recipients"
             private const val DELIVERY_FORMAT_TAG = "deliveryFormat"
             private const val TITLE_TAG = "title"
             private const val TEXT_DESCRIPTION_TAG = "textDescription"
@@ -403,34 +400,29 @@ internal data class ReportDefinition(
              */
             fun parse(parser: XContentParser): Delivery {
                 var recipients: List<String> = listOf()
-                var deliveryFormat: DeliveryFormat? = null
                 var title: String? = null
                 var textDescription: String? = null
                 var htmlDescription: String? = null
-                var channelIds: List<String> = listOf()
+                var configIds: List<String> = listOf()
                 XContentParserUtils.ensureExpectedToken(XContentParser.Token.START_OBJECT, parser.currentToken(), parser)
                 while (XContentParser.Token.END_OBJECT != parser.nextToken()) {
                     val fieldName = parser.currentName()
                     parser.nextToken()
                     when (fieldName) {
-                        RECIPIENTS_TAG -> recipients = parser.stringList()
-                        DELIVERY_FORMAT_TAG -> deliveryFormat = DeliveryFormat.valueOf(parser.text())
                         TITLE_TAG -> title = parser.text()
                         TEXT_DESCRIPTION_TAG -> textDescription = parser.text()
                         HTML_DESCRIPTION_TAG -> htmlDescription = parser.textOrNull()
-                        CHANNEL_IDS_TAG -> channelIds = parser.stringList()
+                        CHANNEL_IDS_TAG -> configIds = parser.stringList()
                         else -> log.info("$LOG_PREFIX: Delivery Unknown field $fieldName")
                     }
                 }
-                deliveryFormat ?: throw IllegalArgumentException("$DELIVERY_FORMAT_TAG field absent")
                 title ?: throw IllegalArgumentException("$TITLE_TAG field absent")
                 textDescription ?: throw IllegalArgumentException("$TEXT_DESCRIPTION_TAG field absent")
-                return Delivery(recipients,
-                    deliveryFormat,
+                return Delivery(
                     title,
                     textDescription,
                     htmlDescription,
-                    channelIds)
+                    configIds)
             }
         }
 
@@ -440,14 +432,12 @@ internal data class ReportDefinition(
         override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
             builder!!
             builder.startObject()
-                .field(RECIPIENTS_TAG, recipients)
-                .field(DELIVERY_FORMAT_TAG, deliveryFormat)
                 .field(TITLE_TAG, title)
                 .field(TEXT_DESCRIPTION_TAG, textDescription)
             if (htmlDescription != null) {
                 builder.field(HTML_DESCRIPTION_TAG, htmlDescription)
             }
-            builder.field(CHANNEL_IDS_TAG, channelIds)
+            builder.field(CHANNEL_IDS_TAG, configIds)
             builder.endObject()
             return builder
         }
