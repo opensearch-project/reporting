@@ -37,6 +37,8 @@ import {
 } from '../../../../../src/core/server';
 import { getFileName, callCluster } from './helpers';
 import { CreateReportResultType } from './types';
+import { RequestParams } from '@elastic/elasticsearch';
+import esb from 'elastic-builder';
 
 /**
  * Specify how long scroll context should be maintained for scrolled search
@@ -200,16 +202,17 @@ async function generateReportData(
   }
 
   async function getOpenSearchDataByScroll() {
+    const searchParams: RequestParams.Search = {
+      index: report._source.paternName,
+      scroll: scrollTimeout,
+      body: reqBody,
+      size: maxResultSize,
+    };
     // Open scroll context by fetching first batch
     opensearchData = await callCluster(
       client,
       'search',
-      {
-        index: report._source.paternName,
-        scroll: scrollTimeout,
-        body: reqBody,
-        size: maxResultSize,
-      },
+      searchParams,
       isScheduledTask
     );
     arrayHits.push(opensearchData.hits);
@@ -243,20 +246,23 @@ async function generateReportData(
   }
 
   async function getOpenSearchDataBySearch() {
+    const searchParams: RequestParams.Search = {
+      index: report._source.paternName,
+      body: reqBody,
+      size: total,
+    };
+
     opensearchData = await callCluster(
       client,
       'search',
-      {
-        index: report._source.paternName,
-        body: reqBody,
-        size: total,
-      },
+      searchParams,
       isScheduledTask
     );
+
     arrayHits.push(opensearchData.hits);
   }
 
-  function buildRequestBody(query: any) {
+  function buildRequestBody(query: esb.RequestBodySearch) {
     const docvalues = [];
     for (const dateType of report._source.dateFields) {
       docvalues.push({
@@ -265,8 +271,10 @@ async function generateReportData(
       });
     }
 
+    // elastic-builder doesn't provide function to build docvalue_fields with format,
+    // this is a workaround which appends docvalues field to the request body.
     return {
-      query: query.toJSON().query,
+      ...query.toJSON(),
       docvalue_fields: docvalues,
     };
   }
