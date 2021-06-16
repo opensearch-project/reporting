@@ -168,7 +168,7 @@ export const getOpenSearchData = (arrayHits, report, params) => {
   for (let valueRes of arrayHits) {
     for (let data of valueRes.hits) {
       const fields = data.fields;
-      //get  all the fields of type date and fromat them to excel format
+      // get all the fields of type date and format them to excel format
       for (let dateType of report._source.dateFields) {
         if (data._source[dateType]) {
           data._source[dateType] = moment(fields[dateType][0]).format(
