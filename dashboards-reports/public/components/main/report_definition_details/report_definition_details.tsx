@@ -422,10 +422,10 @@ export function ReportDefinitionDetails(props) {
         ? humanReadableScheduleDetails(data.report_definition.trigger)
         : `\u2014`,
       status: reportDefinition.status,
-      configIds: configIds,
-      title: title,
-      textDescription: textDescription,
-      htmlDescription: htmlDescription
+      configIds: configIds.length > 0 ? configIds : `\u2014`,
+      title: title != '' ? title : `\u2014`,
+      textDescription: textDescription != '' ? textDescription : `\u2014`,
+      htmlDescription: htmlDescription != '' ? htmlDescription : `\u2014`
     };
     return reportDefinitionDetails;
   };
@@ -824,28 +824,34 @@ export function ReportDefinitionDetails(props) {
           </EuiTitle>
           <EuiSpacer />
           {triggerSection}
-          <EuiSpacer />
+          {/* <EuiSpacer /> */}
           {/* <EuiTitle>
             <h3>Notification settings</h3>
           </EuiTitle>
           <EuiSpacer />
           <EuiFlexGroup>
             <ReportDetailsComponent
-              reportDetailsComponentTitle={'Email recipients'}
+              reportDetailsComponentTitle={'Config IDs'}
               reportDetailsComponentContent={formatEmails(
-                reportDefinitionDetails.emailRecipients
+                reportDefinitionDetails.configIds
               )}
             />
             <ReportDetailsComponent
-              reportDetailsComponentTitle={'Email subject'}
+              reportDetailsComponentTitle={'Title'}
               reportDetailsComponentContent={
-                reportDefinitionDetails.emailSubject
+                reportDefinitionDetails.title
               }
             />
             <ReportDetailsComponent
-              reportDetailsComponentTitle={'Optional message'}
+              reportDetailsComponentTitle={'Text description'}
+              reportDetailsComponentContent={
+                reportDefinitionDetails.textDescription
+              }
+            />
+            <ReportDetailsComponent
+              reportDetailsComponentTitle={'Html description'}
               reportDetailsComponentContent={trimAndRenderAsText(
-                reportDefinitionDetails.emailBody
+                reportDefinitionDetails.htmlDescription
               )}
             />
             <ReportDetailsComponent />
