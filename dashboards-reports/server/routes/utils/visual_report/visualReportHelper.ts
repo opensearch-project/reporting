@@ -134,6 +134,10 @@ export const createVisualReport = async (
       document
         .querySelectorAll("[class^='euiHeader']")
         .forEach((e) => e.remove());
+      // remove exit full screen button
+      document
+        .querySelectorAll("[class^='dshExitFullScreenButton']")
+        .forEach(e => e.remove())
       // remove visualization editor
       if (reportSource === REPORT_TYPE.visualization) {
         document
