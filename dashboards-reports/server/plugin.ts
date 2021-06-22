@@ -35,7 +35,6 @@ import {
 import { setIntervalAsync } from 'set-interval-async/dynamic';
 import { Semaphore, SemaphoreInterface, withTimeout } from 'async-mutex';
 import opensearchReportsPlugin from './backend/opensearch-reports-plugin';
-// import notificationPlugin from './backend/opendistro-notification-plugin';
 import {
   ReportsDashboardsPluginSetup,
   ReportsDashboardsPluginStart,
