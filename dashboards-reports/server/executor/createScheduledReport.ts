@@ -35,7 +35,6 @@ import { createSavedSearchReport } from '../routes/utils/savedSearchReportHelper
 import { ReportSchemaType } from '../model';
 import { CreateReportResultType } from '../routes/utils/types';
 import { createVisualReport } from '../routes/utils/visual_report/visualReportHelper';
-import { deliverReport } from '../routes/lib/deliverReport';
 import { updateReportState } from '../routes/lib/updateReportState';
 
 export const createScheduledReport = async (
@@ -43,7 +42,6 @@ export const createScheduledReport = async (
   report: ReportSchemaType,
   opensearchClient: ILegacyClusterClient,
   opensearchReportsClient: ILegacyClusterClient,
-  notificationClient: ILegacyClusterClient,
   logger: Logger
 ) => {
   let createReportResult: CreateReportResultType;
@@ -76,17 +74,6 @@ export const createScheduledReport = async (
     // }
 
     await updateReportState(reportId, opensearchReportsClient, REPORT_STATE.created);
-
-    // deliver report
-    if (deliveryType == DELIVERY_TYPE.channel) {
-      await deliverReport(
-        report,
-        notificationClient,
-        opensearchReportsClient,
-        reportId,
-        logger
-      );
-    }
   } catch (error) {
     // update report instance with "error" state
     //TODO: save error detail and display on UI

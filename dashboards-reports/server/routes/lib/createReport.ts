@@ -42,7 +42,6 @@ import { ReportSchemaType } from '../../model';
 import { CreateReportResultType } from '../utils/types';
 import { createVisualReport } from '../utils/visual_report/visualReportHelper';
 import { SetCookie, Headers } from 'puppeteer-core';
-import { deliverReport } from './deliverReport';
 import { updateReportState } from './updateReportState';
 import { saveReport } from './saveReport';
 import { SemaphoreInterface } from 'async-mutex';
@@ -61,10 +60,6 @@ export const createReport = async (
   //@ts-ignore
   const semaphore: SemaphoreInterface = context.reporting_plugin.semaphore;
   // @ts-ignore
-  const notificationClient: ILegacyScopedClusterClient = context.reporting_plugin.notificationClient.asScoped(
-    request
-  );
-  // @ts-ignore
   const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
     request
   );
@@ -82,7 +77,6 @@ export const createReport = async (
   const {
     report_definition: {
       report_params: reportParams,
-      delivery: { delivery_type: deliveryType },
     },
   } = report;
   const { report_source: reportSource } = reportParams;
@@ -154,17 +148,6 @@ export const createReport = async (
     // if (!savedReportId) {
     //   await updateReportState(reportId, opensearchReportsClient, REPORT_STATE.created);
     // }
-
-    // deliver report
-    if (!savedReportId && deliveryType == DELIVERY_TYPE.channel) {
-      await deliverReport(
-        report,
-        notificationClient,
-        opensearchReportsClient,
-        reportId,
-        logger
-      );
-    }
   } catch (error) {
     // update report instance with "error" state
     // TODO: save error detail and display on UI
