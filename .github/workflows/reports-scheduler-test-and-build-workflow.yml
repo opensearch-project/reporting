@@ -2,8 +2,6 @@ name: Test and Build Reports Scheduler
 
 on: [push, pull_request]
 
-env:
-  CODECOV_TOKEN: '50c9356f-775f-472c-bcfb-2094fc71819c'
 
 jobs:
   build:
@@ -62,7 +60,7 @@ jobs:
         with:
           flags: reports-scheduler
           directory: reports-scheduler/
-          token: ${{ env.CODECOV_TOKEN }}
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Create Artifact Path
         run: |
