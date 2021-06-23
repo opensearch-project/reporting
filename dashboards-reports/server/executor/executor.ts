@@ -33,7 +33,6 @@ import { BackendReportInstanceType } from 'server/model/backendModel';
 
 async function pollAndExecuteJob(
   opensearchReportsClient: ILegacyClusterClient,
-  notificationClient: ILegacyClusterClient,
   opensearchClient: ILegacyClusterClient,
   logger: Logger
 ) {
@@ -60,7 +59,6 @@ async function pollAndExecuteJob(
         reportMetadata,
         opensearchClient,
         opensearchReportsClient,
-        notificationClient,
         logger
       );
     } else {

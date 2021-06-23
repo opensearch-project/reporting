@@ -35,7 +35,6 @@ import {
 import { setIntervalAsync } from 'set-interval-async/dynamic';
 import { Semaphore, SemaphoreInterface, withTimeout } from 'async-mutex';
 import opensearchReportsPlugin from './backend/opensearch-reports-plugin';
-import notificationPlugin from './backend/opendistro-notification-plugin';
 import {
   ReportsDashboardsPluginSetup,
   ReportsDashboardsPluginStart,
@@ -89,12 +88,6 @@ export class ReportsDashboardsPlugin
       }
     );
 
-    const notificationClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
-      'notification',
-      {
-        plugins: [notificationPlugin],
-      }
-    );
     // Register server side APIs
     registerRoutes(router, accessInfo);
 
@@ -106,7 +99,6 @@ export class ReportsDashboardsPlugin
         return {
           logger: this.logger,
           semaphore: this.semaphore,
-          notificationClient,
           opensearchReportsClient,
         };
       }
@@ -124,12 +116,6 @@ export class ReportsDashboardsPlugin
       }
     );
 
-    const notificationClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
-      'notification',
-      {
-        plugins: [notificationPlugin],
-      }
-    );
     const opensearchClient: ILegacyClusterClient =
       core.opensearch.legacy.client;
     /*
