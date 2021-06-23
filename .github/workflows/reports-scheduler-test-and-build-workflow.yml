@@ -2,6 +2,9 @@ name: Test and Build Reports Scheduler
 
 on: [push, pull_request]
 
+env:
+  CODECOV_TOKEN: '50c9356f-775f-472c-bcfb-2094fc71819c'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -53,6 +56,13 @@ jobs:
         run: |
           cd reports-scheduler
           ./gradlew build -Dopensearch.version=1.0.0-rc1
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v1
+        with:
+          flags: reports-scheduler
+          directory: reports-scheduler/
+          token: ${{ env.CODECOV_TOKEN }}
 
       - name: Create Artifact Path
         run: |
