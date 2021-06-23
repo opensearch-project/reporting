@@ -279,7 +279,7 @@ All the OpenSearch Dashboards Server APIs will be exposed as HTTP(S) RESTFul API
 API calls are stateless. Each request that you make happens in isolation from other calls and must include all of the necessary information for OpenSearch Dashboards to fulfill the request. APIs may optionally take JSON formatted request body.
 API requests return JSON output, which is a format that is machine-readable and works well for automation.
 
-List of existing [OpenSearch Dashboards REST APIs](https://www.elastic.co/guide/en/kibana/master/using-api.html)
+List of existing OpenSearch Dashboards REST APIs (TODO: Add link)
 
 **(A) generateReport**
 
@@ -439,7 +439,7 @@ Scheduled Report Creation workflow
 
 ### 4.4 Alerting Integration
 
-https://docs-beta.opensearch.org/docs/alerting/
+https://docs-beta.opensearch.org/monitoring-plugins/alerting/index/
 
 ODFE Alerting can be used as an external trigger. To generate the report the `generateReport()` API can be utilized as `custom_webhook` destination.
 
