@@ -37,6 +37,9 @@ We welcome you to get involved in development, documentation, testing the OpenSe
 
 OpenSearch Dashboards Reports integration with [Notifications](https://github.com/opensearch-project/notifications) is currently in progress, tracking for the 8/30 OpenSearch 1.1 release.
 
+## Release
+This project follows [OpenSearch branching, labelling, and releasing](https://github.com/opensearch-project/.github/blob/main/RELEASING.md).
+
 ## Code of Conduct
 
 This project has adopted an [Open Source Code of Conduct](https://opensearch.org/codeofconduct.html).
