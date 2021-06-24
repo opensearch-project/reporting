@@ -62,7 +62,7 @@ const input = {
       configIds: [],
       title: 'title',
       textDescription: 'text description',
-      htmlDescription: 'html description'
+      htmlDescription: 'html description',
     },
     trigger: {
       trigger_type: 'On demand',
@@ -70,8 +70,7 @@ const input = {
   },
 };
 
-const queryUrl =
-  'https://demo.elastic.co/app/kibana#/dashboard/welcome_dashboard';
+const mockHtmlPath = `file://${__dirname}/demo_dashboard.html`;
 
 describe('test create visual report', () => {
   test('create report with valid input', async () => {
@@ -84,7 +83,7 @@ describe('test create visual report', () => {
     const reportParams = input.report_definition.report_params;
     const { dataUrl, fileName } = await createVisualReport(
       reportParams as ReportParamsSchemaType,
-      queryUrl,
+      mockHtmlPath,
       mockLogger
     );
     expect(fileName).toContain(`${reportParams.report_name}`);
@@ -99,7 +98,7 @@ describe('test create visual report', () => {
 
     const { dataUrl, fileName } = await createVisualReport(
       reportParams as ReportParamsSchemaType,
-      queryUrl,
+      mockHtmlPath,
       mockLogger
     );
     expect(fileName).toContain(`${reportParams.report_name}`);
