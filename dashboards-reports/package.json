@@ -74,6 +74,8 @@
     "doc-path": "2.1.2",
     "y18n": "^5.0.5",
     "lodash": "^4.17.21",
-    "path-parse": "^1.0.7"
+    "path-parse": "^1.0.7",
+    "glob-parent": "^5.1.2",
+    "css-what": "^5.0.1"
   }
 }
