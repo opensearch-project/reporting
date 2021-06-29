@@ -24,8 +24,8 @@
  * permissions and limitations under the License.
  */
 
-export const PLUGIN_ID = 'reportsDashboards';
-export const PLUGIN_NAME = 'reports-dashboards';
+export const PLUGIN_NAME = 'Reporting';
+export const PLUGIN_ID = 'reports-dashboards';
 
 export const API_PREFIX = '/api/reporting';
 
