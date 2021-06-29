@@ -37,17 +37,17 @@ import {
 } from './types';
 import { i18n } from '@osd/i18n';
 import './components/context_menu/context_menu';
-import { PLUGIN_NAME } from '../common';
+import { PLUGIN_ID, PLUGIN_NAME } from '../common';
 
 export class ReportsDashboardsPlugin
-  implements
-    Plugin<ReportsDashboardsPluginSetup, ReportsDashboardsPluginStart> {
+  implements Plugin<ReportsDashboardsPluginSetup, ReportsDashboardsPluginStart>
+{
   public setup(core: CoreSetup): ReportsDashboardsPluginSetup {
     // Register an application into the side navigation menu
     core.application.register({
-      id: PLUGIN_NAME,
+      id: PLUGIN_ID,
       title: i18n.translate('opensearch.reports.pluginName', {
-        defaultMessage: 'Reporting',
+        defaultMessage: PLUGIN_NAME,
       }),
       category: {
         id: 'opensearch',
