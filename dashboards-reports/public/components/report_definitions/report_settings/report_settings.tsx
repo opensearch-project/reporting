@@ -163,7 +163,7 @@ export function ReportSettings(props: ReportSettingProps) {
       reportDefinitionRequest.report_params.report_source = 'Dashboard';
       reportDefinitionRequest.report_params.core_params.base_url =
         getDashboardBaseUrlCreate(edit, editDefinitionId, fromInContext) +
-        dashboards[0].value;
+        dashboards[0]?.value;
 
       // set params to visual report params after switch from saved search
       handleDataToVisualReportSourceChange(reportDefinitionRequest);
@@ -172,7 +172,7 @@ export function ReportSettings(props: ReportSettingProps) {
       reportDefinitionRequest.report_params.report_source = 'Visualization';
       reportDefinitionRequest.report_params.core_params.base_url =
         getVisualizationBaseUrlCreate(edit, editDefinitionId, fromInContext) +
-        visualizations[0].value;
+        visualizations[0]?.value;
 
       // set params to visual report params after switch from saved search
       handleDataToVisualReportSourceChange(reportDefinitionRequest);
@@ -181,9 +181,9 @@ export function ReportSettings(props: ReportSettingProps) {
       reportDefinitionRequest.report_params.report_source = 'Saved search';
       reportDefinitionRequest.report_params.core_params.base_url =
         getSavedSearchBaseUrlCreate(edit, editDefinitionId, fromInContext) +
-        savedSearches[0].value;
+        savedSearches[0]?.value;
       reportDefinitionRequest.report_params.core_params.saved_search_id =
-        savedSearches[0].value;
+        savedSearches[0]?.value;
       reportDefinitionRequest.report_params.core_params.report_format = 'csv';
       reportDefinitionRequest.report_params.core_params.limit = 10000;
       reportDefinitionRequest.report_params.core_params.excel = true;
@@ -191,7 +191,7 @@ export function ReportSettings(props: ReportSettingProps) {
       reportDefinitionRequest.report_params.report_source = 'Notebook';
       reportDefinitionRequest.report_params.core_params.base_url =
         getNotebooksBaseUrlCreate(edit, editDefinitionId, fromInContext) +
-        notebooks[0].value;
+        notebooks[0]?.value;
 
       // set params to visual report params after switch from saved search
       handleDataToVisualReportSourceChange(reportDefinitionRequest);
