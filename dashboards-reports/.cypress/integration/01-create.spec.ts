@@ -83,6 +83,9 @@ describe('Cypress', () => {
     // set report trigger to Schedule option
     cy.get('[type="radio"]').check({ force: true });
 
+    // set source back to saved search for testing purpose
+    cy.get('#savedSearchReportSource').check({ force: true });
+
     // create scheduled report definition
     cy.get('#createNewReportDefinition').click({ force: true });
   });
