@@ -85,19 +85,12 @@ export default function (router: IRouter) {
         // if not deliver to user himself , no need to send actual file data to client
         const delivery = report.report_definition.delivery;
         addToMetric('report', 'create', 'count', report);
-        if (
-          delivery.delivery_type === DELIVERY_TYPE.opensearchDashboardsUser &&
-          delivery.delivery_params.opensearch_dashboards_recipients.length === 0
-        ) {
-          return response.ok({
-            body: {
-              data: reportData.dataUrl,
-              filename: reportData.fileName,
-            },
-          });
-        } else {
-          return response.ok();
-        }
+        return response.ok({
+          body: {
+            data: reportData.dataUrl,
+            filename: reportData.fileName,
+          },
+        });
       } catch (error) {
         // TODO: better error handling for delivery and stages in generating report, pass logger to deeper level
         logger.error(`Failed to generate report: ${error}`);
