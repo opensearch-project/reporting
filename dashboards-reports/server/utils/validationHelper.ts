@@ -36,14 +36,14 @@ import {
 import { REPORT_TYPE } from '../../server/routes/utils/constants';
 
 export const isValidRelativeUrl = (relativeUrl: string) => {
-  let normalizedRelativeUrl = relativeUrl
+  let normalizedRelativeUrl = relativeUrl;
   if (!relativeUrl.includes('notebooks-dashboards')) {
     normalizedRelativeUrl = path.posix.normalize(relativeUrl);
   }
-  
+
   // check pattern
-  // ODFE pattern: /app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g
-  // AES pattern: /_plugin/kibana/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g
+  // Open Source pattern: /app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g
+  // Managed Service pattern: /_dashboards/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g
   const isValid = regexRelativeUrl.test(normalizedRelativeUrl);
   return isValid;
 };
@@ -52,10 +52,12 @@ export const isValidRelativeUrl = (relativeUrl: string) => {
  * moment.js isValid() API fails to validate time duration, so use regex
  * https://github.com/moment/moment/issues/1805
  **/
-export const regexDuration = /^(-?)P(?=\d|T\d)(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)([DW]))?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$/;
+export const regexDuration =
+  /^(-?)P(?=\d|T\d)(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)([DW]))?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$/;
 export const regexEmailAddress = /\S+@\S+\.\S+/;
 export const regexReportName = /^[\w\-\s\(\)\[\]\,\_\-+]+$/;
-export const regexRelativeUrl = /^\/(_plugin\/kibana\/app|app)\/(dashboards|visualize|discover|notebooks-dashboards\?view=output_only)(\?security_tenant=.+|)#\/(view\/|edit\/)?[^\/]+$/;
+export const regexRelativeUrl =
+  /^\/(_dashboards\/app|app)\/(dashboards|visualize|discover|notebooks-dashboards\?view=output_only)(\?security_tenant=.+|)#\/(view\/|edit\/)?[^\/]+$/;
 
 export const validateReport = async (
   client: ILegacyScopedClusterClient,
@@ -122,14 +124,13 @@ const validateSavedObject = async (
   if (getType(source) === 'notebook') {
     // no backend check for notebooks because we would just be checking against the notebooks api again
     exist = true;
-  }
-  else {
+  } else {
     savedObjectId = `${getType(source)}:${getId(url)}`;
     const params: RequestParams.Exists = {
       index: '.kibana',
       id: savedObjectId,
     };
-    exist = await client.callAsCurrentUser('exists', params);  
+    exist = await client.callAsCurrentUser('exists', params);
   }
   if (!exist) {
     throw Error(`saved object with id ${savedObjectId} does not exist`);
