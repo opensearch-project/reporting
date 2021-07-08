@@ -211,7 +211,7 @@ export function ReportDetails(props) {
       source: reportParams.report_source,
       // TODO:  we have all data needed, time_from, time_to, time_duration,
       // think of a way to better display
-      time_period: parseTimePeriod(queryUrl),
+      time_period: !queryUrl.includes('notebooks-dashboards') ? parseTimePeriod(queryUrl) : '',
       defaultFileFormat: coreParams.report_format,
       state: state,
       reportHeader:
