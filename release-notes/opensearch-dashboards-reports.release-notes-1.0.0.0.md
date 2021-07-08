@@ -26,6 +26,8 @@ Compatible with OpenSearch 1.0.0
 * Better support sorting for csv report based on saved search ([#86](https://github.com/opensearch-project/dashboards-reports/pull/86))
 * bump dependency version ([#101](https://github.com/opensearch-project/dashboards-reports/pull/101))
 * fix failed cypress integ-testing ([#106](https://github.com/opensearch-project/dashboards-reports/pull/106))
+* Fix notebooks context menu ([#109](https://github.com/opensearch-project/dashboards-reports/pull/109))
+* Update context menu download request body after schema change ([#115](https://github.com/opensearch-project/dashboards-reports/pull/115))
 * Exclude time range from report details for Notebooks ([#117](https://github.com/opensearch-project/dashboards-reports/pull/117))
 
 
