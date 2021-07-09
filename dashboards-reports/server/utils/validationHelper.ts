@@ -57,7 +57,7 @@ export const regexDuration =
 export const regexEmailAddress = /\S+@\S+\.\S+/;
 export const regexReportName = /^[\w\-\s\(\)\[\]\,\_\-+]+$/;
 export const regexRelativeUrl =
-  /^\/(_dashboards\/app|app)\/(dashboards|visualize|discover|notebooks-dashboards\?view=output_only)(\?security_tenant=.+|)#\/(view\/|edit\/)?[^\/]+$/;
+  /^\/(_dashboards\/app|app)\/(dashboards|visualize|discover|notebooks-dashboards\?view=output_only)([?&]security_tenant=.+|)#\/(view\/|edit\/)?[^\/]+$/;
 
 export const validateReport = async (
   client: ILegacyScopedClusterClient,
