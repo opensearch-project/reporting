@@ -24,6 +24,18 @@
  * permissions and limitations under the License.
  */
 
+describe('Adding sample data', () => {
+  it('Adds sample data', () => {
+    cy.visit(`${Cypress.env('opensearchDashboards')}/app/home#/tutorial_directory/sampleData`);
+    cy.get('div[data-test-subj="sampleDataSetCardflights"]').contains(/(Add|View) data/).click();
+    cy.wait(3000);
+    cy.get('div[data-test-subj="sampleDataSetCardecommerce"]').contains(/(Add|View) data/).click();
+    cy.wait(3000);
+    cy.get('div[data-test-subj="sampleDataSetCardlogs"]').contains(/(Add|View) data/).click();
+    cy.wait(3000);
+  });
+});
+
 describe('Cypress', () => {
   it('Visits Reporting homepage', () => {
     cy.visit(`${Cypress.env('opensearchDashboards')}/app/reports-dashboards#/`);
