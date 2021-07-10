@@ -236,6 +236,10 @@ integTest {
     if (System.getProperty("test.debug") != null) {
         jvmArgs '-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=8000'
     }
+
+    if (System.getProperty("tests.clustername") != null) {
+         exclude 'org/opensearch/reportsscheduler/ReportsSchedulerPluginIT.class'
+    }
 }
 
 Zip bundle = (Zip) project.getTasks().getByName("bundlePlugin");
