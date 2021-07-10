@@ -64,6 +64,8 @@ describe('Cypress', () => {
     // select drop-down option in report source list
     cy.contains('[Logs] Web Traffic').click();
 
+    cy.wait(500);
+
     // create an on-demand report definition
     cy.get('#createNewReportDefinition').click({ force: true });
 
@@ -93,6 +95,8 @@ describe('Cypress', () => {
 
     // select drop-down option in report source list
     cy.contains('[Logs] Web Traffic').click();
+
+    cy.wait(500);
 
     // set report trigger to Schedule option
     cy.get('[type="radio"]').check({ force: true });
