@@ -422,10 +422,10 @@ export function ReportDefinitionDetails(props) {
         ? humanReadableScheduleDetails(data.report_definition.trigger)
         : `\u2014`,
       status: reportDefinition.status,
-      configIds: configIds,
-      title: title,
-      textDescription: textDescription,
-      htmlDescription: htmlDescription
+      configIds: (configIds.length > 0) ? configIds : `\u2014`,
+      title: (title !== '') ? title : `\u2014`,
+      textDescription: (textDescription !== '') ? textDescription : `\u2014`,
+      htmlDescription: (htmlDescription !== '') ? htmlDescription : `\u2014`
     };
     return reportDefinitionDetails;
   };
@@ -814,42 +814,40 @@ export function ReportDefinitionDetails(props) {
             <EuiFlexItem />
           </EuiFlexGroup>
           <EuiSpacer />
-          <EuiTitle>
-            <h3>
-              {i18n.translate(
-                'opensearch.reports.reportDefinitionsDetails.fields.reportTrigger',
-                { defaultMessage: 'Report trigger' }
-              )}
-            </h3>
-          </EuiTitle>
-          <EuiSpacer />
+          <EuiFlexGroup>
           {triggerSection}
+          </EuiFlexGroup>
           <EuiSpacer />
-          {/* <EuiTitle>
+          <EuiTitle>
             <h3>Notification settings</h3>
           </EuiTitle>
           <EuiSpacer />
           <EuiFlexGroup>
             <ReportDetailsComponent
-              reportDetailsComponentTitle={'Email recipients'}
-              reportDetailsComponentContent={formatEmails(
-                reportDefinitionDetails.emailRecipients
-              )}
-            />
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={'Email subject'}
+              reportDetailsComponentTitle={'Config IDs'}
               reportDetailsComponentContent={
-                reportDefinitionDetails.emailSubject
+                reportDefinitionDetails.configIds
               }
             />
             <ReportDetailsComponent
-              reportDetailsComponentTitle={'Optional message'}
-              reportDetailsComponentContent={trimAndRenderAsText(
-                reportDefinitionDetails.emailBody
-              )}
+              reportDetailsComponentTitle={'Title'}
+              reportDetailsComponentContent={
+                reportDefinitionDetails.title
+              }
             />
-            <ReportDetailsComponent />
-          </EuiFlexGroup> */}
+            <ReportDetailsComponent
+              reportDetailsComponentTitle={'Text description'}
+              reportDetailsComponentContent={
+                reportDefinitionDetails.textDescription
+              }
+            />
+            <ReportDetailsComponent
+              reportDetailsComponentTitle={'Html description'}
+              reportDetailsComponentContent={
+                reportDefinitionDetails.htmlDescription
+              }
+            />
+          </EuiFlexGroup>
         </EuiPageContent>
         <EuiGlobalToastList
           toasts={toasts}
