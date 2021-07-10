@@ -86,6 +86,11 @@ fi
 if [ "$DIRECTORY" = "dashboards-reports" ]
 then
     cd dashboards-reports
+    mv -v dashboards-reports ../dashboards-reports-temp
+    cd ../
+    rm -rf dashboards-reports/
+    mv -v dashboards-reports-temp dashboards-reports
+    cd dashboards-reports
     yarn osd bootstrap
     npx cypress run
 else
