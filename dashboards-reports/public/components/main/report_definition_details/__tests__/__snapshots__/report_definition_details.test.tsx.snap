@@ -388,9 +388,6 @@ exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition d
           </dl>
         </div>
       </div>
-      <div
-        class="euiSpacer euiSpacer--l"
-      />
     </div>
     <div
       aria-live="polite"
@@ -789,9 +786,6 @@ exports[`<ReportDefinitionDetails /> panel render disabled daily definition, cli
           </dl>
         </div>
       </div>
-      <div
-        class="euiSpacer euiSpacer--l"
-      />
     </div>
     <div
       aria-live="polite"
@@ -1186,9 +1180,6 @@ exports[`<ReportDefinitionDetails /> panel render on demand definition details 1
           </dl>
         </div>
       </div>
-      <div
-        class="euiSpacer euiSpacer--l"
-      />
     </div>
     <div
       aria-live="polite"

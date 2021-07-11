@@ -438,7 +438,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
                 'opensearch.reports.details.reportSettings.state',
                 { defaultMessage: 'State' }
               )}
-              reportDetailsComponentContent={reportDetails['state']}
+              reportDetailsComponentContent={reportDetails.state}
             />
           </EuiFlexGroup>
           <EuiSpacer />
@@ -449,7 +449,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
                 { defaultMessage: 'Report header' }
               )}
               reportDetailsComponentContent={trimAndRenderAsText(
-                reportDetails['reportHeader']
+                reportDetails.reportHeader
               )}
             />
             <ReportDetailsComponent
@@ -458,7 +458,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
                 { defaultMessage: 'Report footer' }
               )}
               reportDetailsComponentContent={trimAndRenderAsText(
-                reportDetails['reportFooter']
+                reportDetails.reportFooter
               )}
             />
             {/* <ReportDetailsComponent /> */}
@@ -479,47 +479,50 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
                 'opensearch.reports.details.reportTrigger.reportType',
                 { defaultMessage: 'Report type' }
               )}
-              reportDetailsComponentContent={reportDetails['triggerType']}
+              reportDetailsComponentContent={reportDetails.triggerType}
             />
             <ReportDetailsComponent
               reportDetailsComponentTitle={i18n.translate(
                 'opensearch.reports.details.reportTrigger.scheduleType',
                 { defaultMessage: 'Schedule type' }
               )}
-              reportDetailsComponentContent={reportDetails['scheduleType']}
+              reportDetailsComponentContent={reportDetails.scheduleType}
             />
             <ReportDetailsComponent
               reportDetailsComponentTitle={i18n.translate(
                 'opensearch.reports.details.reportTrigger.scheduleDetails',
                 { defaultMessage: 'Schedule details' }
               )}
-              reportDetailsComponentContent={reportDetails['scheduleDetails']}
+              reportDetailsComponentContent={reportDetails.scheduleDetails}
             />
             <ReportDetailsComponent />
           </EuiFlexGroup>
-          <EuiSpacer />
-          {/* <EuiTitle>
+          {/* <EuiSpacer />
+          <EuiTitle>
             <h3>Notification settings</h3>
           </EuiTitle>
           <EuiSpacer />
           <EuiFlexGroup>
             <ReportDetailsComponent
-              reportDetailsComponentTitle={'Email recipient(s)'}
+              reportDetailsComponentTitle={'Config IDs'}
               reportDetailsComponentContent={formatEmails(
-                reportDetails['emailRecipients']
+                reportDetails.configIds
               )}
             />
             <ReportDetailsComponent
-              reportDetailsComponentTitle={'Email subject'}
-              reportDetailsComponentContent={reportDetails['emailSubject']}
+              reportDetailsComponentTitle={'Title'}
+              reportDetailsComponentContent={reportDetails.title}
             />
             <ReportDetailsComponent
-              reportDetailsComponentTitle={'Optional message'}
+              reportDetailsComponentTitle={'Text description'}
+              reportDetailsComponentContent={reportDetails.textDescription}
+            />
+            <ReportDetailsComponent
+              reportDetailsComponentTitle={'Html description'}
               reportDetailsComponentContent={trimAndRenderAsText(
-                reportDetails['emailBody']
+                reportDetails.htmlDescription
               )}
             />
-            <ReportDetailsComponent />
           </EuiFlexGroup> */}
         </EuiPageContent>
         <EuiGlobalToastList
