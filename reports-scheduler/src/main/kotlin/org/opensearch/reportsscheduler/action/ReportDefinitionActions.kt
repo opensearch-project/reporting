@@ -45,6 +45,7 @@ import org.opensearch.reportsscheduler.model.UpdateReportDefinitionResponse
 import org.opensearch.reportsscheduler.security.UserAccessManager
 import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.OpenSearchStatusException
+import org.opensearch.client.node.NodeClient
 import org.opensearch.rest.RestStatus
 import java.time.Instant
 
@@ -59,7 +60,7 @@ internal object ReportDefinitionActions {
      * @param request [CreateReportDefinitionRequest] object
      * @return [CreateReportDefinitionResponse]
      */
-    fun create(request: CreateReportDefinitionRequest, user: User?): CreateReportDefinitionResponse {
+    fun create(client: NodeClient, request: CreateReportDefinitionRequest, user: User?): CreateReportDefinitionResponse {
         log.info("$LOG_PREFIX:ReportDefinition-create")
         UserAccessManager.validateUser(user)
         val currentTime = Instant.now()
@@ -73,6 +74,8 @@ internal object ReportDefinitionActions {
         val docId = ReportDefinitionsIndex.createReportDefinition(reportDefinitionDetails)
         docId ?: throw OpenSearchStatusException("Report Definition Creation failed",
             RestStatus.INTERNAL_SERVER_ERROR)
+        if (request.reportDefinition.delivery != null)
+            NotificationsActions.send(client, request.reportDefinition.delivery, docId)
         return CreateReportDefinitionResponse(docId)
     }
 

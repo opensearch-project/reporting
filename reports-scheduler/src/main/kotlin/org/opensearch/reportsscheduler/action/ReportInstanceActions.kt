@@ -49,6 +49,7 @@ import org.opensearch.reportsscheduler.security.UserAccessManager
 import org.opensearch.reportsscheduler.settings.PluginSettings
 import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.OpenSearchStatusException
+import org.opensearch.client.node.NodeClient
 import org.opensearch.rest.RestStatus
 import java.time.Instant
 import kotlin.random.Random
@@ -93,7 +94,11 @@ internal object ReportInstanceActions {
      * @param request [OnDemandReportCreateRequest] object
      * @return [OnDemandReportCreateResponse]
      */
-    fun createOnDemandFromDefinition(request: OnDemandReportCreateRequest, user: User?): OnDemandReportCreateResponse {
+    fun createOnDemandFromDefinition(
+        client: NodeClient,
+        request: OnDemandReportCreateRequest,
+        user: User?
+    ): OnDemandReportCreateResponse {
         log.info("$LOG_PREFIX:ReportInstance-createOnDemandFromDefinition ${request.reportDefinitionId}")
         UserAccessManager.validateUser(user)
         val currentTime = Instant.now()
@@ -126,6 +131,8 @@ internal object ReportInstanceActions {
             throw OpenSearchStatusException("Report Instance Creation failed", RestStatus.INTERNAL_SERVER_ERROR)
         }
         val reportInstanceCopy = reportInstance.copy(id = docId)
+        if (reportDefinitionDetails.reportDefinition.delivery != null)
+            NotificationsActions.send(client, reportDefinitionDetails.reportDefinition.delivery, docId)
         return OnDemandReportCreateResponse(reportInstanceCopy, UserAccessManager.hasAllInfoAccess(user))
     }
 
