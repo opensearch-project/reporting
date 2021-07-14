@@ -526,7 +526,7 @@ export function ReportTrigger(props: ReportTriggerProps) {
           labelAppend={
             <EuiText size="xs">
               <EuiLink
-                href="https://docs-beta.opensearch.org/docs/alerting/cron/"
+                href="https://opensearch.org/docs/monitoring-plugins/alerting/cron/"
                 target="_blank"
                 external={true}
               >

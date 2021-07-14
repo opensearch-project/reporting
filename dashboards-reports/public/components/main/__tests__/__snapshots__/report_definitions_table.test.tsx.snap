@@ -905,7 +905,7 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                                
                               <a
                                 class="euiLink euiLink--primary"
-                                href="https://docs-beta.opensearch.org/docs/opensearch-dashboards/reporting/"
+                                href="https://opensearch.org/docs/dashboards/reporting/"
                                 rel="noopener noreferrer"
                                 target="_blank"
                               >

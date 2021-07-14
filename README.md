@@ -1,7 +1,7 @@
 [![OpenSearch Dashboards Reports CI](https://github.com/opensearch-project/dashboards-reports/workflows/Test%20and%20Build%20OpenSearch%20Dashboards%20Reports/badge.svg)](https://github.com/opensearch-project/dashboards-reports/actions?query=workflow%3A%22Test+and+Build+OpenSearch+Dashboards+Reports%22)
 [![Reports Scheduler CI](https://github.com/opensearch-project/dashboards-reports/workflows/Test%20and%20Build%20Reports%20Scheduler/badge.svg)](https://github.com/opensearch-project/dashboards-reports/actions?query=workflow%3A%22Test+and+Build+Reports+Scheduler%22)
 [![codecov](https://codecov.io/gh/opensearch-project/dashboards-reports/branch/main/graph/badge.svg?token=YOX0XBW2NA)](https://codecov.io/gh/opensearch-project/dashboards-reports)
-[![Documentation](https://img.shields.io/badge/documentation-blue.svg)](https://docs-beta.opensearch.org/dashboards/reporting/)
+[![Documentation](https://img.shields.io/badge/documentation-blue.svg)](https://opensearch.org/docs/dashboards/reporting/)
 ![PRs welcome!](https://img.shields.io/badge/PRs-welcome!-success)
 
 <img src="https://opensearch.org/assets/brand/SVG/Logo/opensearch_logo_default.svg" height="64px"/>
