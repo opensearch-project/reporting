@@ -9,6 +9,9 @@
  * GitHub history for details.
  */
 
+import React from "react";
+import { EuiIcon, EuiText } from '@elastic/eui'
+
 /*
  * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -24,15 +27,8 @@
  * permissions and limitations under the License.
  */
 
-export const EMAIL_RECIPIENT_OPTIONS = [];
-
-export const DELIVERY_TYPE_OPTIONS = [
-  {
-    id: 'OpenSearch Dashboards user',
-    label: 'OpenSearch Dashboards user',
-  },
-  {
-    id: 'Channel',
-    label: 'Email',
-  },
-];
+export const testMessageConfirmationMessage = (
+  <EuiText size='s'>
+    <EuiIcon type='check'/> Test message sent to selected channels. If no test message is received, try again or check your channel settings in Notifications.
+  </EuiText>
+);

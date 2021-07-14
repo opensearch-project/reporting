@@ -112,7 +112,7 @@ export interface timeRangeParams {
   timeTo: Date;
 }
 
-export function CreateReport(props) {
+export function CreateReport(props: { [x: string]: any; setBreadcrumbs?: any; httpClient?: any; }) {
   let createReportDefinitionRequest: reportDefinitionParams = {
     report_params: {
       report_name: '',
@@ -187,6 +187,7 @@ export function CreateReport(props) {
       iconType: 'alert',
       id: 'errorToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(errorToast));
   };
 
@@ -211,6 +212,7 @@ export function CreateReport(props) {
         id: 'errorToast',
       };
     }
+    // @ts-ignore
     setToasts(toasts.concat(toast));
   };
 
@@ -228,6 +230,7 @@ export function CreateReport(props) {
       iconType: 'alert',
       id: 'timeRangeErrorToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(errorToast));
   };
 
@@ -235,8 +238,8 @@ export function CreateReport(props) {
     addInvalidTimeRangeToastHandler();
   };
 
-  const removeToast = (removedToast) => {
-    setToasts(toasts.filter((toast) => toast.id !== removedToast.id));
+  const removeToast = (removedToast: { id: any; }) => {
+    setToasts(toasts.filter((toast: any) => toast.id !== removedToast.id));
   };
 
   let timeRange = {
@@ -297,7 +300,7 @@ export function CreateReport(props) {
             'Content-Type': 'application/json',
           },
         })
-        .then(async (resp) => {
+        .then(async (resp: { scheduler_response: { reportDefinitionId: any; }; }) => {
           //TODO: consider handle the on demand report generation from server side instead
           if (metadata.trigger.trigger_type === 'On demand') {
             const reportDefinitionId =
@@ -306,7 +309,7 @@ export function CreateReport(props) {
           }
           window.location.assign(`reports-dashboards#/create=success`);
         })
-        .catch((error) => {
+        .catch((error: {body: { statusCode: number; }; }) => {
           console.log('error in creating report definition: ' + error);
           if (error.body.statusCode === 403) {
             handleErrorOnCreateToast('permissions');
@@ -350,6 +353,7 @@ export function CreateReport(props) {
         <EuiSpacer />
         <ReportSettings
           edit={false}
+          editDefinitionId={''} // empty string since we are coming from create
           reportDefinitionRequest={createReportDefinitionRequest}
           httpClientProps={props['httpClient']}
           timeRange={timeRange}
@@ -358,17 +362,14 @@ export function CreateReport(props) {
           showSettingsReportSourceError={showSettingsReportSourceError}
           settingsReportSourceErrorMessage={settingsReportSourceErrorMessage}
           showTimeRangeError={showTimeRangeError}
-        />
-        <EuiSpacer />
-        <ReportTrigger
-          edit={false}
-          reportDefinitionRequest={createReportDefinitionRequest}
           showTriggerIntervalNaNError={showTriggerIntervalNaNError}
           showCronError={showCronError}
         />
         <EuiSpacer />
         <ReportDelivery
           edit={false}
+          editDefinitionId={''}
+          httpClientProps={props['httpClient']}
           reportDefinitionRequest={createReportDefinitionRequest}
           showEmailRecipientsError={showEmailRecipientsError}
           emailRecipientsErrorMessage={emailRecipientsErrorMessage}

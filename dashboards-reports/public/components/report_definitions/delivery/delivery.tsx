@@ -34,11 +34,22 @@ import {
   EuiHorizontalRule,
   EuiSpacer,
   EuiCheckbox,
+  EuiComboBox,
+  EuiFieldText,
+  EuiButton,
 } from '@elastic/eui';
-import { DELIVERY_TYPE_OPTIONS } from './delivery_constants';
+import CSS from 'csstype';
+import { testMessageConfirmationMessage } from './delivery_constants';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 import { reportDefinitionParams } from '../create/create_report_definition';
-import { EmailDelivery } from './email';
+import ReactMDE from 'react-mde';
+import { converter } from '../utils';
+
+const styles: CSS.Properties = {
+  // float: 'left',
+  // width: '100%',
+  maxWidth: '800px',
+};
 
 export type ReportDeliveryProps = {
   edit: boolean;
@@ -57,23 +68,35 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     httpClientProps,
   } = props;
 
-  const [emailCheckbox, setEmailCheckbox] = useState(false);
+  const [sendNotification, setSendNotification] = useState(false);
+  const [channels, setChannels] = useState([]);
+  const [selectedChannels, setSelectedChannels] = useState([]);
+  const [notificationSubject, setNotificationSubject] = useState('');
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [selectedTab, setSelectedTab] = React.useState<'write' | 'preview'>(
+    'write'
+  );
+  const [testMessageConfirmation, setTestMessageConfirmation] = useState('');
 
-  const handleEmailCheckbox = (e: {
-    target: { checked: React.SetStateAction<boolean> };
-  }) => {
-    setEmailCheckbox(e.target.checked);
-    if (e.target.checked) {
-      // if checked, set delivery type to email
-      reportDefinitionRequest.delivery.delivery_type =
-        DELIVERY_TYPE_OPTIONS[1].id;
-    } else {
-      // uncheck email checkbox means to use default setting, which is opensearch dashboards user
-      defaultCreateDeliveryParams();
-    }
-  };
+  const handleSendNotification = (e: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
+    setSendNotification(e.target.checked);
+  }
 
-  const emailDelivery = emailCheckbox ? <EmailDelivery {...props} /> : null;
+  const handleSelectedChannels = (e: React.SetStateAction<never[]>) => {
+    setSelectedChannels(e);
+  }
+
+  const handleNotificationSubject = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+    setNotificationSubject(e.target.value);
+  }
+
+  const handleNotificationMessage = (e: React.SetStateAction<string>) => {
+    setNotificationMessage(e);
+  }
+
+  const handleTestMessageConfirmation = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+    setTestMessageConfirmation(e);
+  }
 
   const defaultCreateDeliveryParams = () => {
     reportDefinitionRequest.delivery = {
@@ -84,24 +107,87 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     };
   };
 
+  const sendTestNotificationsMessage = () => {
+    // implement send message
+    // on success, set test message confirmation message
+    handleTestMessageConfirmation(testMessageConfirmationMessage)
+  }
+
   useEffect(() => {
     if (edit) {
       httpClientProps
         .get(`../api/reporting/reportDefinitions/${editDefinitionId}`)
-        .then(async (response) => {
-          const isEmailSelected =
-            response.report_definition.delivery.delivery_type ===
-            DELIVERY_TYPE_OPTIONS[1].id;
-          handleEmailCheckbox({ target: { checked: isEmailSelected } });
+        .then(async (response: { report_definition: { delivery: { delivery_type: string; }; }; }) => {
+          
         });
     } else {
       // By default it's set to deliver to OpenSearch Dashboards user
       defaultCreateDeliveryParams();
+
     }
   }, []);
 
+  const showNotificationsBody = sendNotification ? (
+    <div>
+      <EuiSpacer />
+      <EuiFormRow label='Channels'>
+        <EuiComboBox
+          id='notificationsChannelSelect'
+          placeholder={'Select channels'}
+          options={channels}
+          selectedOptions={selectedChannels}
+          onChange={handleSelectedChannels}
+        />
+      </EuiFormRow>
+      <EuiSpacer />
+      <EuiFormRow
+        label='Notification subject'
+        helpText='Required if at least one channel type is Email.'
+        style={styles}
+      >
+        <EuiFieldText
+          placeholder={`New report from ${reportDefinitionRequest.report_params.report_name}`}
+          fullWidth={true}
+          value={notificationSubject}
+          onChange={handleNotificationSubject}
+        />
+      </EuiFormRow>
+      <EuiSpacer />
+      <EuiFormRow
+        label='Notification message'
+        helpText='Embed variables in your message using Mustache template.'
+        style={styles}
+      >
+        <ReactMDE
+          value={notificationMessage}
+          onChange={handleNotificationMessage}
+          selectedTab={selectedTab}
+          onTabChange={setSelectedTab}
+          toolbarCommands={[
+            ['header', 'bold', 'italic', 'strikethrough'],
+            ['unordered-list', 'ordered-list', 'checked-list'],
+          ]}
+          generateMarkdownPreview={(markdown) =>
+            Promise.resolve(converter.makeHtml(markdown))
+          }
+        />
+      </EuiFormRow>
+      <EuiSpacer />
+      <EuiFormRow
+        helpText={testMessageConfirmation}
+        fullWidth={true}
+      >
+        <EuiButton
+          onClick={sendTestNotificationsMessage}
+        >
+          Send test message
+        </EuiButton>
+      </EuiFormRow>
+    </div>
+  ) : null;
+
   return (
-    <EuiPageContent panelPaddingSize={'l'} hidden>
+    <EuiPageContent panelPaddingSize={'l'}>
       <EuiPageHeader>
         <EuiTitle>
           <h2>Notification settings</h2>
@@ -110,13 +196,12 @@ export function ReportDelivery(props: ReportDeliveryProps) {
       <EuiHorizontalRule />
       <EuiPageContentBody>
         <EuiCheckbox
-          id="emailCheckboxDelivery"
-          label="Add email recipients"
-          checked={emailCheckbox}
-          onChange={handleEmailCheckbox}
+          id='notificationsDeliveryCheckbox'
+          label='Send notification when report is available'
+          checked={sendNotification}
+          onChange={handleSendNotification}
         />
-        <EuiSpacer />
-        {emailDelivery}
+        {showNotificationsBody}
       </EuiPageContentBody>
     </EuiPageContent>
   );

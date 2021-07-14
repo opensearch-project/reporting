@@ -40,7 +40,6 @@ import {
   EuiDescriptionListTitle,
   EuiDescriptionListDescription,
   EuiPageHeaderSection,
-  EuiButton,
   EuiLink,
   EuiIcon,
   EuiGlobalToastList,
@@ -55,7 +54,7 @@ import {
   permissionsMissingToast,
   timeRangeMatcher,
 } from '../../utils/utils';
-import { REPORT_STATE, REPORT_DEFINITION_STATUS, REPORT_TYPE, FORMAT, TRIGGER_TYPE, SCHEDULE_TYPE } from 'server/routes/utils/constants';
+import { TRIGGER_TYPE } from '../../../../server/routes/utils/constants';
 
 interface ReportDetails {
   reportName: string;
@@ -65,13 +64,13 @@ interface ReportDetails {
   source: string;
   time_period: string;
   defaultFileFormat: string;
-  state: string;
+  state: string | undefined;
   reportHeader: string;
   reportFooter: string;
   triggerType: string;
   scheduleType: string;
   scheduleDetails: string;
-  configIds: Array<string>;
+  configIds: Array<string> | string; 
   title: string;
   textDescription: string;
   htmlDescription: string;
@@ -141,6 +140,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
     const toast = permissionsMissingToast(
       permissionsMissingActions.GENERATING_REPORT
     );
+    // @ts-ignore
     setToasts(toasts.concat(toast));
   };
 
@@ -162,6 +162,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
       iconType: 'alert',
       id: 'reportDetailsErrorToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(errorToast));
   };
 
@@ -183,6 +184,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
       ),
       id: 'onDemandDownloadSuccessToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(successToast));
   };
 
@@ -191,7 +193,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
   };
 
   const removeToast = (removedToast: { id: any; }) => {
-    setToasts(toasts.filter((toast) => toast.id !== removedToast.id));
+    setToasts(toasts.filter((toast : any) => toast.id !== removedToast.id));
   };
 
   const handleReportDetails = (e: React.SetStateAction<ReportDetails>) => {
@@ -208,7 +210,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
   };
 
   const parseTimePeriod = (queryUrl: string) => {
-    let [timeStringRegEx, fromDateString, toDateString] = queryUrl.match(
+    let [fromDateString, toDateString] : RegExpMatchArray | null = queryUrl.match(
       timeRangeMatcher
     );
 
@@ -225,7 +227,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
     );
   };
 
-  const getReportDetailsData = (report: ReportSchemaType) => {
+  const getReportDetailsData = (report: ReportSchemaType) : ReportDetails => {
     const {
       report_definition: reportDefinition,
       last_updated: lastUpdated,
@@ -276,7 +278,6 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
       htmlDescription: (htmlDescription !== '') ? htmlDescription : `\u2014`,
       queryUrl: queryUrl,
     };
-    console.log('report Details is', reportDetails);
     return reportDetails;
   };
 
@@ -307,7 +308,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
           },
         ]);
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log('Error when fetching report details: ', error);
         handleErrorToast();
       });
@@ -343,6 +344,45 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
       </EuiLink>
     );
   };
+
+  const triggerSection = 
+    reportDetails.triggerType === TRIGGER_TYPE.onDemand ? (
+      <ReportDetailsComponent
+      reportDetailsComponentTitle={i18n.translate(
+        'opensearch.reports.details.reportTrigger.reportType',
+        { defaultMessage: 'Report trigger' }
+      )}
+      reportDetailsComponentContent={reportDetails.triggerType}
+    />
+    ) : (
+      <EuiFlexGroup>
+        <ReportDetailsComponent
+          reportDetailsComponentTitle={i18n.translate(
+            'opensearch.reports.details.reportTrigger.reportType',
+            { defaultMessage: 'Report trigger' }
+          )}
+          reportDetailsComponentContent={reportDetails.triggerType}
+        />
+        <ReportDetailsComponent
+          reportDetailsComponentTitle={i18n.translate(
+            'opensearch.reports.details.reportTrigger.scheduleType',
+            { defaultMessage: 'Schedule type' }
+          )}
+          reportDetailsComponentContent={reportDetails.scheduleType}
+        />
+        <ReportDetailsComponent
+          reportDetailsComponentTitle={i18n.translate(
+            'opensearch.reports.details.reportTrigger.scheduleDetails',
+            { defaultMessage: 'Schedule details' }
+          )}
+          reportDetailsComponentContent={reportDetails.scheduleDetails}
+        />
+        <ReportDetailsComponent
+          reportDetailsComponentTitle={''}
+          reportDetailsComponentContent={''}
+        />
+      </EuiFlexGroup>
+    )
 
   const showLoadingModal = showLoading ? (
     <GenerateReportLoadingModal setShowLoading={setShowLoading} />
@@ -461,43 +501,18 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
                 reportDetails.reportFooter
               )}
             />
-            {/* <ReportDetailsComponent /> */}
-            {/* <ReportDetailsComponent /> */}
+            <ReportDetailsComponent
+              reportDetailsComponentTitle={''}
+              reportDetailsComponentContent={''}
+            />
+            <ReportDetailsComponent
+              reportDetailsComponentTitle={''}
+              reportDetailsComponentContent={''}
+            />
           </EuiFlexGroup>
           <EuiSpacer />
-          <EuiTitle>
-            <h3>
-              {i18n.translate('opensearch.reports.details.reportTrigger', {
-                defaultMessage: 'Report trigger',
-              })}
-            </h3>
-          </EuiTitle>
+          {triggerSection}
           <EuiSpacer />
-          <EuiFlexGroup>
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={i18n.translate(
-                'opensearch.reports.details.reportTrigger.reportType',
-                { defaultMessage: 'Report type' }
-              )}
-              reportDetailsComponentContent={reportDetails.triggerType}
-            />
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={i18n.translate(
-                'opensearch.reports.details.reportTrigger.scheduleType',
-                { defaultMessage: 'Schedule type' }
-              )}
-              reportDetailsComponentContent={reportDetails.scheduleType}
-            />
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={i18n.translate(
-                'opensearch.reports.details.reportTrigger.scheduleDetails',
-                { defaultMessage: 'Schedule details' }
-              )}
-              reportDetailsComponentContent={reportDetails.scheduleDetails}
-            />
-            <ReportDetailsComponent />
-          </EuiFlexGroup>
-          {/* <EuiSpacer />
           <EuiTitle>
             <h3>Notification settings</h3>
           </EuiTitle>
@@ -505,9 +520,9 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
           <EuiFlexGroup>
             <ReportDetailsComponent
               reportDetailsComponentTitle={'Config IDs'}
-              reportDetailsComponentContent={formatEmails(
+              reportDetailsComponentContent={
                 reportDetails.configIds
-              )}
+              }
             />
             <ReportDetailsComponent
               reportDetailsComponentTitle={'Title'}
@@ -523,7 +538,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
                 reportDetails.htmlDescription
               )}
             />
-          </EuiFlexGroup> */}
+          </EuiFlexGroup>
         </EuiPageContent>
         <EuiGlobalToastList
           toasts={toasts}

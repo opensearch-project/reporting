@@ -28,13 +28,17 @@ import 'babel-polyfill';
 import { i18n } from '@osd/i18n';
 import { HttpFetchOptions, HttpSetup } from '../../../../../src/core/public';
 
-export const fileFormatsUpper = {
+type fileFormatsOptions = {
+  [key: string]: string
+}
+
+export const fileFormatsUpper: fileFormatsOptions = {
   csv: 'CSV',
   pdf: 'PDF',
   png: 'PNG',
 };
 
-export const humanReadableDate = (date) => {
+export const humanReadableDate = (date: string | number | Date) => {
   let readableDate = new Date(date);
   return (
     readableDate.toDateString() + ' @ ' + readableDate.toLocaleTimeString()
@@ -55,7 +59,7 @@ export const getFileFormatPrefix = (fileFormat: string) => {
   return fileFormatPrefix;
 };
 
-export const addReportsTableContent = (data) => {
+export const addReportsTableContent = (data: string | any[]) => {
   let reportsTableItems = [];
   for (let index = 0; index < data.length; ++index) {
     let item = data[index];
@@ -110,7 +114,7 @@ export const addReportDefinitionsTableContent = (data: any) => {
   return reportDefinitionsTableItems;
 };
 
-export const removeDuplicatePdfFileFormat = (filename) => {
+export const removeDuplicatePdfFileFormat = (filename: string) => {
   return filename.substring(0, filename.length - 4);
 };
 
@@ -153,7 +157,7 @@ export const readStreamToFile = async (
 };
 
 export const generateReportFromDefinitionId = async (
-  reportDefinitionId,
+  reportDefinitionId: string,
   httpClient: HttpSetup
 ) => {
   let status = false;
@@ -188,7 +192,7 @@ export const generateReportFromDefinitionId = async (
 };
 
 export const generateReportById = async (
-  reportId,
+  reportId: string,
   httpClient: HttpSetup,
   handleSuccessToast,
   handleErrorToast,
