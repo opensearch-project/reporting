@@ -346,16 +346,6 @@ export function EditReportDefinition(props: { [x: string]: any; setBreadcrumbs?:
           showTriggerIntervalNaNError={showTriggerIntervalNaNError}
           showCronError={showCronError}
         />
-        {/* <EuiSpacer /> */}
-        {/* <ReportTrigger
-          edit={true}
-          editDefinitionId={reportDefinitionId}
-          reportDefinitionRequest={editReportDefinitionRequest}
-          httpClientProps={props['httpClient']}
-          timeRange={timeRange}
-          showTriggerIntervalNaNError={showTriggerIntervalNaNError}
-          showCronError={showCronError}
-        /> */}
         <EuiSpacer />
         <ReportDelivery
           edit={true}
