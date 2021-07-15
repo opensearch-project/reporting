@@ -46,8 +46,6 @@ import ReactMDE from 'react-mde';
 import { converter } from '../utils';
 
 const styles: CSS.Properties = {
-  // float: 'left',
-  // width: '100%',
   maxWidth: '800px',
 };
 
@@ -146,7 +144,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
         style={styles}
       >
         <EuiFieldText
-          placeholder={`New report from ${reportDefinitionRequest.report_params.report_name}`}
+          placeholder={'Enter notification message subject'}
           fullWidth={true}
           value={notificationSubject}
           onChange={handleNotificationSubject}
