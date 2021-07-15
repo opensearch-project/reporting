@@ -33,7 +33,6 @@ import org.opensearch.reportsscheduler.model.CreateReportDefinitionResponse
 import org.opensearch.action.ActionType
 import org.opensearch.action.support.ActionFilters
 import org.opensearch.client.Client
-import org.opensearch.client.node.NodeClient
 import org.opensearch.common.inject.Inject
 import org.opensearch.common.xcontent.NamedXContentRegistry
 import org.opensearch.transport.TransportService
@@ -60,6 +59,6 @@ internal class CreateReportDefinitionAction @Inject constructor(
      * {@inheritDoc}
      */
     override fun executeRequest(request: CreateReportDefinitionRequest, user: User?): CreateReportDefinitionResponse {
-        return ReportDefinitionActions.create(client as NodeClient, request, user)
+        return ReportDefinitionActions.create(request, user)
     }
 }
