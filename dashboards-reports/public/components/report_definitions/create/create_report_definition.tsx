@@ -38,7 +38,6 @@ import {
 } from '@elastic/eui';
 import { ReportSettings } from '../report_settings';
 import { ReportDelivery } from '../delivery';
-import { ReportTrigger } from '../report_trigger';
 import { generateReportFromDefinitionId } from '../../main/main_utils';
 import { converter } from '../utils';
 import {
@@ -160,12 +159,12 @@ export function CreateReport(props: { [x: string]: any; setBreadcrumbs?: any; ht
     setShowTriggerIntervalNaNError,
   ] = useState(false);
   const [showCronError, setShowCronError] = useState(false);
-  const [showEmailRecipientsError, setShowEmailRecipientsError] = useState(
+  const [showDeliveryChannelError, setShowDeliveryChannelError] = useState(
     false
   );
   const [
-    emailRecipientsErrorMessage,
-    setEmailRecipientsErrorMessage,
+    deliveryChannelError,
+    setDeliveryChannelError,
   ] = useState('');
   const [showTimeRangeError, setShowTimeRangeError] = useState(false);
 
@@ -272,8 +271,8 @@ export function CreateReport(props: { [x: string]: any; setBreadcrumbs?: any; ht
       timeRange,
       setShowTimeRangeError,
       setShowCronError,
-      setShowEmailRecipientsError,
-      setEmailRecipientsErrorMessage
+      setShowDeliveryChannelError,
+      setDeliveryChannelError
     ).then((response) => {
       error = response;
     });
@@ -371,8 +370,8 @@ export function CreateReport(props: { [x: string]: any; setBreadcrumbs?: any; ht
           editDefinitionId={''}
           httpClientProps={props['httpClient']}
           reportDefinitionRequest={createReportDefinitionRequest}
-          showEmailRecipientsError={showEmailRecipientsError}
-          emailRecipientsErrorMessage={emailRecipientsErrorMessage}
+          showDeliveryChannelError={showDeliveryChannelError}
+          deliveryChannelError={deliveryChannelError}
         />
         <EuiSpacer />
         <EuiFlexGroup justifyContent="flexEnd">

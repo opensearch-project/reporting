@@ -24,7 +24,7 @@
  * permissions and limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import {
   EuiFormRow,
   EuiPageHeader,
@@ -39,7 +39,7 @@ import {
   EuiButton,
 } from '@elastic/eui';
 import CSS from 'csstype';
-import { testMessageConfirmationMessage } from './delivery_constants';
+import { placeholderChannels, testMessageConfirmationMessage } from './delivery_constants';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 import { reportDefinitionParams } from '../create/create_report_definition';
 import ReactMDE from 'react-mde';
@@ -49,13 +49,15 @@ const styles: CSS.Properties = {
   maxWidth: '800px',
 };
 
+export let includeDelivery = false;
+
 export type ReportDeliveryProps = {
   edit: boolean;
   editDefinitionId: string;
   reportDefinitionRequest: reportDefinitionParams;
   httpClientProps: any;
-  showEmailRecipientsError: boolean;
-  emailRecipientsErrorMessage: string;
+  showDeliveryChannelError: boolean;
+  deliveryChannelError: string;
 };
 
 export function ReportDelivery(props: ReportDeliveryProps) {
@@ -64,6 +66,8 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     editDefinitionId,
     reportDefinitionRequest,
     httpClientProps,
+    showDeliveryChannelError,
+    deliveryChannelError
   } = props;
 
   const [sendNotification, setSendNotification] = useState(false);
@@ -78,18 +82,26 @@ export function ReportDelivery(props: ReportDeliveryProps) {
 
   const handleSendNotification = (e: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
     setSendNotification(e.target.checked);
+    includeDelivery = e.target.checked;
   }
 
   const handleSelectedChannels = (e: React.SetStateAction<never[]>) => {
     setSelectedChannels(e);
+    reportDefinitionRequest.delivery.configIds = [];
+    for (let i = 0; i < e.length; ++i) {
+      reportDefinitionRequest.delivery.configIds.push(e[i].label);
+    }
   }
 
   const handleNotificationSubject = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setNotificationSubject(e.target.value);
+    reportDefinitionRequest.delivery.title = e.target.value.toString();
   }
 
   const handleNotificationMessage = (e: React.SetStateAction<string>) => {
     setNotificationMessage(e);
+    reportDefinitionRequest.delivery.textDescription = e.toString();
+    reportDefinitionRequest.delivery.htmlDescription = converter.makeHtml(e.toString());
   }
 
   const handleTestMessageConfirmation = (e: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -112,29 +124,49 @@ export function ReportDelivery(props: ReportDeliveryProps) {
   }
 
   useEffect(() => {
+    // to replace with actual channels from notifications plugin
+    setChannels(placeholderChannels);
     if (edit) {
       httpClientProps
         .get(`../api/reporting/reportDefinitions/${editDefinitionId}`)
-        .then(async (response: { report_definition: { delivery: { delivery_type: string; }; }; }) => {
-          
+        .then(async (response: any) => {
+          if (response.report_definition.delivery.configIds.length > 0) {
+            // add config IDs
+            setSendNotification(true)
+            let delivery = response.report_definition.delivery;
+            let editChannelOptions = [];
+            for (let i = 0; i < delivery.configIds.length; ++i) {
+              let editChannelOption = {
+                label: delivery.configIds[i]
+              };
+              editChannelOptions.push(editChannelOption);
+            }
+            setSelectedChannels(editChannelOptions);
+            setNotificationSubject(delivery.title);
+            setNotificationMessage(delivery.textDescription);
+            reportDefinitionRequest.delivery = delivery;
+          }
         });
     } else {
-      // By default it's set to deliver to OpenSearch Dashboards user
       defaultCreateDeliveryParams();
-
     }
   }, []);
 
   const showNotificationsBody = sendNotification ? (
     <div>
       <EuiSpacer />
-      <EuiFormRow label='Channels'>
+      <EuiFormRow 
+        label='Channels'
+        isInvalid={showDeliveryChannelError}
+        error={deliveryChannelError}
+      >
         <EuiComboBox
           id='notificationsChannelSelect'
           placeholder={'Select channels'}
           options={channels}
           selectedOptions={selectedChannels}
           onChange={handleSelectedChannels}
+          isClearable={true}
         />
       </EuiFormRow>
       <EuiSpacer />

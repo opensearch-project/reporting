@@ -471,7 +471,7 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
         ? humanReadableScheduleDetails(data.trigger)
         : `\u2014`,
       status: reportDefinition.status,
-      configIds: (configIds.length > 0) ? configIds : `\u2014`,
+      configIds: (configIds.length > 0) ? configIds.toString() : `\u2014`,
       title: (title !== '') ? title : `\u2014`,
       textDescription: (textDescription !== '') ? textDescription : `\u2014`,
       htmlDescription: (htmlDescription !== '') ? htmlDescription : `\u2014`

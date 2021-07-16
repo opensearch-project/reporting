@@ -272,7 +272,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
       triggerType: triggerType,
       scheduleType: triggerParams ? triggerParams.schedule_type : `\u2014`,
       scheduleDetails: `\u2014`,
-      configIds: (configIds.length > 0) ? configIds : `\u2014`,
+      configIds: (configIds.length > 0) ? configIds.toString() : `\u2014`,
       title: (title !== '') ? title : `\u2014`,
       textDescription: (textDescription !== '') ? textDescription : `\u2014`,
       htmlDescription: (htmlDescription !== '') ? htmlDescription : `\u2014`,

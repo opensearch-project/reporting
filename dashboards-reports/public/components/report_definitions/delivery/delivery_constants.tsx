@@ -32,3 +32,13 @@ export const testMessageConfirmationMessage = (
     <EuiIcon type='check'/> Test message sent to selected channels. If no test message is received, try again or check your channel settings in Notifications.
   </EuiText>
 );
+
+// Remove after connecting to backend
+export const placeholderChannels = [
+  {
+    label: 'Chime'
+  },
+  {
+    label: 'Slack'
+  }
+]
