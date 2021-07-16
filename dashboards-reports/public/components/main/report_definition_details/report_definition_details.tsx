@@ -305,11 +305,11 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
     setToasts(toasts.filter((toast: any) => toast.id !== removedToast.id));
   };
 
-  const handleReportDefinitionDetails = (e: React.SetStateAction<ReportDefinitionDetails>) => {
+  const handleReportDefinitionDetails = (e: ReportDefinitionDetails) => {
     setReportDefinitionDetails(e);
   };
 
-  const handleReportDefinitionRawResponse = (e: React.SetStateAction<{}>) => {
+  const handleReportDefinitionRawResponse = (e: {} ) => {
     setReportDefinitionRawResponse(e);
   };
 

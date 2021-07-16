@@ -237,7 +237,7 @@ export function CreateReport(props: { [x: string]: any; setBreadcrumbs?: any; ht
     addInvalidTimeRangeToastHandler();
   };
 
-  const removeToast = (removedToast: { id: any; }) => {
+  const removeToast = (removedToast: { id: string; }) => {
     setToasts(toasts.filter((toast: any) => toast.id !== removedToast.id));
   };
 
@@ -299,7 +299,7 @@ export function CreateReport(props: { [x: string]: any; setBreadcrumbs?: any; ht
             'Content-Type': 'application/json',
           },
         })
-        .then(async (resp: { scheduler_response: { reportDefinitionId: any; }; }) => {
+        .then(async (resp: { scheduler_response: { reportDefinitionId: string; }; }) => {
           //TODO: consider handle the on demand report generation from server side instead
           if (metadata.trigger.trigger_type === 'On demand') {
             const reportDefinitionId =

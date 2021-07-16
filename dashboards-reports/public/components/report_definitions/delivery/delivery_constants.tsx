@@ -33,7 +33,7 @@ export const testMessageConfirmationMessage = (
   </EuiText>
 );
 
-// Remove after connecting to backend
+// TODO: Remove and replace references after connecting to backend
 export const placeholderChannels = [
   {
     label: 'Chime',
