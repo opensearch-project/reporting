@@ -73,6 +73,8 @@ internal object ReportDefinitionActions {
         val docId = ReportDefinitionsIndex.createReportDefinition(reportDefinitionDetails)
         docId ?: throw OpenSearchStatusException("Report Definition Creation failed",
             RestStatus.INTERNAL_SERVER_ERROR)
+        if (request.reportDefinition.delivery != null)
+            NotificationsActions.send(request.reportDefinition.delivery, docId)
         return CreateReportDefinitionResponse(docId)
     }
 

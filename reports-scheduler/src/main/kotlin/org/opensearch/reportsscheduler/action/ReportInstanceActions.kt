@@ -27,6 +27,7 @@
 
 package org.opensearch.reportsscheduler.action
 
+import org.opensearch.OpenSearchStatusException
 import org.opensearch.commons.authuser.User
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
 import org.opensearch.reportsscheduler.index.ReportDefinitionsIndex
@@ -48,8 +49,6 @@ import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusResponse
 import org.opensearch.reportsscheduler.security.UserAccessManager
 import org.opensearch.reportsscheduler.settings.PluginSettings
 import org.opensearch.reportsscheduler.util.logger
-import org.opensearch.OpenSearchStatusException
-import org.opensearch.client.node.NodeClient
 import org.opensearch.rest.RestStatus
 import java.time.Instant
 import kotlin.random.Random
@@ -94,11 +93,7 @@ internal object ReportInstanceActions {
      * @param request [OnDemandReportCreateRequest] object
      * @return [OnDemandReportCreateResponse]
      */
-    fun createOnDemandFromDefinition(
-        client: NodeClient,
-        request: OnDemandReportCreateRequest,
-        user: User?
-    ): OnDemandReportCreateResponse {
+    fun createOnDemandFromDefinition(request: OnDemandReportCreateRequest, user: User?): OnDemandReportCreateResponse {
         log.info("$LOG_PREFIX:ReportInstance-createOnDemandFromDefinition ${request.reportDefinitionId}")
         UserAccessManager.validateUser(user)
         val currentTime = Instant.now()
@@ -130,9 +125,9 @@ internal object ReportInstanceActions {
             Metrics.REPORT_FROM_DEFINITION_ID_SYSTEM_ERROR.counter.increment()
             throw OpenSearchStatusException("Report Instance Creation failed", RestStatus.INTERNAL_SERVER_ERROR)
         }
-        val reportInstanceCopy = reportInstance.copy(id = docId)
         if (reportDefinitionDetails.reportDefinition.delivery != null)
-            NotificationsActions.send(client, reportDefinitionDetails.reportDefinition.delivery, docId)
+            NotificationsActions.send(reportDefinitionDetails.reportDefinition.delivery, docId)
+        val reportInstanceCopy = reportInstance.copy(id = docId)
         return OnDemandReportCreateResponse(reportInstanceCopy, UserAccessManager.hasAllInfoAccess(user))
     }
 

@@ -38,6 +38,7 @@ import org.opensearch.reportsscheduler.util.logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.opensearch.reportsscheduler.action.NotificationsActions
 import java.time.Instant
 
 internal object ReportDefinitionJobRunner : ScheduledJobRunner {
@@ -67,6 +68,8 @@ internal object ReportDefinitionJobRunner : ScheduledJobRunner {
             if (id == null) {
                 log.warn("$LOG_PREFIX:runJob-job creation failed for $reportInstance")
             } else {
+                if (reportDefinitionDetails.reportDefinition.delivery != null)
+                    NotificationsActions.send(reportDefinitionDetails.reportDefinition.delivery, id)
                 log.info("$LOG_PREFIX:runJob-created job:$id")
             }
         }

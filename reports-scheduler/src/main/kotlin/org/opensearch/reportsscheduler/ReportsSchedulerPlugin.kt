@@ -58,6 +58,7 @@ import org.opensearch.reportsscheduler.settings.PluginSettings
 import org.opensearch.action.ActionRequest
 import org.opensearch.action.ActionResponse
 import org.opensearch.client.Client
+import org.opensearch.client.node.NodeClient
 import org.opensearch.cluster.metadata.IndexNameExpressionResolver
 import org.opensearch.cluster.node.DiscoveryNodes
 import org.opensearch.cluster.service.ClusterService
@@ -72,6 +73,7 @@ import org.opensearch.env.Environment
 import org.opensearch.env.NodeEnvironment
 import org.opensearch.plugins.ActionPlugin
 import org.opensearch.plugins.Plugin
+import org.opensearch.reportsscheduler.action.NotificationsActions
 import org.opensearch.repositories.RepositoriesService
 import org.opensearch.rest.RestController
 import org.opensearch.rest.RestHandler
@@ -122,6 +124,7 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, JobSchedulerExtension {
         PluginSettings.addSettingsUpdateConsumer(clusterService)
         ReportDefinitionsIndex.initialize(client, clusterService)
         ReportInstancesIndex.initialize(client, clusterService)
+        NotificationsActions.initialize(client as NodeClient)
         return emptyList()
     }
 
