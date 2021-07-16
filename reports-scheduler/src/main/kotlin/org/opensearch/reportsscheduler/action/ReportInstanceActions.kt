@@ -46,6 +46,7 @@ import org.opensearch.reportsscheduler.model.ReportInstance
 import org.opensearch.reportsscheduler.model.ReportInstance.Status
 import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusRequest
 import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusResponse
+import org.opensearch.reportsscheduler.notifications.NotificationsActions
 import org.opensearch.reportsscheduler.security.UserAccessManager
 import org.opensearch.reportsscheduler.settings.PluginSettings
 import org.opensearch.reportsscheduler.util.logger

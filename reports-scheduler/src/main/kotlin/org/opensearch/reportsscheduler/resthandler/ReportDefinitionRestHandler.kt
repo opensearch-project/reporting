@@ -41,7 +41,6 @@ import org.opensearch.reportsscheduler.model.RestTag.REPORT_DEFINITION_ID_FIELD
 import org.opensearch.reportsscheduler.model.UpdateReportDefinitionRequest
 import org.opensearch.reportsscheduler.util.contentParserNextToken
 import org.opensearch.client.node.NodeClient
-import org.opensearch.reportsscheduler.action.NotificationsActions
 import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
 import org.opensearch.rest.BytesRestResponse
 import org.opensearch.rest.RestHandler.Route

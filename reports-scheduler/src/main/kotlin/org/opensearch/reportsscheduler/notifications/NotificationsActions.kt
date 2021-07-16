@@ -9,12 +9,10 @@
  * GitHub history for details.
  */
 
-package org.opensearch.reportsscheduler.action
+package org.opensearch.reportsscheduler.notifications
 
 import org.opensearch.action.ActionListener
-import org.opensearch.client.Client
 import org.opensearch.client.node.NodeClient
-import org.opensearch.cluster.service.ClusterService
 import org.opensearch.commons.notifications.NotificationsPluginInterface
 import org.opensearch.commons.notifications.action.SendNotificationResponse
 import org.opensearch.commons.notifications.model.ChannelMessage
@@ -24,7 +22,6 @@ import org.opensearch.commons.notifications.model.SeverityType
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
 import org.opensearch.reportsscheduler.model.CreateReportDefinitionResponse
 import org.opensearch.reportsscheduler.model.ReportDefinition
-import org.opensearch.reportsscheduler.util.SecureIndexClient
 import org.opensearch.reportsscheduler.util.logger
 
 /**
@@ -61,7 +58,7 @@ internal object NotificationsActions {
                 }
 
                 override fun onFailure(p0: java.lang.Exception) {
-                    log.error("$LOG_PREFIX:NotificationsActions-send error:$p0")
+                    log.error("$LOG_PREFIX:NotificationsActions-send Error:$p0")
                 }
             }
         )
