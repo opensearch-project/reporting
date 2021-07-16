@@ -27,9 +27,6 @@
 
 package org.opensearch.reportsscheduler.scheduler
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.opensearch.jobscheduler.spi.JobExecutionContext
 import org.opensearch.jobscheduler.spi.ScheduledJobParameter
 import org.opensearch.jobscheduler.spi.ScheduledJobRunner
@@ -39,6 +36,9 @@ import org.opensearch.reportsscheduler.model.ReportDefinitionDetails
 import org.opensearch.reportsscheduler.model.ReportInstance
 import org.opensearch.reportsscheduler.notifications.NotificationsActions
 import org.opensearch.reportsscheduler.util.logger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.Instant
 
 internal object ReportDefinitionJobRunner : ScheduledJobRunner {
@@ -68,9 +68,9 @@ internal object ReportDefinitionJobRunner : ScheduledJobRunner {
             if (id == null) {
                 log.warn("$LOG_PREFIX:runJob-job creation failed for $reportInstance")
             } else {
+                log.info("$LOG_PREFIX:runJob-created job:$id")
                 if (reportDefinitionDetails.reportDefinition.delivery != null)
                     NotificationsActions.send(reportDefinitionDetails.reportDefinition.delivery, id)
-                log.info("$LOG_PREFIX:runJob-created job:$id")
             }
         }
     }

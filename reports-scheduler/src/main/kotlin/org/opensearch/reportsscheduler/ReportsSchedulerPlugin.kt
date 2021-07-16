@@ -191,38 +191,17 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, JobSchedulerExtension {
      */
     override fun getActions(): List<ActionPlugin.ActionHandler<out ActionRequest, out ActionResponse>> {
         return listOf(
-            ActionPlugin.ActionHandler(
-                CreateReportDefinitionAction.ACTION_TYPE,
-                CreateReportDefinitionAction::class.java
-            ),
-            ActionPlugin.ActionHandler(
-                DeleteReportDefinitionAction.ACTION_TYPE,
-                DeleteReportDefinitionAction::class.java
-            ),
-            ActionPlugin.ActionHandler(
-                GetAllReportDefinitionsAction.ACTION_TYPE,
-                GetAllReportDefinitionsAction::class.java
-            ),
-            ActionPlugin.ActionHandler(
-                GetAllReportInstancesAction.ACTION_TYPE,
-                GetAllReportInstancesAction::class.java
-            ),
+            ActionPlugin.ActionHandler(CreateReportDefinitionAction.ACTION_TYPE, CreateReportDefinitionAction::class.java),
+            ActionPlugin.ActionHandler(DeleteReportDefinitionAction.ACTION_TYPE, DeleteReportDefinitionAction::class.java),
+            ActionPlugin.ActionHandler(GetAllReportDefinitionsAction.ACTION_TYPE, GetAllReportDefinitionsAction::class.java),
+            ActionPlugin.ActionHandler(GetAllReportInstancesAction.ACTION_TYPE, GetAllReportInstancesAction::class.java),
             ActionPlugin.ActionHandler(GetReportDefinitionAction.ACTION_TYPE, GetReportDefinitionAction::class.java),
             ActionPlugin.ActionHandler(GetReportInstanceAction.ACTION_TYPE, GetReportInstanceAction::class.java),
-            ActionPlugin.ActionHandler(
-                InContextReportCreateAction.ACTION_TYPE,
-                InContextReportCreateAction::class.java
-            ),
+            ActionPlugin.ActionHandler(InContextReportCreateAction.ACTION_TYPE, InContextReportCreateAction::class.java),
             ActionPlugin.ActionHandler(OnDemandReportCreateAction.ACTION_TYPE, OnDemandReportCreateAction::class.java),
             ActionPlugin.ActionHandler(PollReportInstanceAction.ACTION_TYPE, PollReportInstanceAction::class.java),
-            ActionPlugin.ActionHandler(
-                UpdateReportDefinitionAction.ACTION_TYPE,
-                UpdateReportDefinitionAction::class.java
-            ),
-            ActionPlugin.ActionHandler(
-                UpdateReportInstanceStatusAction.ACTION_TYPE,
-                UpdateReportInstanceStatusAction::class.java
-            )
+            ActionPlugin.ActionHandler(UpdateReportDefinitionAction.ACTION_TYPE, UpdateReportDefinitionAction::class.java),
+            ActionPlugin.ActionHandler(UpdateReportInstanceStatusAction.ACTION_TYPE, UpdateReportInstanceStatusAction::class.java)
         )
     }
 }
