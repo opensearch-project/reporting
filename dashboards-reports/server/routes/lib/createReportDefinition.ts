@@ -45,9 +45,6 @@ export const createReportDefinition = async (
   const reqBody = {
     reportDefinition: uiToBackendReportDefinition(reportDefinition),
   };
-  console.log('!!')
-  console.log(reqBody)
-  console.log(JSON.stringify(reqBody, null, 2))
   const opensearchResp = await opensearchReportsClient.callAsCurrentUser(
     'opensearch_reports.createReportDefinition',
     {
