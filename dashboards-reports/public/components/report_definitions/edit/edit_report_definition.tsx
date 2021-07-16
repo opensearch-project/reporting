@@ -74,12 +74,12 @@ export function EditReportDefinition(props: { [x: string]: any; setBreadcrumbs?:
     setShowTriggerIntervalNaNError,
   ] = useState(false);
   const [showCronError, setShowCronError] = useState(false);
-  const [showEmailRecipientsError, setShowEmailRecipientsError] = useState(
+  const [showDeliveryChannelError, setShowDeliveryChannelError] = useState(
     false
   );
   const [
-    emailRecipientsErrorMessage,
-    setEmailRecipientsErrorMessage,
+    deliveryChannelError,
+    setDeliveryChannelError,
   ] = useState('');
   const [showTimeRangeError, setShowTimeRangeError] = useState(false);
 
@@ -262,8 +262,8 @@ export function EditReportDefinition(props: { [x: string]: any; setBreadcrumbs?:
       timeRange,
       setShowTimeRangeError,
       setShowCronError,
-      setShowEmailRecipientsError,
-      setEmailRecipientsErrorMessage
+      setShowDeliveryChannelError,
+      setDeliveryChannelError
     ).then((response) => {
       error = response;
     });
@@ -352,9 +352,8 @@ export function EditReportDefinition(props: { [x: string]: any; setBreadcrumbs?:
           editDefinitionId={reportDefinitionId}
           reportDefinitionRequest={editReportDefinitionRequest}
           httpClientProps={props['httpClient']}
-          timeRange={timeRange}
-          showEmailRecipientsError={showEmailRecipientsError}
-          emailRecipientsErrorMessage={emailRecipientsErrorMessage}
+          showDeliveryChannelError={showDeliveryChannelError}
+          deliveryChannelError={deliveryChannelError}
         />
         <EuiSpacer />
         <EuiFlexGroup justifyContent="flexEnd">

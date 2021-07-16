@@ -272,7 +272,7 @@ export function CreateReport(props: { [x: string]: any; setBreadcrumbs?: any; ht
       setShowTimeRangeError,
       setShowCronError,
       setShowDeliveryChannelError,
-      setDeliveryChannelError
+      setDeliveryChannelError,
     ).then((response) => {
       error = response;
     });

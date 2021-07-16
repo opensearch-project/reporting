@@ -24,7 +24,7 @@
  * permissions and limitations under the License.
  */
 
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   EuiFormRow,
   EuiPageHeader,
@@ -67,7 +67,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     reportDefinitionRequest,
     httpClientProps,
     showDeliveryChannelError,
-    deliveryChannelError
+    deliveryChannelError,
   } = props;
 
   const [sendNotification, setSendNotification] = useState(false);
@@ -80,31 +80,31 @@ export function ReportDelivery(props: ReportDeliveryProps) {
   );
   const [testMessageConfirmation, setTestMessageConfirmation] = useState('');
 
-  const handleSendNotification = (e: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
+  const handleSendNotification = (e: { target: { checked: boolean }; }) => {
     setSendNotification(e.target.checked);
     includeDelivery = e.target.checked;
   }
 
-  const handleSelectedChannels = (e: React.SetStateAction<never[]>) => {
+  const handleSelectedChannels = (e: Array<{ label: string, id: string}>) => {
     setSelectedChannels(e);
     reportDefinitionRequest.delivery.configIds = [];
     for (let i = 0; i < e.length; ++i) {
-      reportDefinitionRequest.delivery.configIds.push(e[i].label);
+      reportDefinitionRequest.delivery.configIds.push(e[i].id);
     }
   }
 
-  const handleNotificationSubject = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+  const handleNotificationSubject = (e: { target: { value: string }; }) => {
     setNotificationSubject(e.target.value);
-    reportDefinitionRequest.delivery.title = e.target.value.toString();
+    reportDefinitionRequest.delivery.title = e.target.value;
   }
 
-  const handleNotificationMessage = (e: React.SetStateAction<string>) => {
+  const handleNotificationMessage = (e: string) => {
     setNotificationMessage(e);
     reportDefinitionRequest.delivery.textDescription = e.toString();
     reportDefinitionRequest.delivery.htmlDescription = converter.makeHtml(e.toString());
   }
 
-  const handleTestMessageConfirmation = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+  const handleTestMessageConfirmation = (e: string) => {
     setTestMessageConfirmation(e);
   }
 
@@ -132,14 +132,20 @@ export function ReportDelivery(props: ReportDeliveryProps) {
         .then(async (response: any) => {
           if (response.report_definition.delivery.configIds.length > 0) {
             // add config IDs
-            setSendNotification(true)
+            handleSendNotification({target: {checked: true}});
             let delivery = response.report_definition.delivery;
             let editChannelOptions = [];
             for (let i = 0; i < delivery.configIds.length; ++i) {
-              let editChannelOption = {
-                label: delivery.configIds[i]
-              };
-              editChannelOptions.push(editChannelOption);
+              for (let j = 0; j < placeholderChannels.length; ++j) {
+                if (delivery.configIds[i] === placeholderChannels[j].id) {
+                  let editChannelOption = {
+                    label: placeholderChannels[j].label,
+                    id: placeholderChannels[j].id
+                  };
+                  
+                  editChannelOptions.push(editChannelOption);                  
+                }
+              }
             }
             setSelectedChannels(editChannelOptions);
             setNotificationSubject(delivery.title);

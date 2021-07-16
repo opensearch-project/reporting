@@ -50,6 +50,7 @@ import {
   trimAndRenderAsText,
 } from '../report_details/report_details';
 import {
+  displayDeliveryChannels,
   fileFormatsUpper,
   generateReportFromDefinitionId,
 } from '../main_utils';
@@ -61,6 +62,7 @@ import {
   permissionsMissingActions,
 } from '../../utils/utils';
 import { GenerateReportLoadingModal } from '../loading_modal';
+import { placeholderChannels } from '../../report_definitions/delivery/delivery_constants';
 
 const ON_DEMAND = 'On demand';
 
@@ -299,7 +301,7 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
     addErrorDeletingReportDefinitionToastHandler();
   };
 
-  const removeToast = (removedToast: { id: any; }) => {
+  const removeToast = (removedToast: { id: string; }) => {
     setToasts(toasts.filter((toast: any) => toast.id !== removedToast.id));
   };
 
@@ -408,6 +410,18 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
     return scheduleDetails;
   };
 
+  // const displayDeliveryChannels = (configIds: Array<string>) => {
+  //   let displayChannels = [];
+  //   for (let i = 0; i < configIds.length; ++i) {
+  //     for (let j = 0; j < placeholderChannels.length; ++j) {
+  //       if (configIds[i] === placeholderChannels[j].id) {
+  //         displayChannels.push(placeholderChannels[i].label);
+  //       }
+  //     }
+  //   }
+  //   return displayChannels.toString();
+  // }
+
   const getReportDefinitionDetailsMetadata = (data: ReportDefinitionSchemaType) : ReportDefinitionDetails => {
     const reportDefinition: ReportDefinitionSchemaType = data;
     const {
@@ -471,7 +485,7 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
         ? humanReadableScheduleDetails(data.trigger)
         : `\u2014`,
       status: reportDefinition.status,
-      configIds: (configIds.length > 0) ? configIds.toString() : `\u2014`,
+      configIds: (configIds.length > 0) ? displayDeliveryChannels(configIds) : `\u2014`,
       title: (title !== '') ? title : `\u2014`,
       textDescription: (textDescription !== '') ? textDescription : `\u2014`,
       htmlDescription: (htmlDescription !== '') ? htmlDescription : `\u2014`

@@ -27,6 +27,19 @@
 import 'babel-polyfill';
 import { i18n } from '@osd/i18n';
 import { HttpFetchOptions, HttpSetup } from '../../../../../src/core/public';
+import { placeholderChannels } from '../report_definitions/delivery/delivery_constants';
+
+export const displayDeliveryChannels = (configIds: Array<string>) => {
+  let displayChannels = [];
+  for (let i = 0; i < configIds.length; ++i) {
+    for (let j = 0; j < placeholderChannels.length; ++j) {
+      if (configIds[i] === placeholderChannels[j].id) {
+        displayChannels.push(placeholderChannels[i].label);
+      }
+    }
+  }
+  return displayChannels.toString();
+}
 
 type fileFormatsOptions = {
   [key: string]: string

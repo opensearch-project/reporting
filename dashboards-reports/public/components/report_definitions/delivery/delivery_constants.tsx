@@ -36,9 +36,11 @@ export const testMessageConfirmationMessage = (
 // Remove after connecting to backend
 export const placeholderChannels = [
   {
-    label: 'Chime'
+    label: 'Chime',
+    id: 'abcdefghijk'
   },
   {
-    label: 'Slack'
+    label: 'Slack',
+    id: 'zyxwvutsrq'
   }
 ]

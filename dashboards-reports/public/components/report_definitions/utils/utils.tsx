@@ -41,7 +41,7 @@ export const definitionInputValidation = async (
   setShowTimeRangeError,
   setShowCronError,
   setShowDeliveryChannelError,
-  setDeliveryChannelsErrorMessage
+  setDeliveryChannelsErrorMessage, 
 ) => {
   // check report name
   // allow a-z, A-Z, 0-9, (), [], ',' - and _ and spaces
