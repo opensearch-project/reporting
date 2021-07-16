@@ -120,17 +120,6 @@ const getBackendDelivery = (
     textDescription: textDescription,
     htmlDescription: htmlDescription
   }
-  // switch (deliveryType) {
-  //   case DELIVERY_TYPE.opensearchDashboardsUser:
-  //     break;
-
-  //   case DELIVERY_TYPE.channel:
-  //     res = {
-  //       ...(deliveryParams as ChannelSchemaType),
-  //       deliveryFormat: BACKEND_DELIVERY_FORMAT.embedded, //TODO: now we only support one delivery format
-  //     };
-  //     break;
-  // }
   return res;
 };
 
