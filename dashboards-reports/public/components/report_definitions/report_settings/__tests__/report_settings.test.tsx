@@ -46,8 +46,10 @@ const emptyRequest = {
     },
   },
   delivery: {
-    delivery_type: '',
-    delivery_params: {},
+    configIds: [],
+    title: '',
+    textDescription: '',
+    htmlDescription: ''
   },
   trigger: {
     trigger_type: '',
@@ -150,12 +152,25 @@ describe('<ReportSettings /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
-        trigger_params: {},
+        trigger_params: {
+          schedule_type: 'Recurring',
+          enabled: false,
+          enabled_time: 1234567890,
+          schedule: {
+            interval: {
+              period: 1,
+              start_time: 123456789,
+              unit: 'Days'
+            }
+          }
+        },
       },
     };
 
@@ -195,12 +210,25 @@ describe('<ReportSettings /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
-        trigger_params: {},
+        trigger_params: {
+          schedule_type: 'Recurring',
+          enabled: false,
+          enabled_time: 1234567890,
+          schedule: {
+            interval: {
+              period: 1,
+              start_time: 123456789,
+              unit: 'Days'
+            }
+          }
+        },
       },
     };
 
@@ -243,12 +271,25 @@ describe('<ReportSettings /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
-        trigger_params: {},
+        trigger_params: {
+          schedule_type: 'Recurring',
+          enabled: false,
+          enabled_time: 1234567890,
+          schedule: {
+            interval: {
+              period: 1,
+              start_time: 123456789,
+              unit: 'Days'
+            }
+          }
+        },
       },
     };
 
@@ -296,7 +337,18 @@ describe('<ReportSettings /> panel', () => {
       },
       trigger: {
         trigger_type: 'Schedule',
-        trigger_params: {},
+        trigger_params: {
+          schedule_type: 'Recurring',
+          enabled: false,
+          enabled_time: 1234567890,
+          schedule: {
+            interval: {
+              period: 1,
+              start_time: 123456789,
+              unit: 'Days'
+            }
+          }
+        },
       },
     };
 
@@ -339,12 +391,25 @@ describe('<ReportSettings /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
-        trigger_params: {},
+        trigger_params: {
+          schedule_type: 'Recurring',
+          enabled: false,
+          enabled_time: 1234567890,
+          schedule: {
+            interval: {
+              period: 1,
+              start_time: 123456789,
+              unit: 'Days'
+            }
+          }
+        },
       },
     };
 
@@ -395,12 +460,25 @@ describe('<ReportSettings /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
-        trigger_params: {},
+        trigger_params: {
+          schedule_type: 'Recurring',
+          enabled: false,
+          enabled_time: 1234567890,
+          schedule: {
+            interval: {
+              period: 1,
+              start_time: 123456789,
+              unit: 'Days'
+            }
+          }
+        },
       },
     };
 
@@ -453,12 +531,25 @@ describe('<ReportSettings /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
-        trigger_params: {},
+        trigger_params: {
+          schedule_type: 'Recurring',
+          enabled: false,
+          enabled_time: 1234567890,
+          schedule: {
+            interval: {
+              period: 1,
+              start_time: 123456789,
+              unit: 'Days'
+            }
+          }
+        },
       },
     };
 
@@ -513,8 +604,10 @@ describe('<ReportSettings /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
@@ -561,12 +654,25 @@ describe('<ReportSettings /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
-        trigger_params: {},
+        trigger_params: {
+          schedule_type: 'Recurring',
+          enabled: false,
+          enabled_time: 1234567890,
+          schedule: {
+            interval: {
+              period: 1,
+              start_time: 123456789,
+              unit: 'Days'
+            }
+          }
+        },
       },
     };
 
@@ -609,12 +715,25 @@ describe('<ReportSettings /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
-        trigger_params: {},
+        trigger_params: {
+          schedule_type: 'Recurring',
+          enabled: false,
+          enabled_time: 1234567890,
+          schedule: {
+            interval: {
+              period: 1,
+              start_time: 123456789,
+              unit: 'Days'
+            }
+          }
+        },
       },
     };
 
@@ -666,12 +785,25 @@ describe('<ReportSettings /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
-        trigger_params: {},
+        trigger_params: {
+          schedule_type: 'Recurring',
+          enabled: false,
+          enabled_time: 1234567890,
+          schedule: {
+            interval: {
+              period: 1,
+              start_time: 123456789,
+              unit: 'Days'
+            }
+          }
+        },
       },
     };
 

@@ -68,7 +68,7 @@ fun constructReportDefinitionRequest(
                         "title":"title",
                         "textDescription":"textDescription",
                         "htmlDescription":"optional htmlDescription",
-                        "channelIds":["optional_channelIds"]
+                        "configIds":["optional_configIds"]
                     }
                 }
             }

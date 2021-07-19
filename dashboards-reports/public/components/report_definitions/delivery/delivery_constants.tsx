@@ -9,6 +9,9 @@
  * GitHub history for details.
  */
 
+import React from "react";
+import { EuiIcon, EuiText } from '@elastic/eui'
+
 /*
  * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -24,15 +27,20 @@
  * permissions and limitations under the License.
  */
 
-export const EMAIL_RECIPIENT_OPTIONS = [];
+export const testMessageConfirmationMessage = (
+  <EuiText size='s'>
+    <EuiIcon type='check'/> Test message sent to selected channels. If no test message is received, try again or check your channel settings in Notifications.
+  </EuiText>
+);
 
-export const DELIVERY_TYPE_OPTIONS = [
+// TODO: Remove and replace references after connecting to backend
+export const placeholderChannels = [
   {
-    id: 'OpenSearch Dashboards user',
-    label: 'OpenSearch Dashboards user',
+    label: 'Chime',
+    id: 'abcdefghijk'
   },
   {
-    id: 'Channel',
-    label: 'Email',
-  },
-];
+    label: 'Slack',
+    id: 'zyxwvutsrq'
+  }
+]

@@ -50,6 +50,7 @@ import {
   trimAndRenderAsText,
 } from '../report_details/report_details';
 import {
+  displayDeliveryChannels,
   fileFormatsUpper,
   generateReportFromDefinitionId,
 } from '../main_utils';
@@ -61,25 +62,64 @@ import {
   permissionsMissingActions,
 } from '../../utils/utils';
 import { GenerateReportLoadingModal } from '../loading_modal';
+import { placeholderChannels } from '../../report_definitions/delivery/delivery_constants';
 
 const ON_DEMAND = 'On demand';
 
-export function ReportDefinitionDetails(props) {
-  const [reportDefinitionDetails, setReportDefinitionDetails] = useState({});
+interface ReportDefinitionDetails {
+  name: string;
+  description: string;
+  created: string;
+  lastUpdated: string;
+  source: string;
+  timePeriod: string;
+  fileFormat: string;
+  status: string | undefined;
+  reportHeader: string;
+  reportFooter: string;
+  triggerType: string;
+  scheduleDetails: string;
+  configIds: Array<string> | string;
+  title: string;
+  textDescription: string;
+  htmlDescription: string;
+  baseUrl: string;
+}
+
+export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: any; httpClient?: any; }) {
+  const [reportDefinitionDetails, setReportDefinitionDetails] = useState<ReportDefinitionDetails>({
+    name: '',
+    description: '',
+    created: '',
+    lastUpdated: '',
+    source: '',
+    timePeriod: '',
+    fileFormat: '',
+    status: '',
+    reportHeader: '',
+    reportFooter: '',
+    triggerType: '',
+    scheduleDetails: '',
+    configIds: [],
+    title: '',
+    textDescription: '',
+    htmlDescription: '',
+    baseUrl: ''
+  });
   const [
     reportDefinitionRawResponse,
     setReportDefinitionRawResponse,
-  ] = useState({});
+  ] = useState<any>({});
   const [toasts, setToasts] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const reportDefinitionId = props.match['params']['reportDefinitionId'];
 
-  const handleLoading = (e) => {
+  const handleLoading = (e: boolean | ((prevState: boolean) => boolean)) => {
     setShowLoading(e);
   };
 
-  const handleShowDeleteModal = (e) => {
+  const handleShowDeleteModal = (e: boolean | ((prevState: boolean) => boolean)) => {
     setShowDeleteModal(e);
   };
 
@@ -87,6 +127,7 @@ export function ReportDefinitionDetails(props) {
     const toast = permissionsMissingToast(
       permissionsMissingActions.CHANGE_SCHEDULE_STATUS
     );
+    // @ts-ignore
     setToasts(toasts.concat(toast));
   };
 
@@ -94,6 +135,7 @@ export function ReportDefinitionDetails(props) {
     const toast = permissionsMissingToast(
       permissionsMissingActions.DELETE_REPORT_DEFINITION
     );
+    // @ts-ignore
     setToasts(toasts.concat(toast));
   };
 
@@ -105,6 +147,7 @@ export function ReportDefinitionDetails(props) {
     const toast = permissionsMissingToast(
       permissionsMissingActions.GENERATING_REPORT
     );
+    // @ts-ignore
     setToasts(toasts.concat(toast));
   };
 
@@ -118,6 +161,7 @@ export function ReportDefinitionDetails(props) {
       iconType: 'alert',
       id: 'reportDefinitionDetailsErrorToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(errorToast));
   };
 
@@ -135,6 +179,7 @@ export function ReportDefinitionDetails(props) {
       iconType: 'check',
       id: 'generateReportSuccessToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(successToast));
   };
 
@@ -152,6 +197,7 @@ export function ReportDefinitionDetails(props) {
       iconType: 'alert',
       id: 'generateReportErrorToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(errorToast));
   };
 
@@ -173,6 +219,7 @@ export function ReportDefinitionDetails(props) {
       iconType: 'check',
       id: 'successEnableToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(successToast));
   };
 
@@ -186,6 +233,7 @@ export function ReportDefinitionDetails(props) {
       iconType: 'alert',
       id: 'errorToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(errorToast));
   };
 
@@ -199,6 +247,7 @@ export function ReportDefinitionDetails(props) {
       iconType: 'check',
       id: 'successDisableToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(successToast));
   };
 
@@ -220,6 +269,7 @@ export function ReportDefinitionDetails(props) {
       iconType: 'alert',
       id: 'errorDisableToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(errorToast));
   };
 
@@ -243,6 +293,7 @@ export function ReportDefinitionDetails(props) {
       iconType: 'alert',
       id: 'errorDeleteToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(errorToast));
   };
 
@@ -250,15 +301,15 @@ export function ReportDefinitionDetails(props) {
     addErrorDeletingReportDefinitionToastHandler();
   };
 
-  const removeToast = (removedToast) => {
-    setToasts(toasts.filter((toast) => toast.id !== removedToast.id));
+  const removeToast = (removedToast: { id: string; }) => {
+    setToasts(toasts.filter((toast: any) => toast.id !== removedToast.id));
   };
 
-  const handleReportDefinitionDetails = (e) => {
+  const handleReportDefinitionDetails = (e: ReportDefinitionDetails) => {
     setReportDefinitionDetails(e);
   };
 
-  const handleReportDefinitionRawResponse = (e) => {
+  const handleReportDefinitionRawResponse = (e: {} ) => {
     setReportDefinitionRawResponse(e);
   };
 
@@ -359,8 +410,20 @@ export function ReportDefinitionDetails(props) {
     return scheduleDetails;
   };
 
-  const getReportDefinitionDetailsMetadata = (data) => {
-    const reportDefinition: ReportDefinitionSchemaType = data.report_definition;
+  // const displayDeliveryChannels = (configIds: Array<string>) => {
+  //   let displayChannels = [];
+  //   for (let i = 0; i < configIds.length; ++i) {
+  //     for (let j = 0; j < placeholderChannels.length; ++j) {
+  //       if (configIds[i] === placeholderChannels[j].id) {
+  //         displayChannels.push(placeholderChannels[i].label);
+  //       }
+  //     }
+  //   }
+  //   return displayChannels.toString();
+  // }
+
+  const getReportDefinitionDetailsMetadata = (data: ReportDefinitionSchemaType) : ReportDefinitionDetails => {
+    const reportDefinition: ReportDefinitionSchemaType = data;
     const {
       report_params: reportParams,
       trigger,
@@ -419,13 +482,13 @@ export function ReportDefinitionDetails(props) {
           : `\u2014`,
       triggerType: triggerType,
       scheduleDetails: triggerParams
-        ? humanReadableScheduleDetails(data.report_definition.trigger)
+        ? humanReadableScheduleDetails(data.trigger)
         : `\u2014`,
       status: reportDefinition.status,
-      configIds: configIds,
-      title: title,
-      textDescription: textDescription,
-      htmlDescription: htmlDescription
+      configIds: (configIds.length > 0) ? displayDeliveryChannels(configIds) : `\u2014`,
+      title: (title !== '') ? title : `\u2014`,
+      textDescription: (textDescription !== '') ? textDescription : `\u2014`,
+      htmlDescription: (htmlDescription !== '') ? htmlDescription : `\u2014`
     };
     return reportDefinitionDetails;
   };
@@ -434,11 +497,9 @@ export function ReportDefinitionDetails(props) {
     const { httpClient } = props;
     httpClient
       .get(`../api/reporting/reportDefinitions/${reportDefinitionId}`)
-      .then((response) => {
+      .then((response: {report_definition: ReportDefinitionSchemaType}) => {
         handleReportDefinitionRawResponse(response);
-        handleReportDefinitionDetails(
-          getReportDefinitionDetailsMetadata(response)
-        );
+        handleReportDefinitionDetails(getReportDefinitionDetailsMetadata(response.report_definition));
         props.setBreadcrumbs([
           {
             text: i18n.translate(
@@ -460,7 +521,7 @@ export function ReportDefinitionDetails(props) {
           },
         ]);
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.error(
           i18n.translate(
             'opensearch.reports.reportDefinitionsDetails.schedule.breadcrumb.error',
@@ -481,7 +542,7 @@ export function ReportDefinitionDetails(props) {
     handleLoading(false);
   };
 
-  const fileFormatDownload = (data) => {
+  const fileFormatDownload = (data: { [x: string]: any; }) => {
     let formatUpper = data['fileFormat'];
     formatUpper = fileFormatsUpper[formatUpper];
     return (
@@ -495,7 +556,7 @@ export function ReportDefinitionDetails(props) {
     );
   };
 
-  const sourceURL = (data) => {
+  const sourceURL = (data: ReportDefinitionDetails) => {
     return (
       <EuiLink href={`${data.baseUrl}`} target="_blank">
         {data['source']}
@@ -503,13 +564,7 @@ export function ReportDefinitionDetails(props) {
     );
   };
 
-  const getRelativeStartDate = (duration) => {
-    duration = moment.duration(duration);
-    let time_difference = moment.now() - duration;
-    return new Date(time_difference);
-  };
-
-  const changeScheduledReportDefinitionStatus = (statusChange) => {
+  const changeScheduledReportDefinitionStatus = (statusChange: string) => {
     let updatedReportDefinition = reportDefinitionRawResponse.report_definition;
     if (statusChange === 'Disable') {
       updatedReportDefinition.trigger.trigger_params.enabled = false;
@@ -518,7 +573,6 @@ export function ReportDefinitionDetails(props) {
       updatedReportDefinition.trigger.trigger_params.enabled = true;
       updatedReportDefinition.status = 'Active';
     }
-
     const { httpClient } = props;
     httpClient
       .put(`../api/reporting/reportDefinitions/${reportDefinitionId}`, {
@@ -530,7 +584,7 @@ export function ReportDefinitionDetails(props) {
         updatedRawResponse.report_definition = updatedReportDefinition;
         handleReportDefinitionRawResponse(updatedRawResponse);
         setReportDefinitionDetails(
-          getReportDefinitionDetailsMetadata(updatedRawResponse)
+          getReportDefinitionDetailsMetadata(updatedReportDefinition)
         );
         if (statusChange === 'Enable') {
           handleSuccessChangingScheduleStatusToast('enable');
@@ -538,7 +592,7 @@ export function ReportDefinitionDetails(props) {
           handleSuccessChangingScheduleStatusToast('disable');
         }
       })
-      .catch((error) => {
+      .catch((error: { body: { statusCode: number; }; }) => {
         console.error('error in updating report definition status:', error);
         if (error.body.statusCode === 403) {
           handleErrorChangingScheduleStatusToast('permissions');
@@ -592,7 +646,7 @@ export function ReportDefinitionDetails(props) {
       .then(() => {
         window.location.assign(`reports-dashboards#/delete=success`);
       })
-      .catch((error) => {
+      .catch((error: { body: { statusCode: number; }; }) => {
         console.log('error when deleting report definition:', error);
         if (error.body.statusCode === 403) {
           handlePermissionsMissingDeleteToast();
@@ -619,7 +673,7 @@ export function ReportDefinitionDetails(props) {
       <ReportDetailsComponent
         reportDetailsComponentTitle={i18n.translate(
           'opensearch.reports.reportDefinitionsDetails.schedule.triggerSection.triggerType',
-          { defaultMessage: 'Trigger type' }
+          { defaultMessage: 'Report trigger' }
         )}
         reportDetailsComponentContent={reportDefinitionDetails.triggerType}
       />
@@ -628,7 +682,7 @@ export function ReportDefinitionDetails(props) {
         <ReportDetailsComponent
           reportDetailsComponentTitle={i18n.translate(
             'opensearch.reports.reportDefinitionsDetails.schedule.triggerSection.triggerType',
-            { defaultMessage: 'Trigger type' }
+            { defaultMessage: 'Report trigger' }
           )}
           reportDetailsComponentContent={reportDefinitionDetails.triggerType}
         />
@@ -648,7 +702,10 @@ export function ReportDefinitionDetails(props) {
           )}
           reportDetailsComponentContent={reportDefinitionDetails.status}
         />
-        <ReportDetailsComponent />
+        <ReportDetailsComponent 
+          reportDetailsComponentTitle={''}
+          reportDetailsComponentContent={''}
+        />
       </EuiFlexGroup>
     );
 
@@ -691,7 +748,7 @@ export function ReportDefinitionDetails(props) {
               <EuiFlexItem grow={false}>
                 <EuiButton
                   color={'danger'}
-                  onClick={handleShowDeleteModal}
+                  onClick={(show: any) => handleShowDeleteModal(show)}
                   id={'deleteReportDefinitionButton'}
                 >
                   {i18n.translate(
@@ -814,42 +871,38 @@ export function ReportDefinitionDetails(props) {
             <EuiFlexItem />
           </EuiFlexGroup>
           <EuiSpacer />
-          <EuiTitle>
-            <h3>
-              {i18n.translate(
-                'opensearch.reports.reportDefinitionsDetails.fields.reportTrigger',
-                { defaultMessage: 'Report trigger' }
-              )}
-            </h3>
-          </EuiTitle>
-          <EuiSpacer />
           {triggerSection}
           <EuiSpacer />
-          {/* <EuiTitle>
+          <EuiTitle>
             <h3>Notification settings</h3>
           </EuiTitle>
           <EuiSpacer />
           <EuiFlexGroup>
             <ReportDetailsComponent
-              reportDetailsComponentTitle={'Email recipients'}
-              reportDetailsComponentContent={formatEmails(
-                reportDefinitionDetails.emailRecipients
-              )}
-            />
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={'Email subject'}
+              reportDetailsComponentTitle={'Config IDs'}
               reportDetailsComponentContent={
-                reportDefinitionDetails.emailSubject
+                reportDefinitionDetails.configIds
               }
             />
             <ReportDetailsComponent
-              reportDetailsComponentTitle={'Optional message'}
-              reportDetailsComponentContent={trimAndRenderAsText(
-                reportDefinitionDetails.emailBody
-              )}
+              reportDetailsComponentTitle={'Title'}
+              reportDetailsComponentContent={
+                reportDefinitionDetails.title
+              }
             />
-            <ReportDetailsComponent />
-          </EuiFlexGroup> */}
+            <ReportDetailsComponent
+              reportDetailsComponentTitle={'Text description'}
+              reportDetailsComponentContent={
+                reportDefinitionDetails.textDescription
+              }
+            />
+            <ReportDetailsComponent
+              reportDetailsComponentTitle={'Html description'}
+              reportDetailsComponentContent={
+                reportDefinitionDetails.htmlDescription
+              }
+            />
+          </EuiFlexGroup>
         </EuiPageContent>
         <EuiGlobalToastList
           toasts={toasts}

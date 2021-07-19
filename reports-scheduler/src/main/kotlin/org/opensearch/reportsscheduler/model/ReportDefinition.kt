@@ -80,7 +80,7 @@ import java.time.Duration
  *       "title":"title",
  *       "textDescription":"textDescription",
  *       "htmlDescription":"optional htmlDescription",
- *       "channelIds":["optional_channelIds"]
+ *       "configIds":["optional_configIds"]
  *   }
  * }
  * }</pre>
@@ -391,7 +391,7 @@ internal data class ReportDefinition(
             private const val TITLE_TAG = "title"
             private const val TEXT_DESCRIPTION_TAG = "textDescription"
             private const val HTML_DESCRIPTION_TAG = "htmlDescription"
-            private const val CHANNEL_IDS_TAG = "channelIds"
+            private const val CONFIG_IDS_TAG = "configIds"
 
             /**
              * Parse the data from parser and create Delivery object
@@ -412,7 +412,7 @@ internal data class ReportDefinition(
                         TITLE_TAG -> title = parser.text()
                         TEXT_DESCRIPTION_TAG -> textDescription = parser.text()
                         HTML_DESCRIPTION_TAG -> htmlDescription = parser.textOrNull()
-                        CHANNEL_IDS_TAG -> configIds = parser.stringList()
+                        CONFIG_IDS_TAG -> configIds = parser.stringList()
                         else -> log.info("$LOG_PREFIX: Delivery Unknown field $fieldName")
                     }
                 }
@@ -437,7 +437,7 @@ internal data class ReportDefinition(
             if (htmlDescription != null) {
                 builder.field(HTML_DESCRIPTION_TAG, htmlDescription)
             }
-            builder.field(CHANNEL_IDS_TAG, configIds)
+            builder.field(CONFIG_IDS_TAG, configIds)
             builder.endObject()
             return builder
         }

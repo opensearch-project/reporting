@@ -73,6 +73,7 @@ import {
 import { TimeRangeSelect } from './time_range';
 import { converter } from '../utils';
 import { ReportDefinitionSchemaType } from 'server/model';
+import { ReportTrigger } from '../report_trigger';
 
 type ReportSettingProps = {
   edit: boolean;
@@ -85,6 +86,8 @@ type ReportSettingProps = {
   showSettingsReportSourceError: boolean;
   settingsReportSourceErrorMessage: string;
   showTimeRangeError: boolean;
+  showTriggerIntervalNaNError: boolean;
+  showCronError: boolean;
 };
 
 export function ReportSettings(props: ReportSettingProps) {
@@ -99,6 +102,8 @@ export function ReportSettings(props: ReportSettingProps) {
     showSettingsReportSourceError,
     settingsReportSourceErrorMessage,
     showTimeRangeError,
+    showTriggerIntervalNaNError,
+    showCronError
   } = props;
 
   const [reportName, setReportName] = useState('');
@@ -433,7 +438,7 @@ export function ReportSettings(props: ReportSettingProps) {
           legend={{
             children: i18n.translate(
               'opensearch.reports.reportSettingProps.headerAndFooter',
-              { defaultMessage: 'Header and footer' }
+              { defaultMessage: 'Report header and footer' }
             ),
           }}
         />
@@ -922,6 +927,15 @@ export function ReportSettings(props: ReportSettingProps) {
         {displayNotebooksSelect}
         {displayTimeRangeSelect}
         {displayVisualReportsFormatAndMarkdown}
+        <EuiSpacer />
+        <ReportTrigger
+          edit={edit}
+          editDefinitionId={editDefinitionId}
+          httpClientProps={httpClientProps}
+          reportDefinitionRequest={reportDefinitionRequest}
+          showTriggerIntervalNaNError={showTriggerIntervalNaNError}
+          showCronError={showCronError}
+        />
       </EuiPageContentBody>
     </EuiPageContent>
   );

@@ -136,7 +136,7 @@ export const getNotebooksBaseUrlCreate = (
   );
 }
 
-export const getDashboardOptions = (data) => {
+export const getDashboardOptions = (data: string | any[]) => {
   let index;
   let dashboard_options = [];
   for (index = 0; index < data.length; ++index) {

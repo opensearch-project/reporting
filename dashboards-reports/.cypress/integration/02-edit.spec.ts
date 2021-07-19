@@ -51,9 +51,14 @@ describe('Cypress', () => {
     cy.get('#reportSettingsDescription').type(' update description');
 
     cy.get('#editReportDefinitionButton').click({ force: true });
+
+    cy.wait(12500);
+    
+    // check that re-direct to home page
+    cy.get('#reportDefinitionDetailsLink').should('exist');
   });
 
-  it('Visit edit page, change report source and trigger', () => {
+  it('Visit edit page, change report trigger', () => {
     cy.visit(`${Cypress.env('opensearchDashboards')}/app/reports-dashboards#/`);
     cy.location('pathname', { timeout: 60000 }).should(
       'include',
@@ -71,13 +76,18 @@ describe('Cypress', () => {
     cy.url().should('include', 'edit');
 
     cy.wait(1000);
-    cy.get('#visualizationReportSource').check({ force: true });
+    cy.get('#reportDefinitionTriggerTypes > div:nth-child(2)').click({ force: true });
 
     cy.get('#Schedule').check({ force: true });
     cy.get('#editReportDefinitionButton').click({ force: true });
+
+    cy.wait(12500);
+    
+    // check that re-direct to home page
+    cy.get('#reportDefinitionDetailsLink').should('exist');
   });
 
-  it('Visit edit page, change report source back', () => {
+  it('Visit edit page, change report trigger back', () => {
     cy.visit(`${Cypress.env('opensearchDashboards')}/app/reports-dashboards#/`);
     cy.location('pathname', { timeout: 60000 }).should(
       'include',
@@ -96,8 +106,13 @@ describe('Cypress', () => {
 
     cy.wait(1000);
 
-    cy.get('#dashboardReportSource').check({ force: true });
+    cy.get('#reportDefinitionTriggerTypes > div:nth-child(1)').click({ force: true });
 
     cy.get('#editReportDefinitionButton').click({ force: true });
+
+    cy.wait(12500);
+    
+    // check that re-direct to home page
+    cy.get('#reportDefinitionDetailsLink').should('exist');
   });
 });

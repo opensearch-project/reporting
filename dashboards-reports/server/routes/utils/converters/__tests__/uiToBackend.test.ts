@@ -53,12 +53,10 @@ const input: ReportDefinitionSchemaType = {
     },
   },
   delivery: {
-    delivery_type: DELIVERY_TYPE.channel,
-    delivery_params: {
-      recipients: ['szhongna@amazon.com'],
-      title: 'Email subject',
-      textDescription: 'This is a test email',
-    },
+    configIds: [],
+    title: '',
+    textDescription: '',
+    htmlDescription: ''
   },
   trigger: {
     trigger_type: TRIGGER_TYPE.schedule,
@@ -94,10 +92,10 @@ const output = {
     },
   },
   delivery: {
-    recipients: ['szhongna@amazon.com'],
-    title: 'Email subject',
-    textDescription: 'This is a test email',
-    deliveryFormat: 'Embedded',
+    configIds: [],
+    title: '',
+    textDescription: '',
+    htmlDescription: ''
   },
 };
 

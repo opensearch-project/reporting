@@ -27,6 +27,7 @@
 import { isValidCron } from 'cron-validator';
 import { i18n } from '@osd/i18n';
 import moment from 'moment';
+import { includeDelivery } from '../delivery/delivery';
 
 export const definitionInputValidation = async (
   metadata,
@@ -39,8 +40,8 @@ export const definitionInputValidation = async (
   timeRange,
   setShowTimeRangeError,
   setShowCronError,
-  setShowEmailRecipientsError,
-  setEmailRecipientsErrorMessage
+  setShowDeliveryChannelError,
+  setDeliveryChannelsErrorMessage, 
 ) => {
   // check report name
   // allow a-z, A-Z, 0-9, (), [], ',' - and _ and spaces
@@ -99,34 +100,17 @@ export const definitionInputValidation = async (
       error = true;
     }
   }
-  // if email delivery
-  if (metadata.delivery.delivery_type === 'Channel') {
-    // no recipients are listed
-    if (metadata.delivery.delivery_params.recipients.length === 0) {
-      setShowEmailRecipientsError(true);
-      setEmailRecipientsErrorMessage(
-        i18n.translate(
-          'opensearch.reports.error.emailRecipientsListCannotBeEmpty',
-          { defaultMessage: 'Email recipients list cannot be empty.' }
-        )
-      );
-      error = true;
-    }
-    // recipients have invalid email addresses: regexp checks format xxxxx@yyyy.zzz
-    let emailRegExp = /\S+@\S+\.\S+/;
-    let index;
-    let recipients = metadata.delivery.delivery_params.recipients;
-    for (index = 0; index < recipients.length; ++index) {
-      if (recipients[0].search(emailRegExp) === -1) {
-        setShowEmailRecipientsError(true);
-        setEmailRecipientsErrorMessage(
-          i18n.translate('opensearch.reports.error.invalidEmailAddresses', {
-            defaultMessage: 'Invalid email addresses in recipients list.',
-          })
-        );
-        error = true;
-      }
-    }
+  // delivery
+  if (metadata.delivery.configIds.length === 0 && includeDelivery) {
+    // no channels are listed
+    setShowDeliveryChannelError(true);
+    setDeliveryChannelsErrorMessage(
+      i18n.translate(
+        'opensearch.reports.error.channelListCannotBeEmpty',
+        { defaultMessage: 'Channels list cannot be empty.' }
+      )
+    );
+    error = true;
   }
   return error;
 };
