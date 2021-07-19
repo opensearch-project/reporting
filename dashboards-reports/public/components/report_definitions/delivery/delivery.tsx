@@ -49,6 +49,7 @@ const styles: CSS.Properties = {
   maxWidth: '800px',
 };
 
+// TODO: add to schema to avoid need for export
 export let includeDelivery = false;
 
 export type ReportDeliveryProps = {
