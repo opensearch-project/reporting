@@ -56,7 +56,7 @@ export const SCHEDULE_TYPE_OPTIONS = [
     id: 'Cron based',
     label: i18n.translate(
       'opensearch.reports.reportTriggerConstants.scheduleTypeOptions.cronBased',
-      { defaultMessage: 'Cron-based' }
+      { defaultMessage: 'Cron based' }
     ),
   },
 ];

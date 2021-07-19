@@ -71,8 +71,10 @@ describe('<ReportDefinitionDetails /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'On demand',
@@ -111,8 +113,10 @@ describe('<ReportDefinitionDetails /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
@@ -163,8 +167,10 @@ describe('<ReportDefinitionDetails /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
@@ -216,8 +222,10 @@ describe('<ReportDefinitionDetails /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'On demand',
@@ -260,8 +268,10 @@ describe('<ReportDefinitionDetails /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
@@ -317,8 +327,10 @@ describe('<ReportDefinitionDetails /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
@@ -376,8 +388,10 @@ describe('<ReportDefinitionDetails /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',

@@ -32,9 +32,7 @@ exports[`<ReportDetails /> panel render 5 hours recurring component 1`] = `
             >
               <h2
                 class="euiTitle euiTitle--medium"
-              >
-                test create report definition trigger
-              </h2>
+              />
             </div>
           </div>
         </div>
@@ -66,9 +64,7 @@ exports[`<ReportDetails /> panel render 5 hours recurring component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              test create report definition trigger
-            </dd>
+            />
           </dl>
         </div>
         <div
@@ -84,9 +80,7 @@ exports[`<ReportDetails /> panel render 5 hours recurring component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              —
-            </dd>
+            />
           </dl>
         </div>
         <div
@@ -102,9 +96,7 @@ exports[`<ReportDetails /> panel render 5 hours recurring component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              —
-            </dd>
+            />
           </dl>
         </div>
         <div
@@ -120,9 +112,7 @@ exports[`<ReportDetails /> panel render 5 hours recurring component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              —
-            </dd>
+            />
           </dl>
         </div>
       </div>
@@ -148,11 +138,11 @@ exports[`<ReportDetails /> panel render 5 hours recurring component 1`] = `
             >
               <a
                 class="euiLink euiLink--primary"
-                href="http://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g=(time:(from:'2020-10-23T20:53:35.315Z',to:'2020-10-23T21:23:35.316Z'))"
+                href=""
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Dashboard
+                
               </a>
             </dd>
           </dl>
@@ -170,9 +160,7 @@ exports[`<ReportDetails /> panel render 5 hours recurring component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              10/23/2020, 1:53:35 PM -&gt; 10/23/2020, 2:23:35 PM
-            </dd>
+            />
           </dl>
         </div>
         <div
@@ -248,11 +236,7 @@ exports[`<ReportDetails /> panel render 5 hours recurring component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              <p>
-                —
-              </p>
-            </dd>
+            />
           </dl>
         </div>
         <div
@@ -268,11 +252,7 @@ exports[`<ReportDetails /> panel render 5 hours recurring component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              <p>
-                —
-              </p>
-            </dd>
+            />
           </dl>
         </div>
         <div
@@ -284,6 +264,75 @@ exports[`<ReportDetails /> panel render 5 hours recurring component 1`] = `
             <dt
               class="euiDescriptionList__title"
             />
+            <dd
+              class="euiDescriptionList__description"
+            />
+          </dl>
+        </div>
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            />
+            <dd
+              class="euiDescriptionList__description"
+            />
+          </dl>
+        </div>
+      </div>
+      <div
+        class="euiSpacer euiSpacer--l"
+      />
+      <div
+        class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionRow euiFlexGroup--responsive"
+      >
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            >
+              Report trigger
+            </dt>
+            <dd
+              class="euiDescriptionList__description"
+            />
+          </dl>
+        </div>
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            >
+              Schedule type
+            </dt>
+            <dd
+              class="euiDescriptionList__description"
+            />
+          </dl>
+        </div>
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            >
+              Schedule details
+            </dt>
             <dd
               class="euiDescriptionList__description"
             />
@@ -310,7 +359,7 @@ exports[`<ReportDetails /> panel render 5 hours recurring component 1`] = `
       <h3
         class="euiTitle euiTitle--medium"
       >
-        Report trigger
+        Notification settings
       </h3>
       <div
         class="euiSpacer euiSpacer--l"
@@ -327,75 +376,126 @@ exports[`<ReportDetails /> panel render 5 hours recurring component 1`] = `
             <dt
               class="euiDescriptionList__title"
             >
-              Report type
+              Config IDs
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              Schedule
-            </dd>
-          </dl>
-        </div>
-        <div
-          class="euiFlexItem"
-        >
-          <dl
-            class="euiDescriptionList euiDescriptionList--row"
-          >
-            <dt
-              class="euiDescriptionList__title"
-            >
-              Schedule type
-            </dt>
-            <dd
-              class="euiDescriptionList__description"
-            >
-              Recurring
-            </dd>
-          </dl>
-        </div>
-        <div
-          class="euiFlexItem"
-        >
-          <dl
-            class="euiDescriptionList euiDescriptionList--row"
-          >
-            <dt
-              class="euiDescriptionList__title"
-            >
-              Schedule details
-            </dt>
-            <dd
-              class="euiDescriptionList__description"
-            >
-              —
-            </dd>
-          </dl>
-        </div>
-        <div
-          class="euiFlexItem"
-        >
-          <dl
-            class="euiDescriptionList euiDescriptionList--row"
-          >
-            <dt
-              class="euiDescriptionList__title"
             />
+          </dl>
+        </div>
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            >
+              Title
+            </dt>
+            <dd
+              class="euiDescriptionList__description"
+            />
+          </dl>
+        </div>
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            >
+              Text description
+            </dt>
+            <dd
+              class="euiDescriptionList__description"
+            />
+          </dl>
+        </div>
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            >
+              Html description
+            </dt>
             <dd
               class="euiDescriptionList__description"
             />
           </dl>
         </div>
       </div>
-      <div
-        class="euiSpacer euiSpacer--l"
-      />
     </div>
     <div
       aria-live="polite"
       class="euiGlobalToastList euiGlobalToastList--right"
       role="region"
-    />
+    >
+      <div
+        class="euiToast euiToast--danger euiGlobalToastListItem"
+        id="reportDetailsErrorToast"
+      >
+        <p
+          class="euiScreenReaderOnly"
+        >
+          A new notification appears
+        </p>
+        <div
+          aria-label="Notification"
+          class="euiToastHeader"
+          data-test-subj="euiToastHeader"
+        >
+          <svg
+            aria-hidden="true"
+            class="euiIcon euiIcon--medium euiToastHeader__icon"
+            focusable="false"
+            height="16"
+            role="img"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.59 10.059L7.35 5.18h1.3L8.4 10.06h-.81zm.394 1.901a.61.61 0 01-.448-.186.606.606 0 01-.186-.444c0-.174.062-.323.186-.446a.614.614 0 01.448-.184c.169 0 .315.06.44.182.124.122.186.27.186.448a.6.6 0 01-.189.446.607.607 0 01-.437.184zM2 14a1 1 0 01-.878-1.479l6-11a1 1 0 011.756 0l6 11A1 1 0 0114 14H2zm0-1h12L8 2 2 13z"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <span
+            class="euiToastHeader__title"
+          >
+            Error loading report details.
+          </span>
+        </div>
+        <button
+          aria-label="Dismiss toast"
+          class="euiToast__closeButton"
+          data-test-subj="toastCloseButton"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="euiIcon euiIcon--medium"
+            focusable="false"
+            height="16"
+            role="img"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.293 8L3.146 3.854a.5.5 0 11.708-.708L8 7.293l4.146-4.147a.5.5 0 01.708.708L8.707 8l4.147 4.146a.5.5 0 01-.708.708L8 8.707l-4.146 4.147a.5.5 0 01-.708-.708L7.293 8z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
   </main>
 </div>
 `;
@@ -432,9 +532,7 @@ exports[`<ReportDetails /> panel render on-demand component 1`] = `
             >
               <h2
                 class="euiTitle euiTitle--medium"
-              >
-                test create report definition trigger
-              </h2>
+              />
             </div>
           </div>
         </div>
@@ -466,9 +564,7 @@ exports[`<ReportDetails /> panel render on-demand component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              test create report definition trigger
-            </dd>
+            />
           </dl>
         </div>
         <div
@@ -484,9 +580,7 @@ exports[`<ReportDetails /> panel render on-demand component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              —
-            </dd>
+            />
           </dl>
         </div>
         <div
@@ -502,9 +596,7 @@ exports[`<ReportDetails /> panel render on-demand component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              —
-            </dd>
+            />
           </dl>
         </div>
         <div
@@ -520,9 +612,7 @@ exports[`<ReportDetails /> panel render on-demand component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              —
-            </dd>
+            />
           </dl>
         </div>
       </div>
@@ -548,11 +638,11 @@ exports[`<ReportDetails /> panel render on-demand component 1`] = `
             >
               <a
                 class="euiLink euiLink--primary"
-                href="http://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g=(time:(from:'2020-10-23T20:53:35.315Z',to:'2020-10-23T21:23:35.316Z'))"
+                href=""
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Dashboard
+                
               </a>
             </dd>
           </dl>
@@ -570,9 +660,7 @@ exports[`<ReportDetails /> panel render on-demand component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              10/23/2020, 1:53:35 PM -&gt; 10/23/2020, 2:23:35 PM
-            </dd>
+            />
           </dl>
         </div>
         <div
@@ -644,11 +732,7 @@ exports[`<ReportDetails /> panel render on-demand component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              <p>
-                —
-              </p>
-            </dd>
+            />
           </dl>
         </div>
         <div
@@ -664,11 +748,7 @@ exports[`<ReportDetails /> panel render on-demand component 1`] = `
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              <p>
-                —
-              </p>
-            </dd>
+            />
           </dl>
         </div>
         <div
@@ -680,6 +760,75 @@ exports[`<ReportDetails /> panel render on-demand component 1`] = `
             <dt
               class="euiDescriptionList__title"
             />
+            <dd
+              class="euiDescriptionList__description"
+            />
+          </dl>
+        </div>
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            />
+            <dd
+              class="euiDescriptionList__description"
+            />
+          </dl>
+        </div>
+      </div>
+      <div
+        class="euiSpacer euiSpacer--l"
+      />
+      <div
+        class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionRow euiFlexGroup--responsive"
+      >
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            >
+              Report trigger
+            </dt>
+            <dd
+              class="euiDescriptionList__description"
+            />
+          </dl>
+        </div>
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            >
+              Schedule type
+            </dt>
+            <dd
+              class="euiDescriptionList__description"
+            />
+          </dl>
+        </div>
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            >
+              Schedule details
+            </dt>
             <dd
               class="euiDescriptionList__description"
             />
@@ -706,7 +855,7 @@ exports[`<ReportDetails /> panel render on-demand component 1`] = `
       <h3
         class="euiTitle euiTitle--medium"
       >
-        Report trigger
+        Notification settings
       </h3>
       <div
         class="euiSpacer euiSpacer--l"
@@ -723,75 +872,117 @@ exports[`<ReportDetails /> panel render on-demand component 1`] = `
             <dt
               class="euiDescriptionList__title"
             >
-              Report type
+              Config IDs
             </dt>
             <dd
               class="euiDescriptionList__description"
-            >
-              On demand
-            </dd>
-          </dl>
-        </div>
-        <div
-          class="euiFlexItem"
-        >
-          <dl
-            class="euiDescriptionList euiDescriptionList--row"
-          >
-            <dt
-              class="euiDescriptionList__title"
-            >
-              Schedule type
-            </dt>
-            <dd
-              class="euiDescriptionList__description"
-            >
-              —
-            </dd>
-          </dl>
-        </div>
-        <div
-          class="euiFlexItem"
-        >
-          <dl
-            class="euiDescriptionList euiDescriptionList--row"
-          >
-            <dt
-              class="euiDescriptionList__title"
-            >
-              Schedule details
-            </dt>
-            <dd
-              class="euiDescriptionList__description"
-            >
-              —
-            </dd>
-          </dl>
-        </div>
-        <div
-          class="euiFlexItem"
-        >
-          <dl
-            class="euiDescriptionList euiDescriptionList--row"
-          >
-            <dt
-              class="euiDescriptionList__title"
             />
+          </dl>
+        </div>
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            >
+              Title
+            </dt>
+            <dd
+              class="euiDescriptionList__description"
+            />
+          </dl>
+        </div>
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            >
+              Text description
+            </dt>
+            <dd
+              class="euiDescriptionList__description"
+            />
+          </dl>
+        </div>
+        <div
+          class="euiFlexItem"
+        >
+          <dl
+            class="euiDescriptionList euiDescriptionList--row"
+          >
+            <dt
+              class="euiDescriptionList__title"
+            >
+              Html description
+            </dt>
             <dd
               class="euiDescriptionList__description"
             />
           </dl>
         </div>
       </div>
-      <div
-        class="euiSpacer euiSpacer--l"
-      />
     </div>
     <div
       aria-live="polite"
       class="euiGlobalToastList euiGlobalToastList--right"
       role="region"
-    />
+    >
+      <div
+        class="euiToast euiToast--danger euiGlobalToastListItem"
+        id="reportDetailsErrorToast"
+      >
+        <p
+          class="euiScreenReaderOnly"
+        >
+          A new notification appears
+        </p>
+        <div
+          aria-label="Notification"
+          class="euiToastHeader"
+          data-test-subj="euiToastHeader"
+        >
+          <svg
+            aria-hidden="true"
+            class="euiIcon euiIcon--medium euiIcon-isLoading euiToastHeader__icon"
+            focusable="false"
+            height="16"
+            role="img"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          />
+          <span
+            class="euiToastHeader__title"
+          >
+            Error loading report details.
+          </span>
+        </div>
+        <button
+          aria-label="Dismiss toast"
+          class="euiToast__closeButton"
+          data-test-subj="toastCloseButton"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="euiIcon euiIcon--medium euiIcon-isLoading"
+            focusable="false"
+            height="16"
+            role="img"
+            viewBox="0 0 16 16"
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+          />
+        </button>
+      </div>
+    </div>
   </main>
 </div>
 `;

@@ -42,8 +42,10 @@ const emptyRequest = {
     },
   },
   delivery: {
-    delivery_type: '',
-    delivery_params: {},
+    configIds: [],
+    title: '',
+    textDescription: '',
+    htmlDescription: ''
   },
   trigger: {
     trigger_type: '',
@@ -89,8 +91,10 @@ describe('<ReportDelivery /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'On demand',

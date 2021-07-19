@@ -48,7 +48,7 @@ import {
 } from '../../utils/utils';
 import { definitionInputValidation } from '../utils/utils';
 
-export function EditReportDefinition(props) {
+export function EditReportDefinition(props: { [x: string]: any; setBreadcrumbs?: any; httpClient?: any; }) {
   const [toasts, setToasts] = useState([]);
   const [comingFromError, setComingFromError] = useState(false);
   const [preErrorData, setPreErrorData] = useState({});
@@ -74,12 +74,12 @@ export function EditReportDefinition(props) {
     setShowTriggerIntervalNaNError,
   ] = useState(false);
   const [showCronError, setShowCronError] = useState(false);
-  const [showEmailRecipientsError, setShowEmailRecipientsError] = useState(
+  const [showDeliveryChannelError, setShowDeliveryChannelError] = useState(
     false
   );
   const [
-    emailRecipientsErrorMessage,
-    setEmailRecipientsErrorMessage,
+    deliveryChannelError,
+    setDeliveryChannelError,
   ] = useState('');
   const [showTimeRangeError, setShowTimeRangeError] = useState(false);
 
@@ -100,6 +100,7 @@ export function EditReportDefinition(props) {
         id: 'errorToast',
       };
     }
+    // @ts-ignore
     setToasts(toasts.concat(toast));
   };
 
@@ -120,6 +121,7 @@ export function EditReportDefinition(props) {
       iconType: 'alert',
       id: 'errorToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(errorToast));
   };
 
@@ -144,6 +146,7 @@ export function EditReportDefinition(props) {
         id: 'errorToast',
       };
     }
+    // @ts-ignore
     setToasts(toasts.concat(toast));
   };
 
@@ -161,6 +164,7 @@ export function EditReportDefinition(props) {
       iconType: 'alert',
       id: 'errorDeleteToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(errorToast));
   };
 
@@ -168,8 +172,8 @@ export function EditReportDefinition(props) {
     addErrorDeletingReportDefinitionToastHandler();
   };
 
-  const removeToast = (removedToast) => {
-    setToasts(toasts.filter((toast) => toast.id !== removedToast.id));
+  const removeToast = (removedToast: { id: any; }) => {
+    setToasts(toasts.filter((toast: any) => toast.id !== removedToast.id));
   };
 
   const reportDefinitionId = props['match']['params']['reportDefinitionId'];
@@ -186,8 +190,10 @@ export function EditReportDefinition(props) {
       },
     },
     delivery: {
-      delivery_type: '',
-      delivery_params: {},
+      configIds: [],
+      title: '',
+      textDescription: '',
+      htmlDescription: ''
     },
     trigger: {
       trigger_type: '',
@@ -217,7 +223,7 @@ export function EditReportDefinition(props) {
       .then(async () => {
         window.location.assign(`reports-dashboards#/edit=success`);
       })
-      .catch((error) => {
+      .catch((error: { body: { statusCode: number; }; }) => {
         console.log('error in updating report definition:', error);
         if (error.body.statusCode === 400) {
           handleInputValidationErrorToast();
@@ -231,7 +237,7 @@ export function EditReportDefinition(props) {
       });
   };
 
-  const editReportDefinition = async (metadata) => {
+  const editReportDefinition = async (metadata: { report_params: {core_params: {header: string, footer: string}}}) => {
     if ('header' in metadata.report_params.core_params) {
       metadata.report_params.core_params.header = converter.makeHtml(
         metadata.report_params.core_params.header
@@ -256,8 +262,8 @@ export function EditReportDefinition(props) {
       timeRange,
       setShowTimeRangeError,
       setShowCronError,
-      setShowEmailRecipientsError,
-      setEmailRecipientsErrorMessage
+      setShowDeliveryChannelError,
+      setDeliveryChannelError
     ).then((response) => {
       error = response;
     });
@@ -302,7 +308,7 @@ export function EditReportDefinition(props) {
           },
         ]);
       })
-      .catch((error) => {
+      .catch((error: { body: { statusCode: number; }; }) => {
         console.error(
           'error when loading edit report definition page: ',
           error
@@ -337,14 +343,6 @@ export function EditReportDefinition(props) {
           showSettingsReportSourceError={showSettingsReportSourceError}
           settingsReportSourceErrorMessage={settingsReportSourceErrorMessage}
           showTimeRangeError={showTimeRangeError}
-        />
-        <EuiSpacer />
-        <ReportTrigger
-          edit={true}
-          editDefinitionId={reportDefinitionId}
-          reportDefinitionRequest={editReportDefinitionRequest}
-          httpClientProps={props['httpClient']}
-          timeRange={timeRange}
           showTriggerIntervalNaNError={showTriggerIntervalNaNError}
           showCronError={showCronError}
         />
@@ -354,9 +352,8 @@ export function EditReportDefinition(props) {
           editDefinitionId={reportDefinitionId}
           reportDefinitionRequest={editReportDefinitionRequest}
           httpClientProps={props['httpClient']}
-          timeRange={timeRange}
-          showEmailRecipientsError={showEmailRecipientsError}
-          emailRecipientsErrorMessage={emailRecipientsErrorMessage}
+          showDeliveryChannelError={showDeliveryChannelError}
+          deliveryChannelError={deliveryChannelError}
         />
         <EuiSpacer />
         <EuiFlexGroup justifyContent="flexEnd">
