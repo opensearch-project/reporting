@@ -166,7 +166,7 @@ export const channelSchema = schema.object({
   title: schema.string(),
   textDescription: schema.string(),
   htmlDescription: schema.maybe(schema.string()),
-  channelIds: schema.maybe(schema.arrayOf(schema.string())),
+  configIds: schema.maybe(schema.arrayOf(schema.string())),
 });
 
 export const triggerSchema = schema.object({

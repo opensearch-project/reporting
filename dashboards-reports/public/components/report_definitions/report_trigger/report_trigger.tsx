@@ -27,11 +27,6 @@
 import React, { useEffect, useState } from 'react';
 import { i18n } from '@osd/i18n';
 import {
-  EuiPageHeader,
-  EuiTitle,
-  EuiPageContent,
-  EuiPageContentBody,
-  EuiHorizontalRule,
   EuiFormRow,
   EuiRadioGroup,
   EuiDatePicker,
@@ -44,7 +39,6 @@ import {
   EuiCheckboxGroup,
   EuiTextArea,
   EuiLink,
-  EuiButton,
   EuiFieldNumber,
 } from '@elastic/eui';
 import moment, { Moment } from 'moment';
@@ -723,35 +717,22 @@ export function ReportTrigger(props: ReportTriggerProps) {
   }, []);
 
   return (
-    <EuiPageContent panelPaddingSize={'l'}>
-      <EuiPageHeader>
-        <EuiTitle>
-          <h2>
-            {i18n.translate(
-              'opensearch.reports.reportTrigger.title.reportTrigger',
-              { defaultMessage: 'Report trigger' }
-            )}
-          </h2>
-        </EuiTitle>
-      </EuiPageHeader>
-      <EuiHorizontalRule />
-      <EuiPageContentBody>
-        <EuiFormRow
-          label={i18n.translate(
-            'opensearch.reports.reportTrigger.form.triggerType',
-            { defaultMessage: 'Trigger type' }
-          )}
-          id="reportDefinitionTriggerTypes"
-        >
-          <EuiRadioGroup
-            options={TRIGGER_TYPE_OPTIONS}
-            idSelected={reportTriggerType}
-            onChange={handleReportTriggerType}
-          />
-        </EuiFormRow>
-        <EuiSpacer />
-        {schedule}
-      </EuiPageContentBody>
-    </EuiPageContent>
+    <div>
+      <EuiFormRow
+        label={i18n.translate(
+        'opensearch.reports.reportTrigger.form.triggerType',
+        { defaultMessage: 'Report trigger' }
+        )}
+        id="reportDefinitionTriggerTypes"
+      >
+        <EuiRadioGroup
+        options={TRIGGER_TYPE_OPTIONS}
+        idSelected={reportTriggerType}
+        onChange={handleReportTriggerType}
+        />
+      </EuiFormRow>
+      <EuiSpacer />
+      {schedule}
+    </div>
   );
 }

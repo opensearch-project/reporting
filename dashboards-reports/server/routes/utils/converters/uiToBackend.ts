@@ -109,20 +109,16 @@ const getBackendDelivery = (
   delivery: DeliverySchemaType
 ): DeliveryType | undefined => {
   const {
-    delivery_type: deliveryType,
-    delivery_params: deliveryParams,
+    configIds: configIds,
+    title: title,
+    textDescription: textDescription,
+    htmlDescription: htmlDescription
   } = delivery;
-  let res: any;
-  switch (deliveryType) {
-    case DELIVERY_TYPE.opensearchDashboardsUser:
-      break;
-
-    case DELIVERY_TYPE.channel:
-      res = {
-        ...(deliveryParams as ChannelSchemaType),
-        deliveryFormat: BACKEND_DELIVERY_FORMAT.embedded, //TODO: now we only support one delivery format
-      };
-      break;
+  let res = {
+    configIds: configIds,
+    title: title,
+    textDescription: textDescription,
+    htmlDescription: htmlDescription
   }
   return res;
 };

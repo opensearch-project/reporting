@@ -40,12 +40,11 @@ import {
   EuiDescriptionListTitle,
   EuiDescriptionListDescription,
   EuiPageHeaderSection,
-  EuiButton,
   EuiLink,
   EuiIcon,
   EuiGlobalToastList,
 } from '@elastic/eui';
-import { fileFormatsUpper, generateReportById } from '../main_utils';
+import { displayDeliveryChannels, fileFormatsUpper, generateReportById } from '../main_utils';
 import { GenerateReportLoadingModal } from '../loading_modal';
 import { ReportSchemaType } from '../../../../server/model';
 import { converter } from '../../report_definitions/utils';
@@ -55,8 +54,30 @@ import {
   permissionsMissingToast,
   timeRangeMatcher,
 } from '../../utils/utils';
+import { TRIGGER_TYPE } from '../../../../server/routes/utils/constants';
 
-export const ReportDetailsComponent = (props) => {
+interface ReportDetails {
+  reportName: string;
+  description: string;
+  created: string;
+  lastUpdated: string;
+  source: string;
+  time_period: string;
+  defaultFileFormat: string;
+  state: string | undefined;
+  reportHeader: string;
+  reportFooter: string;
+  triggerType: string;
+  scheduleType: string;
+  scheduleDetails: string;
+  configIds: Array<string> | string; 
+  title: string;
+  textDescription: string;
+  htmlDescription: string;
+  queryUrl: string;
+}
+
+export const ReportDetailsComponent = (props: { reportDetailsComponentTitle: any; reportDetailsComponentContent: any; }) => {
   const { reportDetailsComponentTitle, reportDetailsComponentContent } = props;
 
   return (
@@ -85,14 +106,33 @@ export const formatEmails = (emails: string[]) => {
   return Array.isArray(emails) ? emails.join(', ') : emails;
 };
 
-export function ReportDetails(props) {
-  const [reportDetails, setReportDetails] = useState({});
+export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpClient: any; }) {
+  const [reportDetails, setReportDetails] = useState<ReportDetails>({
+    reportName: '',
+    description: '',
+    created: '',
+    lastUpdated: '',
+    source: '',
+    time_period: '',
+    defaultFileFormat: '',
+    state: '',
+    reportHeader: '',
+    reportFooter: '',
+    triggerType: '',
+    scheduleType: '',
+    scheduleDetails: '',
+    configIds: [],
+    title: '',
+    textDescription: '',
+    htmlDescription: '',
+    queryUrl: ''
+  });
   const [toasts, setToasts] = useState([]);
   const [showLoading, setShowLoading] = useState(false);
 
   const reportId = props.match['params']['reportId'];
 
-  const handleLoading = (e) => {
+  const handleLoading = (e: boolean | ((prevState: boolean) => boolean)) => {
     setShowLoading(e);
   };
 
@@ -100,6 +140,7 @@ export function ReportDetails(props) {
     const toast = permissionsMissingToast(
       permissionsMissingActions.GENERATING_REPORT
     );
+    // @ts-ignore
     setToasts(toasts.concat(toast));
   };
 
@@ -121,6 +162,7 @@ export function ReportDetails(props) {
       iconType: 'alert',
       id: 'reportDetailsErrorToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(errorToast));
   };
 
@@ -142,6 +184,7 @@ export function ReportDetails(props) {
       ),
       id: 'onDemandDownloadSuccessToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(successToast));
   };
 
@@ -149,15 +192,15 @@ export function ReportDetails(props) {
     addSuccessToastHandler();
   };
 
-  const removeToast = (removedToast) => {
-    setToasts(toasts.filter((toast) => toast.id !== removedToast.id));
+  const removeToast = (removedToast: { id: any; }) => {
+    setToasts(toasts.filter((toast : any) => toast.id !== removedToast.id));
   };
 
-  const handleReportDetails = (e) => {
+  const handleReportDetails = (e: React.SetStateAction<ReportDetails>) => {
     setReportDetails(e);
   };
 
-  const convertTimestamp = (timestamp: number) => {
+  const convertTimestamp = (timestamp: number | undefined) => {
     let displayDate = `\u2014`;
     if (timestamp) {
       let readableDate = new Date(timestamp);
@@ -167,7 +210,7 @@ export function ReportDetails(props) {
   };
 
   const parseTimePeriod = (queryUrl: string) => {
-    let [timeStringRegEx, fromDateString, toDateString] = queryUrl.match(
+    let [fromDateString, toDateString] : RegExpMatchArray | null = queryUrl.match(
       timeRangeMatcher
     );
 
@@ -184,7 +227,7 @@ export function ReportDetails(props) {
     );
   };
 
-  const getReportDetailsData = (report: ReportSchemaType) => {
+  const getReportDetailsData = (report: ReportSchemaType) : ReportDetails => {
     const {
       report_definition: reportDefinition,
       last_updated: lastUpdated,
@@ -197,8 +240,10 @@ export function ReportDetails(props) {
       trigger_params: triggerParams,
     } = trigger;
     const {
-      delivery_type: deliveryType,
-      delivery_params: deliveryParams,
+      configIds: configIds,
+      title: title,
+      textDescription: textDescription,
+      htmlDescription: htmlDescription
     } = delivery;
     const coreParams = reportParams.core_params;
     // covert timestamp to local date-time string
@@ -211,7 +256,7 @@ export function ReportDetails(props) {
       source: reportParams.report_source,
       // TODO:  we have all data needed, time_from, time_to, time_duration,
       // think of a way to better display
-      time_period: (reportParams.report_source !== 'Notebook') ? parseTimePeriod(queryUrl) : '',
+      time_period: (reportParams.report_source !== 'Notebook') ? parseTimePeriod(queryUrl) : `\u2014`,
       defaultFileFormat: coreParams.report_format,
       state: state,
       reportHeader:
@@ -227,14 +272,10 @@ export function ReportDetails(props) {
       triggerType: triggerType,
       scheduleType: triggerParams ? triggerParams.schedule_type : `\u2014`,
       scheduleDetails: `\u2014`,
-      alertDetails: `\u2014`,
-      channel: deliveryType,
-      emailRecipients:
-        deliveryType === 'Channel' ? deliveryParams.recipients : `\u2014`,
-      emailSubject:
-        deliveryType === 'Channel' ? deliveryParams.title : `\u2014`,
-      emailBody:
-        deliveryType === 'Channel' ? deliveryParams.textDescription : `\u2014`,
+      configIds: (configIds.length > 0) ? displayDeliveryChannels(configIds) : `\u2014`,
+      title: (title !== '') ? title : `\u2014`,
+      textDescription: (textDescription !== '') ? textDescription : `\u2014`,
+      htmlDescription: (htmlDescription !== '') ? htmlDescription : `\u2014`,
       queryUrl: queryUrl,
     };
     return reportDetails;
@@ -244,7 +285,7 @@ export function ReportDetails(props) {
     const { httpClient } = props;
     httpClient
       .get('../api/reporting/reports/' + reportId)
-      .then((response) => {
+      .then((response: ReportSchemaType) => {
         handleReportDetails(getReportDetailsData(response));
         props.setBreadcrumbs([
           {
@@ -267,7 +308,7 @@ export function ReportDetails(props) {
           },
         ]);
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log('Error when fetching report details: ', error);
         handleErrorToast();
       });
@@ -285,7 +326,7 @@ export function ReportDetails(props) {
     handleLoading(false);
   };
 
-  const fileFormatDownload = (data) => {
+  const fileFormatDownload = (data: ReportDetails) => {
     let formatUpper = data['defaultFileFormat'];
     formatUpper = fileFormatsUpper[formatUpper];
     return (
@@ -296,13 +337,52 @@ export function ReportDetails(props) {
     );
   };
 
-  const sourceURL = (data) => {
+  const sourceURL = (data: ReportDetails) => {
     return (
       <EuiLink href={`${data.queryUrl}`} target="_blank">
         {data['source']}
       </EuiLink>
     );
   };
+
+  const triggerSection = 
+    reportDetails.triggerType === TRIGGER_TYPE.onDemand ? (
+      <ReportDetailsComponent
+      reportDetailsComponentTitle={i18n.translate(
+        'opensearch.reports.details.reportTrigger.reportType',
+        { defaultMessage: 'Report trigger' }
+      )}
+      reportDetailsComponentContent={reportDetails.triggerType}
+    />
+    ) : (
+      <EuiFlexGroup>
+        <ReportDetailsComponent
+          reportDetailsComponentTitle={i18n.translate(
+            'opensearch.reports.details.reportTrigger.reportType',
+            { defaultMessage: 'Report trigger' }
+          )}
+          reportDetailsComponentContent={reportDetails.triggerType}
+        />
+        <ReportDetailsComponent
+          reportDetailsComponentTitle={i18n.translate(
+            'opensearch.reports.details.reportTrigger.scheduleType',
+            { defaultMessage: 'Schedule type' }
+          )}
+          reportDetailsComponentContent={reportDetails.scheduleType}
+        />
+        <ReportDetailsComponent
+          reportDetailsComponentTitle={i18n.translate(
+            'opensearch.reports.details.reportTrigger.scheduleDetails',
+            { defaultMessage: 'Schedule details' }
+          )}
+          reportDetailsComponentContent={reportDetails.scheduleDetails}
+        />
+        <ReportDetailsComponent
+          reportDetailsComponentTitle={''}
+          reportDetailsComponentContent={''}
+        />
+      </EuiFlexGroup>
+    )
 
   const showLoadingModal = showLoading ? (
     <GenerateReportLoadingModal setShowLoading={setShowLoading} />
@@ -325,7 +405,7 @@ export function ReportDetails(props) {
               <EuiFlexItem>
                 <EuiPageHeaderSection>
                   <EuiTitle>
-                    <h2>{reportDetails['reportName']}</h2>
+                    <h2>{reportDetails.reportName}</h2>
                   </EuiTitle>
                 </EuiPageHeaderSection>
               </EuiFlexItem>
@@ -346,28 +426,28 @@ export function ReportDetails(props) {
                 'opensearch.reports.details.reportSettings.name',
                 { defaultMessage: 'Name' }
               )}
-              reportDetailsComponentContent={reportDetails['reportName']}
+              reportDetailsComponentContent={reportDetails.reportName}
             />
             <ReportDetailsComponent
               reportDetailsComponentTitle={i18n.translate(
                 'opensearch.reports.details.reportSettings.description',
                 { defaultMessage: 'Description' }
               )}
-              reportDetailsComponentContent={reportDetails['description']}
+              reportDetailsComponentContent={reportDetails.description}
             />
             <ReportDetailsComponent
               reportDetailsComponentTitle={i18n.translate(
                 'opensearch.reports.details.reportSettings.created',
                 { defaultMessage: 'Created' }
               )}
-              reportDetailsComponentContent={reportDetails['created']}
+              reportDetailsComponentContent={reportDetails.created}
             />
             <ReportDetailsComponent
               reportDetailsComponentTitle={i18n.translate(
                 'opensearch.reports.details.reportSettings.lastUpdated',
                 { defaultMessage: 'Last updated' }
               )}
-              reportDetailsComponentContent={reportDetails['lastUpdated']}
+              reportDetailsComponentContent={reportDetails.lastUpdated}
             />
           </EuiFlexGroup>
           <EuiSpacer />
@@ -398,7 +478,7 @@ export function ReportDetails(props) {
                 'opensearch.reports.details.reportSettings.state',
                 { defaultMessage: 'State' }
               )}
-              reportDetailsComponentContent={reportDetails['state']}
+              reportDetailsComponentContent={reportDetails.state}
             />
           </EuiFlexGroup>
           <EuiSpacer />
@@ -409,7 +489,7 @@ export function ReportDetails(props) {
                 { defaultMessage: 'Report header' }
               )}
               reportDetailsComponentContent={trimAndRenderAsText(
-                reportDetails['reportHeader']
+                reportDetails.reportHeader
               )}
             />
             <ReportDetailsComponent
@@ -418,69 +498,47 @@ export function ReportDetails(props) {
                 { defaultMessage: 'Report footer' }
               )}
               reportDetailsComponentContent={trimAndRenderAsText(
-                reportDetails['reportFooter']
+                reportDetails.reportFooter
               )}
             />
-            <ReportDetailsComponent />
-            <ReportDetailsComponent />
+            <ReportDetailsComponent
+              reportDetailsComponentTitle={''}
+              reportDetailsComponentContent={''}
+            />
+            <ReportDetailsComponent
+              reportDetailsComponentTitle={''}
+              reportDetailsComponentContent={''}
+            />
           </EuiFlexGroup>
+          <EuiSpacer />
+          {triggerSection}
           <EuiSpacer />
           <EuiTitle>
-            <h3>
-              {i18n.translate('opensearch.reports.details.reportTrigger', {
-                defaultMessage: 'Report trigger',
-              })}
-            </h3>
-          </EuiTitle>
-          <EuiSpacer />
-          <EuiFlexGroup>
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={i18n.translate(
-                'opensearch.reports.details.reportTrigger.reportType',
-                { defaultMessage: 'Report type' }
-              )}
-              reportDetailsComponentContent={reportDetails['triggerType']}
-            />
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={i18n.translate(
-                'opensearch.reports.details.reportTrigger.scheduleType',
-                { defaultMessage: 'Schedule type' }
-              )}
-              reportDetailsComponentContent={reportDetails['scheduleType']}
-            />
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={i18n.translate(
-                'opensearch.reports.details.reportTrigger.scheduleDetails',
-                { defaultMessage: 'Schedule details' }
-              )}
-              reportDetailsComponentContent={reportDetails['scheduleDetails']}
-            />
-            <ReportDetailsComponent />
-          </EuiFlexGroup>
-          <EuiSpacer />
-          {/* <EuiTitle>
             <h3>Notification settings</h3>
           </EuiTitle>
           <EuiSpacer />
           <EuiFlexGroup>
             <ReportDetailsComponent
-              reportDetailsComponentTitle={'Email recipient(s)'}
-              reportDetailsComponentContent={formatEmails(
-                reportDetails['emailRecipients']
-              )}
+              reportDetailsComponentTitle={'Config IDs'}
+              reportDetailsComponentContent={
+                reportDetails.configIds
+              }
             />
             <ReportDetailsComponent
-              reportDetailsComponentTitle={'Email subject'}
-              reportDetailsComponentContent={reportDetails['emailSubject']}
+              reportDetailsComponentTitle={'Title'}
+              reportDetailsComponentContent={reportDetails.title}
             />
             <ReportDetailsComponent
-              reportDetailsComponentTitle={'Optional message'}
+              reportDetailsComponentTitle={'Text description'}
+              reportDetailsComponentContent={reportDetails.textDescription}
+            />
+            <ReportDetailsComponent
+              reportDetailsComponentTitle={'Html description'}
               reportDetailsComponentContent={trimAndRenderAsText(
-                reportDetails['emailBody']
+                reportDetails.htmlDescription
               )}
             />
-            <ReportDetailsComponent />
-          </EuiFlexGroup> */}
+          </EuiFlexGroup>
         </EuiPageContent>
         <EuiGlobalToastList
           toasts={toasts}

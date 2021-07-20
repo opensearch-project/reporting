@@ -29,7 +29,7 @@ import React, { useState, useEffect } from 'react';
 import { i18n } from '@osd/i18n';
 import { TIMEZONE_OPTIONS } from './report_trigger_constants';
 
-export function TimezoneSelect(props) {
+export function TimezoneSelect(props: { reportDefinitionRequest: any; httpClientProps: any; edit: any; editDefinitionId: any; }) {
   const {
     reportDefinitionRequest,
     httpClientProps,
@@ -38,7 +38,7 @@ export function TimezoneSelect(props) {
   } = props;
   const [timezone, setTimezone] = useState(TIMEZONE_OPTIONS[0].value);
 
-  const handleTimezone = (e) => {
+  const handleTimezone = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setTimezone(e.target.value);
     if (
       reportDefinitionRequest.trigger.trigger_params.schedule_type ===
