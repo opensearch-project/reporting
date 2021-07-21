@@ -176,7 +176,6 @@ export function ReportDelivery(props: ReportDeliveryProps) {
                         label: availableChannels[j].label,
                         id: availableChannels[j].id
                       };
-                      console.log('edit channel option is', editChannelOption);
                       editChannelOptions.push(editChannelOption);                  
                     }
                   }

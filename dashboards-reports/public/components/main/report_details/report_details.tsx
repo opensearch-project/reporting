@@ -323,35 +323,6 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
         handleErrorToast();
       });
     })
-    // httpClient
-    //   .get('../api/reporting/reports/' + reportId)
-    //   .then((response: ReportSchemaType) => {
-    //     handleReportDetails(getReportDetailsData(response));
-    //     props.setBreadcrumbs([
-    //       {
-    //         text: i18n.translate(
-    //           'opensearch.reports.details.breadcrumb.reporting',
-    //           { defaultMessage: 'Reporting' }
-    //         ),
-    //         href: '#',
-    //       },
-    //       {
-    //         text: i18n.translate(
-    //           'opensearch.reports.details.breadcrumb.reportDetails',
-    //           {
-    //             defaultMessage: 'Report details: {name}',
-    //             values: {
-    //               name: response.report_definition.report_params.report_name,
-    //             },
-    //           }
-    //         ),
-    //       },
-    //     ]);
-    //   })
-    //   .catch((error: any) => {
-    //     console.log('Error when fetching report details: ', error);
-    //     handleErrorToast();
-    //   });
   }, []);
 
   const downloadIconDownload = async () => {
