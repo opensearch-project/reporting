@@ -59,8 +59,10 @@ describe('<ReportDetails /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'On demand',
@@ -70,6 +72,7 @@ describe('<ReportDetails /> panel', () => {
     httpClientMock.get = jest.fn().mockResolvedValue({
       report_definition,
       query_url: `http://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g=(time:(from:'2020-10-23T20:53:35.315Z',to:'2020-10-23T21:23:35.316Z'))`,
+      config_list: []
     });
 
     const { container } = render(
@@ -100,8 +103,10 @@ describe('<ReportDetails /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
@@ -123,6 +128,7 @@ describe('<ReportDetails /> panel', () => {
     httpClientMock.get = jest.fn().mockResolvedValue({
       report_definition,
       query_url: `http://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g=(time:(from:'2020-10-23T20:53:35.315Z',to:'2020-10-23T21:23:35.316Z'))`,
+      config_list: []
     });
 
     const { container } = render(

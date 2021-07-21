@@ -53,6 +53,7 @@ import {
   displayDeliveryChannels,
   fileFormatsUpper,
   generateReportFromDefinitionId,
+  getAvailableNotificationsChannels,
 } from '../main_utils';
 import { ReportDefinitionSchemaType } from '../../../../server/model';
 import moment from 'moment';
@@ -62,7 +63,7 @@ import {
   permissionsMissingActions,
 } from '../../utils/utils';
 import { GenerateReportLoadingModal } from '../loading_modal';
-import { placeholderChannels } from '../../report_definitions/delivery/delivery_constants';
+import { getChannelsQueryObject, placeholderChannels } from '../../report_definitions/delivery/delivery_constants';
 
 const ON_DEMAND = 'On demand';
 
@@ -410,7 +411,7 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
     return scheduleDetails;
   };
 
-  const getReportDefinitionDetailsMetadata = (data: ReportDefinitionSchemaType) : ReportDefinitionDetails => {
+  const getReportDefinitionDetailsMetadata = (data: ReportDefinitionSchemaType, availableChannels) : ReportDefinitionDetails => {
     const reportDefinition: ReportDefinitionSchemaType = data;
     const {
       report_params: reportParams,
@@ -473,7 +474,7 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
         ? humanReadableScheduleDetails(data.trigger)
         : `\u2014`,
       status: reportDefinition.status,
-      configIds: (configIds.length > 0) ? displayDeliveryChannels(configIds) : `\u2014`,
+      configIds: (configIds.length > 0) ? displayDeliveryChannels(configIds, availableChannels) : `\u2014`,
       title: (title !== '') ? title : `\u2014`,
       textDescription: (textDescription !== '') ? textDescription : `\u2014`,
       htmlDescription: (htmlDescription !== '') ? htmlDescription : `\u2014`
@@ -484,10 +485,19 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
   useEffect(() => {
     const { httpClient } = props;
     httpClient
+    .get('../api/notifications/get_configs', {
+      query: getChannelsQueryObject
+    })
+    .then(async (response: any) => {
+      let availableChannels = getAvailableNotificationsChannels(response.config_list);
+      return availableChannels;
+    })
+    .then((availableChannels: any) => {
+      httpClient
       .get(`../api/reporting/reportDefinitions/${reportDefinitionId}`)
       .then((response: {report_definition: ReportDefinitionSchemaType}) => {
         handleReportDefinitionRawResponse(response);
-        handleReportDefinitionDetails(getReportDefinitionDetailsMetadata(response.report_definition));
+        handleReportDefinitionDetails(getReportDefinitionDetailsMetadata(response.report_definition, availableChannels));
         props.setBreadcrumbs([
           {
             text: i18n.translate(
@@ -522,6 +532,7 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
         );
         handleDetailsErrorToast();
       });
+    })
   }, []);
 
   const downloadIconDownload = async () => {

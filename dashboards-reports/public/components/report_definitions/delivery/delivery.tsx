@@ -44,6 +44,7 @@ import 'react-mde/lib/styles/css/react-mde-all.css';
 import { reportDefinitionParams } from '../create/create_report_definition';
 import ReactMDE from 'react-mde';
 import { converter } from '../utils';
+import { getAvailableNotificationsChannels } from '../../main/main_utils';
 
 const styles: CSS.Properties = {
   maxWidth: '800px',
@@ -118,6 +119,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
   }
 
   const defaultCreateDeliveryParams = () => {
+    includeDelivery = false;
     reportDefinitionRequest.delivery = {
       configIds: [],
       title: `\u2014`, // default values before any Notifications settings are configured
@@ -128,7 +130,6 @@ export function ReportDelivery(props: ReportDeliveryProps) {
 
   const sendTestNotificationsMessage = () => {
     // on success, set test message confirmation message
-    console.log('selectedChannels is', selectedChannels);
     // for each config ID in the current channels list
 
     for (let i = 0; i < selectedChannels.length; ++i) {
@@ -139,28 +140,13 @@ export function ReportDelivery(props: ReportDeliveryProps) {
             feature: 'reports'
           }
         })
-        .then(() => {})
+        .then(() => {
+          handleTestMessageConfirmation(testMessageConfirmationMessage);
+        })
         .catch((error: string) => {
           console.log('error sending test message:', error);
         })
     }
-    handleTestMessageConfirmation(testMessageConfirmationMessage)
-  }
-
-  // placeholder type any
-  const getAvailableNotificationsChannels = (configList: any) => {
-    let availableChannels = [];
-    for (let i = 0; i < configList.length; ++i) {
-      let channelEntry = {};
-      if (configList[i].config.feature_list.includes('reports')) {
-        channelEntry = {
-          label: configList[i].config.name,
-          id: configList[i].config_id
-        }
-        availableChannels.push(channelEntry);
-      }
-    }
-    return availableChannels;
   }
 
   useEffect(() => {
