@@ -39,7 +39,7 @@ import {
   EuiButton,
 } from '@elastic/eui';
 import CSS from 'csstype';
-import { placeholderChannels, testMessageConfirmationMessage } from './delivery_constants';
+import { getChannelsQueryObject, placeholderChannels, testMessageConfirmationMessage } from './delivery_constants';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 import { reportDefinitionParams } from '../create/create_report_definition';
 import ReactMDE from 'react-mde';
@@ -74,8 +74,8 @@ export function ReportDelivery(props: ReportDeliveryProps) {
   const [sendNotification, setSendNotification] = useState(false);
   const [channels, setChannels] = useState([]);
   const [selectedChannels, setSelectedChannels] = useState([]);
-  const [notificationSubject, setNotificationSubject] = useState('');
-  const [notificationMessage, setNotificationMessage] = useState('');
+  const [notificationSubject, setNotificationSubject] = useState('New report');
+  const [notificationMessage, setNotificationMessage] = useState('New report available to view');
   const [selectedTab, setSelectedTab] = React.useState<'write' | 'preview'>(
     'write'
   );
@@ -84,6 +84,14 @@ export function ReportDelivery(props: ReportDeliveryProps) {
   const handleSendNotification = (e: { target: { checked: boolean }; }) => {
     setSendNotification(e.target.checked);
     includeDelivery = e.target.checked;
+    if (includeDelivery) {
+      reportDefinitionRequest.delivery.title = 'New report';
+      reportDefinitionRequest.delivery.textDescription = 'New report available to view';
+    }
+    else {
+      reportDefinitionRequest.delivery.title = `\u2014`;
+      reportDefinitionRequest.delivery.textDescription = `\u2014`;
+    }
   }
 
   const handleSelectedChannels = (e: Array<{ label: string, id: string}>) => {
@@ -112,51 +120,94 @@ export function ReportDelivery(props: ReportDeliveryProps) {
   const defaultCreateDeliveryParams = () => {
     reportDefinitionRequest.delivery = {
       configIds: [],
-      title: '',
-      textDescription: '',
+      title: `\u2014`, // default values before any Notifications settings are configured
+      textDescription: `\u2014`,
       htmlDescription: ''
     };
   };
 
   const sendTestNotificationsMessage = () => {
-    // implement send message
     // on success, set test message confirmation message
+    console.log('selectedChannels is', selectedChannels);
+    // for each config ID in the current channels list
+
+    for (let i = 0; i < selectedChannels.length; ++i) {
+      httpClientProps
+        .get(`../api/notifications/test_message/${selectedChannels[i].id}`, 
+        {
+          query: {
+            feature: 'reports'
+          }
+        })
+        .then(() => {})
+        .catch((error: string) => {
+          console.log('error sending test message:', error);
+        })
+    }
     handleTestMessageConfirmation(testMessageConfirmationMessage)
   }
 
-  useEffect(() => {
-    // to replace with actual channels from notifications plugin
-    setChannels(placeholderChannels);
-    if (edit) {
-      httpClientProps
-        .get(`../api/reporting/reportDefinitions/${editDefinitionId}`)
-        .then(async (response: any) => {
-          if (response.report_definition.delivery.configIds.length > 0) {
-            // add config IDs
-            handleSendNotification({target: {checked: true}});
-            let delivery = response.report_definition.delivery;
-            let editChannelOptions = [];
-            for (let i = 0; i < delivery.configIds.length; ++i) {
-              for (let j = 0; j < placeholderChannels.length; ++j) {
-                if (delivery.configIds[i] === placeholderChannels[j].id) {
-                  let editChannelOption = {
-                    label: placeholderChannels[j].label,
-                    id: placeholderChannels[j].id
-                  };
-                  
-                  editChannelOptions.push(editChannelOption);                  
-                }
-              }
-            }
-            setSelectedChannels(editChannelOptions);
-            setNotificationSubject(delivery.title);
-            setNotificationMessage(delivery.textDescription);
-            reportDefinitionRequest.delivery = delivery;
-          }
-        });
-    } else {
-      defaultCreateDeliveryParams();
+  // placeholder type any
+  const getAvailableNotificationsChannels = (configList: any) => {
+    let availableChannels = [];
+    for (let i = 0; i < configList.length; ++i) {
+      let channelEntry = {};
+      if (configList[i].config.feature_list.includes('reports')) {
+        channelEntry = {
+          label: configList[i].config.name,
+          id: configList[i].config_id
+        }
+        availableChannels.push(channelEntry);
+      }
     }
+    return availableChannels;
+  }
+
+  useEffect(() => {
+    httpClientProps
+      .get('../api/notifications/get_configs', {
+        query: getChannelsQueryObject
+      })
+      .then(async (response: any) => {  
+        let availableChannels = getAvailableNotificationsChannels(response.config_list);
+        setChannels(availableChannels);
+        return availableChannels;
+      })
+      .then((availableChannels: any) => {
+        if (edit) {
+          httpClientProps
+            .get(`../api/reporting/reportDefinitions/${editDefinitionId}`)
+            .then(async (response: any) => {
+              if (response.report_definition.delivery.configIds.length > 0) {
+                // add config IDs
+                handleSendNotification({target: {checked: true}});
+                let delivery = response.report_definition.delivery;
+                let editChannelOptions = [];
+                for (let i = 0; i < delivery.configIds.length; ++i) {
+                  for (let j = 0; j < availableChannels.length; ++j) {
+                    if (delivery.configIds[i] === availableChannels[j].id) {
+                      let editChannelOption = {
+                        label: availableChannels[j].label,
+                        id: availableChannels[j].id
+                      };
+                      console.log('edit channel option is', editChannelOption);
+                      editChannelOptions.push(editChannelOption);                  
+                    }
+                  }
+                }
+                setSelectedChannels(editChannelOptions);
+                setNotificationSubject(delivery.title);
+                setNotificationMessage(delivery.textDescription);
+                reportDefinitionRequest.delivery = delivery;
+              }
+            });
+        } else {
+          defaultCreateDeliveryParams();
+        }
+      })
+      .catch((error: string) => {
+        console.log('error: cannot get available channels from Notifications plugin:', error);
+      })
   }, []);
 
   const showNotificationsBody = sendNotification ? (
@@ -192,7 +243,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
       <EuiSpacer />
       <EuiFormRow
         label='Notification message'
-        helpText='Embed variables in your message using Mustache template.'
+        helpText='Embed variables in your message using Markdown.'
         style={styles}
       >
         <ReactMDE

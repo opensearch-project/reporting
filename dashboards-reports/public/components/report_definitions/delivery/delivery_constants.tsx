@@ -33,6 +33,14 @@ export const testMessageConfirmationMessage = (
   </EuiText>
 );
 
+export const getChannelsQueryObject = {
+  config_type: ['slack', 'email', 'chime', 'webhook', 'sns', 'ses'],
+  from_index: 0,
+  max_items: 10,
+  sort_field: 'name',
+  sort_order: 'asc'
+}
+
 // TODO: Remove and replace references after connecting to backend
 export const placeholderChannels = [
   {

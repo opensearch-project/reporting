@@ -410,18 +410,6 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
     return scheduleDetails;
   };
 
-  // const displayDeliveryChannels = (configIds: Array<string>) => {
-  //   let displayChannels = [];
-  //   for (let i = 0; i < configIds.length; ++i) {
-  //     for (let j = 0; j < placeholderChannels.length; ++j) {
-  //       if (configIds[i] === placeholderChannels[j].id) {
-  //         displayChannels.push(placeholderChannels[i].label);
-  //       }
-  //     }
-  //   }
-  //   return displayChannels.toString();
-  // }
-
   const getReportDefinitionDetailsMetadata = (data: ReportDefinitionSchemaType) : ReportDefinitionDetails => {
     const reportDefinition: ReportDefinitionSchemaType = data;
     const {
