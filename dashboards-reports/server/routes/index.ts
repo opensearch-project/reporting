@@ -28,6 +28,7 @@ import registerReportRoute from './report';
 import registerReportDefinitionRoute from './reportDefinition';
 import registerReportSourceRoute from './reportSource';
 import registerMetricRoute from './metric';
+import registerNotificationRoute from './notifications';
 import { IRouter } from '../../../../src/core/server';
 import { AccessInfoType } from 'server';
 
@@ -36,4 +37,5 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
   registerReportDefinitionRoute(router, accessInfo);
   registerReportSourceRoute(router);
   registerMetricRoute(router);
+  registerNotificationRoute(router);
 }

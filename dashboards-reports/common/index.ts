@@ -39,3 +39,15 @@ export const OPENSEARCH_REPORTS_API = {
   LIST_REPORT_DEFINITIONS: `${BASE_REPORTS_URI}/definitions`,
   POLL_REPORT_INSTANCE: `${BASE_REPORTS_URI}/poll_instance`,
 };
+
+const NOTIFICATIONS_DASHBOARDS_BASE_PATH = '/api/reporting_notifications';
+export const NOTIFICATIONS_DASHBOARDS_API = Object.freeze({
+  GET_CONFIGS: `${NOTIFICATIONS_DASHBOARDS_BASE_PATH}/get_configs`,
+  SEND_TEST_MESSAGE: `${NOTIFICATIONS_DASHBOARDS_BASE_PATH}/test_message`
+});
+
+const NOTIFICATIONS_API_BASE_PATH = '/_plugins/_notifications';
+export const NOTIFICATIONS_API = Object.freeze({
+  CONFIGS: `${NOTIFICATIONS_API_BASE_PATH}/configs`,
+  TEST_MESSAGE: `${NOTIFICATIONS_API_BASE_PATH}/feature/test`
+});

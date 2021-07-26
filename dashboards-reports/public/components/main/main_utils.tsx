@@ -34,6 +34,7 @@ export const displayDeliveryChannels = (configIds: Array<string>, channels: Arra
     for (let j = 0; j < channels.length; ++j) {
       if (configIds[i] === channels[j].id) {
         displayChannels.push(channels[j].label);
+        break;
       }
     }
   }
@@ -44,13 +45,11 @@ export const getAvailableNotificationsChannels = (configList: any) => {
   let availableChannels = [];
   for (let i = 0; i < configList.length; ++i) {
     let channelEntry = {};
-    if (configList[i].config.feature_list.includes('reports')) {
-      channelEntry = {
-        label: configList[i].config.name,
-        id: configList[i].config_id
-      }
-      availableChannels.push(channelEntry);
+    channelEntry = {
+      label: configList[i].config.name,
+      id: configList[i].config_id
     }
+    availableChannels.push(channelEntry);
   }
   return availableChannels;
 }

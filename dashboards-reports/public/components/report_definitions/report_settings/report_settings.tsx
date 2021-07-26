@@ -835,7 +835,7 @@ export function ReportSettings(props: ReportSettingProps) {
           <h2>
             {i18n.translate(
               'opensearch.reports.reportSettingProps.form.reportSettings',
-              { defaultMessage: 'Report Settings' }
+              { defaultMessage: 'Report settings' }
             )}
           </h2>
         </EuiTitle>

@@ -63,7 +63,7 @@ import {
   permissionsMissingActions,
 } from '../../utils/utils';
 import { GenerateReportLoadingModal } from '../loading_modal';
-import { getChannelsQueryObject, placeholderChannels } from '../../report_definitions/delivery/delivery_constants';
+import { getChannelsQueryObject } from '../../report_definitions/delivery/delivery_constants';
 
 const ON_DEMAND = 'On demand';
 
@@ -114,6 +114,7 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
   const [toasts, setToasts] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
+  const [channels, setChannels] = useState<Array<{ label: string; id: string; }>>([]);
   const reportDefinitionId = props.match['params']['reportDefinitionId'];
 
   const handleLoading = (e: boolean | ((prevState: boolean) => boolean)) => {
@@ -411,7 +412,10 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
     return scheduleDetails;
   };
 
-  const getReportDefinitionDetailsMetadata = (data: ReportDefinitionSchemaType, availableChannels) : ReportDefinitionDetails => {
+  const getReportDefinitionDetailsMetadata = (
+    data: ReportDefinitionSchemaType, 
+    availableChannels: Array<{ label: string; id: string; }>
+  ) : ReportDefinitionDetails => {
     const reportDefinition: ReportDefinitionSchemaType = data;
     const {
       report_params: reportParams,
@@ -485,11 +489,12 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
   useEffect(() => {
     const { httpClient } = props;
     httpClient
-    .get('../api/notifications/get_configs', {
+    .get('../api/reporting_notifications/get_configs', {
       query: getChannelsQueryObject
     })
     .then(async (response: any) => {
       let availableChannels = getAvailableNotificationsChannels(response.config_list);
+      setChannels(availableChannels);
       return availableChannels;
     })
     .then((availableChannels: any) => {
@@ -583,7 +588,7 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
         updatedRawResponse.report_definition = updatedReportDefinition;
         handleReportDefinitionRawResponse(updatedRawResponse);
         setReportDefinitionDetails(
-          getReportDefinitionDetailsMetadata(updatedReportDefinition)
+          getReportDefinitionDetailsMetadata(updatedReportDefinition, channels)
         );
         if (statusChange === 'Enable') {
           handleSuccessChangingScheduleStatusToast('enable');

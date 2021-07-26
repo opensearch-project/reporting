@@ -43,6 +43,7 @@ import registerRoutes from './routes';
 import { pollAndExecuteJob } from './executor/executor';
 import { POLL_INTERVAL } from './utils/constants';
 import { AccessInfoType } from 'server';
+import { NotificationsPlugin } from './clusters/notificationsPlugin';
 
 export interface ReportsPluginRequestContext {
   logger: Logger;
@@ -84,7 +85,14 @@ export class ReportsDashboardsPlugin
     const opensearchReportsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
       'opensearch_reports',
       {
-        plugins: [opensearchReportsPlugin],
+        plugins: [opensearchReportsPlugin, NotificationsPlugin],
+      }
+    );
+
+    const notificationsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
+      'opensearch_notifications',
+      {
+        plugins: [NotificationsPlugin],
       }
     );
 
@@ -100,6 +108,7 @@ export class ReportsDashboardsPlugin
           logger: this.logger,
           semaphore: this.semaphore,
           opensearchReportsClient,
+          notificationsClient
         };
       }
     );

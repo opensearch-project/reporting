@@ -228,7 +228,10 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
     );
   };
 
-  const getReportDetailsData = (report: ReportSchemaType, availableChannels) : ReportDetails => {
+  const getReportDetailsData = (
+    report: ReportSchemaType, 
+    availableChannels: Array<{ label: string; id: string; }>
+    ) : ReportDetails => {
     const {
       report_definition: reportDefinition,
       last_updated: lastUpdated,
@@ -285,7 +288,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
   useEffect(() => {
     const { httpClient } = props;
     httpClient
-    .get('../api/notifications/get_configs', {
+    .get('../api/reporting_notifications/get_configs', {
       query: getChannelsQueryObject
     })
     .then(async (response: any) => {

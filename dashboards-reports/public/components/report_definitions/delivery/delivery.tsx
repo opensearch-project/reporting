@@ -39,7 +39,7 @@ import {
   EuiButton,
 } from '@elastic/eui';
 import CSS from 'csstype';
-import { getChannelsQueryObject, placeholderChannels, testMessageConfirmationMessage } from './delivery_constants';
+import { getChannelsQueryObject, testMessageConfirmationMessage } from './delivery_constants';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 import { reportDefinitionParams } from '../create/create_report_definition';
 import ReactMDE from 'react-mde';
@@ -131,10 +131,9 @@ export function ReportDelivery(props: ReportDeliveryProps) {
   const sendTestNotificationsMessage = () => {
     // on success, set test message confirmation message
     // for each config ID in the current channels list
-
     for (let i = 0; i < selectedChannels.length; ++i) {
       httpClientProps
-        .get(`../api/notifications/test_message/${selectedChannels[i].id}`, 
+        .get(`../api/reporting_notifications/test_message/${selectedChannels[i].id}`, 
         {
           query: {
             feature: 'reports'
@@ -151,7 +150,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
 
   useEffect(() => {
     httpClientProps
-      .get('../api/notifications/get_configs', {
+      .get('../api/reporting_notifications/get_configs', {
         query: getChannelsQueryObject
       })
       .then(async (response: any) => {  
@@ -176,7 +175,8 @@ export function ReportDelivery(props: ReportDeliveryProps) {
                         label: availableChannels[j].label,
                         id: availableChannels[j].id
                       };
-                      editChannelOptions.push(editChannelOption);                  
+                      editChannelOptions.push(editChannelOption);
+                      break;                  
                     }
                   }
                 }

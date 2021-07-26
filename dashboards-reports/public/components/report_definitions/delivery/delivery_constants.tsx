@@ -36,19 +36,8 @@ export const testMessageConfirmationMessage = (
 export const getChannelsQueryObject = {
   config_type: ['slack', 'email', 'chime', 'webhook', 'sns', 'ses'],
   from_index: 0,
-  max_items: 10,
+  max_items: 1000,
   sort_field: 'name',
-  sort_order: 'asc'
+  sort_order: 'asc',
+  feature_list: ['reports']
 }
-
-// TODO: Remove and replace references after connecting to backend
-export const placeholderChannels = [
-  {
-    label: 'Chime',
-    id: 'abcdefghijk'
-  },
-  {
-    label: 'Slack',
-    id: 'zyxwvutsrq'
-  }
-]
