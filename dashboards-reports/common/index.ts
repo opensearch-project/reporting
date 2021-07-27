@@ -43,11 +43,13 @@ export const OPENSEARCH_REPORTS_API = {
 const NOTIFICATIONS_DASHBOARDS_BASE_PATH = '/api/reporting_notifications';
 export const NOTIFICATIONS_DASHBOARDS_API = Object.freeze({
   GET_CONFIGS: `${NOTIFICATIONS_DASHBOARDS_BASE_PATH}/get_configs`,
+  GET_EVENT: `${NOTIFICATIONS_DASHBOARDS_BASE_PATH}/get_event`,
   SEND_TEST_MESSAGE: `${NOTIFICATIONS_DASHBOARDS_BASE_PATH}/test_message`
 });
 
 const NOTIFICATIONS_API_BASE_PATH = '/_plugins/_notifications';
 export const NOTIFICATIONS_API = Object.freeze({
   CONFIGS: `${NOTIFICATIONS_API_BASE_PATH}/configs`,
+  EVENTS: `${NOTIFICATIONS_API_BASE_PATH}/events`,
   TEST_MESSAGE: `${NOTIFICATIONS_API_BASE_PATH}/feature/test`
 });

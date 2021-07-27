@@ -80,6 +80,36 @@ export default function(router: IRouter) {
     }
   );
 
+  // get event by id
+  router.get(
+    {
+      path: `${NOTIFICATIONS_DASHBOARDS_API.GET_EVENT}/{eventId}`,
+      validate: {
+        params: schema.object({
+          eventId: schema.string(),
+        }),
+      },
+    },
+    async (context, request, response) => {
+      // @ts-ignore
+      const client: ILegacyScopedClusterClient = context.reporting_plugin.notificationsClient.asScoped(
+        request
+      );
+      try {
+        const resp = await client.callAsCurrentUser(
+          'notifications.getEventById',
+          { eventId: request.params.eventId }
+        );
+        return response.ok({ body: resp });
+      } catch (error) {
+        return response.custom({
+          statusCode: error.statusCode || 500,
+          body: error.message,
+        });
+      }
+    }
+  )
+
   // Send test message
   router.get(
     {

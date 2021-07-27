@@ -24,6 +24,19 @@ export function NotificationsPlugin(Client: any, config: any, components: any) {
     method: 'GET',
   });
 
+  notifications.getEventById = clientAction({
+    url: {
+      fmt: `${NOTIFICATIONS_API.EVENTS}/<%=eventId%>`,
+      req: {
+        eventId: {
+          type: 'string',
+          required: true,
+        },
+      },
+    },
+    method: 'GET',
+  })
+
   notifications.sendTestMessage = clientAction({
     url: {
       fmt: `${NOTIFICATIONS_API.TEST_MESSAGE}/<%=configId%>`,

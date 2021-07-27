@@ -33,6 +33,12 @@ export const testMessageConfirmationMessage = (
   </EuiText>
 );
 
+export const testMessageFailureMessage = (
+  <EuiText size='s'>
+    <EuiIcon type='alert'/> Failed to send test message. Please adjust channel settings.
+  </EuiText>
+)
+
 export const getChannelsQueryObject = {
   config_type: ['slack', 'email', 'chime', 'webhook', 'sns', 'ses'],
   from_index: 0,

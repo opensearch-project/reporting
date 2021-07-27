@@ -39,7 +39,7 @@ import {
   EuiButton,
 } from '@elastic/eui';
 import CSS from 'csstype';
-import { getChannelsQueryObject, testMessageConfirmationMessage } from './delivery_constants';
+import { getChannelsQueryObject, testMessageConfirmationMessage, testMessageFailureMessage } from './delivery_constants';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 import { reportDefinitionParams } from '../create/create_report_definition';
 import ReactMDE from 'react-mde';
@@ -128,23 +128,35 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     };
   };
 
-  const sendTestNotificationsMessage = () => {
+  const sendTestNotificationsMessage = async () => {
     // on success, set test message confirmation message
     // for each config ID in the current channels list
     for (let i = 0; i < selectedChannels.length; ++i) {
-      httpClientProps
-        .get(`../api/reporting_notifications/test_message/${selectedChannels[i].id}`, 
-        {
-          query: {
-            feature: 'reports'
-          }
-        })
-        .then(() => {
-          handleTestMessageConfirmation(testMessageConfirmationMessage);
-        })
-        .catch((error: string) => {
-          console.log('error sending test message:', error);
-        })
+      try {
+        const eventId = await httpClientProps
+          .get(`../api/reporting_notifications/test_message/${selectedChannels[i].id}`, 
+          {
+            query: {
+              feature: 'reports'
+            }
+          })
+          .then((response) => response.event_id);
+          
+        await httpClientProps
+          .get(`../api/reporting_notifications/get_event/${eventId}`)
+          .then((response) => {
+            if (response.event_list.length != 1 && response.event_list[0].event_id != eventId) {
+              const error = new Error('Failed to send the test message.');
+              throw error;
+            }
+            else {
+              handleTestMessageConfirmation(testMessageConfirmationMessage);
+            }
+          });
+      } catch (error) {
+        // error message
+        handleTestMessageConfirmation(testMessageFailureMessage);
+      }
     }
   }
 
