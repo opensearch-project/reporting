@@ -27,6 +27,12 @@ import { EuiIcon, EuiText } from '@elastic/eui'
  * permissions and limitations under the License.
  */
 
+export const noDeliveryChannelsSelectedMessage = (
+  <EuiText size='s'>
+    <EuiIcon type='alert'/> Please select a channel. 
+  </EuiText>
+)
+
 export const testMessageConfirmationMessage = (
   <EuiText size='s'>
     <EuiIcon type='check'/> Test message sent to selected channels. If no test message is received, try again or check your channel settings in Notifications.

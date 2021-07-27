@@ -61,6 +61,12 @@ const timeRange = {
   timeTo: new Date(1234567890),
 };
 
+global.fetch = jest.fn(() => ({
+  then: jest.fn(() => ({
+    then: jest.fn()
+  }))
+}));
+
 describe('<ReportDelivery /> panel', () => {
   test('render create component', () => {
     const { container } = render(

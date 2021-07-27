@@ -39,12 +39,18 @@ import {
   EuiButton,
 } from '@elastic/eui';
 import CSS from 'csstype';
-import { getChannelsQueryObject, testMessageConfirmationMessage, testMessageFailureMessage } from './delivery_constants';
+import { 
+  getChannelsQueryObject, 
+  noDeliveryChannelsSelectedMessage, 
+  testMessageConfirmationMessage, 
+  testMessageFailureMessage 
+} from './delivery_constants';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 import { reportDefinitionParams } from '../create/create_report_definition';
 import ReactMDE from 'react-mde';
 import { converter } from '../utils';
 import { getAvailableNotificationsChannels } from '../../main/main_utils';
+import { NOTIFICATIONS_DASHBOARDS_API } from '../../../../common';
 
 const styles: CSS.Properties = {
   maxWidth: '800px',
@@ -60,6 +66,10 @@ export type ReportDeliveryProps = {
   httpClientProps: any;
   showDeliveryChannelError: boolean;
   deliveryChannelError: string;
+  showDeliverySubjectError: boolean;
+  deliverySubjectError: string;
+  showDeliveryTextError: boolean;
+  deliveryTextError: string;
 };
 
 export function ReportDelivery(props: ReportDeliveryProps) {
@@ -70,8 +80,13 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     httpClientProps,
     showDeliveryChannelError,
     deliveryChannelError,
+    showDeliverySubjectError,
+    deliverySubjectError,
+    showDeliveryTextError,
+    deliveryTextError
   } = props;
 
+  const [isDeliveryHidden, setIsHidden] = useState(false);
   const [sendNotification, setSendNotification] = useState(false);
   const [channels, setChannels] = useState([]);
   const [selectedChannels, setSelectedChannels] = useState([]);
@@ -114,7 +129,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     reportDefinitionRequest.delivery.htmlDescription = converter.makeHtml(e.toString());
   }
 
-  const handleTestMessageConfirmation = (e: string) => {
+  const handleTestMessageConfirmation = (e: JSX.Element) => {
     setTestMessageConfirmation(e);
   }
 
@@ -128,13 +143,41 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     };
   };
 
+  const isStatusCodeSuccess = (statusCode: string) => {
+    if (!statusCode) return true;
+    return /^2\d\d/.test(statusCode);
+  };
+
+  const eventToNotification = (event: any) => {
+    const success = event.event.status_list.every(
+      (status: any) => isStatusCodeSuccess(status.delivery_status.status_code)
+    );
+    return {
+      event_source: event.event.event_source,
+      status_list: event.event.status_list,
+      event_id: event.event_id,
+      created_time_ms: event.created_time_ms,
+      last_updated_time_ms: event.last_updated_time_ms,
+      success,
+    };
+  };
+
+  const getNotification = async (id: string) => {
+    const response = await httpClientProps.get(
+      `${NOTIFICATIONS_DASHBOARDS_API.GET_EVENT}/${id}`
+    );
+    return eventToNotification(response.event_list[0]);
+  };
+
   const sendTestNotificationsMessage = async () => {
-    // on success, set test message confirmation message
+    if (selectedChannels.length === 0) {
+      handleTestMessageConfirmation(noDeliveryChannelsSelectedMessage);
+    }
     // for each config ID in the current channels list
     for (let i = 0; i < selectedChannels.length; ++i) {
       try {
         const eventId = await httpClientProps
-          .get(`../api/reporting_notifications/test_message/${selectedChannels[i].id}`, 
+          .get(`${NOTIFICATIONS_DASHBOARDS_API.SEND_TEST_MESSAGE}/${selectedChannels[i].id}`, 
           {
             query: {
               feature: 'reports'
@@ -142,10 +185,9 @@ export function ReportDelivery(props: ReportDeliveryProps) {
           })
           .then((response) => response.event_id);
           
-        await httpClientProps
-          .get(`../api/reporting_notifications/get_event/${eventId}`)
+        await getNotification(eventId)
           .then((response) => {
-            if (response.event_list.length != 1 && response.event_list[0].event_id != eventId) {
+            if (!response.success) {
               const error = new Error('Failed to send the test message.');
               throw error;
             }
@@ -160,9 +202,34 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     }
   }
 
+  const checkIfNotificationsPluginIsInstalled = () => {
+    fetch("http://localhost:5601/api/console/proxy?path=%2F_cat%2Fplugins%3Fv%3Dtrue%26s%3Dcomponent%26h%3Dcomponent&method=GET", {
+      "credentials": "include",
+      "headers": {
+          "Accept": "text/plain, */*; q=0.01",
+          "Accept-Language": "en-US,en;q=0.5",
+          "osd-xsrf": "true"
+      },
+      "referrer": "http://localhost:5601/app/dev_tools",
+      "method": "POST",
+      "mode": "cors"
+    })
+    .then((response) => {
+      return response.text();
+    })
+    .then(function(data) {
+      if (data.includes('opensearch-notifications')) {
+        setIsHidden(false);
+        return;
+      }
+      setIsHidden(true);
+    })
+  }
+
   useEffect(() => {
+    checkIfNotificationsPluginIsInstalled();
     httpClientProps
-      .get('../api/reporting_notifications/get_configs', {
+      .get(`${NOTIFICATIONS_DASHBOARDS_API.GET_CONFIGS}`, {
         query: getChannelsQueryObject
       })
       .then(async (response: any) => {  
@@ -228,6 +295,8 @@ export function ReportDelivery(props: ReportDeliveryProps) {
       <EuiFormRow
         label='Notification subject'
         helpText='Required if at least one channel type is Email.'
+        isInvalid={showDeliverySubjectError}
+        error={deliverySubjectError}
         style={styles}
       >
         <EuiFieldText
@@ -241,6 +310,8 @@ export function ReportDelivery(props: ReportDeliveryProps) {
       <EuiFormRow
         label='Notification message'
         helpText='Embed variables in your message using Markdown.'
+        isInvalid={showDeliveryTextError}
+        error={deliveryTextError}
         style={styles}
       >
         <ReactMDE
@@ -272,7 +343,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
   ) : null;
 
   return (
-    <EuiPageContent panelPaddingSize={'l'}>
+    <EuiPageContent panelPaddingSize={'l'} hidden={isDeliveryHidden}>
       <EuiPageHeader>
         <EuiTitle>
           <h2>Notification settings</h2>
