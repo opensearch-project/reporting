@@ -54,21 +54,13 @@ fun constructReportDefinitionRequest(
                         "origin":"localhost:5601",
                         "id":"id"
                     },
+                    $trigger
                     "format":{
                         "duration":"PT1H",
                         "fileFormat":"Pdf",
                         "limit":1000,
                         "header":"optional header",
                         "footer":"optional footer"
-                    },
-                    $trigger
-                    "delivery":{
-                        "recipients":["nobody@email.com"],
-                        "deliveryFormat":"LinkOnly",
-                        "title":"title",
-                        "textDescription":"textDescription",
-                        "htmlDescription":"optional htmlDescription",
-                        "configIds":["optional_configIds"]
                     }
                 }
             }
