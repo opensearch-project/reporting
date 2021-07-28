@@ -71,11 +71,11 @@ export const contextMenuCreateReportDefinition = (baseURI) => {
   const timeRanges = getTimeFieldsFromUrl();
 
   // check report source
-  if (baseURI.includes('dashboard')) {
+  if (/\/app\/dashboards/.test(baseURI)) {
     reportSource = 'dashboard:';
-  } else if (baseURI.includes('visualize')) {
+  } else if (/\/app\/visualize/.test(baseURI)) {
     reportSource = 'visualize:';
-  } else if (baseURI.includes('discover')) {
+  } else if (/\/app\/discover/.test(baseURI)) {
     reportSource = 'discover:';
   }
   reportSource += reportSourceId.toString();
