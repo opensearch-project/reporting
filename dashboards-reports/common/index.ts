@@ -40,11 +40,11 @@ export const OPENSEARCH_REPORTS_API = {
   POLL_REPORT_INSTANCE: `${BASE_REPORTS_URI}/poll_instance`,
 };
 
-const NOTIFICATIONS_DASHBOARDS_BASE_PATH = '/api/reporting_notifications';
+const NOTIFICATIONS_API_PREFIX = '/api/reporting_notifications';
 export const NOTIFICATIONS_DASHBOARDS_API = Object.freeze({
-  GET_CONFIGS: `${NOTIFICATIONS_DASHBOARDS_BASE_PATH}/get_configs`,
-  GET_EVENT: `${NOTIFICATIONS_DASHBOARDS_BASE_PATH}/get_event`,
-  SEND_TEST_MESSAGE: `${NOTIFICATIONS_DASHBOARDS_BASE_PATH}/test_message`
+  GET_CONFIGS: `${NOTIFICATIONS_API_PREFIX}/get_configs`,
+  GET_EVENT: `${NOTIFICATIONS_API_PREFIX}/get_event`,
+  SEND_TEST_MESSAGE: `${NOTIFICATIONS_API_PREFIX}/test_message`
 });
 
 const NOTIFICATIONS_API_BASE_PATH = '/_plugins/_notifications';
