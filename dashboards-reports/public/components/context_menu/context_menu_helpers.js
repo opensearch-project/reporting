@@ -71,11 +71,11 @@ export const contextMenuCreateReportDefinition = (baseURI) => {
   const timeRanges = getTimeFieldsFromUrl();
 
   // check report source
-  if (/^\/(_plugin\/kibana\/|_dashboards\/)?app\/dashboards/.test(baseURI)) {
+  if (/\/app\/dashboards/.test(baseURI)) {
     reportSource = 'dashboard:';
-  } else if (/^\/(_plugin\/kibana\/|_dashboards\/)?app\/visualize/.test(baseURI)) {
+  } else if (/\/app\/visualize/.test(baseURI)) {
     reportSource = 'visualize:';
-  } else if (/^\/(_plugin\/kibana\/|_dashboards\/)?app\/discover/.test(baseURI)) {
+  } else if (/\/app\/discover/.test(baseURI)) {
     reportSource = 'discover:';
   }
   reportSource += reportSourceId.toString();
