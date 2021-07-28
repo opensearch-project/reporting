@@ -66,11 +66,11 @@ const generateInContextReport = async (
   }
 
   let reportSource = '';
-  if (baseUrl.includes('dashboard')) {
+  if (/\/app\/dashboards/.test(baseUrl)) {
     reportSource = 'Dashboard';
-  } else if (baseUrl.includes('visualize')) {
+  } else if (/\/app\/visualize/.test(baseUrl)) {
     reportSource = 'Visualization';
-  } else if (baseUrl.includes('discover')) {
+  } else if (/\/app\/discover/.test(baseUrl)) {
     reportSource = 'Saved search';
   }
 
