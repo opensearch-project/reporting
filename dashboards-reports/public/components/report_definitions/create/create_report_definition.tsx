@@ -166,6 +166,22 @@ export function CreateReport(props: { [x: string]: any; setBreadcrumbs?: any; ht
     deliveryChannelError,
     setDeliveryChannelError,
   ] = useState('');
+  const [
+    showDeliverySubjectError, 
+    setShowDeliverySubjectError
+  ] = useState(false);
+  const [
+    deliverySubjectError, 
+    setDeliverySubjectError
+  ] = useState('');
+  const [
+    showDeliveryTextError,
+    setShowDeliveryTextError
+  ] = useState(false);
+  const [
+    deliveryTextError,
+    setDeliveryTextError
+  ] = useState('');
   const [showTimeRangeError, setShowTimeRangeError] = useState(false);
 
   // preserve the state of the request after an invalid create report definition request
@@ -273,6 +289,10 @@ export function CreateReport(props: { [x: string]: any; setBreadcrumbs?: any; ht
       setShowCronError,
       setShowDeliveryChannelError,
       setDeliveryChannelError,
+      setShowDeliverySubjectError,
+      setDeliverySubjectError,
+      setShowDeliveryTextError,
+      setDeliveryTextError
     ).then((response) => {
       error = response;
     });
@@ -372,6 +392,10 @@ export function CreateReport(props: { [x: string]: any; setBreadcrumbs?: any; ht
           reportDefinitionRequest={createReportDefinitionRequest}
           showDeliveryChannelError={showDeliveryChannelError}
           deliveryChannelError={deliveryChannelError}
+          showDeliverySubjectError={showDeliverySubjectError}
+          deliverySubjectError={deliverySubjectError}
+          showDeliveryTextError={showDeliveryTextError}
+          deliveryTextError={deliveryTextError}
         />
         <EuiSpacer />
         <EuiFlexGroup justifyContent="flexEnd">

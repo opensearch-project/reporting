@@ -27,18 +27,31 @@
 import 'babel-polyfill';
 import { i18n } from '@osd/i18n';
 import { HttpFetchOptions, HttpSetup } from '../../../../../src/core/public';
-import { placeholderChannels } from '../report_definitions/delivery/delivery_constants';
 
-export const displayDeliveryChannels = (configIds: Array<string>) => {
+export const displayDeliveryChannels = (configIds: Array<string>, channels: Array<{label: string, id: string}>) => {
   let displayChannels = [];
   for (let i = 0; i < configIds.length; ++i) {
-    for (let j = 0; j < placeholderChannels.length; ++j) {
-      if (configIds[i] === placeholderChannels[j].id) {
-        displayChannels.push(placeholderChannels[i].label);
+    for (let j = 0; j < channels.length; ++j) {
+      if (configIds[i] === channels[j].id) {
+        displayChannels.push(channels[j].label);
+        break;
       }
     }
   }
   return displayChannels.toString();
+}
+
+export const getAvailableNotificationsChannels = (configList: any) => {
+  let availableChannels = [];
+  for (let i = 0; i < configList.length; ++i) {
+    let channelEntry = {};
+    channelEntry = {
+      label: configList[i].config.name,
+      id: configList[i].config_id
+    }
+    availableChannels.push(channelEntry);
+  }
+  return availableChannels;
 }
 
 type fileFormatsOptions = {
