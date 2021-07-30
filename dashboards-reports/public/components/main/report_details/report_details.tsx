@@ -44,7 +44,7 @@ import {
   EuiIcon,
   EuiGlobalToastList,
 } from '@elastic/eui';
-import { displayDeliveryChannels, fileFormatsUpper, generateReportById } from '../main_utils';
+import { displayDeliveryChannels, fileFormatsUpper, generateReportById, getAvailableNotificationsChannels } from '../main_utils';
 import { GenerateReportLoadingModal } from '../loading_modal';
 import { ReportSchemaType } from '../../../../server/model';
 import { converter } from '../../report_definitions/utils';
@@ -55,6 +55,7 @@ import {
   timeRangeMatcher,
 } from '../../utils/utils';
 import { TRIGGER_TYPE } from '../../../../server/routes/utils/constants';
+import { getChannelsQueryObject } from '../../report_definitions/delivery/delivery_constants';
 
 interface ReportDetails {
   reportName: string;
@@ -227,7 +228,10 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
     );
   };
 
-  const getReportDetailsData = (report: ReportSchemaType) : ReportDetails => {
+  const getReportDetailsData = (
+    report: ReportSchemaType, 
+    availableChannels: Array<{ label: string; id: string; }>
+    ) : ReportDetails => {
     const {
       report_definition: reportDefinition,
       last_updated: lastUpdated,
@@ -272,7 +276,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
       triggerType: triggerType,
       scheduleType: triggerParams ? triggerParams.schedule_type : `\u2014`,
       scheduleDetails: `\u2014`,
-      configIds: (configIds.length > 0) ? displayDeliveryChannels(configIds) : `\u2014`,
+      configIds: (configIds.length > 0) ? displayDeliveryChannels(configIds, availableChannels) : `\u2014`,
       title: (title !== '') ? title : `\u2014`,
       textDescription: (textDescription !== '') ? textDescription : `\u2014`,
       htmlDescription: (htmlDescription !== '') ? htmlDescription : `\u2014`,
@@ -284,9 +288,18 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
   useEffect(() => {
     const { httpClient } = props;
     httpClient
+    .get('../api/reporting_notifications/get_configs', {
+      query: getChannelsQueryObject
+    })
+    .then(async (response: any) => {
+      let availableChannels = getAvailableNotificationsChannels(response.config_list);
+      return availableChannels;
+    })
+    .then((availableChannels: any) => {
+      httpClient
       .get('../api/reporting/reports/' + reportId)
       .then((response: ReportSchemaType) => {
-        handleReportDetails(getReportDetailsData(response));
+        handleReportDetails(getReportDetailsData(response, availableChannels));
         props.setBreadcrumbs([
           {
             text: i18n.translate(
@@ -312,6 +325,7 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
         console.log('Error when fetching report details: ', error);
         handleErrorToast();
       });
+    })
   }, []);
 
   const downloadIconDownload = async () => {

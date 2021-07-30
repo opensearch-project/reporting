@@ -118,6 +118,8 @@
     "opensearch.reports.editReportDefinition.save": "Zapisz zmiany",
     "opensearch.reports.editReportDefinition.title": "Edytuj definicję raportu.",
     "opensearch.reports.error.channelListCannotBeEmpty": "Lista kanałów nie może być pusta.",
+    "opensearch.reports.error.deliverySubjectCannotBeEmpty": "Temat nie może być pusty.",
+    "opensearch.reports.error.deliveryTextCannotBeEmpty": "Tekst dostawy nie może być pusty",
     "opensearch.reports.error.reportSourceMustNotBeEmpty": "Źródło raportu nie może być puste.",
     "opensearch.reports.loading.close": "Zamknij",
     "opensearch.reports.loading.generatingReport": "Generowanie raportu.",
