@@ -173,6 +173,8 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     if (selectedChannels.length === 0) {
       handleTestMessageConfirmation(noDeliveryChannelsSelectedMessage);
     }
+    let testMessageFailures = false;
+    let failedChannels: string[] = [];
     // for each config ID in the current channels list
     for (let i = 0; i < selectedChannels.length; ++i) {
       try {
@@ -189,16 +191,19 @@ export function ReportDelivery(props: ReportDeliveryProps) {
           .then((response) => {
             if (!response.success) {
               const error = new Error('Failed to send the test message.');
+              failedChannels.push(response.status_list[0].config_name);
+              error.stack = JSON.stringify(response.status_list, null, 2);
               throw error;
-            }
-            else {
-              handleTestMessageConfirmation(testMessageConfirmationMessage);
             }
           });
       } catch (error) {
-        // error message
-        handleTestMessageConfirmation(testMessageFailureMessage);
+        testMessageFailures = true;
       }
+    }
+    if (testMessageFailures) {
+      handleTestMessageConfirmation(testMessageFailureMessage(failedChannels));
+    } else {
+      handleTestMessageConfirmation(testMessageConfirmationMessage);
     }
   }
 

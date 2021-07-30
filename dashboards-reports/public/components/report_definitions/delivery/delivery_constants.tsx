@@ -39,9 +39,9 @@ export const testMessageConfirmationMessage = (
   </EuiText>
 );
 
-export const testMessageFailureMessage = (
+export const testMessageFailureMessage = (failedChannels: Array<string>) => (
   <EuiText size='s'>
-    <EuiIcon type='alert'/> Failed to send test message. Please adjust channel settings.
+    <EuiIcon type='alert'/> Failed to send test message for some channels. Please adjust channel settings for {failedChannels.toString()}
   </EuiText>
 )
 
