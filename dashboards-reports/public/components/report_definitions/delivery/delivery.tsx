@@ -50,7 +50,7 @@ import { reportDefinitionParams } from '../create/create_report_definition';
 import ReactMDE from 'react-mde';
 import { converter } from '../utils';
 import { getAvailableNotificationsChannels } from '../../main/main_utils';
-import { NOTIFICATIONS_DASHBOARDS_API } from '../../../../common';
+import { REPORTING_NOTIFICATIONS_DASHBOARDS_API } from '../../../../common';
 
 const styles: CSS.Properties = {
   maxWidth: '800px',
@@ -164,7 +164,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
 
   const getNotification = async (id: string) => {
     const response = await httpClientProps.get(
-      `${NOTIFICATIONS_DASHBOARDS_API.GET_EVENT}/${id}`
+      `${REPORTING_NOTIFICATIONS_DASHBOARDS_API.GET_EVENT}/${id}`
     );
     return eventToNotification(response.event_list[0]);
   };
@@ -177,7 +177,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     for (let i = 0; i < selectedChannels.length; ++i) {
       try {
         const eventId = await httpClientProps
-          .get(`${NOTIFICATIONS_DASHBOARDS_API.SEND_TEST_MESSAGE}/${selectedChannels[i].id}`, 
+          .get(`${REPORTING_NOTIFICATIONS_DASHBOARDS_API.SEND_TEST_MESSAGE}/${selectedChannels[i].id}`, 
           {
             query: {
               feature: 'reports'
@@ -229,7 +229,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
   useEffect(() => {
     checkIfNotificationsPluginIsInstalled();
     httpClientProps
-      .get(`${NOTIFICATIONS_DASHBOARDS_API.GET_CONFIGS}`, {
+      .get(`${REPORTING_NOTIFICATIONS_DASHBOARDS_API.GET_CONFIGS}`, {
         query: getChannelsQueryObject
       })
       .then(async (response: any) => {  

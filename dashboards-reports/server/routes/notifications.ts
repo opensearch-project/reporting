@@ -10,7 +10,7 @@
  */
 
 import { schema } from '@osd/config-schema';
-import { NOTIFICATIONS_DASHBOARDS_API } from '../../common';
+import { REPORTING_NOTIFICATIONS_DASHBOARDS_API } from '../../common';
 import {
   IRouter,
   IOpenSearchDashboardsResponse,
@@ -24,7 +24,7 @@ export default function(router: IRouter) {
   // Get all configs from Notifications
   router.get(
     {
-      path: NOTIFICATIONS_DASHBOARDS_API.GET_CONFIGS,
+      path: REPORTING_NOTIFICATIONS_DASHBOARDS_API.GET_CONFIGS,
       validate: {
         query: schema.object({
           from_index: schema.number(),
@@ -83,7 +83,7 @@ export default function(router: IRouter) {
   // get event by id
   router.get(
     {
-      path: `${NOTIFICATIONS_DASHBOARDS_API.GET_EVENT}/{eventId}`,
+      path: `${REPORTING_NOTIFICATIONS_DASHBOARDS_API.GET_EVENT}/{eventId}`,
       validate: {
         params: schema.object({
           eventId: schema.string(),
@@ -113,7 +113,7 @@ export default function(router: IRouter) {
   // Send test message
   router.get(
     {
-      path: `${NOTIFICATIONS_DASHBOARDS_API.SEND_TEST_MESSAGE}/{configId}`,
+      path: `${REPORTING_NOTIFICATIONS_DASHBOARDS_API.SEND_TEST_MESSAGE}/{configId}`,
       validate: {
         params: schema.object({
           configId: schema.string(),
