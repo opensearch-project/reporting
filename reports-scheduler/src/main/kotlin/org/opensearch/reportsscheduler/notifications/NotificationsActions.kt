@@ -55,6 +55,7 @@ internal object NotificationsActions {
             object : ActionListener<SendNotificationResponse> {
                 override fun onResponse(p0: SendNotificationResponse) {
                     log.info("$LOG_PREFIX:NotificationsActions-send:${p0.notificationId}")
+                    // TODO need to get listener and return listener.onResponse(p0)
                 }
 
                 override fun onFailure(p0: java.lang.Exception) {
