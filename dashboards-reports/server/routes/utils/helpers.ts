@@ -105,3 +105,11 @@ export const checkErrorType = (error: any) => {
     return 'system_error';
   }
 };
+
+export const joinRequestParams = (
+  queryParams: string | string[] | undefined
+) => {
+  if (Array.isArray(queryParams)) return queryParams.join(',');
+  if (typeof queryParams === 'string') return queryParams;
+  return '';
+};

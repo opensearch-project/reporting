@@ -83,6 +83,7 @@ describe('<ReportDefinitionDetails /> panel', () => {
 
     httpClientMock.get = jest.fn().mockResolvedValue({
       report_definition,
+      config_list: []
     });
 
     const { container } = render(
@@ -137,6 +138,7 @@ describe('<ReportDefinitionDetails /> panel', () => {
 
     httpClientMock.get = jest.fn().mockResolvedValue({
       report_definition,
+      config_list: []
     });
 
     const { container } = render(
@@ -191,6 +193,7 @@ describe('<ReportDefinitionDetails /> panel', () => {
 
     httpClientMock.get = jest.fn().mockResolvedValue({
       report_definition,
+      config_list: []
     });
 
     const { container } = render(
@@ -234,6 +237,7 @@ describe('<ReportDefinitionDetails /> panel', () => {
 
     httpClientMock.get = jest.fn().mockResolvedValue({
       report_definition,
+      config_list: []
     });
 
     const component = mount(
@@ -292,6 +296,7 @@ describe('<ReportDefinitionDetails /> panel', () => {
 
     httpClientMock.get = jest.fn().mockResolvedValue({
       report_definition,
+      config_list: []
     });
 
     const component = mount(
@@ -351,6 +356,7 @@ describe('<ReportDefinitionDetails /> panel', () => {
 
     httpClientMock.get = jest.fn().mockResolvedValue({
       report_definition,
+      config_list: []
     });
 
     httpClientMock.put = jest.fn().mockResolvedValue({});
@@ -412,6 +418,7 @@ describe('<ReportDefinitionDetails /> panel', () => {
 
     httpClientMock.get = jest.fn().mockResolvedValue({
       report_definition,
+      config_list: []
     });
 
     httpClientMock.put = jest.fn().mockResolvedValue({});

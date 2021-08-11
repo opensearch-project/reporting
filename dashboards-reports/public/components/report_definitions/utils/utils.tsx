@@ -42,6 +42,10 @@ export const definitionInputValidation = async (
   setShowCronError,
   setShowDeliveryChannelError,
   setDeliveryChannelsErrorMessage, 
+  setShowDeliverySubjectError,
+  setDeliverySubjectError,
+  setShowDeliveryTextError,
+  setDeliveryTextError
 ) => {
   // check report name
   // allow a-z, A-Z, 0-9, (), [], ',' - and _ and spaces
@@ -101,16 +105,40 @@ export const definitionInputValidation = async (
     }
   }
   // delivery
-  if (metadata.delivery.configIds.length === 0 && includeDelivery) {
-    // no channels are listed
-    setShowDeliveryChannelError(true);
-    setDeliveryChannelsErrorMessage(
-      i18n.translate(
-        'opensearch.reports.error.channelListCannotBeEmpty',
-        { defaultMessage: 'Channels list cannot be empty.' }
-      )
-    );
-    error = true;
+  if (includeDelivery) {
+    if (metadata.delivery.configIds.length === 0) {
+      // no channels are listed
+      setShowDeliveryChannelError(true);
+      setDeliveryChannelsErrorMessage(
+        i18n.translate(
+          'opensearch.reports.error.channelListCannotBeEmpty',
+          { defaultMessage: 'Channels list cannot be empty.' }
+        )
+      );
+      error = true;
+    }
+    // subject is empty
+    if (metadata.delivery.title === '') {
+      setShowDeliverySubjectError(true);
+      setDeliverySubjectError(
+        i18n.translate(
+          'opensearch.reports.error.deliverySubjectCannotBeEmpty',
+          { defaultMessage: 'Subject cannot be empty.' }
+        )
+      );
+      error = true;
+    }
+    // message is empty
+    if (metadata.delivery.textDescription === '') {
+      setShowDeliveryTextError(true);
+      setDeliveryTextError(
+        i18n.translate(
+          'opensearch.reports.error.deliverySubjectCannotBeEmpty',
+          { defaultMessage: 'Subject cannot be empty.' }
+        )
+      );
+      error = true;
+    }    
   }
   return error;
 };
