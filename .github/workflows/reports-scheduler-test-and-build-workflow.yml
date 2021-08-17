@@ -18,7 +18,11 @@ jobs:
         with:
           java-version: 1.14
 
-    # dependencies: OpenSearch
+      # reports-scheduler
+      - name: Checkout Reports Scheduler
+        uses: actions/checkout@v2
+
+      # dependencies: OpenSearch
       - name: Checkout OpenSearch
         uses: actions/checkout@v2
         with:
@@ -50,10 +54,15 @@ jobs:
       - name: Build job-scheduler
         working-directory: ./job-scheduler
         run: ./gradlew publishToMavenLocal -Dopensearch.version=${{ env.OPENSEARCH_VERSION }}
+      - name: Assemble job-scheduler
+        working-directory: ./job-scheduler
+        run: |
+          ./gradlew assemble -Dopensearch.version=${{ env.OPENSEARCH_VERSION }}
+          mkdir -p ../reports-scheduler/src/test/resources/job-scheduler
+          cp ./build/distributions/*.zip ../reports-scheduler/src/test/resources/job-scheduler
+          ls ../reports-scheduler/src/test/resources/job-scheduler        
 
       # reports-scheduler
-      - name: Checkout Reports Scheduler
-        uses: actions/checkout@v2
       - name: Build with Gradle
         run: |
           cd reports-scheduler
