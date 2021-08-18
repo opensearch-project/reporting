@@ -3,9 +3,10 @@ name: Test and Build Reports Scheduler
 on: [push, pull_request]
 
 env:
-  OPENSEARCH_VERSION: '1.0'
-  COMMON_UTILS_VERSION: '1.0'
-  JOB_SCHEDULER_VERSION: '1.0'
+  OPENSEARCH_VERSION: '1.1.0-SNAPSHOT'
+  OPENSEARCH_BRANCH: '1.x'
+  COMMON_UTILS_BRANCH: 'main'
+  JOB_SCHEDULER_BRANCH: 'main'
 
 jobs:
   build:
@@ -17,38 +18,38 @@ jobs:
         with:
           java-version: 1.14
 
-    # dependencies: OpenSearch
+      # dependencies: OpenSearch
       - name: Checkout OpenSearch
         uses: actions/checkout@v2
         with:
           repository: 'opensearch-project/OpenSearch'
           path: OpenSearch
-          ref: ${{ env.OPENSEARCH_VERSION }}
+          ref: ${{ env.OPENSEARCH_BRANCH }}
       - name: Build OpenSearch
         working-directory: ./OpenSearch
-        run: ./gradlew publishToMavenLocal -Dbuild.snapshot=false
+        run: ./gradlew publishToMavenLocal
 
       # dependencies: common-utils
       - name: Checkout common-utils
         uses: actions/checkout@v2
         with:
           repository: 'opensearch-project/common-utils'
-          ref: ${{ env.COMMON_UTILS_VERSION }}
           path: common-utils
+          ref: ${{ env.COMMON_UTILS_BRANCH }}
       - name: Build common-utils
         working-directory: ./common-utils
-        run: ./gradlew publishToMavenLocal -Dopensearch.version=${{ env.OPENSEARCH_VERSION }}.0
+        run: ./gradlew publishToMavenLocal -Dopensearch.version=${{ env.OPENSEARCH_VERSION }}
 
       # dependencies: job-scheduler
       - name: Checkout job-scheduler
         uses: actions/checkout@v2
         with:
           repository: 'opensearch-project/job-scheduler'
-          ref: ${{ env.JOB_SCHEDULER_VERSION }}
+          ref: ${{ env.JOB_SCHEDULER_BRANCH }}
           path: job-scheduler
       - name: Build job-scheduler
         working-directory: ./job-scheduler
-        run: ./gradlew publishToMavenLocal -Dopensearch.version=${{ env.OPENSEARCH_VERSION }}.0 -Dbuild.snapshot=false
+        run: ./gradlew publishToMavenLocal -Dopensearch.version=${{ env.OPENSEARCH_VERSION }}
 
       # reports-scheduler
       - name: Checkout Reports Scheduler
@@ -57,7 +58,7 @@ jobs:
       - name: Build with Gradle
         run: |
           cd reports-scheduler
-          ./gradlew build -Dopensearch.version=${{ env.OPENSEARCH_VERSION }}.0
+          ./gradlew build -Dopensearch.version=${{ env.OPENSEARCH_VERSION }}
 
       - name: Upload coverage
         uses: codecov/codecov-action@v1
