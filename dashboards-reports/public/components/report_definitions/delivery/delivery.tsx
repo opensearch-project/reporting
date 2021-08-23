@@ -103,6 +103,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     if (includeDelivery) {
       reportDefinitionRequest.delivery.title = 'New report';
       reportDefinitionRequest.delivery.textDescription = 'New report available to view';
+      reportDefinitionRequest.delivery.htmlDescription = converter.makeHtml('New report available to view');
     }
     else {
       reportDefinitionRequest.delivery.title = `\u2014`;
