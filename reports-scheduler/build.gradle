@@ -30,10 +30,12 @@ import java.util.concurrent.Callable
 buildscript {
     ext {
         opensearch_group = "org.opensearch"
-        opensearch_version = System.getProperty("opensearch.version", "1.0.0")
+        opensearch_version = System.getProperty("opensearch.version", "1.1.0-SNAPSHOT")
+        // 1.0.0 -> 1.0.0.0, and 1.0.0-SNAPSHOT -> 1.0.0.0-SNAPSHOT
+        opensearch_build = opensearch_version.replaceAll(/(\.\d)([^\d]*)$/, '$1.0$2')
+        common_utils_version = System.getProperty("common_utils.version", opensearch_build)
+        job_scheduler_version = System.getProperty("job_scheduler.version", opensearch_build)        
         kotlin_version = System.getProperty("kotlin.version", "1.4.0")
-        common_utils_version = "1.0.0.0"
-        job_scheduler_version = "1.0.0.0"
     }
 
     repositories {
@@ -109,11 +111,6 @@ ext {
     licenseFile = rootProject.file('LICENSE.txt')
     noticeFile = rootProject.file('NOTICE.txt')
     isSnapshot = "true" == System.getProperty("build.snapshot", "true")
-    opensearchVersion = "${version}.0"
-}
-
-if (isSnapshot) {
-    version += "-SNAPSHOT"
 }
 
 plugins.withId('java') {
@@ -126,7 +123,10 @@ plugins.withId('org.jetbrains.kotlin.jvm') {
 
 allprojects {
     group = "org.opensearch"
-    version = "${opensearchVersion}"
+    version = "${opensearch_version}" - "-SNAPSHOT" + ".0"
+    if (isSnapshot) {
+        version += "-SNAPSHOT"
+    } 
     plugins.withId('java') {
         sourceCompatibility = targetCompatibility = "1.8"
     }
