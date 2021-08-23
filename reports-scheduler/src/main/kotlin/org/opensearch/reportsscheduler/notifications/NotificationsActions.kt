@@ -13,11 +13,11 @@ package org.opensearch.reportsscheduler.notifications
 
 import org.opensearch.action.ActionListener
 import org.opensearch.client.node.NodeClient
+import org.opensearch.commons.notifications.NotificationConstants.FEATURE_REPORTS
 import org.opensearch.commons.notifications.NotificationsPluginInterface
 import org.opensearch.commons.notifications.action.SendNotificationResponse
 import org.opensearch.commons.notifications.model.ChannelMessage
 import org.opensearch.commons.notifications.model.EventSource
-import org.opensearch.commons.notifications.model.Feature
 import org.opensearch.commons.notifications.model.SeverityType
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
 import org.opensearch.reportsscheduler.model.CreateReportDefinitionResponse
@@ -49,17 +49,16 @@ internal object NotificationsActions {
         log.info("$LOG_PREFIX:NotificationsActions-send")
         NotificationsPluginInterface.sendNotification(
             client,
-            EventSource(delivery.title, referenceId, Feature.REPORTS, SeverityType.INFO),
+            EventSource(delivery.title, referenceId, FEATURE_REPORTS, SeverityType.INFO),
             ChannelMessage(delivery.textDescription, delivery.htmlDescription, null),
             delivery.configIds,
             object : ActionListener<SendNotificationResponse> {
-                override fun onResponse(p0: SendNotificationResponse) {
-                    log.info("$LOG_PREFIX:NotificationsActions-send:${p0.notificationId}")
-                    // TODO need to get listener and return listener.onResponse(p0)
+                override fun onResponse(sendNotificationResponse: SendNotificationResponse) {
+                    log.info("$LOG_PREFIX:NotificationsActions-send:$sendNotificationResponse")
                 }
 
-                override fun onFailure(p0: java.lang.Exception) {
-                    log.error("$LOG_PREFIX:NotificationsActions-send Error:$p0")
+                override fun onFailure(exception: Exception) {
+                    log.error("$LOG_PREFIX:NotificationsActions-send Error:$exception")
                 }
             }
         )
