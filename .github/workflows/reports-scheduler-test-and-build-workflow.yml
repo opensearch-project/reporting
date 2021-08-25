@@ -3,7 +3,7 @@ name: Test and Build Reports Scheduler
 on: [push, pull_request]
 
 env:
-  OPENSEARCH_VERSION: '1.0'
+  OPENSEARCH_VERSION: 'tags/1.0.0'
   COMMON_UTILS_VERSION: '1.0'
   JOB_SCHEDULER_VERSION: '1.0'
 
