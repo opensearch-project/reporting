@@ -41,7 +41,8 @@ fun constructReportDefinitionRequest(
                 "triggerType":"OnDemand"
             },
         """.trimIndent(),
-    name: String = "report_definition"
+    name: String = "report_definition",
+    delivery: String = ""
 ): String {
     return """
             {
@@ -55,6 +56,7 @@ fun constructReportDefinitionRequest(
                         "id":"id"
                     },
                     $trigger
+                    $delivery
                     "format":{
                         "duration":"PT1H",
                         "fileFormat":"Pdf",
