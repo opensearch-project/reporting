@@ -24,6 +24,20 @@
  * permissions and limitations under the License.
  */
 
+describe('Adding sample data', () => {
+  it('Adds sample data', () => {
+    cy.visit(`${Cypress.env('opensearchDashboards')}/app/home#/tutorial_directory/sampleData`);
+    cy.get('div[data-test-subj="sampleDataSetCardflights"]').contains(/(Add|View) data/).click();
+    cy.wait(3000);
+    cy.visit(`${Cypress.env('opensearchDashboards')}/app/home#/tutorial_directory/sampleData`);
+    cy.get('div[data-test-subj="sampleDataSetCardecommerce"]').contains(/(Add|View) data/).click();
+    cy.wait(3000);
+    cy.visit(`${Cypress.env('opensearchDashboards')}/app/home#/tutorial_directory/sampleData`);
+    cy.get('div[data-test-subj="sampleDataSetCardlogs"]').contains(/(Add|View) data/).click();
+    cy.wait(3000);
+  });
+});
+
 describe('Cypress', () => {
   it('Visits Reporting homepage', () => {
     cy.visit(`${Cypress.env('opensearchDashboards')}/app/reports-dashboards#/`);
@@ -59,10 +73,20 @@ describe('Cypress', () => {
     cy.get('#reportSettingsDescription').type('Description for cypress test');
 
     // select a report source
-    cy.get('.euiComboBox').click({ force: true });
+    cy.get('[data-test-subj="comboBoxInput"]').eq(0).click({ force: true });
+
+    // select drop-down option in report source list
+    cy.contains('[Logs] Web Traffic').click();
+
+    cy.wait(500);
 
     // create an on-demand report definition
     cy.get('#createNewReportDefinition').click({ force: true });
+
+    cy.wait(12500);
+    
+    // check that re-direct to 
+    cy.get('#reportDefinitionDetailsLink').should('exist');
   });
 
   it('Create a new scheduled report definition', () => {
@@ -80,6 +104,14 @@ describe('Cypress', () => {
     // enter a report description
     cy.get('#reportSettingsDescription').type('Description for cypress test');
 
+    // select a report source
+    cy.get('[data-test-subj="comboBoxInput"]').eq(0).click({ force: true });
+
+    // select drop-down option in report source list
+    cy.contains('[Logs] Web Traffic').click();
+
+    cy.wait(500);
+
     // set report trigger to Schedule option
     cy.get('[type="radio"]').check({ force: true });
 
@@ -88,5 +120,10 @@ describe('Cypress', () => {
 
     // create scheduled report definition
     cy.get('#createNewReportDefinition').click({ force: true });
+
+    cy.wait(12500);
+    
+    // check that re-direct to 
+    cy.get('#reportDefinitionDetailsLink').should('exist');
   });
 });
