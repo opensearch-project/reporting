@@ -236,6 +236,10 @@ integTest {
     if (System.getProperty("test.debug") != null) {
         jvmArgs '-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=8000'
     }
+
+    if (System.getProperty("tests.clustername") != null) {
+         exclude 'org/opensearch/reportsscheduler/ReportsSchedulerPluginIT.class'
+    }
 }
 
 Zip bundle = (Zip) project.getTasks().getByName("bundlePlugin");
@@ -243,7 +247,7 @@ integTest.dependsOn(bundle)
 integTest.getClusters().forEach{c -> c.plugin(project.getObjects().fileProperty().value(bundle.getArchiveFile()))}
 
 testClusters.integTest {
-    testDistribution = "INTEG_TEST"
+    testDistribution = "ARCHIVE"
     // need to install job-scheduler first, need to assemble job-scheduler first
     plugin(provider(new Callable<RegularFile>(){
         @Override
