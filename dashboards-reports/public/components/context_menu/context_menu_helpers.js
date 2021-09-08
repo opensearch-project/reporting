@@ -141,22 +141,22 @@ export const replaceQueryURL = (pageUrl) => {
   // we unhash the url in case OpenSearch Dashboards advanced UI setting 'state:storeInSessionStorage' is turned on
   const unhashedUrl = new URL(unhashUrl(pageUrl));
   let queryUrl = unhashedUrl.pathname + unhashedUrl.hash;
-  let [, fromDateString, toDateString] = queryUrl.match(timeRangeMatcher);
-  fromDateString = fromDateString.replace(/[']+/g, '').replace('%2F','/');
+  let [, fromDateStringMatch, toDateStringMatch] = queryUrl.match(timeRangeMatcher);
+  fromDateString = fromDateStringMatch.replace(/[']+/g, '').replace('%2F','/');
 
   // convert time range to from date format in case time range is relative
   const fromDateFormat = dateMath.parse(fromDateString);
-  toDateString = toDateString.replace(/[']+/g, '').replace('%2F','/');
+  toDateString = toDateStringMatch.replace(/[']+/g, '').replace('%2F','/');
   const toDateFormat = dateMath.parse(toDateString);
 
   // replace to and from dates with absolute date
   queryUrl = queryUrl.replace(
-    fromDateString,
+    fromDateStringMatch,
     "'" + fromDateFormat.toISOString() + "'"
   );
   queryUrl = queryUrl.replace(
-    toDateString + '))',
-    "'" + toDateFormat.toISOString() + "'))"
+    toDateStringMatch,
+    "'" + toDateFormat.toISOString() + "'"
   );
   return queryUrl;
 };
