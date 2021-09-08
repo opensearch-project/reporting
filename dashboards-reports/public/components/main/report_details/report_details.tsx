@@ -215,8 +215,8 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
       timeRangeMatcher
     );
 
-    fromDateString = fromDateString.replace(/[']+/g, '');
-    toDateString = toDateString.replace(/[']+/g, '');
+    fromDateString = fromDateString.replace(/[']+/g, '').replace('%2F','/');
+    toDateString = toDateString.replace(/[']+/g, '').replace('%2F','/');
 
     let fromDateParsed = dateMath.parse(fromDateString);
     let toDateParsed = dateMath.parse(toDateString);
