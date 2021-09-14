@@ -26,10 +26,10 @@ We welcome you to get involved in development, documentation, testing the OpenSe
 
 ## Setup & Build
 
-Complete OpenSearch Dashboards Report feature is composed of 2 plugins. Refer to README in each plugin folder for more details.
+Complete OpenSearch Dashboards Report feature is composed of 2 plugins.
 
 - [OpenSearch Dashboards reports plugin](./dashboards-reports/README.md)
-- [OpenSearch Reports scheduler plugin](./reports-scheduler/README.md)（TODO）
+- OpenSearch Reports scheduler plugin
 
 ## Notifications Integration
 
@@ -54,7 +54,7 @@ If you discover a potential security issue in this project we ask that you notif
 
 ## License
 
-See the [LICENSE](./LICENSE.txt) file for our project's licensing. We will ask you to confirm the licensing of your contribution.
+See the [LICENSE](./LICENSE) file for our project's licensing. We will ask you to confirm the licensing of your contribution.
 
 ## Copyright
 
