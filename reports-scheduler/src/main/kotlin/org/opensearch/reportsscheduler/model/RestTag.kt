@@ -52,7 +52,6 @@ internal object RestTag {
     const val REPORT_DEFINITION_DETAILS_FIELD = "reportDefinitionDetails"
     const val FROM_INDEX_FIELD = "fromIndex"
     const val MAX_ITEMS_FIELD = "maxItems"
-    const val RETRY_AFTER_FIELD = "retryAfter"
     private val INCLUDE_ID = Pair(ID_FIELD, "true")
     private val EXCLUDE_ACCESS = Pair(ACCESS_LIST_FIELD, "false")
     val INSTANCE_INDEX_PARAMS: Params = ToXContent.MapParams(mapOf(INCLUDE_ID))

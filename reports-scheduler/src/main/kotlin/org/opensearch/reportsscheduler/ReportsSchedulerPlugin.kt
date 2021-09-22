@@ -37,7 +37,6 @@ import org.opensearch.reportsscheduler.action.GetReportDefinitionAction
 import org.opensearch.reportsscheduler.action.GetReportInstanceAction
 import org.opensearch.reportsscheduler.action.InContextReportCreateAction
 import org.opensearch.reportsscheduler.action.OnDemandReportCreateAction
-import org.opensearch.reportsscheduler.action.PollReportInstanceAction
 import org.opensearch.reportsscheduler.action.UpdateReportDefinitionAction
 import org.opensearch.reportsscheduler.action.UpdateReportInstanceStatusAction
 import org.opensearch.reportsscheduler.index.ReportDefinitionsIndex
@@ -47,12 +46,10 @@ import org.opensearch.reportsscheduler.resthandler.OnDemandReportRestHandler
 import org.opensearch.reportsscheduler.resthandler.ReportDefinitionListRestHandler
 import org.opensearch.reportsscheduler.resthandler.ReportDefinitionRestHandler
 import org.opensearch.reportsscheduler.resthandler.ReportInstanceListRestHandler
-import org.opensearch.reportsscheduler.resthandler.ReportInstancePollRestHandler
 import org.opensearch.reportsscheduler.resthandler.ReportInstanceRestHandler
 import org.opensearch.reportsscheduler.resthandler.ReportStatsRestHandler
 import org.opensearch.reportsscheduler.scheduler.ReportDefinitionJobParser
 import org.opensearch.reportsscheduler.scheduler.ReportDefinitionJobRunner
-import org.opensearch.reportsscheduler.settings.LegacyPluginSettings
 import org.opensearch.reportsscheduler.settings.PluginSettings
 
 import org.opensearch.action.ActionRequest
@@ -99,7 +96,6 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, JobSchedulerExtension {
     override fun getSettings(): List<Setting<*>> {
         val settingList = arrayListOf<Setting<*>>()
         settingList.addAll(PluginSettings.getAllSettings())
-        settingList.addAll(LegacyPluginSettings.getAllSettings())
         return settingList
     }
 
@@ -171,7 +167,6 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, JobSchedulerExtension {
             ReportInstanceRestHandler(),
             ReportInstanceListRestHandler(),
             OnDemandReportRestHandler(),
-            ReportInstancePollRestHandler(),
             ReportStatsRestHandler()
         )
     }
@@ -189,7 +184,6 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, JobSchedulerExtension {
             ActionPlugin.ActionHandler(GetReportInstanceAction.ACTION_TYPE, GetReportInstanceAction::class.java),
             ActionPlugin.ActionHandler(InContextReportCreateAction.ACTION_TYPE, InContextReportCreateAction::class.java),
             ActionPlugin.ActionHandler(OnDemandReportCreateAction.ACTION_TYPE, OnDemandReportCreateAction::class.java),
-            ActionPlugin.ActionHandler(PollReportInstanceAction.ACTION_TYPE, PollReportInstanceAction::class.java),
             ActionPlugin.ActionHandler(UpdateReportDefinitionAction.ACTION_TYPE, UpdateReportDefinitionAction::class.java),
             ActionPlugin.ActionHandler(UpdateReportInstanceStatusAction.ACTION_TYPE, UpdateReportInstanceStatusAction::class.java)
         )

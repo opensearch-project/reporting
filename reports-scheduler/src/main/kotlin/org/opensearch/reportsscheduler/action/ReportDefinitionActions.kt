@@ -129,7 +129,7 @@ internal object ReportDefinitionActions {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
             throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportDefinitionId}", RestStatus.FORBIDDEN)
         }
-        return GetReportDefinitionResponse(reportDefinitionDetails, UserAccessManager.hasAllInfoAccess(user))
+        return GetReportDefinitionResponse(reportDefinitionDetails, true)
     }
 
     /**
@@ -170,6 +170,6 @@ internal object ReportDefinitionActions {
             UserAccessManager.getSearchAccessInfo(user),
             request.fromIndex,
             request.maxItems)
-        return GetAllReportDefinitionsResponse(reportDefinitionsList, UserAccessManager.hasAllInfoAccess(user))
+        return GetAllReportDefinitionsResponse(reportDefinitionsList, true)
     }
 }

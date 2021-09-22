@@ -40,18 +40,15 @@ import org.opensearch.reportsscheduler.model.InContextReportCreateRequest
 import org.opensearch.reportsscheduler.model.InContextReportCreateResponse
 import org.opensearch.reportsscheduler.model.OnDemandReportCreateRequest
 import org.opensearch.reportsscheduler.model.OnDemandReportCreateResponse
-import org.opensearch.reportsscheduler.model.PollReportInstanceResponse
 import org.opensearch.reportsscheduler.model.ReportInstance
 import org.opensearch.reportsscheduler.model.ReportInstance.Status
 import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusRequest
 import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusResponse
 import org.opensearch.reportsscheduler.security.UserAccessManager
-import org.opensearch.reportsscheduler.settings.PluginSettings
 import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.OpenSearchStatusException
 import org.opensearch.rest.RestStatus
 import java.time.Instant
-import kotlin.random.Random
 
 /**
  * Report instances index operation actions.
@@ -85,7 +82,7 @@ internal object ReportInstanceActions {
             throw OpenSearchStatusException("Report Instance Creation failed", RestStatus.INTERNAL_SERVER_ERROR)
         }
         val reportInstanceCopy = reportInstance.copy(id = docId)
-        return InContextReportCreateResponse(reportInstanceCopy, UserAccessManager.hasAllInfoAccess(user))
+        return InContextReportCreateResponse(reportInstanceCopy, true)
     }
 
     /**
@@ -126,7 +123,7 @@ internal object ReportInstanceActions {
             throw OpenSearchStatusException("Report Instance Creation failed", RestStatus.INTERNAL_SERVER_ERROR)
         }
         val reportInstanceCopy = reportInstance.copy(id = docId)
-        return OnDemandReportCreateResponse(reportInstanceCopy, UserAccessManager.hasAllInfoAccess(user))
+        return OnDemandReportCreateResponse(reportInstanceCopy, true)
     }
 
     /**
@@ -181,7 +178,7 @@ internal object ReportInstanceActions {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
             throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportInstanceId}", RestStatus.FORBIDDEN)
         }
-        return GetReportInstanceResponse(reportInstance, UserAccessManager.hasAllInfoAccess(user))
+        return GetReportInstanceResponse(reportInstance, true)
     }
 
     /**
@@ -196,41 +193,6 @@ internal object ReportInstanceActions {
             UserAccessManager.getSearchAccessInfo(user),
             request.fromIndex,
             request.maxItems)
-        return GetAllReportInstancesResponse(reportInstanceList, UserAccessManager.hasAllInfoAccess(user))
-    }
-
-    fun poll(user: User?): PollReportInstanceResponse {
-        log.info("$LOG_PREFIX:ReportInstance-poll")
-        UserAccessManager.validatePollingUser(user)
-        val currentTime = Instant.now()
-        val reportInstances = ReportInstancesIndex.getPendingReportInstances()
-        return if (reportInstances.isEmpty()) {
-            PollReportInstanceResponse(getRetryAfterTime())
-        } else {
-            // Shuffle list so that when multiple requests are made, chances of lock conflict is less
-            reportInstances.shuffle()
-            /*
-            If the shuffling is perfect random then there is high probability that first item locking is successful
-            even when there are many parallel requests. i.e. say there are x jobs and y parallel requests.
-            then x out of y jobs can lock first item and rest cannot lock any jobs. However shuffle may not be perfect
-            hence checking first few jobs for locking.
-            */
-            val lockedJob = reportInstances.subList(0, PluginSettings.maxLockRetries).find {
-                val updatedInstance = it.copy(reportInstance = it.reportInstance.copy(
-                    updatedTime = currentTime,
-                    status = Status.Executing
-                ))
-                ReportInstancesIndex.updateReportInstanceDoc(updatedInstance)
-            }
-            if (lockedJob == null) {
-                PollReportInstanceResponse(PluginSettings.minPollingDurationSeconds)
-            } else {
-                PollReportInstanceResponse(0, lockedJob.reportInstance, UserAccessManager.hasAllInfoAccess(user))
-            }
-        }
-    }
-
-    private fun getRetryAfterTime(): Int {
-        return Random.nextInt(PluginSettings.minPollingDurationSeconds, PluginSettings.maxPollingDurationSeconds)
+        return GetAllReportInstancesResponse(reportInstanceList, true)
     }
 }

@@ -30,10 +30,8 @@ package org.opensearch.reportsscheduler.security
 import org.opensearch.commons.authuser.User
 import org.opensearch.reportsscheduler.metrics.Metrics
 import org.opensearch.reportsscheduler.settings.PluginSettings
-import org.opensearch.reportsscheduler.settings.PluginSettings.FilterBy
 import org.opensearch.OpenSearchStatusException
 import org.opensearch.rest.RestStatus
-import java.util.stream.Collectors
 
 /**
  * Class for checking/filtering user access.
@@ -42,8 +40,6 @@ internal object UserAccessManager {
     private const val USER_TAG = "User:"
     private const val ROLE_TAG = "Role:"
     private const val BACKEND_ROLE_TAG = "BERole:"
-    private const val ALL_ACCESS_ROLE = "all_access"
-    private const val KIBANA_SERVER_USER = "kibanaserver" // TODO: Change it to background user when created.
     private const val PRIVATE_TENANT = "__user__"
     const val DEFAULT_TENANT = ""
 
@@ -64,46 +60,12 @@ internal object UserAccessManager {
             throw OpenSearchStatusException("User name not provided for private tenant access",
                 RestStatus.FORBIDDEN)
         }
-        when (PluginSettings.filterBy) {
-            FilterBy.NoFilter -> { // No validation
-            }
-            FilterBy.User -> { // User name must be present
-                user?.name
-                    ?: run {
-                        Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-                        throw OpenSearchStatusException("Filter-by enabled with security disabled",
-                            RestStatus.FORBIDDEN)
-                    }
-            }
-            FilterBy.Roles -> { // backend roles must be present
-                if (user == null || user.roles.isNullOrEmpty()) {
-                    Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-                    throw OpenSearchStatusException("User doesn't have roles configured. Contact administrator.",
-                        RestStatus.FORBIDDEN)
-                } else if (user.roles.stream().filter { !PluginSettings.ignoredRoles.contains(it) }.count() == 0L) {
-                    Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-                    throw OpenSearchStatusException("No distinguishing roles configured. Contact administrator.",
-                        RestStatus.FORBIDDEN)
-                }
-            }
-            FilterBy.BackendRoles -> { // backend roles must be present
-                if (user?.backendRoles.isNullOrEmpty()) {
-                    Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-                    throw OpenSearchStatusException("User doesn't have backend roles configured. Contact administrator.",
-                        RestStatus.FORBIDDEN)
-                }
-            }
-        }
-    }
-
-    /**
-     * validate if user has access to polling actions
-     */
-    fun validatePollingUser(user: User?) {
-        if (user != null) { // Check only if security is enabled
-            if (user.name != KIBANA_SERVER_USER) {
+        if (PluginSettings.isRbacEnabled()) {
+            // backend roles must be present
+            if (user?.backendRoles.isNullOrEmpty()) {
                 Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-                throw OpenSearchStatusException("Permission denied", RestStatus.FORBIDDEN)
+                throw OpenSearchStatusException("User doesn't have backend roles configured. Contact administrator.",
+                    RestStatus.FORBIDDEN)
             }
         }
     }
@@ -144,17 +106,10 @@ internal object UserAccessManager {
         if (isUserPrivateTenant(user)) {
             return listOf("$USER_TAG${user.name}") // No sharing allowed in private tenant.
         }
-        if (canAdminViewAllItems(user)) {
-            return listOf()
-        }
-        return when (PluginSettings.filterBy) {
-            FilterBy.NoFilter -> listOf()
-            FilterBy.User -> listOf("$USER_TAG${user.name}")
-            FilterBy.Roles -> user.roles.stream()
-                .filter { !PluginSettings.ignoredRoles.contains(it) }
-                .map { "$ROLE_TAG$it" }
-                .collect(Collectors.toList())
-            FilterBy.BackendRoles -> user.backendRoles.map { "$BACKEND_ROLE_TAG$it" }
+        return if (PluginSettings.isRbacEnabled()) {
+            user.backendRoles.map { "$BACKEND_ROLE_TAG$it" }
+        } else {
+            listOf()
         }
     }
 
@@ -168,36 +123,11 @@ internal object UserAccessManager {
         if (getUserTenant(user) != tenant) {
             return false
         }
-        if (canAdminViewAllItems(user)) {
-            return true
+        return if (PluginSettings.isRbacEnabled()) {
+            user.backendRoles.map { "$BACKEND_ROLE_TAG$it" }.any { it in access }
+        } else {
+            true
         }
-        return when (PluginSettings.filterBy) {
-            FilterBy.NoFilter -> true
-            FilterBy.User -> access.contains("$USER_TAG${user.name}")
-            FilterBy.Roles -> user.roles.stream()
-                .filter { !PluginSettings.ignoredRoles.contains(it) }
-                .map { "$ROLE_TAG$it" }
-                .anyMatch { it in access }
-            FilterBy.BackendRoles -> user.backendRoles.map { "$BACKEND_ROLE_TAG$it" }.any { it in access }
-        }
-    }
-
-    /**
-     * Check if user has all info access.
-     */
-    fun hasAllInfoAccess(user: User?): Boolean {
-        if (user == null) { // Security is disabled
-            return true
-        }
-        return isAdminUser(user)
-    }
-
-    private fun canAdminViewAllItems(user: User): Boolean {
-        return PluginSettings.adminAccess == PluginSettings.AdminAccess.AllReports && isAdminUser(user)
-    }
-
-    private fun isAdminUser(user: User): Boolean {
-        return user.roles.contains(ALL_ACCESS_ROLE)
     }
 
     private fun isUserPrivateTenant(user: User?): Boolean {

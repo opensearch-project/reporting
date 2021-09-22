@@ -38,7 +38,6 @@ import org.opensearch.reportsscheduler.model.RestTag.REPORT_DEFINITION_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.TENANT_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.UPDATED_TIME_FIELD
 import org.opensearch.reportsscheduler.security.UserAccessManager.DEFAULT_TENANT
-import org.opensearch.reportsscheduler.settings.PluginSettings
 import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.reportsscheduler.util.stringList
 import org.opensearch.common.xcontent.ToXContent
@@ -169,13 +168,6 @@ internal data class ReportDefinitionDetails(
      */
     override fun getEnabledTime(): Instant {
         return createdTime
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    override fun getLockDurationSeconds(): Long? {
-        return PluginSettings.jobLockDurationSeconds.toLong()
     }
 
     override fun getSchedule(): Schedule {
