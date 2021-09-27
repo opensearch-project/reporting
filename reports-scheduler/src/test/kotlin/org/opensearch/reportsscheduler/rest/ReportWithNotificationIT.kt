@@ -85,7 +85,6 @@ class ReportWithNotificationIT : PluginRestTestCase() {
             "",
             RestStatus.OK.status
         )
-        println(notificationEventResponse)
         Assert.assertEquals(1, notificationEventResponse.get("total_hits").asInt)
         val notificationsStatusList = notificationEventResponse.getAsJsonArray("event_list").get(0).asJsonObject
             .getAsJsonObject("event").getAsJsonArray("status_list").get(0).asJsonObject
