@@ -57,15 +57,19 @@ internal object UserAccessManager {
     fun validateUser(user: User?) {
         if (isUserPrivateTenant(user) && user?.name == null) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-            throw OpenSearchStatusException("User name not provided for private tenant access",
-                RestStatus.FORBIDDEN)
+            throw OpenSearchStatusException(
+                "User name not provided for private tenant access",
+                RestStatus.FORBIDDEN
+            )
         }
         if (PluginSettings.isRbacEnabled()) {
             // backend roles must be present
             if (user?.backendRoles.isNullOrEmpty()) {
                 Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-                throw OpenSearchStatusException("User doesn't have backend roles configured. Contact administrator.",
-                    RestStatus.FORBIDDEN)
+                throw OpenSearchStatusException(
+                    "User doesn't have backend roles configured. Contact administrator.",
+                    RestStatus.FORBIDDEN
+                )
             }
         }
     }
@@ -94,6 +98,19 @@ internal object UserAccessManager {
         user.roles.forEach { retList.add("$ROLE_TAG$it") }
         user.backendRoles.forEach { retList.add("$BACKEND_ROLE_TAG$it") }
         return retList
+    }
+
+    /**
+     * Get user object from all user access info.
+     */
+    fun getUserFromAccess(access: List<String>): User? {
+        if (access.isNullOrEmpty()) {
+            return null
+        }
+        val name = access.find { it.startsWith(USER_TAG) }?.substring(USER_TAG.length)
+        val backendRoles = access.filter { it.startsWith(ROLE_TAG) }.map { it.substring(ROLE_TAG.length) }
+        val roles = access.filter { it.startsWith(BACKEND_ROLE_TAG) }.map { it.substring(BACKEND_ROLE_TAG.length) }
+        return User(name, backendRoles, roles, listOf())
     }
 
     /**
