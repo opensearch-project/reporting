@@ -52,11 +52,9 @@ export const getTimeFieldsFromUrl = () => {
   // convert time range to from date format in case time range is relative
   const fromDateFormat = dateMath.parse(fromDateString);
   toDateString = decodeURIComponent(toDateString.replace(/[']+/g, ''));
-  const toDateFormat = dateMath.parse(toDateString);
+  const toDateFormat = dateMath.parse(toDateString, { roundUp: true });
 
-  const timeDuration = moment.duration(
-    dateMath.parse(toDateString).diff(dateMath.parse(fromDateString))
-  );
+  const timeDuration = moment.duration(toDateFormat.diff(fromDateFormat));
 
   return {
     time_from: fromDateFormat,
@@ -141,13 +139,14 @@ export const replaceQueryURL = (pageUrl) => {
   // we unhash the url in case OpenSearch Dashboards advanced UI setting 'state:storeInSessionStorage' is turned on
   const unhashedUrl = new URL(unhashUrl(pageUrl));
   let queryUrl = unhashedUrl.pathname + unhashedUrl.hash;
-  let [, fromDateStringMatch, toDateStringMatch] = queryUrl.match(timeRangeMatcher);
+  let [, fromDateStringMatch, toDateStringMatch] =
+    queryUrl.match(timeRangeMatcher);
   fromDateString = decodeURIComponent(fromDateStringMatch.replace(/[']+/g, ''));
 
   // convert time range to from date format in case time range is relative
   const fromDateFormat = dateMath.parse(fromDateString);
   toDateString = decodeURIComponent(toDateStringMatch.replace(/[']+/g, ''));
-  const toDateFormat = dateMath.parse(toDateString);
+  const toDateFormat = dateMath.parse(toDateString, { roundUp: true });
 
   // replace to and from dates with absolute date
   queryUrl = queryUrl.replace(
