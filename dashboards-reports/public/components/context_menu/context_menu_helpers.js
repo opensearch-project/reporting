@@ -48,10 +48,10 @@ export const getTimeFieldsFromUrl = () => {
   const url = unhashUrl(window.location.href);
 
   let [, fromDateString, toDateString] = url.match(timeRangeMatcher);
-  fromDateString = fromDateString.replace(/[']+/g, '').replace('%2F','/');
+  fromDateString = decodeURIComponent(fromDateString.replace(/[']+/g, ''));
   // convert time range to from date format in case time range is relative
   const fromDateFormat = dateMath.parse(fromDateString);
-  toDateString = toDateString.replace(/[']+/g, '').replace('%2F','/');
+  toDateString = decodeURIComponent(toDateString.replace(/[']+/g, ''));
   const toDateFormat = dateMath.parse(toDateString);
 
   const timeDuration = moment.duration(
@@ -142,11 +142,11 @@ export const replaceQueryURL = (pageUrl) => {
   const unhashedUrl = new URL(unhashUrl(pageUrl));
   let queryUrl = unhashedUrl.pathname + unhashedUrl.hash;
   let [, fromDateStringMatch, toDateStringMatch] = queryUrl.match(timeRangeMatcher);
-  fromDateString = fromDateStringMatch.replace(/[']+/g, '').replace('%2F','/');
+  fromDateString = decodeURIComponent(fromDateStringMatch.replace(/[']+/g, ''));
 
   // convert time range to from date format in case time range is relative
   const fromDateFormat = dateMath.parse(fromDateString);
-  toDateString = toDateStringMatch.replace(/[']+/g, '').replace('%2F','/');
+  toDateString = decodeURIComponent(toDateStringMatch.replace(/[']+/g, ''));
   const toDateFormat = dateMath.parse(toDateString);
 
   // replace to and from dates with absolute date
