@@ -215,7 +215,6 @@ export function ReportDelivery(props: ReportDeliveryProps) {
           "Accept-Language": "en-US,en;q=0.5",
           "osd-xsrf": "true"
       },
-      "referrer": "http://localhost:5601/app/dev_tools",
       "method": "POST",
       "mode": "cors"
     })
