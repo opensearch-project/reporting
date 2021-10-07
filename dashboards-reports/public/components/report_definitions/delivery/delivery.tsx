@@ -208,14 +208,13 @@ export function ReportDelivery(props: ReportDeliveryProps) {
   }
 
   const checkIfNotificationsPluginIsInstalled = () => {
-    fetch("http://localhost:5601/api/console/proxy?path=%2F_cat%2Fplugins%3Fv%3Dtrue%26s%3Dcomponent%26h%3Dcomponent&method=GET", {
+    fetch("../api/console/proxy?path=%2F_cat%2Fplugins%3Fv%3Dtrue%26s%3Dcomponent%26h%3Dcomponent&method=GET", {
       "credentials": "include",
       "headers": {
           "Accept": "text/plain, */*; q=0.01",
           "Accept-Language": "en-US,en;q=0.5",
           "osd-xsrf": "true"
       },
-      "referrer": "http://localhost:5601/app/dev_tools",
       "method": "POST",
       "mode": "cors"
     })
