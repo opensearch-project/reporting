@@ -95,7 +95,10 @@ export function ReportDetails(props) {
     addPermissionsMissingDownloadToastHandler();
   };
 
-  const addErrorToastHandler = (title = 'Error loading report details.', text = '') => {
+  const addErrorToastHandler = (
+    title = 'Error loading report details.',
+    text = ''
+  ) => {
     const errorToast = {
       title,
       text,
@@ -146,11 +149,11 @@ export function ReportDetails(props) {
       timeRangeMatcher
     );
 
-    fromDateString = fromDateString.replace(/[']+/g, '');
-    toDateString = toDateString.replace(/[']+/g, '');
+    fromDateString = decodeURIComponent(fromDateString.replace(/[']+/g, ''));
+    toDateString = decodeURIComponent(toDateString.replace(/[']+/g, ''));
 
     let fromDateParsed = dateMath.parse(fromDateString);
-    let toDateParsed = dateMath.parse(toDateString);
+    let toDateParsed = dateMath.parse(toDateString, { roundUp: true });
 
     const fromTimePeriod = fromDateParsed?.toDate();
     const toTimePeriod = toDateParsed?.toDate();
@@ -189,12 +192,16 @@ export function ReportDetails(props) {
       time_period: parseTimePeriod(queryUrl),
       defaultFileFormat: coreParams.report_format,
       state: state,
-      reportHeader: reportParams.core_params.hasOwnProperty('header') && reportParams.core_params.header != ""
-        ? converter.makeMarkdown(reportParams.core_params.header)
-        : `\u2014`,
-      reportFooter: reportParams.core_params.hasOwnProperty('footer') && reportParams.core_params.footer != ""
-        ? converter.makeMarkdown(reportParams.core_params.footer)
-        : `\u2014`,
+      reportHeader:
+        reportParams.core_params.hasOwnProperty('header') &&
+        reportParams.core_params.header != ''
+          ? converter.makeMarkdown(reportParams.core_params.header)
+          : `\u2014`,
+      reportFooter:
+        reportParams.core_params.hasOwnProperty('footer') &&
+        reportParams.core_params.footer != ''
+          ? converter.makeMarkdown(reportParams.core_params.footer)
+          : `\u2014`,
       triggerType: triggerType,
       scheduleType: triggerParams ? triggerParams.schedule_type : `\u2014`,
       scheduleDetails: `\u2014`,
@@ -266,8 +273,9 @@ export function ReportDetails(props) {
     );
   };
 
-  const showLoadingModal = showLoading ?
-    <GenerateReportLoadingModal setShowLoading={setShowLoading} /> : null; 
+  const showLoadingModal = showLoading ? (
+    <GenerateReportLoadingModal setShowLoading={setShowLoading} />
+  ) : null;
 
   return (
     <EuiPage>
