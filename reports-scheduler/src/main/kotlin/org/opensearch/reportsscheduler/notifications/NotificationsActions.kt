@@ -77,6 +77,7 @@ internal object NotificationsActions {
         return sendNotificationResponse
     }
 
+    @Suppress("TooGenericExceptionCaught")
     private fun sendNotificationHelper(
         delivery: ReportDefinition.Delivery,
         referenceId: String
