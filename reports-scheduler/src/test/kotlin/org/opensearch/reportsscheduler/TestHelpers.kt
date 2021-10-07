@@ -41,7 +41,8 @@ fun constructReportDefinitionRequest(
                 "triggerType":"OnDemand"
             },
         """.trimIndent(),
-    name: String = "report_definition"
+    name: String = "report_definition",
+    delivery: String = ""
 ): String {
     return """
             {
@@ -54,21 +55,14 @@ fun constructReportDefinitionRequest(
                         "origin":"localhost:5601",
                         "id":"id"
                     },
+                    $trigger
+                    $delivery
                     "format":{
                         "duration":"PT1H",
                         "fileFormat":"Pdf",
                         "limit":1000,
                         "header":"optional header",
                         "footer":"optional footer"
-                    },
-                    $trigger
-                    "delivery":{
-                        "recipients":["nobody@email.com"],
-                        "deliveryFormat":"LinkOnly",
-                        "title":"title",
-                        "textDescription":"textDescription",
-                        "htmlDescription":"optional htmlDescription",
-                        "configIds":["optional_configIds"]
                     }
                 }
             }

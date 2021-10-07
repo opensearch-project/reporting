@@ -39,12 +39,16 @@ import org.apache.http.impl.client.BasicCredentialsProvider
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder
 import org.apache.http.message.BasicHeader
 import org.apache.http.ssl.SSLContextBuilder
+import org.junit.After
+import org.junit.AfterClass
+import org.junit.Before
 import org.opensearch.client.Request
 import org.opensearch.client.RequestOptions
 import org.opensearch.client.Response
 import org.opensearch.client.ResponseException
 import org.opensearch.client.RestClient
 import org.opensearch.client.RestClientBuilder
+import org.opensearch.client.WarningFailureException
 import org.opensearch.common.settings.Settings
 import org.opensearch.common.unit.TimeValue
 import org.opensearch.common.util.concurrent.ThreadContext
@@ -52,15 +56,12 @@ import org.opensearch.common.xcontent.DeprecationHandler
 import org.opensearch.common.xcontent.NamedXContentRegistry
 import org.opensearch.common.xcontent.XContentType
 import org.opensearch.test.rest.OpenSearchRestTestCase
-import org.junit.After
-import org.junit.AfterClass
-import org.junit.Before
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.charset.StandardCharsets
 import java.security.cert.X509Certificate
 import javax.management.MBeanServerInvocationHandler
 import javax.management.ObjectName
@@ -184,6 +185,8 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
             client().performRequest(request)
         } catch (exception: ResponseException) {
             exception.response
+        } catch (exception: WarningFailureException) {
+            exception.response
         }
         if (expectedRestStatus != null) {
             assertEquals(expectedRestStatus, response.statusLine.statusCode)
@@ -275,10 +278,10 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
             val serverUrl = "service:jmx:rmi:///jndi/rmi://127.0.0.1:7777/jmxrmi"
             JMXConnectorFactory.connect(JMXServiceURL(serverUrl)).use { connector ->
                 val proxy = MBeanServerInvocationHandler.newProxyInstance(
-                        connector.mBeanServerConnection,
-                        ObjectName("org.jacoco:type=Runtime"),
-                        IProxy::class.java,
-                        false
+                    connector.mBeanServerConnection,
+                    ObjectName("org.jacoco:type=Runtime"),
+                    IProxy::class.java,
+                    false
                 )
                 proxy.getExecutionData(false)?.let {
                     val path = Path.of("$jacocoBuildPath/integTest.exec")

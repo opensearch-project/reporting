@@ -48,15 +48,13 @@ export const getTimeFieldsFromUrl = () => {
   const url = unhashUrl(window.location.href);
 
   let [, fromDateString, toDateString] = url.match(timeRangeMatcher);
-  fromDateString = fromDateString.replace(/[']+/g, '');
+  fromDateString = decodeURIComponent(fromDateString.replace(/[']+/g, ''));
   // convert time range to from date format in case time range is relative
   const fromDateFormat = dateMath.parse(fromDateString);
-  toDateString = toDateString.replace(/[']+/g, '');
-  const toDateFormat = dateMath.parse(toDateString);
+  toDateString = decodeURIComponent(toDateString.replace(/[']+/g, ''));
+  const toDateFormat = dateMath.parse(toDateString, { roundUp: true });
 
-  const timeDuration = moment.duration(
-    dateMath.parse(toDateString).diff(dateMath.parse(fromDateString))
-  );
+  const timeDuration = moment.duration(toDateFormat.diff(fromDateFormat));
 
   return {
     time_from: fromDateFormat,
@@ -141,22 +139,23 @@ export const replaceQueryURL = (pageUrl) => {
   // we unhash the url in case OpenSearch Dashboards advanced UI setting 'state:storeInSessionStorage' is turned on
   const unhashedUrl = new URL(unhashUrl(pageUrl));
   let queryUrl = unhashedUrl.pathname + unhashedUrl.hash;
-  let [, fromDateString, toDateString] = queryUrl.match(timeRangeMatcher);
-  fromDateString = fromDateString.replace(/[']+/g, '');
+  let [, fromDateStringMatch, toDateStringMatch] =
+    queryUrl.match(timeRangeMatcher);
+  fromDateString = decodeURIComponent(fromDateStringMatch.replace(/[']+/g, ''));
 
   // convert time range to from date format in case time range is relative
   const fromDateFormat = dateMath.parse(fromDateString);
-  toDateString = toDateString.replace(/[']+/g, '');
-  const toDateFormat = dateMath.parse(toDateString);
+  toDateString = decodeURIComponent(toDateStringMatch.replace(/[']+/g, ''));
+  const toDateFormat = dateMath.parse(toDateString, { roundUp: true });
 
   // replace to and from dates with absolute date
   queryUrl = queryUrl.replace(
-    fromDateString,
+    fromDateStringMatch,
     "'" + fromDateFormat.toISOString() + "'"
   );
   queryUrl = queryUrl.replace(
-    toDateString + '))',
-    "'" + toDateFormat.toISOString() + "'))"
+    toDateStringMatch,
+    "'" + toDateFormat.toISOString() + "'"
   );
   return queryUrl;
 };

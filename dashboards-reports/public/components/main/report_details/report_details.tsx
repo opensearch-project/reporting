@@ -215,11 +215,11 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
       timeRangeMatcher
     );
 
-    fromDateString = fromDateString.replace(/[']+/g, '');
-    toDateString = toDateString.replace(/[']+/g, '');
+    fromDateString = decodeURIComponent(fromDateString.replace(/[']+/g, ''));
+    toDateString = decodeURIComponent(toDateString.replace(/[']+/g, ''));
 
     let fromDateParsed = dateMath.parse(fromDateString);
-    let toDateParsed = dateMath.parse(toDateString);
+    let toDateParsed = dateMath.parse(toDateString, { roundUp: true });
 
     const fromTimePeriod = fromDateParsed?.toDate();
     const toTimePeriod = toDateParsed?.toDate();

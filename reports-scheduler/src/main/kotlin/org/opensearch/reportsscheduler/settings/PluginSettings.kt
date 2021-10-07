@@ -27,8 +27,6 @@
 
 package org.opensearch.reportsscheduler.settings
 
-import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
-import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.PLUGIN_NAME
 import org.apache.logging.log4j.LogManager
 import org.opensearch.bootstrap.BootstrapInfo
 import org.opensearch.cluster.service.ClusterService
@@ -36,6 +34,8 @@ import org.opensearch.common.settings.Setting
 import org.opensearch.common.settings.Setting.Property.Dynamic
 import org.opensearch.common.settings.Setting.Property.NodeScope
 import org.opensearch.common.settings.Settings
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.PLUGIN_NAME
 import java.io.IOException
 import java.nio.file.Path
 
@@ -43,6 +43,8 @@ import java.nio.file.Path
  * settings specific to reports scheduler Plugin.
  */
 internal object PluginSettings {
+
+    private lateinit var clusterService: ClusterService
 
     /**
      * Settings Key prefix for this plugin.
@@ -55,16 +57,6 @@ internal object PluginSettings {
     private const val GENERAL_KEY_PREFIX = "$KEY_PREFIX.general"
 
     /**
-     * Polling settings Key prefix.
-     */
-    private const val POLLING_KEY_PREFIX = "$KEY_PREFIX.polling"
-
-    /**
-     * Access settings Key prefix.
-     */
-    private const val ACCESS_KEY_PREFIX = "$KEY_PREFIX.access"
-
-    /**
      * Operation timeout for network operations.
      */
     private const val OPERATION_TIMEOUT_MS_KEY = "$GENERAL_KEY_PREFIX.operationTimeoutMs"
@@ -75,39 +67,14 @@ internal object PluginSettings {
     private const val DEFAULT_ITEMS_QUERY_COUNT_KEY = "$GENERAL_KEY_PREFIX.defaultItemsQueryCount"
 
     /**
-     * Setting to choose Job lock duration.
+     * Legacy Alerting plugin filter_by_backend_roles setting.
      */
-    private const val JOB_LOCK_DURATION_S_KEY = "$POLLING_KEY_PREFIX.jobLockDurationSeconds"
+    private const val LEGACY_FILTER_BY_BACKEND_ROLES_KEY = "opendistro.alerting.filter_by_backend_roles"
 
     /**
-     * Setting to choose Minimum polling duration.
+     * Alerting plugin filter_by_backend_roles setting.
      */
-    private const val MIN_POLLING_DURATION_S_KEY = "$POLLING_KEY_PREFIX.minPollingDurationSeconds"
-
-    /**
-     * Setting to choose Maximum polling duration.
-     */
-    private const val MAX_POLLING_DURATION_S_KEY = "$POLLING_KEY_PREFIX.maxPollingDurationSeconds"
-
-    /**
-     * Setting to choose Maximum number of retries to try locking.
-     */
-    private const val MAX_LOCK_RETRIES_KEY = "$POLLING_KEY_PREFIX.maxLockRetries"
-
-    /**
-     * Setting to choose admin access restriction.
-     */
-    private const val ADMIN_ACCESS_KEY = "$ACCESS_KEY_PREFIX.adminAccess"
-
-    /**
-     * Setting to choose filter method.
-     */
-    private const val FILTER_BY_KEY = "$ACCESS_KEY_PREFIX.filterBy"
-
-    /**
-     * Setting to choose ignored roles for filtering.
-     */
-    private const val IGNORE_ROLE_KEY = "$ACCESS_KEY_PREFIX.ignoreRoles"
+    private const val FILTER_BY_BACKEND_ROLES_KEY = "plugins.alerting.filter_by_backend_roles"
 
     /**
      * Default operation timeout for network operations.
@@ -120,46 +87,6 @@ internal object PluginSettings {
     private const val MINIMUM_OPERATION_TIMEOUT_MS = 100L
 
     /**
-     * Default Job lock duration.
-     */
-    private const val DEFAULT_JOB_LOCK_DURATION_S = 300
-
-    /**
-     * Minimum Job lock duration.
-     */
-    private const val MINIMUM_JOB_LOCK_DURATION_S = 10
-
-    /**
-     * Default Minimum polling duration.
-     */
-    private const val DEFAULT_MIN_POLLING_DURATION_S = 300
-
-    /**
-     * Minimum Min polling duration.
-     */
-    private const val MINIMUM_MIN_POLLING_DURATION_S = 60
-
-    /**
-     * Default Maximum polling duration.
-     */
-    private const val DEFAULT_MAX_POLLING_DURATION_S = 900
-
-    /**
-     * Minimum Maximum polling duration.
-     */
-    private const val MINIMUM_MAX_POLLING_DURATION_S = 300
-
-    /**
-     * Default number of retries to try locking.
-     */
-    private const val DEFAULT_MAX_LOCK_RETRIES = 4
-
-    /**
-     * Minimum number of retries to try locking.
-     */
-    private const val MINIMUM_LOCK_RETRIES = 1
-
-    /**
      * Default number of items to query.
      */
     private const val DEFAULT_ITEMS_QUERY_COUNT_VALUE = 100
@@ -169,24 +96,7 @@ internal object PluginSettings {
      */
     private const val MINIMUM_ITEMS_QUERY_COUNT = 10
 
-    /**
-     * Default admin access method.
-     */
-    private const val DEFAULT_ADMIN_ACCESS_METHOD = "AllReports"
-
-    /**
-     * Default filter-by method.
-     */
-    private const val DEFAULT_FILTER_BY_METHOD = "NoFilter"
-
-    /**
-     * Default filter-by method.
-     */
-    private val DEFAULT_IGNORED_ROLES = listOf("own_index",
-        "kibana_user",
-        "reports_full_access",
-        "reports_read_access",
-        "reports_instances_read_access")
+    private const val DECIMAL_RADIX: Int = 10
 
     /**
      * Operation timeout setting in ms for I/O operations
@@ -199,66 +109,6 @@ internal object PluginSettings {
      */
     @Volatile
     var defaultItemsQueryCount: Int
-
-    /**
-     * Job lock duration
-     */
-    @Volatile
-    var jobLockDurationSeconds: Int
-
-    /**
-     * Minimum polling duration
-     */
-    @Volatile
-    var minPollingDurationSeconds: Int
-
-    /**
-     * Maximum polling duration.
-     */
-    @Volatile
-    var maxPollingDurationSeconds: Int
-
-    /**
-     * Max number of retries to try locking.
-     */
-    @Volatile
-    var maxLockRetries: Int
-
-    /**
-     * admin access method.
-     */
-    @Volatile
-    var adminAccess: AdminAccess
-
-    /**
-     * Filter-by method.
-     */
-    @Volatile
-    var filterBy: FilterBy
-
-    /**
-     * list of ignored roles.
-     */
-    @Volatile
-    var ignoredRoles: List<String>
-
-    /**
-     * Enum for types of admin access
-     * "Standard" -> Admin user access follows standard user
-     * "AllReports" -> Admin user with "all_access" role can see all reports of all users.
-     */
-    internal enum class AdminAccess { Standard, AllReports }
-
-    /**
-     * Enum for types of filterBy options
-     * NoFilter -> everyone see each other's reports
-     * User -> reports are visible to only themselves
-     * Roles -> reports are visible to users having any one of the role of creator
-     * BackendRoles -> reports are visible to users having any one of the backend role of creator
-     */
-    internal enum class FilterBy { NoFilter, User, Roles, BackendRoles }
-
-    private const val DECIMAL_RADIX: Int = 10
 
     private val log = LogManager.getLogger(javaClass)
     private val defaultSettings: Map<String, String>
@@ -278,82 +128,49 @@ internal object PluginSettings {
         operationTimeoutMs = (settings?.get(OPERATION_TIMEOUT_MS_KEY)?.toLong()) ?: DEFAULT_OPERATION_TIMEOUT_MS
         defaultItemsQueryCount = (settings?.get(DEFAULT_ITEMS_QUERY_COUNT_KEY)?.toInt())
             ?: DEFAULT_ITEMS_QUERY_COUNT_VALUE
-        jobLockDurationSeconds = (settings?.get(JOB_LOCK_DURATION_S_KEY)?.toInt()) ?: DEFAULT_JOB_LOCK_DURATION_S
-        minPollingDurationSeconds = (settings?.get(MIN_POLLING_DURATION_S_KEY)?.toInt())
-            ?: DEFAULT_MIN_POLLING_DURATION_S
-        maxPollingDurationSeconds = (settings?.get(MAX_POLLING_DURATION_S_KEY)?.toInt())
-            ?: DEFAULT_MAX_POLLING_DURATION_S
-        maxLockRetries = (settings?.get(MAX_LOCK_RETRIES_KEY)?.toInt()) ?: DEFAULT_MAX_LOCK_RETRIES
-        adminAccess = AdminAccess.valueOf(settings?.get(ADMIN_ACCESS_KEY) ?: DEFAULT_ADMIN_ACCESS_METHOD)
-        filterBy = FilterBy.valueOf(settings?.get(FILTER_BY_KEY) ?: DEFAULT_FILTER_BY_METHOD)
-        ignoredRoles = settings?.getAsList(IGNORE_ROLE_KEY) ?: DEFAULT_IGNORED_ROLES
 
         defaultSettings = mapOf(
             OPERATION_TIMEOUT_MS_KEY to operationTimeoutMs.toString(DECIMAL_RADIX),
-            DEFAULT_ITEMS_QUERY_COUNT_KEY to defaultItemsQueryCount.toString(DECIMAL_RADIX),
-            JOB_LOCK_DURATION_S_KEY to jobLockDurationSeconds.toString(DECIMAL_RADIX),
-            MIN_POLLING_DURATION_S_KEY to minPollingDurationSeconds.toString(DECIMAL_RADIX),
-            MAX_POLLING_DURATION_S_KEY to maxPollingDurationSeconds.toString(DECIMAL_RADIX),
-            MAX_LOCK_RETRIES_KEY to maxLockRetries.toString(DECIMAL_RADIX),
-            ADMIN_ACCESS_KEY to adminAccess.name,
-            FILTER_BY_KEY to filterBy.name
+            DEFAULT_ITEMS_QUERY_COUNT_KEY to defaultItemsQueryCount.toString(DECIMAL_RADIX)
         )
     }
 
     private val OPERATION_TIMEOUT_MS: Setting<Long> = Setting.longSetting(
         OPERATION_TIMEOUT_MS_KEY,
-        LegacyPluginSettings.OPERATION_TIMEOUT_MS,
+        defaultSettings[OPERATION_TIMEOUT_MS_KEY]!!.toLong(),
+        MINIMUM_OPERATION_TIMEOUT_MS,
         NodeScope, Dynamic
     )
 
     private val DEFAULT_ITEMS_QUERY_COUNT: Setting<Int> = Setting.intSetting(
         DEFAULT_ITEMS_QUERY_COUNT_KEY,
-        LegacyPluginSettings.DEFAULT_ITEMS_QUERY_COUNT,
+        defaultSettings[DEFAULT_ITEMS_QUERY_COUNT_KEY]!!.toInt(),
+        MINIMUM_ITEMS_QUERY_COUNT,
         NodeScope, Dynamic
     )
 
-    private val JOB_LOCK_DURATION_S: Setting<Int> = Setting.intSetting(
-        JOB_LOCK_DURATION_S_KEY,
-        LegacyPluginSettings.JOB_LOCK_DURATION_S,
+    private val LEGACY_FILTER_BY_BACKEND_ROLES: Setting<Boolean> = Setting.boolSetting(
+        LEGACY_FILTER_BY_BACKEND_ROLES_KEY,
+        false,
+        NodeScope, Dynamic, Setting.Property.Deprecated
+    )
+
+    private val FILTER_BY_BACKEND_ROLES: Setting<Boolean> = Setting.boolSetting(
+        FILTER_BY_BACKEND_ROLES_KEY,
+        LEGACY_FILTER_BY_BACKEND_ROLES,
         NodeScope, Dynamic
     )
 
-    private val MIN_POLLING_DURATION_S: Setting<Int> = Setting.intSetting(
-        MIN_POLLING_DURATION_S_KEY,
-        LegacyPluginSettings.MIN_POLLING_DURATION_S,
-        NodeScope, Dynamic
-    )
-
-    private val MAX_POLLING_DURATION_S: Setting<Int> = Setting.intSetting(
-        MAX_POLLING_DURATION_S_KEY,
-        LegacyPluginSettings.MAX_POLLING_DURATION_S,
-        NodeScope, Dynamic
-    )
-
-    private val MAX_LOCK_RETRIES: Setting<Int> = Setting.intSetting(
-        MAX_LOCK_RETRIES_KEY,
-        LegacyPluginSettings.MAX_LOCK_RETRIES,
-        NodeScope, Dynamic
-    )
-
-    private val ADMIN_ACCESS: Setting<String> = Setting.simpleString(
-        ADMIN_ACCESS_KEY,
-        LegacyPluginSettings.ADMIN_ACCESS,
-        NodeScope, Dynamic
-    )
-
-    private val FILTER_BY: Setting<String> = Setting.simpleString(
-        FILTER_BY_KEY,
-        LegacyPluginSettings.FILTER_BY,
-        NodeScope, Dynamic
-    )
-
-    private val IGNORED_ROLES: Setting<List<String>> = Setting.listSetting(
-        IGNORE_ROLE_KEY,
-        LegacyPluginSettings.IGNORED_ROLES,
-        { it },
-        NodeScope, Dynamic
-    )
+    /**
+     * Returns true if RBAC is enabled, else false (default false).
+     */
+    fun isRbacEnabled(): Boolean {
+        return if (clusterService.clusterSettings.get(FILTER_BY_BACKEND_ROLES_KEY) != null) {
+            return clusterService.clusterSettings.get(FILTER_BY_BACKEND_ROLES) ?: false
+        } else {
+            false
+        }
+    }
 
     /**
      * Returns list of additional settings available specific to this plugin.
@@ -362,14 +179,7 @@ internal object PluginSettings {
      */
     fun getAllSettings(): List<Setting<*>> {
         return listOf(OPERATION_TIMEOUT_MS,
-            DEFAULT_ITEMS_QUERY_COUNT,
-            JOB_LOCK_DURATION_S,
-            MIN_POLLING_DURATION_S,
-            MAX_POLLING_DURATION_S,
-            MAX_LOCK_RETRIES,
-            ADMIN_ACCESS,
-            FILTER_BY,
-            IGNORED_ROLES
+            DEFAULT_ITEMS_QUERY_COUNT
         )
     }
 
@@ -380,13 +190,6 @@ internal object PluginSettings {
     private fun updateSettingValuesFromLocal(clusterService: ClusterService) {
         operationTimeoutMs = OPERATION_TIMEOUT_MS.get(clusterService.settings)
         defaultItemsQueryCount = DEFAULT_ITEMS_QUERY_COUNT.get(clusterService.settings)
-        jobLockDurationSeconds = JOB_LOCK_DURATION_S.get(clusterService.settings)
-        minPollingDurationSeconds = MIN_POLLING_DURATION_S.get(clusterService.settings)
-        maxPollingDurationSeconds = MAX_POLLING_DURATION_S.get(clusterService.settings)
-        maxLockRetries = MAX_LOCK_RETRIES.get(clusterService.settings)
-        adminAccess = AdminAccess.valueOf(ADMIN_ACCESS.get(clusterService.settings))
-        filterBy = FilterBy.valueOf(FILTER_BY.get(clusterService.settings))
-        ignoredRoles = IGNORED_ROLES.get(clusterService.settings)
     }
 
     /**
@@ -404,41 +207,6 @@ internal object PluginSettings {
             log.debug("$LOG_PREFIX:$DEFAULT_ITEMS_QUERY_COUNT_KEY -autoUpdatedTo-> $clusterDefaultItemsQueryCount")
             defaultItemsQueryCount = clusterDefaultItemsQueryCount
         }
-        val clusterJobLockDurationSeconds = clusterService.clusterSettings.get(JOB_LOCK_DURATION_S)
-        if (clusterJobLockDurationSeconds != null) {
-            log.debug("$LOG_PREFIX:$JOB_LOCK_DURATION_S_KEY -autoUpdatedTo-> $clusterJobLockDurationSeconds")
-            jobLockDurationSeconds = clusterJobLockDurationSeconds
-        }
-        val clusterMinPollingDurationSeconds = clusterService.clusterSettings.get(MIN_POLLING_DURATION_S)
-        if (clusterMinPollingDurationSeconds != null) {
-            log.debug("$LOG_PREFIX:$MIN_POLLING_DURATION_S_KEY -autoUpdatedTo-> $clusterMinPollingDurationSeconds")
-            minPollingDurationSeconds = clusterMinPollingDurationSeconds
-        }
-        val clusterMaxPollingDurationSeconds = clusterService.clusterSettings.get(MAX_POLLING_DURATION_S)
-        if (clusterMaxPollingDurationSeconds != null) {
-            log.debug("$LOG_PREFIX:$MAX_POLLING_DURATION_S_KEY -autoUpdatedTo-> $clusterMaxPollingDurationSeconds")
-            maxPollingDurationSeconds = clusterMaxPollingDurationSeconds
-        }
-        val clusterMaxLockRetries = clusterService.clusterSettings.get(MAX_LOCK_RETRIES)
-        if (clusterMaxLockRetries != null) {
-            log.debug("$LOG_PREFIX:$MAX_LOCK_RETRIES_KEY -autoUpdatedTo-> $clusterMaxLockRetries")
-            maxLockRetries = clusterMaxLockRetries
-        }
-        val clusterAdminAccess = clusterService.clusterSettings.get(ADMIN_ACCESS)
-        if (clusterAdminAccess != null) {
-            log.debug("$LOG_PREFIX:$ADMIN_ACCESS_KEY -autoUpdatedTo-> $clusterAdminAccess")
-            adminAccess = AdminAccess.valueOf(clusterAdminAccess)
-        }
-        val clusterFilterBy = clusterService.clusterSettings.get(FILTER_BY)
-        if (clusterFilterBy != null) {
-            log.debug("$LOG_PREFIX:$FILTER_BY_KEY -autoUpdatedTo-> $clusterFilterBy")
-            filterBy = FilterBy.valueOf(clusterFilterBy)
-        }
-        val clusterIgnoredRoles = clusterService.clusterSettings.get(IGNORED_ROLES)
-        if (clusterIgnoredRoles != null) {
-            log.debug("$LOG_PREFIX:$IGNORE_ROLE_KEY -autoUpdatedTo-> $clusterIgnoredRoles")
-            ignoredRoles = clusterIgnoredRoles
-        }
     }
 
     /**
@@ -446,6 +214,7 @@ internal object PluginSettings {
      * @param clusterService cluster service instance
      */
     fun addSettingsUpdateConsumer(clusterService: ClusterService) {
+        this.clusterService = clusterService
         updateSettingValuesFromLocal(clusterService)
         // Update the variables to cluster setting values
         // If the cluster is not yet started then we get default values again
@@ -458,34 +227,6 @@ internal object PluginSettings {
         clusterService.clusterSettings.addSettingsUpdateConsumer(DEFAULT_ITEMS_QUERY_COUNT) {
             defaultItemsQueryCount = it
             log.info("$LOG_PREFIX:$DEFAULT_ITEMS_QUERY_COUNT_KEY -updatedTo-> $it")
-        }
-        clusterService.clusterSettings.addSettingsUpdateConsumer(JOB_LOCK_DURATION_S) {
-            jobLockDurationSeconds = it
-            log.info("$LOG_PREFIX:$JOB_LOCK_DURATION_S_KEY -updatedTo-> $it")
-        }
-        clusterService.clusterSettings.addSettingsUpdateConsumer(MIN_POLLING_DURATION_S) {
-            minPollingDurationSeconds = it
-            log.info("$LOG_PREFIX:$MIN_POLLING_DURATION_S_KEY -updatedTo-> $it")
-        }
-        clusterService.clusterSettings.addSettingsUpdateConsumer(MAX_POLLING_DURATION_S) {
-            maxPollingDurationSeconds = it
-            log.info("$LOG_PREFIX:$MAX_POLLING_DURATION_S_KEY -updatedTo-> $it")
-        }
-        clusterService.clusterSettings.addSettingsUpdateConsumer(MAX_LOCK_RETRIES) {
-            maxLockRetries = it
-            log.info("$LOG_PREFIX:$MAX_LOCK_RETRIES_KEY -updatedTo-> $it")
-        }
-        clusterService.clusterSettings.addSettingsUpdateConsumer(ADMIN_ACCESS) {
-            adminAccess = AdminAccess.valueOf(it)
-            log.info("$LOG_PREFIX:$ADMIN_ACCESS_KEY -updatedTo-> $it")
-        }
-        clusterService.clusterSettings.addSettingsUpdateConsumer(FILTER_BY) {
-            filterBy = FilterBy.valueOf(it)
-            log.info("$LOG_PREFIX:$FILTER_BY_KEY -updatedTo-> $it")
-        }
-        clusterService.clusterSettings.addSettingsUpdateConsumer(IGNORED_ROLES) {
-            ignoredRoles = it
-            log.info("$LOG_PREFIX:$IGNORE_ROLE_KEY -updatedTo-> $it")
         }
     }
 }
