@@ -27,6 +27,7 @@
 
 package org.opensearch.reportsscheduler.action
 
+import org.opensearch.OpenSearchStatusException
 import org.opensearch.commons.authuser.User
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
 import org.opensearch.reportsscheduler.index.ReportDefinitionsIndex
@@ -44,9 +45,9 @@ import org.opensearch.reportsscheduler.model.ReportInstance
 import org.opensearch.reportsscheduler.model.ReportInstance.Status
 import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusRequest
 import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusResponse
+import org.opensearch.reportsscheduler.notifications.NotificationsActions
 import org.opensearch.reportsscheduler.security.UserAccessManager
 import org.opensearch.reportsscheduler.util.logger
-import org.opensearch.OpenSearchStatusException
 import org.opensearch.rest.RestStatus
 import java.time.Instant
 
@@ -122,6 +123,8 @@ internal object ReportInstanceActions {
             Metrics.REPORT_FROM_DEFINITION_ID_SYSTEM_ERROR.counter.increment()
             throw OpenSearchStatusException("Report Instance Creation failed", RestStatus.INTERNAL_SERVER_ERROR)
         }
+        if (reportDefinitionDetails.reportDefinition.delivery != null)
+            NotificationsActions.send(reportDefinitionDetails.reportDefinition.delivery, docId)
         val reportInstanceCopy = reportInstance.copy(id = docId)
         return OnDemandReportCreateResponse(reportInstanceCopy, true)
     }
