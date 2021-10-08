@@ -70,7 +70,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       // input validation
       try {
         report.report_definition.report_params.core_params.origin =
-          request.headers.origin;
+          request.headers.origin || request.headers.host;
         report = await validateReport(
           context.core.opensearch.legacy.client,
           report,
