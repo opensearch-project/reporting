@@ -45,7 +45,10 @@ import { validateReport } from '../../server/utils/validationHelper';
 import { AccessInfoType } from 'server';
 
 export default function (router: IRouter, accessInfo: AccessInfoType) {
-  const { basePath } = accessInfo;
+  const {
+    basePath,
+    serverInfo: { protocol, port, hostname },
+  } = accessInfo;
   // generate report (with provided metadata)
   router.post(
     {
@@ -69,8 +72,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
 
       // input validation
       try {
-        report.report_definition.report_params.core_params.origin =
-          request.headers.origin;
+        report.report_definition.report_params.core_params.origin = `${protocol}://${hostname}:${port}${basePath}`;
         report = await validateReport(
           context.core.opensearch.legacy.client,
           report,
@@ -145,7 +147,10 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
           }
         );
         // convert report to use UI model
-        const report = backendToUiReport(opensearchResp.reportInstance, basePath);
+        const report = backendToUiReport(
+          opensearchResp.reportInstance,
+          basePath
+        );
         // generate report
         const reportData = await createReport(
           request,
@@ -211,7 +216,10 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         );
         const reportId = opensearchResp.reportInstance.id;
         // convert report to use UI model
-        const report = backendToUiReport(opensearchResp.reportInstance, basePath);
+        const report = backendToUiReport(
+          opensearchResp.reportInstance,
+          basePath
+        );
         // generate report
         const reportData = await createReport(
           request,
@@ -324,7 +332,10 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
           }
         );
 
-        const report = backendToUiReport(opensearchResp.reportInstance, basePath);
+        const report = backendToUiReport(
+          opensearchResp.reportInstance,
+          basePath
+        );
 
         return response.ok({
           body: report,
