@@ -156,6 +156,11 @@ public enum Metrics {
     REPORT_FROM_DEFINITION_ID_SYSTEM_ERROR("on_demand_from_definition.create.system_error", new RollingCounter()),
 
 
+    // Notifications: POST _plugins/_reports/on_demand/{reportDefinitionId} and scheduled jobs
+    REPORT_NOTIFICATIONS_TOTAL("report_notifications.send.total", new BasicCounter()),
+    REPORT_NOTIFICATIONS_ERROR("report_notifications.send.error", new RollingCounter()),
+
+
     REPORT_SECURITY_PERMISSION_ERROR("es_security_permission_error",  new RollingCounter()),
     REPORT_PERMISSION_USER_ERROR("permission_user_error",  new RollingCounter());
 
