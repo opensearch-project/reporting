@@ -45,7 +45,10 @@ import { validateReportDefinition } from '../../server/utils/validationHelper';
 import { AccessInfoType } from 'server';
 
 export default function (router: IRouter, accessInfo: AccessInfoType) {
-  const { basePath, serverInfo } = accessInfo;
+  const {
+    basePath,
+    serverInfo: { protocol, port, hostname },
+  } = accessInfo;
   // Create report Definition
   router.post(
     {
@@ -65,8 +68,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       const logger = context.reporting_plugin.logger;
       // input validation
       try {
-        reportDefinition.report_params.core_params.origin =
-          request.headers.origin;
+        reportDefinition.report_params.core_params.origin = `${protocol}://${hostname}:${port}${basePath}`;
         reportDefinition = await validateReportDefinition(
           context.core.opensearch.legacy.client,
           reportDefinition,

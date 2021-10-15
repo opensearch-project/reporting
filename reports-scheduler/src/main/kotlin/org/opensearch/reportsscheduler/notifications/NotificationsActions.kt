@@ -11,6 +11,7 @@
 
 package org.opensearch.reportsscheduler.notifications
 
+import org.opensearch.OpenSearchException
 import org.opensearch.action.ActionListener
 import org.opensearch.client.node.NodeClient
 import org.opensearch.common.util.concurrent.ThreadContext
@@ -22,6 +23,7 @@ import org.opensearch.commons.notifications.model.ChannelMessage
 import org.opensearch.commons.notifications.model.EventSource
 import org.opensearch.commons.notifications.model.SeverityType
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
+import org.opensearch.reportsscheduler.metrics.Metrics
 import org.opensearch.reportsscheduler.model.CreateReportDefinitionResponse
 import org.opensearch.reportsscheduler.model.ReportDefinition
 import org.opensearch.reportsscheduler.util.logger
@@ -48,8 +50,8 @@ internal object NotificationsActions {
      * @param referenceId [String] object
      * @return [CreateReportDefinitionResponse]
      */
-    fun send(delivery: ReportDefinition.Delivery, referenceId: String): SendNotificationResponse? {
-        return send(delivery, referenceId, "")
+    fun send(delivery: ReportDefinition.Delivery, referenceId: String, reportLink: String): SendNotificationResponse? {
+        return send(delivery, referenceId, reportLink, "")
     }
 
     /**
@@ -59,9 +61,9 @@ internal object NotificationsActions {
      * @param userStr [String] object,
      * @return [CreateReportDefinitionResponse]
      */
-    fun send(delivery: ReportDefinition.Delivery, referenceId: String, userStr: String?): SendNotificationResponse? {
+    fun send(delivery: ReportDefinition.Delivery, referenceId: String, reportLink: String, userStr: String?): SendNotificationResponse? {
         if (userStr.isNullOrEmpty()) {
-            return sendNotificationHelper(delivery, referenceId)
+            return sendNotificationHelper(delivery, referenceId, reportLink)
         }
 
         var sendNotificationResponse: SendNotificationResponse? = null
@@ -70,33 +72,50 @@ internal object NotificationsActions {
                 ConfigConstants.OPENSEARCH_SECURITY_USER_INFO_THREAD_CONTEXT,
                 userStr
             )
-            sendNotificationResponse = sendNotificationHelper(delivery, referenceId)
+            sendNotificationResponse = sendNotificationHelper(delivery, referenceId, reportLink)
         }
         return sendNotificationResponse
     }
 
+    @Suppress("TooGenericExceptionCaught")
     private fun sendNotificationHelper(
         delivery: ReportDefinition.Delivery,
-        referenceId: String
+        referenceId: String,
+        reportLink: String
     ): SendNotificationResponse? {
         log.info("$LOG_PREFIX:NotificationsActions-send")
         var sendNotificationResponse: SendNotificationResponse? = null
-        NotificationsPluginInterface.sendNotification(
-            client,
-            EventSource(delivery.title, referenceId, FEATURE_REPORTS, SeverityType.INFO),
-            ChannelMessage(delivery.textDescription, delivery.htmlDescription, null),
-            delivery.configIds,
-            object : ActionListener<SendNotificationResponse> {
-                override fun onResponse(response: SendNotificationResponse) {
-                    sendNotificationResponse = response
-                    log.info("$LOG_PREFIX:NotificationsActions-send:$sendNotificationResponse")
-                }
+        Metrics.REPORT_NOTIFICATIONS_TOTAL.counter.increment()
+        try {
+            NotificationsPluginInterface.sendNotification(
+                client,
+                EventSource(delivery.title, referenceId, FEATURE_REPORTS, SeverityType.INFO),
+                ChannelMessage("${delivery.textDescription}\nGet your report at $reportLink", delivery.htmlDescription, null),
+                delivery.configIds,
+                object : ActionListener<SendNotificationResponse> {
+                    override fun onResponse(response: SendNotificationResponse) {
+                        sendNotificationResponse = response
+                        log.info("$LOG_PREFIX:NotificationsActions-send:$sendNotificationResponse")
+                    }
 
-                override fun onFailure(exception: Exception) {
-                    log.error("$LOG_PREFIX:NotificationsActions-send Error:$exception")
+                    override fun onFailure(exception: Exception) {
+                        log.error("$LOG_PREFIX:NotificationsActions-send Error:$exception")
+                        throw exception
+                    }
                 }
+            )
+        } catch (e: Exception) {
+            Metrics.REPORT_NOTIFICATIONS_ERROR.counter.increment()
+            val isMissingNotificationPlugin = e.message?.contains("failed to find action") ?: false
+            if (isMissingNotificationPlugin) {
+                throw OpenSearchException(
+                    "Notification plugin is not installed. Please install the Notification plugin.",
+                    e
+                )
+            } else {
+                throw e
             }
-        )
+        }
         return sendNotificationResponse
     }
 

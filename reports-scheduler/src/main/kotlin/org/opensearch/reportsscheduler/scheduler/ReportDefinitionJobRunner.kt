@@ -39,6 +39,7 @@ import org.opensearch.reportsscheduler.model.ReportDefinitionDetails
 import org.opensearch.reportsscheduler.model.ReportInstance
 import org.opensearch.reportsscheduler.notifications.NotificationsActions
 import org.opensearch.reportsscheduler.security.UserAccessManager
+import org.opensearch.reportsscheduler.util.buildReportLink
 import org.opensearch.reportsscheduler.util.logger
 import java.time.Instant
 
@@ -73,7 +74,8 @@ internal object ReportDefinitionJobRunner : ScheduledJobRunner {
                 if (reportDefinitionDetails.reportDefinition.delivery != null) {
                     val user = UserAccessManager.getUserFromAccess(job.access)
                     val userStr = user?.let { it.toString() } ?: ""
-                    NotificationsActions.send(reportDefinitionDetails.reportDefinition.delivery, id, userStr)
+                    val reportLink = buildReportLink(reportDefinitionDetails.reportDefinition.source.origin, reportInstance.tenant, id)
+                    NotificationsActions.send(reportDefinitionDetails.reportDefinition.delivery, id, reportLink, userStr)
                 }
             }
         }
