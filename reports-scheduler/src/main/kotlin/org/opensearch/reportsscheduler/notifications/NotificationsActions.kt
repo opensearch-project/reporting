@@ -50,8 +50,8 @@ internal object NotificationsActions {
      * @param referenceId [String] object
      * @return [CreateReportDefinitionResponse]
      */
-    fun send(delivery: ReportDefinition.Delivery, referenceId: String): SendNotificationResponse? {
-        return send(delivery, referenceId, "")
+    fun send(delivery: ReportDefinition.Delivery, referenceId: String, reportLink: String): SendNotificationResponse? {
+        return send(delivery, referenceId, reportLink, "")
     }
 
     /**
@@ -61,9 +61,9 @@ internal object NotificationsActions {
      * @param userStr [String] object,
      * @return [CreateReportDefinitionResponse]
      */
-    fun send(delivery: ReportDefinition.Delivery, referenceId: String, userStr: String?): SendNotificationResponse? {
+    fun send(delivery: ReportDefinition.Delivery, referenceId: String, reportLink: String, userStr: String?): SendNotificationResponse? {
         if (userStr.isNullOrEmpty()) {
-            return sendNotificationHelper(delivery, referenceId)
+            return sendNotificationHelper(delivery, referenceId, reportLink)
         }
 
         var sendNotificationResponse: SendNotificationResponse? = null
@@ -72,7 +72,7 @@ internal object NotificationsActions {
                 ConfigConstants.OPENSEARCH_SECURITY_USER_INFO_THREAD_CONTEXT,
                 userStr
             )
-            sendNotificationResponse = sendNotificationHelper(delivery, referenceId)
+            sendNotificationResponse = sendNotificationHelper(delivery, referenceId, reportLink)
         }
         return sendNotificationResponse
     }
@@ -80,7 +80,8 @@ internal object NotificationsActions {
     @Suppress("TooGenericExceptionCaught")
     private fun sendNotificationHelper(
         delivery: ReportDefinition.Delivery,
-        referenceId: String
+        referenceId: String,
+        reportLink: String
     ): SendNotificationResponse? {
         log.info("$LOG_PREFIX:NotificationsActions-send")
         var sendNotificationResponse: SendNotificationResponse? = null
@@ -89,7 +90,7 @@ internal object NotificationsActions {
             NotificationsPluginInterface.sendNotification(
                 client,
                 EventSource(delivery.title, referenceId, FEATURE_REPORTS, SeverityType.INFO),
-                ChannelMessage(delivery.textDescription, delivery.htmlDescription, null),
+                ChannelMessage("${delivery.textDescription}\nGet your report at $reportLink", delivery.htmlDescription, null),
                 delivery.configIds,
                 object : ActionListener<SendNotificationResponse> {
                     override fun onResponse(response: SendNotificationResponse) {

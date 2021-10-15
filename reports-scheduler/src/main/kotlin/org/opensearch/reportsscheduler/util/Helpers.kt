@@ -39,7 +39,9 @@ import org.opensearch.common.xcontent.XContentParser
 import org.opensearch.common.xcontent.XContentParser.Token
 import org.opensearch.common.xcontent.XContentParserUtils
 import org.opensearch.common.xcontent.XContentType
+import org.opensearch.reportsscheduler.model.ReportInstance
 import org.opensearch.rest.RestRequest
+import java.net.URI
 
 internal fun StreamInput.createJsonParser(): XContentParser {
     return XContentType.JSON.xContent().createParser(NamedXContentRegistry.EMPTY, DeprecationHandler.IGNORE_DEPRECATIONS, this)
@@ -77,4 +79,22 @@ internal fun XContentBuilder.objectIfNotNull(name: String, xContentObject: ToXCo
         xContentObject.toXContent(this, ToXContent.EMPTY_PARAMS)
     }
     return this
+}
+
+/**
+ * Helper function of notification feature, to build report link and send as message
+ * @param origin [ReportInstance] url prefix
+ * @param tenant [String]
+ * @param reportInstanceId[String]
+ * @return [String] the actual report link
+ */
+internal fun buildReportLink(origin: String, tenant: String, reportInstanceId: String): String {
+    var tenantValueInUrl = tenant
+    tenantValueInUrl = when (tenant) {
+        "__user__" -> "private"
+        "" -> "global"
+        // Use this as equivalent to Javascript encodeURIComponents() https://stackoverflow.com/a/35294242
+        else -> URI(null, null, tenantValueInUrl, null).rawPath
+    }
+    return "$origin/app/reports-dashboards?security_tenant=$tenantValueInUrl#/report_details/$reportInstanceId"
 }
