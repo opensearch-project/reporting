@@ -658,7 +658,11 @@ export function ReportSettings(props: ReportSettingProps) {
       });
 
     await httpClientProps
-      .get('../api/notebooks/')
+      .get('../api/observability/notebooks/')
+      .catch((error: any) => {
+        console.error('error fetching notebooks, retrying with legacy api', error)
+        return httpClientProps.get('../api/notebooks/')
+      })
       .then(async (response: any) => {
         let notebooksOptions = getNotebooksOptions(response.data);
         reportSourceOptions.notebooks = notebooksOptions;
