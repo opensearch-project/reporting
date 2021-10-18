@@ -39,11 +39,11 @@ import {
   EuiButton,
 } from '@elastic/eui';
 import CSS from 'csstype';
-import { 
-  getChannelsQueryObject, 
-  noDeliveryChannelsSelectedMessage, 
-  testMessageConfirmationMessage, 
-  testMessageFailureMessage 
+import {
+  getChannelsQueryObject,
+  noDeliveryChannelsSelectedMessage,
+  testMessageConfirmationMessage,
+  testMessageFailureMessage,
 } from './delivery_constants';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 import { reportDefinitionParams } from '../create/create_report_definition';
@@ -83,7 +83,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     showDeliverySubjectError,
     deliverySubjectError,
     showDeliveryTextError,
-    deliveryTextError
+    deliveryTextError,
   } = props;
 
   const [isDeliveryHidden, setIsHidden] = useState(false);
@@ -91,47 +91,54 @@ export function ReportDelivery(props: ReportDeliveryProps) {
   const [channels, setChannels] = useState([]);
   const [selectedChannels, setSelectedChannels] = useState([]);
   const [notificationSubject, setNotificationSubject] = useState('New report');
-  const [notificationMessage, setNotificationMessage] = useState('New report available to view');
+  const [notificationMessage, setNotificationMessage] = useState(
+    'New report available to view'
+  );
   const [selectedTab, setSelectedTab] = React.useState<'write' | 'preview'>(
     'write'
   );
   const [testMessageConfirmation, setTestMessageConfirmation] = useState('');
 
-  const handleSendNotification = (e: { target: { checked: boolean }; }) => {
+  const handleSendNotification = (e: { target: { checked: boolean } }) => {
     setSendNotification(e.target.checked);
     includeDelivery = e.target.checked;
     if (includeDelivery) {
       reportDefinitionRequest.delivery.title = 'New report';
-      reportDefinitionRequest.delivery.textDescription = 'New report available to view';
-    }
-    else {
+      reportDefinitionRequest.delivery.textDescription =
+        'New report available to view';
+      reportDefinitionRequest.delivery.htmlDescription = converter.makeHtml(
+        'New report available to view'
+      );
+    } else {
       reportDefinitionRequest.delivery.title = `\u2014`;
       reportDefinitionRequest.delivery.textDescription = `\u2014`;
     }
-  }
+  };
 
-  const handleSelectedChannels = (e: Array<{ label: string, id: string}>) => {
+  const handleSelectedChannels = (e: Array<{ label: string; id: string }>) => {
     setSelectedChannels(e);
     reportDefinitionRequest.delivery.configIds = [];
     for (let i = 0; i < e.length; ++i) {
       reportDefinitionRequest.delivery.configIds.push(e[i].id);
     }
-  }
+  };
 
-  const handleNotificationSubject = (e: { target: { value: string }; }) => {
+  const handleNotificationSubject = (e: { target: { value: string } }) => {
     setNotificationSubject(e.target.value);
     reportDefinitionRequest.delivery.title = e.target.value;
-  }
+  };
 
   const handleNotificationMessage = (e: string) => {
     setNotificationMessage(e);
     reportDefinitionRequest.delivery.textDescription = e.toString();
-    reportDefinitionRequest.delivery.htmlDescription = converter.makeHtml(e.toString());
-  }
+    reportDefinitionRequest.delivery.htmlDescription = converter.makeHtml(
+      e.toString()
+    );
+  };
 
   const handleTestMessageConfirmation = (e: JSX.Element) => {
     setTestMessageConfirmation(e);
-  }
+  };
 
   const defaultCreateDeliveryParams = () => {
     includeDelivery = false;
@@ -139,7 +146,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
       configIds: [],
       title: `\u2014`, // default values before any Notifications settings are configured
       textDescription: `\u2014`,
-      htmlDescription: ''
+      htmlDescription: '',
     };
   };
 
@@ -149,8 +156,8 @@ export function ReportDelivery(props: ReportDeliveryProps) {
   };
 
   const eventToNotification = (event: any) => {
-    const success = event.event.status_list.every(
-      (status: any) => isStatusCodeSuccess(status.delivery_status.status_code)
+    const success = event.event.status_list.every((status: any) =>
+      isStatusCodeSuccess(status.delivery_status.status_code)
     );
     return {
       event_source: event.event.event_source,
@@ -179,23 +186,24 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     for (let i = 0; i < selectedChannels.length; ++i) {
       try {
         const eventId = await httpClientProps
-          .get(`${REPORTING_NOTIFICATIONS_DASHBOARDS_API.SEND_TEST_MESSAGE}/${selectedChannels[i].id}`, 
-          {
-            query: {
-              feature: 'reports'
+          .get(
+            `${REPORTING_NOTIFICATIONS_DASHBOARDS_API.SEND_TEST_MESSAGE}/${selectedChannels[i].id}`,
+            {
+              query: {
+                feature: 'reports',
+              },
             }
-          })
+          )
           .then((response) => response.event_id);
-          
-        await getNotification(eventId)
-          .then((response) => {
-            if (!response.success) {
-              const error = new Error('Failed to send the test message.');
-              failedChannels.push(response.status_list[0].config_name);
-              error.stack = JSON.stringify(response.status_list, null, 2);
-              throw error;
-            }
-          });
+
+        await getNotification(eventId).then((response) => {
+          if (!response.success) {
+            const error = new Error('Failed to send the test message.');
+            failedChannels.push(response.status_list[0].config_name);
+            error.stack = JSON.stringify(response.status_list, null, 2);
+            throw error;
+          }
+        });
       } catch (error) {
         testMessageFailures = true;
       }
@@ -205,39 +213,44 @@ export function ReportDelivery(props: ReportDeliveryProps) {
     } else {
       handleTestMessageConfirmation(testMessageConfirmationMessage);
     }
-  }
+  };
 
   const checkIfNotificationsPluginIsInstalled = () => {
-    fetch("../api/console/proxy?path=%2F_cat%2Fplugins%3Fv%3Dtrue%26s%3Dcomponent%26h%3Dcomponent&method=GET", {
-      "credentials": "include",
-      "headers": {
-          "Accept": "text/plain, */*; q=0.01",
-          "Accept-Language": "en-US,en;q=0.5",
-          "osd-xsrf": "true"
-      },
-      "method": "POST",
-      "mode": "cors"
-    })
-    .then((response) => {
-      return response.text();
-    })
-    .then(function(data) {
-      if (data.includes('opensearch-notifications')) {
-        setIsHidden(false);
-        return;
+    fetch(
+      '../api/console/proxy?path=%2F_cat%2Fplugins%3Fv%3Dtrue%26s%3Dcomponent%26h%3Dcomponent&method=GET',
+      {
+        credentials: 'include',
+        headers: {
+          Accept: 'text/plain, */*; q=0.01',
+          'Accept-Language': 'en-US,en;q=0.5',
+          'osd-xsrf': 'true',
+        },
+        method: 'POST',
+        mode: 'cors',
       }
-      setIsHidden(true);
-    })
-  }
+    )
+      .then((response) => {
+        return response.text();
+      })
+      .then(function (data) {
+        if (data.includes('opensearch-notifications')) {
+          setIsHidden(false);
+          return;
+        }
+        setIsHidden(true);
+      });
+  };
 
   useEffect(() => {
     checkIfNotificationsPluginIsInstalled();
     httpClientProps
       .get(`${REPORTING_NOTIFICATIONS_DASHBOARDS_API.GET_CONFIGS}`, {
-        query: getChannelsQueryObject
+        query: getChannelsQueryObject,
       })
-      .then(async (response: any) => {  
-        let availableChannels = getAvailableNotificationsChannels(response.config_list);
+      .then(async (response: any) => {
+        let availableChannels = getAvailableNotificationsChannels(
+          response.config_list
+        );
         setChannels(availableChannels);
         return availableChannels;
       })
@@ -248,7 +261,7 @@ export function ReportDelivery(props: ReportDeliveryProps) {
             .then(async (response: any) => {
               if (response.report_definition.delivery.configIds.length > 0) {
                 // add config IDs
-                handleSendNotification({target: {checked: true}});
+                handleSendNotification({ target: { checked: true } });
                 let delivery = response.report_definition.delivery;
                 let editChannelOptions = [];
                 for (let i = 0; i < delivery.configIds.length; ++i) {
@@ -256,10 +269,10 @@ export function ReportDelivery(props: ReportDeliveryProps) {
                     if (delivery.configIds[i] === availableChannels[j].id) {
                       let editChannelOption = {
                         label: availableChannels[j].label,
-                        id: availableChannels[j].id
+                        id: availableChannels[j].id,
                       };
                       editChannelOptions.push(editChannelOption);
-                      break;                  
+                      break;
                     }
                   }
                 }
@@ -274,20 +287,23 @@ export function ReportDelivery(props: ReportDeliveryProps) {
         }
       })
       .catch((error: string) => {
-        console.log('error: cannot get available channels from Notifications plugin:', error);
-      })
+        console.log(
+          'error: cannot get available channels from Notifications plugin:',
+          error
+        );
+      });
   }, []);
 
   const showNotificationsBody = sendNotification ? (
     <div>
       <EuiSpacer />
-      <EuiFormRow 
-        label='Channels'
+      <EuiFormRow
+        label="Channels"
         isInvalid={showDeliveryChannelError}
         error={deliveryChannelError}
       >
         <EuiComboBox
-          id='notificationsChannelSelect'
+          id="notificationsChannelSelect"
           placeholder={'Select channels'}
           options={channels}
           selectedOptions={selectedChannels}
@@ -297,8 +313,8 @@ export function ReportDelivery(props: ReportDeliveryProps) {
       </EuiFormRow>
       <EuiSpacer />
       <EuiFormRow
-        label='Notification subject'
-        helpText='Required if at least one channel type is Email.'
+        label="Notification subject"
+        helpText="Required if at least one channel type is Email."
         isInvalid={showDeliverySubjectError}
         error={deliverySubjectError}
         style={styles}
@@ -312,8 +328,8 @@ export function ReportDelivery(props: ReportDeliveryProps) {
       </EuiFormRow>
       <EuiSpacer />
       <EuiFormRow
-        label='Notification message'
-        helpText='Embed variables in your message using Markdown.'
+        label="Notification message"
+        helpText="Embed variables in your message using Markdown."
         isInvalid={showDeliveryTextError}
         error={deliveryTextError}
         style={styles}
@@ -333,13 +349,8 @@ export function ReportDelivery(props: ReportDeliveryProps) {
         />
       </EuiFormRow>
       <EuiSpacer />
-      <EuiFormRow
-        helpText={testMessageConfirmation}
-        fullWidth={true}
-      >
-        <EuiButton
-          onClick={sendTestNotificationsMessage}
-        >
+      <EuiFormRow helpText={testMessageConfirmation} fullWidth={true}>
+        <EuiButton onClick={sendTestNotificationsMessage}>
           Send test message
         </EuiButton>
       </EuiFormRow>
@@ -356,8 +367,8 @@ export function ReportDelivery(props: ReportDeliveryProps) {
       <EuiHorizontalRule />
       <EuiPageContentBody>
         <EuiCheckbox
-          id='notificationsDeliveryCheckbox'
-          label='Send notification when report is available'
+          id="notificationsDeliveryCheckbox"
+          label="Send notification when report is available"
           checked={sendNotification}
           onChange={handleSendNotification}
         />
