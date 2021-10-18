@@ -65,13 +65,39 @@ const createReportInput: ReportSchemaType = {
   report_definition: createReportDefinitionInput,
 };
 
-const createReportDefinitionNotebookInput: ReportDefinitionSchemaType = {
+// this is the url format used before notebooks merged into observability
+const createReportDefinitionNotebookLegacyInput: ReportDefinitionSchemaType = {
   report_params: {
     report_name: 'test notebooks report',
     report_source: REPORT_TYPE.notebook,
     description: 'Hi this is your Notebook on demand',
     core_params: {
       base_url: `/app/notebooks-dashboards?view=output_only#/${SAMPLE_SAVED_OBJECT_ID}`,
+      window_width: 1300,
+      window_height: 900,
+      report_format: FORMAT.pdf,
+      time_duration: 'PT5M',
+      origin: 'http://localhost:5601',
+    },
+  },
+  delivery: {
+    configIds: [],
+    title: 'title',
+    textDescription: 'text description',
+    htmlDescription: 'html description'
+  },
+  trigger: {
+    trigger_type: TRIGGER_TYPE.onDemand,
+  },
+}
+
+const createReportDefinitionNotebookInput: ReportDefinitionSchemaType = {
+  report_params: {
+    report_name: 'test notebooks report',
+    report_source: REPORT_TYPE.notebook,
+    description: 'Hi this is your Notebook on demand',
+    core_params: {
+      base_url: `/app/observability#/notebooks/${SAMPLE_SAVED_OBJECT_ID}`,
       window_width: 1300,
       window_height: 900,
       report_format: FORMAT.pdf,
@@ -114,6 +140,16 @@ describe('test input validation', () => {
     const report = await validateReportDefinition(
       client,
       createReportDefinitionInput
+    );
+    expect(report).toBeDefined();
+  });
+
+  test('create notebook report definition with legacy base url format', async () => {
+    const savedObjectIds = [`notebook:${SAMPLE_SAVED_OBJECT_ID}`];
+    const client = mockOpenSearchClient(savedObjectIds);
+    const report = await validateReportDefinition(
+      client,
+      createReportDefinitionNotebookLegacyInput
     );
     expect(report).toBeDefined();
   });

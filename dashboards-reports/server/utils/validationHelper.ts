@@ -37,7 +37,10 @@ import { REPORT_TYPE } from '../../server/routes/utils/constants';
 
 export const isValidRelativeUrl = (relativeUrl: string) => {
   let normalizedRelativeUrl = relativeUrl
-  if (!relativeUrl.includes('notebooks-dashboards')) {
+  if (
+    !relativeUrl.includes('observability#/notebooks') &&
+    !relativeUrl.includes('notebooks-dashboards')
+  ) {
     normalizedRelativeUrl = path.posix.normalize(relativeUrl);
   }
   
@@ -55,7 +58,7 @@ export const isValidRelativeUrl = (relativeUrl: string) => {
 export const regexDuration = /^(-?)P(?=\d|T\d)(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)([DW]))?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$/;
 export const regexEmailAddress = /\S+@\S+\.\S+/;
 export const regexReportName = /^[\w\-\s\(\)\[\]\,\_\-+]+$/;
-export const regexRelativeUrl = /^\/(_plugin\/kibana\/|_dashboards\/)?app\/(dashboards|visualize|discover|notebooks-dashboards\?view=output_only)([?&]security_tenant=.+|)#\/(view\/|edit\/)?[^\/]+$/;
+export const regexRelativeUrl = /^\/(_plugin\/kibana\/|_dashboards\/)?app\/(dashboards|visualize|discover|observability|notebooks-dashboards\?view=output_only)([?&]security_tenant=.+|)#\/(notebooks\/|view\/|edit\/)?[^\/]+$/;
 
 export const validateReport = async (
   client: ILegacyScopedClusterClient,

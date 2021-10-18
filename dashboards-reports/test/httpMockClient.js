@@ -38,6 +38,12 @@ httpClientMock.get = jest.fn(() => ({
     })),
     catch: jest.fn(),
   })),
+  catch: jest.fn(() => ({
+    then: jest.fn(() => ({
+      catch: jest.fn()
+    })),
+    catch: jest.fn(),
+  })),
 }));
 httpClientMock.head = jest.fn();
 httpClientMock.post = jest.fn(() => ({
