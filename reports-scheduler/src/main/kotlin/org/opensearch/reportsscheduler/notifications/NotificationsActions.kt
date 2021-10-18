@@ -50,8 +50,8 @@ internal object NotificationsActions {
      * @param referenceId [String] object
      * @return [CreateReportDefinitionResponse]
      */
-    fun send(delivery: ReportDefinition.Delivery, referenceId: String, reportLink: String): SendNotificationResponse? {
-        return send(delivery, referenceId, reportLink, "")
+    fun send(delivery: ReportDefinition.Delivery, referenceId: String, reportLink: String, reportName: String): SendNotificationResponse? {
+        return send(delivery, referenceId, reportLink, reportName, "")
     }
 
     /**
@@ -61,9 +61,15 @@ internal object NotificationsActions {
      * @param userStr [String] object,
      * @return [CreateReportDefinitionResponse]
      */
-    fun send(delivery: ReportDefinition.Delivery, referenceId: String, reportLink: String, userStr: String?): SendNotificationResponse? {
+    fun send(
+        delivery: ReportDefinition.Delivery,
+        referenceId: String,
+        reportLink: String,
+        reportName: String,
+        userStr: String?
+    ): SendNotificationResponse? {
         if (userStr.isNullOrEmpty()) {
-            return sendNotificationHelper(delivery, referenceId, reportLink)
+            return sendNotificationHelper(delivery, referenceId, reportLink, reportName)
         }
 
         var sendNotificationResponse: SendNotificationResponse? = null
@@ -72,7 +78,7 @@ internal object NotificationsActions {
                 ConfigConstants.OPENSEARCH_SECURITY_USER_INFO_THREAD_CONTEXT,
                 userStr
             )
-            sendNotificationResponse = sendNotificationHelper(delivery, referenceId, reportLink)
+            sendNotificationResponse = sendNotificationHelper(delivery, referenceId, reportLink, reportName)
         }
         return sendNotificationResponse
     }
@@ -81,7 +87,8 @@ internal object NotificationsActions {
     private fun sendNotificationHelper(
         delivery: ReportDefinition.Delivery,
         referenceId: String,
-        reportLink: String
+        reportLink: String,
+        reportName: String
     ): SendNotificationResponse? {
         log.info("$LOG_PREFIX:NotificationsActions-send")
         var sendNotificationResponse: SendNotificationResponse? = null
@@ -90,7 +97,11 @@ internal object NotificationsActions {
             NotificationsPluginInterface.sendNotification(
                 client,
                 EventSource(delivery.title, referenceId, FEATURE_REPORTS, SeverityType.INFO),
-                ChannelMessage("${delivery.textDescription}\nGet your report at $reportLink", delivery.htmlDescription, null),
+                ChannelMessage(
+                    MessageBuilder.buildTextMessage(delivery.textDescription, reportLink, reportName),
+                    delivery.htmlDescription?.let { MessageBuilder.buildEmailMessageWithTemplate(it, reportLink, reportName) },
+                    null
+                ),
                 delivery.configIds,
                 object : ActionListener<SendNotificationResponse> {
                     override fun onResponse(response: SendNotificationResponse) {

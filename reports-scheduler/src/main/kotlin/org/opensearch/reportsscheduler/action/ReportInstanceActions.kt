@@ -125,8 +125,9 @@ internal object ReportInstanceActions {
             throw OpenSearchStatusException("Report Instance Creation failed", RestStatus.INTERNAL_SERVER_ERROR)
         }
         if (reportDefinitionDetails.reportDefinition.delivery != null) {
+            val reportName = reportInstance.reportDefinitionDetails!!.reportDefinition.name
             val reportLink = buildReportLink(reportDefinitionDetails.reportDefinition.source.origin, reportInstance.tenant, docId)
-            NotificationsActions.send(reportDefinitionDetails.reportDefinition.delivery, docId, reportLink)
+            NotificationsActions.send(reportDefinitionDetails.reportDefinition.delivery, docId, reportLink, reportName)
         }
         val reportInstanceCopy = reportInstance.copy(id = docId)
         return OnDemandReportCreateResponse(reportInstanceCopy, true)
