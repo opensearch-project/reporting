@@ -163,7 +163,7 @@ export const buildQuery = (report, is_count) => {
 };
 
 // Fetch the data from OpenSearch
-export const getOpenSearchData = (arrayHits, report, params) => {
+export const getOpenSearchData = (arrayHits, report, params, dateFormat: string) => {
   let hits: any = [];
   for (let valueRes of arrayHits) {
     for (let data of valueRes.hits) {
@@ -171,9 +171,7 @@ export const getOpenSearchData = (arrayHits, report, params) => {
       // get all the fields of type date and format them to excel format
       for (let dateType of report._source.dateFields) {
         if (data._source[dateType]) {
-          data._source[dateType] = moment(fields[dateType][0]).format(
-            DATA_REPORT_CONFIG.excelDateFormat
-          );
+          data._source[dateType] = moment(fields[dateType][0]).format(dateFormat);
         }
       }
       delete data['fields'];
