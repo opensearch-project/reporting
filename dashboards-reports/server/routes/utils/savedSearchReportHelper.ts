@@ -267,7 +267,7 @@ async function generateReportData(
     for (const dateType of report._source.dateFields) {
       docvalues.push({
         field: dateType,
-        format: 'date_hour_minute',
+        format: 'date_hour_minute_second_fraction',
       });
     }
 

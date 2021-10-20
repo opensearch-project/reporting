@@ -64,7 +64,7 @@ export enum REPORT_TYPE {
 }
 
 export enum DATA_REPORT_CONFIG {
-  excelDateFormat = 'MM/DD/YYYY h:mm:ss a',
+  excelDateFormat = 'MM/DD/YYYY h:mm:ss.SSS a',
 }
 
 export enum TRIGGER_TYPE {
