@@ -18,6 +18,6 @@ export const uiSettingsService = {
     uiSettings = client;
   },
   get: (key: string, defaultOverride?: any) => {
-    return uiSettings?.get(key, defaultOverride);
+    return uiSettings?.get(key, defaultOverride) || '';
   },
 };
