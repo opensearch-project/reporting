@@ -141,11 +141,11 @@ export const replaceQueryURL = (pageUrl) => {
   let queryUrl = unhashedUrl.pathname + unhashedUrl.hash;
   let [, fromDateStringMatch, toDateStringMatch] =
     queryUrl.match(timeRangeMatcher);
-  fromDateString = decodeURIComponent(fromDateStringMatch.replace(/[']+/g, ''));
+  const fromDateString = decodeURIComponent(fromDateStringMatch.replace(/[']+/g, ''));
 
   // convert time range to from date format in case time range is relative
   const fromDateFormat = dateMath.parse(fromDateString);
-  toDateString = decodeURIComponent(toDateStringMatch.replace(/[']+/g, ''));
+  const toDateString = decodeURIComponent(toDateStringMatch.replace(/[']+/g, ''));
   const toDateFormat = dateMath.parse(toDateString, { roundUp: true });
 
   // replace to and from dates with absolute date
