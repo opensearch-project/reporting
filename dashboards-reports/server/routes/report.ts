@@ -42,10 +42,8 @@ import {
 } from './utils/converters/backendToUi';
 import { addToMetric } from './utils/metricHelper';
 import { validateReport } from '../../server/utils/validationHelper';
-import { AccessInfoType } from 'server';
 
-export default function (router: IRouter, accessInfo: AccessInfoType) {
-  const { basePath } = accessInfo;
+export default function (router: IRouter) {
   // generate report (with provided metadata)
   router.post(
     {
@@ -73,8 +71,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
           request.headers.origin;
         report = await validateReport(
           context.core.opensearch.legacy.client,
-          report,
-          basePath
+          report
         );
       } catch (error) {
         logger.error(`Failed input validation for create report ${error}`);
@@ -83,12 +80,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       }
 
       try {
-        const reportData = await createReport(
-          request,
-          context,
-          report,
-          accessInfo
-        );
+        const reportData = await createReport(request, context, report);
 
         // if not deliver to user himself , no need to send actual file data to client
         const delivery = report.report_definition.delivery;
@@ -145,13 +137,12 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
           }
         );
         // convert report to use UI model
-        const report = backendToUiReport(opensearchResp.reportInstance, basePath);
+        const report = backendToUiReport(opensearchResp.reportInstance);
         // generate report
         const reportData = await createReport(
           request,
           context,
           report,
-          accessInfo,
           savedReportId
         );
         addToMetric('report', 'download', 'count', report);
@@ -211,13 +202,12 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         );
         const reportId = opensearchResp.reportInstance.id;
         // convert report to use UI model
-        const report = backendToUiReport(opensearchResp.reportInstance, basePath);
+        const report = backendToUiReport(opensearchResp.reportInstance);
         // generate report
         const reportData = await createReport(
           request,
           context,
           report,
-          accessInfo,
           reportId
         );
         addToMetric('report', 'create_from_definition', 'count', report);
@@ -275,8 +265,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         );
 
         const reportsList = backendToUiReportsList(
-          opensearchResp.reportInstanceList,
-          basePath
+          opensearchResp.reportInstanceList
         );
 
         return response.ok({
@@ -324,7 +313,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
           }
         );
 
-        const report = backendToUiReport(opensearchResp.reportInstance, basePath);
+        const report = backendToUiReport(opensearchResp.reportInstance);
 
         return response.ok({
           body: report,
