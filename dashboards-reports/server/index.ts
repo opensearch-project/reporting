@@ -29,12 +29,6 @@ import {
   PluginInitializerContext,
 } from '../../../src/core/server';
 import { ReportsDashboardsPlugin } from './plugin';
-
-export type AccessInfoType = {
-  basePath: string;
-  serverInfo: HttpServerInfo;
-};
-
 //  This exports static code and TypeScript types,
 //  as well as, OpenSearch Dashboards Platform `plugin()` initializer.
 
