@@ -37,13 +37,32 @@ OpenSearch Dashboards Reports integration with [Notifications](https://github.co
 
 ## Troubleshooting
 
-#### Fail to launch Chromium
+### Fail to launch Chromium
 
 There could be two reasons for this problem
 
 1. You are not having the correct version of headless-chrome matching to the OS that your OpenSearch Dashboards is running. Different versions of headless-chrome can be found [here](https://github.com/opensearch-project/dashboards-reports/releases/tag/chromium-1.12.0.0)
 
 2. Missing additional dependencies. Please refer to [additional dependencies section](./dashboards-reports/rendering-engine/headless-chrome/README.md#additional-libaries) to install required dependencies according to your operating system.
+
+### System Dependencies
+Chromium may not have all of the dependencies you may require to be able to view all of the content of your reports.
+
+If you are using a CentOS/RHEL system, install the following packages:
+* `ipa-gothic-fonts`
+* `xorg-x11-fonts-100dpi`
+* `xorg-x11-fonts-75dpi`
+* `xorg-x11-utils`
+* `xorg-x11-fonts-cyrillic`
+* `xorg-x11-fonts-Type1`
+* `xorg-x11-fonts-misc`
+* `fontconfig`
+* `freetype`
+
+If you are using a Ubuntu/Debian system, install the following packages:
+* `fonts-liberation`
+* `libfontconfig1`
+
 ## Code of Conduct
 
 This project has adopted the [Amazon Open Source Code of Conduct](CODE_OF_CONDUCT.md). For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq), or contact [opensource-codeofconduct@amazon.com](mailto:opensource-codeofconduct@amazon.com) with any additional questions or comments.
