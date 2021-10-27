@@ -28,7 +28,7 @@ import {
   REPORT_TYPE,
   REPORT_STATE,
   DELIVERY_TYPE,
-  SECURITY_CONSTANTS,
+  EXTRA_HEADERS,
   LOCAL_HOST,
 } from '../utils/constants';
 
@@ -46,6 +46,7 @@ import { SetCookie, Headers } from 'puppeteer-core';
 import { updateReportState } from './updateReportState';
 import { saveReport } from './saveReport';
 import { SemaphoreInterface } from 'async-mutex';
+import _ from 'lodash';
 
 export const createReport = async (
   request: OpenSearchDashboardsRequest,
@@ -59,9 +60,8 @@ export const createReport = async (
   //@ts-ignore
   const semaphore: SemaphoreInterface = context.reporting_plugin.semaphore;
   // @ts-ignore
-  const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
-    request
-  );
+  const opensearchReportsClient: ILegacyScopedClusterClient =
+    context.reporting_plugin.opensearchReportsClient.asScoped(request);
   const opensearchClient = context.core.opensearch.legacy.client;
   // @ts-ignore
   const timezone = request.query.timezone;
@@ -70,9 +70,7 @@ export const createReport = async (
   let reportId;
 
   const {
-    report_definition: {
-      report_params: reportParams,
-    },
+    report_definition: { report_params: reportParams },
   } = report;
   const { report_source: reportSource } = reportParams;
 
@@ -95,42 +93,15 @@ export const createReport = async (
       // report source can only be one of [saved search, visualization, dashboard, notebook]
       // compose url
       const completeQueryUrl = `${LOCAL_HOST}${report.query_url}`;
-      // Check if security is enabled. TODO: is there a better way to check?
-      let cookieObject: SetCookie | undefined;
-      if (request.headers.cookie) {
-        const cookies = request.headers.cookie.split(';');
-        cookies.map((item: string) => {
-          const cookie = item.trim().split('=');
-          if (cookie[0] === SECURITY_CONSTANTS.AUTH_COOKIE_NAME) {
-            cookieObject = {
-              name: cookie[0],
-              value: cookie[1],
-              url: completeQueryUrl,
-            };
-          }
-        });
-      }
-      // If header exists assuming that it needs forwarding
-      let additionalHeaders: Headers | undefined;
-      if (request.headers[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER]) {
-        additionalHeaders = {};
-        additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER] =
-          request.headers[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER];
-        additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_IP_HEADER] =
-          request.headers[SECURITY_CONSTANTS.PROXY_AUTH_IP_HEADER];
-        if (request.headers[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER]) {
-          additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER] =
-            request.headers[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER];
-        }
-      }
+      const extraHeaders = _.pick(request.headers, EXTRA_HEADERS);
+
       const [value, release] = await semaphore.acquire();
       try {
         createReportResult = await createVisualReport(
           reportParams,
           completeQueryUrl,
           logger,
-          cookieObject,
-          additionalHeaders,
+          extraHeaders,
           timezone
         );
       } finally {
