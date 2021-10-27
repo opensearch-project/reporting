@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-import puppeteer, { ElementHandle, SetCookie } from 'puppeteer-core';
+import puppeteer, { Headers } from 'puppeteer-core';
 import createDOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
 import { Logger } from '../../../../../../src/core/server';
@@ -30,12 +30,13 @@ import { CreateReportResultType } from '../types';
 import { ReportParamsSchemaType, VisualReportSchemaType } from 'server/model';
 import fs from 'fs';
 import cheerio from 'cheerio';
+import _ from 'lodash';
 
 export const createVisualReport = async (
   reportParams: ReportParamsSchemaType,
   queryUrl: string,
   logger: Logger,
-  cookie?: SetCookie,
+  extraHeaders: Headers,
   timezone?: string
 ): Promise<CreateReportResultType> => {
   const {
@@ -95,7 +96,13 @@ export const createVisualReport = async (
      * TODO: temp fix to disable sandbox when launching chromium on Linux instance
      * https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#setting-up-chrome-linux-sandbox
      */
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu', '--no-zygote', '--single-process'],
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-gpu',
+      '--no-zygote',
+      '--single-process',
+    ],
     executablePath: CHROMIUM_PATH,
     env: {
       TZ: timezone || 'UTC',
@@ -104,9 +111,9 @@ export const createVisualReport = async (
   const page = await browser.newPage();
   page.setDefaultNavigationTimeout(0);
   page.setDefaultTimeout(100000); // use 100s timeout instead of default 30s
-  if (cookie) {
-    logger.info('domain enables security, use session cookie to access');
-    await page.setCookie(cookie);
+  // Set extra headers that are needed
+  if (!_.isEmpty(extraHeaders)) {
+    await page.setExtraHTTPHeaders(extraHeaders);
   }
   logger.info(`original queryUrl ${queryUrl}`);
   await page.goto(queryUrl, { waitUntil: 'networkidle0' });
