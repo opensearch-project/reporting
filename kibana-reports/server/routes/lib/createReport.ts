@@ -19,6 +19,7 @@ import {
   LOCAL_HOST,
   SECURITY_AUTH_COOKIE_NAME,
   DELIVERY_TYPE,
+  EXTRA_HEADERS,
 } from '../utils/constants';
 
 import {
@@ -36,6 +37,8 @@ import { deliverReport } from './deliverReport';
 import { updateReportState } from './updateReportState';
 import { saveReport } from './saveReport';
 import { SemaphoreInterface } from 'async-mutex';
+import { AccessInfoType } from 'server';
+import _ from 'lodash';
 
 export const createReport = async (
   request: KibanaRequest,
@@ -90,28 +93,14 @@ export const createReport = async (
       // report source can only be one of [saved search, visualization, dashboard]
       // compose url
       const completeQueryUrl = `${LOCAL_HOST}${report.query_url}`;
-      // Check if security is enabled. TODO: is there a better way to check?
-      let cookieObject: SetCookie | undefined;
-      if (request.headers.cookie) {
-        const cookies = request.headers.cookie.split(';');
-        cookies.map((item: string) => {
-          const cookie = item.trim().split('=');
-          if (cookie[0] === SECURITY_AUTH_COOKIE_NAME) {
-            cookieObject = {
-              name: cookie[0],
-              value: cookie[1],
-              url: completeQueryUrl,
-            };
-          }
-        });
-      }
+      const extraHeaders = _.pick(request.headers, EXTRA_HEADERS);
       const [value, release] = await semaphore.acquire();
       try {
         createReportResult = await createVisualReport(
           reportParams,
           completeQueryUrl,
           logger,
-          cookieObject,
+          extraHeaders,
           timezone
         );
       } finally {

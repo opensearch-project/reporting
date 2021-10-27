@@ -79,7 +79,20 @@ export const BASE_PATH = '/_plugin/kibana';
 
 export const DEFAULT_REPORT_HEADER = '<h1>Open Distro Kibana Reports</h1>';
 
+<<<<<<< HEAD:kibana-reports/server/routes/utils/constants.ts
 export const SECURITY_AUTH_COOKIE_NAME = 'security_authentication';
+=======
+export const SECURITY_CONSTANTS = {
+  TENANT_LOCAL_STORAGE_KEY: 'opendistro::security::tenant::show_popup',
+};
+>>>>>>> 1b96740... Forward extra headers while using headless chromium (#194):dashboards-reports/server/routes/utils/constants.ts
+
+export const EXTRA_HEADERS = [
+  'cookie',
+  'x-proxy-user',
+  'x-proxy-roles',
+  'x-forwarded-for',
+];
 
 export const CHROMIUM_PATH = `${__dirname}/../../../.chromium/headless_shell`;
 
