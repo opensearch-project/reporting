@@ -24,12 +24,11 @@
  * permissions and limitations under the License.
  */
 
-import { DATA_REPORT_CONFIG } from './constants';
-
 import esb, { Sort } from 'elastic-builder';
-import moment from 'moment';
 import converter from 'json-2-csv';
 import _ from 'lodash';
+import moment from 'moment';
+import { DATA_REPORT_CONFIG } from './constants';
 
 export var metaData = {
   saved_search_id: <string>null,
@@ -92,6 +91,14 @@ export const buildQuery = (report, is_count) => {
               }
               requestBody.minimumShouldMatch(1);
               break;
+            case 'range':
+              const builder = esb.rangeQuery(item.meta.key);
+              if (item.meta.params.gte) builder.gte(item.meta.params.gte);
+              if (item.meta.params.lte) builder.lte(item.meta.params.lte);
+              if (item.meta.params.gt) builder.gt(item.meta.params.gt);
+              if (item.meta.params.lt) builder.lt(item.meta.params.lt);
+              requestBody.must(builder);
+              break;
           }
           break;
         case true:
@@ -118,6 +125,14 @@ export const buildQuery = (report, is_count) => {
               }
               negatedBody.minimumShouldMatch(1);
               requestBody.mustNot(negatedBody);
+              break;
+            case 'range':
+              const builder = esb.rangeQuery(item.meta.key);
+              if (item.meta.params.gte) builder.gte(item.meta.params.gte);
+              if (item.meta.params.lte) builder.lte(item.meta.params.lte);
+              if (item.meta.params.gt) builder.gt(item.meta.params.gt);
+              if (item.meta.params.lt) builder.lt(item.meta.params.lt);
+              requestBody.mustNot(builder);
               break;
           }
           break;
