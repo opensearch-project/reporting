@@ -32,7 +32,7 @@ import {
 } from './context_menu_ui';
 import { timeRangeMatcher } from '../utils/utils';
 import { parse } from 'url';
-import { unhashUrl } from '../../../../../src/plugins/kibana_utils/public';
+import { uiSettingsService } from '../utils/settings_service';
 
 const generateInContextReport = async (
   timeRanges,
@@ -94,7 +94,7 @@ const generateInContextReport = async (
   fetch(
     `../api/reporting/generateReport?timezone=${
       Intl.DateTimeFormat().resolvedOptions().timeZone
-    }`,
+    }&dateFormat=${uiSettingsService.get('dateFormat')}`,
     {
       headers: {
         'Content-Type': 'application/json',

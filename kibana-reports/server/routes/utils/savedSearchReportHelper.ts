@@ -37,6 +37,7 @@ const scrollTimeout = '1m';
 export async function createSavedSearchReport(
   report: any,
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
+  dateFormat: string,
   isScheduledTask: boolean = true
 ): Promise<CreateReportResultType> {
   const params = report.report_definition.report_params;
@@ -47,6 +48,7 @@ export async function createSavedSearchReport(
   const data = await generateReportData(
     client,
     params.core_params,
+    dateFormat,
     isScheduledTask
   );
 
@@ -130,6 +132,7 @@ async function populateMetaData(
 async function generateReportData(
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
   params: any,
+  dateFormat: string,
   isScheduledTask: boolean
 ) {
   let esData: any = {};
@@ -245,7 +248,7 @@ async function generateReportData(
     for (const dateType of report._source.dateFields) {
       docvalues.push({
         field: dateType,
-        format: 'date_hour_minute',
+        format: 'date_hour_minute_second_fraction',
       });
     }
 
@@ -260,7 +263,7 @@ async function generateReportData(
   // Parse ES data and convert to CSV
   async function convertEsDataToCsv() {
     const dataset: any = [];
-    dataset.push(getEsData(arrayHits, report, params));
+    dataset.push(getEsData(arrayHits, report, params, dateFormat));
     return await convertToCSV(dataset);
   }
 }

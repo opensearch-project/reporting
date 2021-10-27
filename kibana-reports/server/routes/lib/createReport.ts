@@ -17,6 +17,7 @@ import {
   REPORT_TYPE,
   REPORT_STATE,
   DELIVERY_TYPE,
+  DATA_REPORT_CONFIG,
   EXTRA_HEADERS,
 } from '../utils/constants';
 
@@ -59,6 +60,9 @@ export const createReport = async (
   const esClient = context.core.elasticsearch.legacy.client;
   // @ts-ignore
   const timezone = request.query.timezone;
+  // @ts-ignore
+  const dateFormat =
+    request.query.dateFormat || DATA_REPORT_CONFIG.excelDateFormat;
 
   let createReportResult: CreateReportResultType;
   let reportId;
@@ -84,6 +88,7 @@ export const createReport = async (
       createReportResult = await createSavedSearchReport(
         report,
         esClient,
+        dateFormat,
         isScheduledTask
       );
     } else {
