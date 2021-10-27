@@ -292,8 +292,12 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
       query: getChannelsQueryObject
     })
     .then(async (response: any) => {
+      console.log('notification get configs is', response);
       let availableChannels = getAvailableNotificationsChannels(response.config_list);
       return availableChannels;
+    })
+    .catch((error: any) => {
+      console.log('error when retrieving notification configs:', error);
     })
     .then((availableChannels: any) => {
       httpClient
