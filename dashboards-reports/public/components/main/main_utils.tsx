@@ -27,6 +27,7 @@
 import 'babel-polyfill';
 import { i18n } from '@osd/i18n';
 import { HttpFetchOptions, HttpSetup } from '../../../../../src/core/public';
+import { uiSettingsService } from '../utils/settings_service';
 
 export const displayDeliveryChannels = (configIds: Array<string>, channels: Array<{label: string, id: string}>) => {
   let displayChannels = [];
@@ -193,7 +194,10 @@ export const generateReportFromDefinitionId = async (
       headers: {
         'Content-Type': 'application/json',
       },
-      query: { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone },
+      query: {
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        dateFormat: uiSettingsService.get('dateFormat'),
+      },
     })
     .then(async (response: any) => {
       // for emailing a report, this API response doesn't have response body
@@ -226,7 +230,10 @@ export const generateReportById = async (
 ) => {
   await httpClient
     .get(`../api/reporting/generateReport/${reportId}`, {
-      query: { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone },
+      query: {
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        dateFormat: uiSettingsService.get('dateFormat'),
+      },
     })
     .then(async (response) => {
       //TODO: duplicate code, extract to be a function that can reuse. e.g. handleResponse(response)
