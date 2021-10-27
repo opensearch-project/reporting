@@ -124,7 +124,7 @@ internal object ReportInstanceActions {
             Metrics.REPORT_FROM_DEFINITION_ID_SYSTEM_ERROR.counter.increment()
             throw OpenSearchStatusException("Report Instance Creation failed", RestStatus.INTERNAL_SERVER_ERROR)
         }
-        if (reportDefinitionDetails.reportDefinition.delivery != null) {
+        if (reportDefinitionDetails.reportDefinition.delivery != null && reportDefinitionDetails.reportDefinition.delivery.configIds.isNotEmpty()) {
             val reportName = reportInstance.reportDefinitionDetails!!.reportDefinition.name
             val reportLink = buildReportLink(reportDefinitionDetails.reportDefinition.source.origin, reportInstance.tenant, docId)
             NotificationsActions.send(reportDefinitionDetails.reportDefinition.delivery, docId, reportLink, reportName)
