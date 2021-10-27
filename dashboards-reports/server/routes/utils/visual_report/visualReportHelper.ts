@@ -24,7 +24,7 @@
  * permissions and limitations under the License.
  */
 
-import puppeteer, { SetCookie, Headers } from 'puppeteer-core';
+import puppeteer, { Headers } from 'puppeteer-core';
 import createDOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
 import { Logger } from '../../../../../../src/core/server';
@@ -40,13 +40,13 @@ import { getFileName } from '../helpers';
 import { CreateReportResultType } from '../types';
 import { ReportParamsSchemaType, VisualReportSchemaType } from 'server/model';
 import fs from 'fs';
+import _ from 'lodash';
 
 export const createVisualReport = async (
   reportParams: ReportParamsSchemaType,
   queryUrl: string,
   logger: Logger,
-  cookie?: SetCookie,
-  additionalheaders?: Headers,
+  extraHeaders: Headers,
   timezone?: string
 ): Promise<CreateReportResultType> => {
   const {
@@ -94,13 +94,9 @@ export const createVisualReport = async (
   const page = await browser.newPage();
   page.setDefaultNavigationTimeout(0);
   page.setDefaultTimeout(100000); // use 100s timeout instead of default 30s
-  if (cookie) {
-    logger.info('domain enables security, use session cookie to access');
-    await page.setCookie(cookie);
-  }
-  if (additionalheaders) {
-    logger.info('domain passed proxy auth headers, passing to backend');
-    await page.setExtraHTTPHeaders(additionalheaders);
+  // Set extra headers that are needed
+  if (!_.isEmpty(extraHeaders)) {
+    await page.setExtraHTTPHeaders(extraHeaders);
   }
   logger.info(`original queryUrl ${queryUrl}`);
   await page.goto(queryUrl, { waitUntil: 'networkidle0' });
