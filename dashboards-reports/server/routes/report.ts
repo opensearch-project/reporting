@@ -57,6 +57,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         body: schema.any(),
         query: schema.object({
           timezone: schema.maybe(schema.string()),
+          dateFormat: schema.maybe(schema.string()),
         }),
       },
     },
@@ -121,6 +122,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         }),
         query: schema.object({
           timezone: schema.string(),
+          dateFormat: schema.maybe(schema.string()),
         }),
       },
     },
@@ -186,6 +188,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         }),
         query: schema.object({
           timezone: schema.string(),
+          dateFormat: schema.maybe(schema.string()),
         }),
       },
     },
