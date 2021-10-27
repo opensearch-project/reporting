@@ -28,7 +28,7 @@ import {
   REPORT_TYPE,
   REPORT_STATE,
   DELIVERY_TYPE,
-  SECURITY_CONSTANTS,
+  EXTRA_HEADERS,
 } from '../utils/constants';
 
 import {
@@ -46,6 +46,7 @@ import { updateReportState } from './updateReportState';
 import { saveReport } from './saveReport';
 import { SemaphoreInterface } from 'async-mutex';
 import { AccessInfoType } from 'server';
+import _ from 'lodash';
 
 export const createReport = async (
   request: OpenSearchDashboardsRequest,
@@ -75,9 +76,7 @@ export const createReport = async (
   let reportId;
 
   const {
-    report_definition: {
-      report_params: reportParams,
-    },
+    report_definition: { report_params: reportParams },
   } = report;
   const { report_source: reportSource } = reportParams;
 
@@ -103,40 +102,15 @@ export const createReport = async (
         ? report.query_url
         : `${basePath}${report.query_url}`;
       const completeQueryUrl = `${protocol}://${hostname}:${port}${relativeUrl}`;
-      // Check if security is enabled. TODO: is there a better way to check?
-      let cookieObject: SetCookie | undefined;
-      if (request.headers.cookie) {
-        const cookies = request.headers.cookie.split(';');
-        cookies.map((item: string) => {
-          const cookie = item.trim().split('=');
-          if (cookie[0] === SECURITY_CONSTANTS.AUTH_COOKIE_NAME) {
-            cookieObject = {
-              name: cookie[0],
-              value: cookie[1],
-              url: completeQueryUrl,
-              path: basePath,
-            };
-          }
-        });
-      }
-      // If header exists assuming that it needs forwarding
-      let additionalHeaders: Headers | undefined;
-      if (request.headers[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER]) {
-        additionalHeaders = {}
-        additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER] = request.headers[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER];
-        additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_IP_HEADER] = request.headers[SECURITY_CONSTANTS.PROXY_AUTH_IP_HEADER];
-        if (request.headers[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER]) {
-          additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER] = request.headers[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER]
-        }
-      }
+      const extraHeaders = _.pick(request.headers, EXTRA_HEADERS);
+
       const [value, release] = await semaphore.acquire();
       try {
         createReportResult = await createVisualReport(
           reportParams,
           completeQueryUrl,
           logger,
-          cookieObject,
-          additionalHeaders,
+          extraHeaders,
           timezone
         );
       } finally {
