@@ -295,6 +295,9 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
       let availableChannels = getAvailableNotificationsChannels(response.config_list);
       return availableChannels;
     })
+    .catch((error: any) => {
+      console.log('error when retrieving notification configs:', error);
+    })
     .then((availableChannels: any) => {
       httpClient
       .get('../api/reporting/reports/' + reportId)

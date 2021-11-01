@@ -497,6 +497,9 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
       setChannels(availableChannels);
       return availableChannels;
     })
+    .catch((error: any) => {
+      console.log('error when retrieving notification configs:', error);
+    })
     .then((availableChannels: any) => {
       httpClient
       .get(`../api/reporting/reportDefinitions/${reportDefinitionId}`)
