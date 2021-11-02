@@ -37,9 +37,6 @@ import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREF
 import org.opensearch.reportsscheduler.index.ReportInstancesIndex
 import org.opensearch.reportsscheduler.model.ReportDefinitionDetails
 import org.opensearch.reportsscheduler.model.ReportInstance
-import org.opensearch.reportsscheduler.notifications.NotificationsActions
-import org.opensearch.reportsscheduler.security.UserAccessManager
-import org.opensearch.reportsscheduler.util.buildReportLink
 import org.opensearch.reportsscheduler.util.logger
 import java.time.Instant
 
@@ -71,12 +68,6 @@ internal object ReportDefinitionJobRunner : ScheduledJobRunner {
                 log.warn("$LOG_PREFIX:runJob-job creation failed for $reportInstance")
             } else {
                 log.info("$LOG_PREFIX:runJob-created job:$id")
-                if (reportDefinitionDetails.reportDefinition.delivery != null) {
-                    val user = UserAccessManager.getUserFromAccess(job.access)
-                    val userStr = user?.let { it.toString() } ?: ""
-                    val reportLink = buildReportLink(reportDefinitionDetails.reportDefinition.source.origin, reportInstance.tenant, id)
-                    NotificationsActions.send(reportDefinitionDetails.reportDefinition.delivery, id, reportLink, userStr)
-                }
             }
         }
     }
