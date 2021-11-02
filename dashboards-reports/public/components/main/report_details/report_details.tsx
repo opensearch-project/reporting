@@ -44,7 +44,7 @@ import {
   EuiIcon,
   EuiGlobalToastList,
 } from '@elastic/eui';
-import { displayDeliveryChannels, fileFormatsUpper, generateReportById, getAvailableNotificationsChannels } from '../main_utils';
+import { fileFormatsUpper, generateReportById } from '../main_utils';
 import { GenerateReportLoadingModal } from '../loading_modal';
 import { ReportSchemaType } from '../../../../server/model';
 import { converter } from '../../report_definitions/utils';
@@ -55,7 +55,6 @@ import {
   timeRangeMatcher,
 } from '../../utils/utils';
 import { TRIGGER_TYPE } from '../../../../server/routes/utils/constants';
-import { getChannelsQueryObject } from '../../report_definitions/delivery/delivery_constants';
 
 interface ReportDetails {
   reportName: string;
@@ -71,10 +70,6 @@ interface ReportDetails {
   triggerType: string;
   scheduleType: string;
   scheduleDetails: string;
-  configIds: Array<string> | string; 
-  title: string;
-  textDescription: string;
-  htmlDescription: string;
   queryUrl: string;
 }
 
@@ -122,10 +117,6 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
     triggerType: '',
     scheduleType: '',
     scheduleDetails: '',
-    configIds: [],
-    title: '',
-    textDescription: '',
-    htmlDescription: '',
     queryUrl: ''
   });
   const [toasts, setToasts] = useState([]);
@@ -229,26 +220,19 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
   };
 
   const getReportDetailsData = (
-    report: ReportSchemaType, 
-    availableChannels: Array<{ label: string; id: string; }>
-    ) : ReportDetails => {
+    report: ReportSchemaType
+  ) : ReportDetails => {
     const {
       report_definition: reportDefinition,
       last_updated: lastUpdated,
       state,
       query_url: queryUrl,
     } = report;
-    const { report_params: reportParams, trigger, delivery } = reportDefinition;
+    const { report_params: reportParams, trigger } = reportDefinition;
     const {
       trigger_type: triggerType,
       trigger_params: triggerParams,
     } = trigger;
-    const {
-      configIds: configIds,
-      title: title,
-      textDescription: textDescription,
-      htmlDescription: htmlDescription
-    } = delivery;
     const coreParams = reportParams.core_params;
     // covert timestamp to local date-time string
     let reportDetails = {
@@ -276,10 +260,6 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
       triggerType: triggerType,
       scheduleType: triggerParams ? triggerParams.schedule_type : `\u2014`,
       scheduleDetails: `\u2014`,
-      configIds: (configIds.length > 0) ? displayDeliveryChannels(configIds, availableChannels) : `\u2014`,
-      title: (title !== '') ? title : `\u2014`,
-      textDescription: (textDescription !== '') ? textDescription : `\u2014`,
-      htmlDescription: (htmlDescription !== '') ? htmlDescription : `\u2014`,
       queryUrl: queryUrl,
     };
     return reportDetails;
@@ -288,47 +268,34 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
   useEffect(() => {
     const { httpClient } = props;
     httpClient
-    .get('../api/reporting_notifications/get_configs', {
-      query: getChannelsQueryObject
-    })
-    .then(async (response: any) => {
-      let availableChannels = getAvailableNotificationsChannels(response.config_list);
-      return availableChannels;
+    .get('../api/reporting/reports/' + reportId)
+    .then((response: ReportSchemaType) => {
+      handleReportDetails(getReportDetailsData(response));
+      props.setBreadcrumbs([
+        {
+          text: i18n.translate(
+            'opensearch.reports.details.breadcrumb.reporting',
+            { defaultMessage: 'Reporting' }
+          ),
+          href: '#',
+        },
+        {
+          text: i18n.translate(
+            'opensearch.reports.details.breadcrumb.reportDetails',
+            {
+              defaultMessage: 'Report details: {name}',
+              values: {
+                name: response.report_definition.report_params.report_name,
+              },
+            }
+          ),
+        },
+      ]);
     })
     .catch((error: any) => {
-      console.log('error when retrieving notification configs:', error);
-    })
-    .then((availableChannels: any) => {
-      httpClient
-      .get('../api/reporting/reports/' + reportId)
-      .then((response: ReportSchemaType) => {
-        handleReportDetails(getReportDetailsData(response, availableChannels));
-        props.setBreadcrumbs([
-          {
-            text: i18n.translate(
-              'opensearch.reports.details.breadcrumb.reporting',
-              { defaultMessage: 'Reporting' }
-            ),
-            href: '#',
-          },
-          {
-            text: i18n.translate(
-              'opensearch.reports.details.breadcrumb.reportDetails',
-              {
-                defaultMessage: 'Report details: {name}',
-                values: {
-                  name: response.report_definition.report_params.report_name,
-                },
-              }
-            ),
-          },
-        ]);
-      })
-      .catch((error: any) => {
-        console.log('Error when fetching report details: ', error);
-        handleErrorToast();
-      });
-    })
+      console.log('Error when fetching report details: ', error);
+      handleErrorToast();
+    });
   }, []);
 
   const downloadIconDownload = async () => {
@@ -529,33 +496,6 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
           </EuiFlexGroup>
           <EuiSpacer />
           {triggerSection}
-          <EuiSpacer />
-          <EuiTitle>
-            <h3>Notification settings</h3>
-          </EuiTitle>
-          <EuiSpacer />
-          <EuiFlexGroup>
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={'Config IDs'}
-              reportDetailsComponentContent={
-                reportDetails.configIds
-              }
-            />
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={'Title'}
-              reportDetailsComponentContent={reportDetails.title}
-            />
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={'Text description'}
-              reportDetailsComponentContent={reportDetails.textDescription}
-            />
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={'Html description'}
-              reportDetailsComponentContent={trimAndRenderAsText(
-                reportDetails.htmlDescription
-              )}
-            />
-          </EuiFlexGroup>
         </EuiPageContent>
         <EuiGlobalToastList
           toasts={toasts}
