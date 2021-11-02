@@ -38,7 +38,6 @@ import {
   EuiGlobalToastList,
 } from '@elastic/eui';
 import { ReportSettings } from '../report_settings';
-import { ReportDelivery } from '../delivery';
 import { ReportTrigger } from '../report_trigger';
 import { ReportDefinitionSchemaType } from 'server/model';
 import { converter } from '../utils';
@@ -74,13 +73,6 @@ export function EditReportDefinition(props: { [x: string]: any; setBreadcrumbs?:
     setShowTriggerIntervalNaNError,
   ] = useState(false);
   const [showCronError, setShowCronError] = useState(false);
-  const [showDeliveryChannelError, setShowDeliveryChannelError] = useState(
-    false
-  );
-  const [
-    deliveryChannelError,
-    setDeliveryChannelError,
-  ] = useState('');
   const [showTimeRangeError, setShowTimeRangeError] = useState(false);
 
   const addPermissionsMissingViewEditPageToastHandler = (errorType: string) => {
@@ -262,8 +254,6 @@ export function EditReportDefinition(props: { [x: string]: any; setBreadcrumbs?:
       timeRange,
       setShowTimeRangeError,
       setShowCronError,
-      setShowDeliveryChannelError,
-      setDeliveryChannelError
     ).then((response) => {
       error = response;
     });
@@ -345,15 +335,6 @@ export function EditReportDefinition(props: { [x: string]: any; setBreadcrumbs?:
           showTimeRangeError={showTimeRangeError}
           showTriggerIntervalNaNError={showTriggerIntervalNaNError}
           showCronError={showCronError}
-        />
-        <EuiSpacer />
-        <ReportDelivery
-          edit={true}
-          editDefinitionId={reportDefinitionId}
-          reportDefinitionRequest={editReportDefinitionRequest}
-          httpClientProps={props['httpClient']}
-          showDeliveryChannelError={showDeliveryChannelError}
-          deliveryChannelError={deliveryChannelError}
         />
         <EuiSpacer />
         <EuiFlexGroup justifyContent="flexEnd">
