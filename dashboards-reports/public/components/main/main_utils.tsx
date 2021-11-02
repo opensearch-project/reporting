@@ -29,19 +29,6 @@ import { i18n } from '@osd/i18n';
 import { HttpFetchOptions, HttpSetup } from '../../../../../src/core/public';
 import { uiSettingsService } from '../utils/settings_service';
 
-export const displayDeliveryChannels = (configIds: Array<string>, channels: Array<{label: string, id: string}>) => {
-  let displayChannels = [];
-  for (let i = 0; i < configIds.length; ++i) {
-    for (let j = 0; j < channels.length; ++j) {
-      if (configIds[i] === channels[j].id) {
-        displayChannels.push(channels[j].label);
-        break;
-      }
-    }
-  }
-  return displayChannels.toString();
-}
-
 export const getAvailableNotificationsChannels = (configList: any) => {
   let availableChannels = [];
   for (let i = 0; i < configList.length; ++i) {

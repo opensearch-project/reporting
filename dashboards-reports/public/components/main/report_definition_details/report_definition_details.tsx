@@ -50,10 +50,8 @@ import {
   trimAndRenderAsText,
 } from '../report_details/report_details';
 import {
-  displayDeliveryChannels,
   fileFormatsUpper,
   generateReportFromDefinitionId,
-  getAvailableNotificationsChannels,
 } from '../main_utils';
 import { ReportDefinitionSchemaType } from '../../../../server/model';
 import moment from 'moment';
@@ -63,7 +61,6 @@ import {
   permissionsMissingActions,
 } from '../../utils/utils';
 import { GenerateReportLoadingModal } from '../loading_modal';
-import { getChannelsQueryObject } from '../../report_definitions/delivery/delivery_constants';
 
 const ON_DEMAND = 'On demand';
 
@@ -80,10 +77,6 @@ interface ReportDefinitionDetails {
   reportFooter: string;
   triggerType: string;
   scheduleDetails: string;
-  configIds: Array<string> | string;
-  title: string;
-  textDescription: string;
-  htmlDescription: string;
   baseUrl: string;
 }
 
@@ -101,10 +94,6 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
     reportFooter: '',
     triggerType: '',
     scheduleDetails: '',
-    configIds: [],
-    title: '',
-    textDescription: '',
-    htmlDescription: '',
     baseUrl: ''
   });
   const [
@@ -114,7 +103,6 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
   const [toasts, setToasts] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
-  const [channels, setChannels] = useState<Array<{ label: string; id: string; }>>([]);
   const reportDefinitionId = props.match['params']['reportDefinitionId'];
 
   const handleLoading = (e: boolean | ((prevState: boolean) => boolean)) => {
@@ -413,8 +401,7 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
   };
 
   const getReportDefinitionDetailsMetadata = (
-    data: ReportDefinitionSchemaType, 
-    availableChannels: Array<{ label: string; id: string; }>
+    data: ReportDefinitionSchemaType
   ) : ReportDefinitionDetails => {
     const reportDefinition: ReportDefinitionSchemaType = data;
     const {
@@ -428,12 +415,6 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
       trigger_type: triggerType,
       trigger_params: triggerParams,
     } = trigger;
-    const {
-      configIds: configIds,
-      title: title,
-      textDescription: textDescription,
-      htmlDescription: htmlDescription
-    } = delivery;
     const {
       core_params: {
         base_url: baseUrl,
@@ -478,10 +459,6 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
         ? humanReadableScheduleDetails(data.trigger)
         : `\u2014`,
       status: reportDefinition.status,
-      configIds: (configIds.length > 0) ? displayDeliveryChannels(configIds, availableChannels) : `\u2014`,
-      title: (title !== '') ? title : `\u2014`,
-      textDescription: (textDescription !== '') ? textDescription : `\u2014`,
-      htmlDescription: (htmlDescription !== '') ? htmlDescription : `\u2014`
     };
     return reportDefinitionDetails;
   };
@@ -489,58 +466,44 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
   useEffect(() => {
     const { httpClient } = props;
     httpClient
-    .get('../api/reporting_notifications/get_configs', {
-      query: getChannelsQueryObject
-    })
-    .then(async (response: any) => {
-      let availableChannels = getAvailableNotificationsChannels(response.config_list);
-      setChannels(availableChannels);
-      return availableChannels;
+    .get(`../api/reporting/reportDefinitions/${reportDefinitionId}`)
+    .then((response: {report_definition: ReportDefinitionSchemaType}) => {
+      handleReportDefinitionRawResponse(response);
+      handleReportDefinitionDetails(getReportDefinitionDetailsMetadata(response.report_definition));
+      props.setBreadcrumbs([
+        {
+          text: i18n.translate(
+            'opensearch.reports.reportDefinitionsDetails.schedule.breadcrumb.reporting',
+            { defaultMessage: 'Reporting' }
+          ),
+          href: '#',
+        },
+        {
+          text: i18n.translate(
+            'opensearch.reports.reportDefinitionsDetails.schedule.breadcrumb.reportDefinitionDetails',
+            {
+              defaultMessage: 'Report definition details: {name}',
+              values: {
+                name: response.report_definition.report_params.report_name,
+              },
+            }
+          ),
+        },
+      ]);
     })
     .catch((error: any) => {
-      console.log('error when retrieving notification configs:', error);
-    })
-    .then((availableChannels: any) => {
-      httpClient
-      .get(`../api/reporting/reportDefinitions/${reportDefinitionId}`)
-      .then((response: {report_definition: ReportDefinitionSchemaType}) => {
-        handleReportDefinitionRawResponse(response);
-        handleReportDefinitionDetails(getReportDefinitionDetailsMetadata(response.report_definition, availableChannels));
-        props.setBreadcrumbs([
+      console.error(
+        i18n.translate(
+          'opensearch.reports.reportDefinitionsDetails.schedule.breadcrumb.error',
           {
-            text: i18n.translate(
-              'opensearch.reports.reportDefinitionsDetails.schedule.breadcrumb.reporting',
-              { defaultMessage: 'Reporting' }
-            ),
-            href: '#',
-          },
-          {
-            text: i18n.translate(
-              'opensearch.reports.reportDefinitionsDetails.schedule.breadcrumb.reportDefinitionDetails',
-              {
-                defaultMessage: 'Report definition details: {name}',
-                values: {
-                  name: response.report_definition.report_params.report_name,
-                },
-              }
-            ),
-          },
-        ]);
-      })
-      .catch((error: any) => {
-        console.error(
-          i18n.translate(
-            'opensearch.reports.reportDefinitionsDetails.schedule.breadcrumb.error',
-            {
-              defaultMessage:
-                'error when getting report definition details: {error}',
-              values: { error: error },
-            }
-          )
-        );
-        handleDetailsErrorToast();
-      });
-    })
+            defaultMessage:
+              'error when getting report definition details: {error}',
+            values: { error: error },
+          }
+        )
+      );
+      handleDetailsErrorToast();
+    });
   }, []);
 
   const downloadIconDownload = async () => {
@@ -591,7 +554,7 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
         updatedRawResponse.report_definition = updatedReportDefinition;
         handleReportDefinitionRawResponse(updatedRawResponse);
         setReportDefinitionDetails(
-          getReportDefinitionDetailsMetadata(updatedReportDefinition, channels)
+          getReportDefinitionDetailsMetadata(updatedReportDefinition)
         );
         if (statusChange === 'Enable') {
           handleSuccessChangingScheduleStatusToast('enable');
@@ -879,37 +842,6 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
           </EuiFlexGroup>
           <EuiSpacer />
           {triggerSection}
-          <EuiSpacer />
-          <EuiTitle>
-            <h3>Notification settings</h3>
-          </EuiTitle>
-          <EuiSpacer />
-          <EuiFlexGroup>
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={'Config IDs'}
-              reportDetailsComponentContent={
-                reportDefinitionDetails.configIds
-              }
-            />
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={'Title'}
-              reportDetailsComponentContent={
-                reportDefinitionDetails.title
-              }
-            />
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={'Text description'}
-              reportDetailsComponentContent={
-                reportDefinitionDetails.textDescription
-              }
-            />
-            <ReportDetailsComponent
-              reportDetailsComponentTitle={'Html description'}
-              reportDetailsComponentContent={
-                reportDefinitionDetails.htmlDescription
-              }
-            />
-          </EuiFlexGroup>
         </EuiPageContent>
         <EuiGlobalToastList
           toasts={toasts}
