@@ -49,6 +49,7 @@ export async function createSavedSearchReport(
   report: any,
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
   dateFormat: string,
+  csvSeparator: string,
   isScheduledTask: boolean = true
 ): Promise<CreateReportResultType> {
   const params = report.report_definition.report_params;
@@ -60,6 +61,7 @@ export async function createSavedSearchReport(
     client,
     params.core_params,
     dateFormat,
+    csvSeparator,
     isScheduledTask
   );
 
@@ -144,6 +146,7 @@ async function generateReportData(
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
   params: any,
   dateFormat: string,
+  csvSeparator: string,
   isScheduledTask: boolean
 ) {
   let opensearchData: any = {};
@@ -286,6 +289,6 @@ async function generateReportData(
   async function convertOpenSearchDataToCsv() {
     const dataset: any = [];
     dataset.push(getOpenSearchData(arrayHits, report, params, dateFormat));
-    return await convertToCSV(dataset);
+    return await convertToCSV(dataset, csvSeparator);
   }
 }

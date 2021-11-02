@@ -206,10 +206,10 @@ export const getOpenSearchData = (arrayHits, report, params, dateFormat: string)
 };
 
 //Convert the data to Csv format
-export const convertToCSV = async (dataset) => {
+export const convertToCSV = async (dataset, csvSeparator) => {
   let convertedData: any = [];
   const options = {
-    delimiter: { field: ',', eol: '\n' },
+    delimiter: { field: csvSeparator, eol: '\n' },
     emptyFieldValue: ' ',
   };
   await converter.json2csvAsync(dataset[0], options).then((csv) => {
