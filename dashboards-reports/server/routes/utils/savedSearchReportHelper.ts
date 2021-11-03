@@ -34,6 +34,7 @@ import {
 import {
   ILegacyClusterClient,
   ILegacyScopedClusterClient,
+  Logger,
 } from '../../../../../src/core/server';
 import { getFileName, callCluster } from './helpers';
 import { CreateReportResultType } from './types';
@@ -49,18 +50,20 @@ export async function createSavedSearchReport(
   report: any,
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
   dateFormat: string,
-  isScheduledTask: boolean = true
+  isScheduledTask: boolean = true,
+  logger: Logger
 ): Promise<CreateReportResultType> {
   const params = report.report_definition.report_params;
   const reportFormat = params.core_params.report_format;
   const reportName = params.report_name;
 
-  await populateMetaData(client, report, isScheduledTask);
+  await populateMetaData(client, report, isScheduledTask, logger);
   const data = await generateReportData(
     client,
     params.core_params,
     dateFormat,
-    isScheduledTask
+    isScheduledTask,
+    logger
   );
 
   const curTime = new Date();
@@ -81,7 +84,8 @@ export async function createSavedSearchReport(
 async function populateMetaData(
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
   report: any,
-  isScheduledTask: boolean
+  isScheduledTask: boolean,
+  logger: Logger
 ) {
   metaData.saved_search_id =
     report.report_definition.report_params.core_params.saved_search_id;
@@ -144,7 +148,8 @@ async function generateReportData(
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
   params: any,
   dateFormat: string,
-  isScheduledTask: boolean
+  isScheduledTask: boolean,
+  logger: Logger
 ) {
   let opensearchData: any = {};
   const arrayHits: any = [];
@@ -159,6 +164,9 @@ async function generateReportData(
   }
 
   const reqBody = buildRequestBody(buildQuery(report, 0));
+  logger.info(
+    `[Reporting csv module] DSL request body: ${JSON.stringify(reqBody)}`
+  );
   if (total > maxResultSize) {
     await getOpenSearchDataByScroll();
   } else {
