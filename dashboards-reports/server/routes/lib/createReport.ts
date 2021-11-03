@@ -92,7 +92,8 @@ export const createReport = async (
         report,
         opensearchClient,
         dateFormat,
-        isScheduledTask
+        isScheduledTask,
+        logger
       );
     } else {
       // report source can only be one of [saved search, visualization, dashboard, notebook]
