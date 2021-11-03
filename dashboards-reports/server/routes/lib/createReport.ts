@@ -61,9 +61,8 @@ export const createReport = async (
   //@ts-ignore
   const semaphore: SemaphoreInterface = context.reporting_plugin.semaphore;
   // @ts-ignore
-  const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
-    request
-  );
+  const opensearchReportsClient: ILegacyScopedClusterClient =
+    context.reporting_plugin.opensearchReportsClient.asScoped(request);
   const opensearchClient = context.core.opensearch.legacy.client;
   // @ts-ignore
   const timezone = request.query.timezone;
@@ -93,7 +92,8 @@ export const createReport = async (
         report,
         opensearchClient,
         dateFormat,
-        isScheduledTask
+        isScheduledTask,
+        logger
       );
     } else {
       // report source can only be one of [saved search, visualization, dashboard, notebook]
