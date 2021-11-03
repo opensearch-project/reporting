@@ -25,7 +25,7 @@
  */
 
 import {
-  buildQuery,
+  buildRequestBody,
   convertToCSV,
   getOpenSearchData,
   getSelectedFields,
@@ -104,7 +104,7 @@ async function populateMetaData(
 
   metaData.sorting = ssInfos._source.search.sort;
   metaData.type = ssInfos._source.type;
-  metaData.filters =
+  metaData.searchSourceJSON =
     ssInfos._source.search.kibanaSavedObjectMeta.searchSourceJSON;
 
   // Get the list of selected columns in the saved search.Otherwise select all the fields under the _source
@@ -112,7 +112,7 @@ async function populateMetaData(
 
   // Get index name
   for (const item of ssInfos._source.references) {
-    if (item.name === JSON.parse(metaData.filters).indexRefName) {
+    if (item.name === JSON.parse(metaData.searchSourceJSON).indexRefName) {
       // Get index-pattern information
       const indexPattern = await callCluster(
         client,
@@ -163,7 +163,7 @@ async function generateReportData(
     return '';
   }
 
-  const reqBody = buildRequestBody(buildQuery(report, 0));
+  const reqBody = buildRequestBody(report, 0);
   logger.info(
     `[Reporting csv module] DSL request body: ${JSON.stringify(reqBody)}`
   );
@@ -200,13 +200,13 @@ async function generateReportData(
 
   // Build the OpenSearch Count query to count the size of result
   async function getOpenSearchDataSize() {
-    const countReq = buildQuery(report, 1);
+    const countReq = buildRequestBody(report, 1);
     return await callCluster(
       client,
       'count',
       {
         index: indexPattern,
-        body: countReq.toJSON(),
+        body: countReq,
       },
       isScheduledTask
     );
@@ -271,23 +271,6 @@ async function generateReportData(
     );
 
     arrayHits.push(opensearchData.hits);
-  }
-
-  function buildRequestBody(query: esb.RequestBodySearch) {
-    const docvalues = [];
-    for (const dateType of report._source.dateFields) {
-      docvalues.push({
-        field: dateType,
-        format: 'date_hour_minute_second_fraction',
-      });
-    }
-
-    // elastic-builder doesn't provide function to build docvalue_fields with format,
-    // this is a workaround which appends docvalues field to the request body.
-    return {
-      ...query.toJSON(),
-      docvalue_fields: docvalues,
-    };
   }
 
   // Parse OpenSearch data and convert to CSV
