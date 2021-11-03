@@ -69,7 +69,8 @@ export const createReport = async (
   // @ts-ignore
   const timezone = request.query.timezone;
   // @ts-ignore
-  const dateFormat = request.query.dateFormat || DATA_REPORT_CONFIG.excelDateFormat;
+  const dateFormat =
+    request.query.dateFormat || DATA_REPORT_CONFIG.excelDateFormat;
   const {
     basePath,
     serverInfo: { protocol, port, hostname },
@@ -97,7 +98,8 @@ export const createReport = async (
         report,
         opensearchClient,
         dateFormat,
-        isScheduledTask
+        isScheduledTask,
+        logger
       );
     } else {
       // report source can only be one of [saved search, visualization, dashboard, notebook]
