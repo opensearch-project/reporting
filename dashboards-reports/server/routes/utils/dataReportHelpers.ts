@@ -49,14 +49,17 @@ export var metaData = {
 // Get the selected columns by the user.
 export const getSelectedFields = async (columns) => {
   const selectedFields = [];
+  let fields_exist = false;
   for (let column of columns) {
     if (column !== '_source') {
-      metaData.fields_exist = true;
+      fields_exist = true;
       selectedFields.push(column);
     } else {
+      fields_exist = false;
       selectedFields.push('_source');
     }
   }
+  metaData.fields_exist = fields_exist;
   metaData.selectedFields = selectedFields;
 };
 
@@ -191,7 +194,7 @@ export const getOpenSearchData = (arrayHits, report, params, dateFormat: string)
       }
       delete data['fields'];
       if (report._source.fields_exist === true) {
-        let result = traverse(data._source, report._source.selectedFields);
+        let result = traverse(data, report._source.selectedFields);
         hits.push(params.excel ? sanitize(result) : result);
       } else {
         hits.push(params.excel ? sanitize(data) : data);
@@ -229,7 +232,7 @@ function flattenHits(hits, result = {}, prefix = '') {
     ) {
       flattenHits(value, result, prefix + key + '.');
     } else {
-      result[prefix + key] = value;
+      result[prefix.replace(/^_source\./, '') + key] = value;
     }
   }
   return result;
