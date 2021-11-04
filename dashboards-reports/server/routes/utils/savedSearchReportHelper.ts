@@ -25,7 +25,7 @@
  */
 
 import {
-  buildQuery,
+  buildRequestBody,
   convertToCSV,
   getOpenSearchData,
   getSelectedFields,
@@ -34,6 +34,7 @@ import {
 import {
   ILegacyClusterClient,
   ILegacyScopedClusterClient,
+  Logger,
 } from '../../../../../src/core/server';
 import { getFileName, callCluster } from './helpers';
 import { CreateReportResultType } from './types';
@@ -50,19 +51,21 @@ export async function createSavedSearchReport(
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
   dateFormat: string,
   csvSeparator: string,
-  isScheduledTask: boolean = true
+  isScheduledTask: boolean = true,
+  logger: Logger
 ): Promise<CreateReportResultType> {
   const params = report.report_definition.report_params;
   const reportFormat = params.core_params.report_format;
   const reportName = params.report_name;
 
-  await populateMetaData(client, report, isScheduledTask);
+  await populateMetaData(client, report, isScheduledTask, logger);
   const data = await generateReportData(
     client,
     params.core_params,
     dateFormat,
     csvSeparator,
-    isScheduledTask
+    isScheduledTask,
+    logger
   );
 
   const curTime = new Date();
@@ -83,7 +86,8 @@ export async function createSavedSearchReport(
 async function populateMetaData(
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
   report: any,
-  isScheduledTask: boolean
+  isScheduledTask: boolean,
+  logger: Logger
 ) {
   metaData.saved_search_id =
     report.report_definition.report_params.core_params.saved_search_id;
@@ -102,7 +106,7 @@ async function populateMetaData(
 
   metaData.sorting = ssInfos._source.search.sort;
   metaData.type = ssInfos._source.type;
-  metaData.filters =
+  metaData.searchSourceJSON =
     ssInfos._source.search.kibanaSavedObjectMeta.searchSourceJSON;
 
   // Get the list of selected columns in the saved search.Otherwise select all the fields under the _source
@@ -110,7 +114,7 @@ async function populateMetaData(
 
   // Get index name
   for (const item of ssInfos._source.references) {
-    if (item.name === JSON.parse(metaData.filters).indexRefName) {
+    if (item.name === JSON.parse(metaData.searchSourceJSON).indexRefName) {
       // Get index-pattern information
       const indexPattern = await callCluster(
         client,
@@ -147,7 +151,8 @@ async function generateReportData(
   params: any,
   dateFormat: string,
   csvSeparator: string,
-  isScheduledTask: boolean
+  isScheduledTask: boolean,
+  logger: Logger
 ) {
   let opensearchData: any = {};
   const arrayHits: any = [];
@@ -161,7 +166,10 @@ async function generateReportData(
     return '';
   }
 
-  const reqBody = buildRequestBody(buildQuery(report, 0));
+  const reqBody = buildRequestBody(report, 0);
+  logger.info(
+    `[Reporting csv module] DSL request body: ${JSON.stringify(reqBody)}`
+  );
   if (total > maxResultSize) {
     await getOpenSearchDataByScroll();
   } else {
@@ -195,13 +203,13 @@ async function generateReportData(
 
   // Build the OpenSearch Count query to count the size of result
   async function getOpenSearchDataSize() {
-    const countReq = buildQuery(report, 1);
+    const countReq = buildRequestBody(report, 1);
     return await callCluster(
       client,
       'count',
       {
         index: indexPattern,
-        body: countReq.toJSON(),
+        body: countReq,
       },
       isScheduledTask
     );
@@ -266,23 +274,6 @@ async function generateReportData(
     );
 
     arrayHits.push(opensearchData.hits);
-  }
-
-  function buildRequestBody(query: esb.RequestBodySearch) {
-    const docvalues = [];
-    for (const dateType of report._source.dateFields) {
-      docvalues.push({
-        field: dateType,
-        format: 'date_hour_minute_second_fraction',
-      });
-    }
-
-    // elastic-builder doesn't provide function to build docvalue_fields with format,
-    // this is a workaround which appends docvalues field to the request body.
-    return {
-      ...query.toJSON(),
-      docvalue_fields: docvalues,
-    };
   }
 
   // Parse OpenSearch data and convert to CSV

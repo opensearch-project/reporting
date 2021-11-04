@@ -28,18 +28,9 @@ import 'regenerator-runtime/runtime';
 import { createVisualReport } from '../visual_report/visualReportHelper';
 import { Logger } from '../../../../../../src/core/server';
 import { ReportParamsSchemaType, reportSchema } from '../../../model';
+import { mockLogger } from '../../../../test/__mocks__/loggerMock';
 
-const mockLogger: Logger = {
-  info: jest.fn(),
-  trace: jest.fn(),
-  warn: jest.fn(),
-  debug: jest.fn(),
-  error: jest.fn(),
-  fatal: jest.fn(),
-  log: jest.fn(),
-  get: jest.fn(),
-};
-
+const mockHeader = { mockKey: 'mockValue' };
 const input = {
   query_url: '/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d',
   time_from: 1343576635300,
@@ -84,7 +75,8 @@ describe('test create visual report', () => {
     const { dataUrl, fileName } = await createVisualReport(
       reportParams as ReportParamsSchemaType,
       mockHtmlPath,
-      mockLogger
+      mockLogger,
+      mockHeader
     );
     expect(fileName).toContain(`${reportParams.report_name}`);
     expect(fileName).toContain('.png');
@@ -99,7 +91,8 @@ describe('test create visual report', () => {
     const { dataUrl, fileName } = await createVisualReport(
       reportParams as ReportParamsSchemaType,
       mockHtmlPath,
-      mockLogger
+      mockLogger,
+      mockHeader
     );
     expect(fileName).toContain(`${reportParams.report_name}`);
     expect(fileName).toContain('.pdf');

@@ -27,6 +27,8 @@
 import 'regenerator-runtime/runtime';
 import { createSavedSearchReport } from '../savedSearchReportHelper';
 import { reportSchema } from '../../../model';
+import { mockLogger } from '../../../../test/__mocks__/loggerMock';
+import _ from 'lodash';
 
 /**
  * The mock and sample input for saved search export function.
@@ -62,6 +64,8 @@ const input = {
   },
 };
 
+const mockDateFormat = 'MM/DD/YYYY h:mm:ss.SSS a';
+
 /**
  * Max result window size in OpenSearch index settings.
  */
@@ -79,8 +83,10 @@ describe('test create saved search report', () => {
     const { timeCreated, fileName } = await createSavedSearchReport(
       input,
       client,
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
     expect(fileName).toContain(`test report table order_`);
   }, 20000);
@@ -89,8 +95,10 @@ describe('test create saved search report', () => {
     const csvReport = await createSavedSearchReport(
       input,
       mockOpenSearchClient([]),
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
     expect(csvReport.fileName).toContain('.csv');
 
@@ -98,8 +106,10 @@ describe('test create saved search report', () => {
     const xlsxReport = await createSavedSearchReport(
       input,
       mockOpenSearchClient([]),
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
     expect(xlsxReport.fileName).toContain('.xlsx');
   }, 20000);
@@ -110,8 +120,10 @@ describe('test create saved search report', () => {
     const { dataUrl } = await createSavedSearchReport(
       input,
       client,
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
     expect(dataUrl).toEqual('');
   }, 20000);
@@ -128,8 +140,10 @@ describe('test create saved search report', () => {
     const { dataUrl } = await createSavedSearchReport(
       input,
       client,
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
 
     expect(dataUrl).toEqual(
@@ -160,8 +174,10 @@ describe('test create saved search report', () => {
     const { dataUrl } = await createSavedSearchReport(
       input,
       client,
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
 
     expect(dataUrl).toEqual(
@@ -195,8 +211,10 @@ describe('test create saved search report', () => {
     const { dataUrl } = await createSavedSearchReport(
       input,
       client,
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
 
     expect(dataUrl).toEqual('category,customer_gender\n' + 'c1,Male');
@@ -222,8 +240,10 @@ describe('test create saved search report', () => {
     const { dataUrl } = await createSavedSearchReport(
       input,
       client,
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
 
     expect(dataUrl).toEqual(
@@ -253,8 +273,10 @@ describe('test create saved search report', () => {
     const { dataUrl } = await createSavedSearchReport(
       input,
       client,
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
 
     expect(dataUrl).toEqual(
@@ -278,8 +300,10 @@ describe('test create saved search report', () => {
     const { dataUrl } = await createSavedSearchReport(
       input,
       client,
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
 
     expect(dataUrl).toEqual(
@@ -300,8 +324,10 @@ describe('test create saved search report', () => {
     const { dataUrl } = await createSavedSearchReport(
       input,
       client,
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      '|'
+      mockDateFormat,
+      '|',
+      undefined,
+      mockLogger
     );
 
     expect(dataUrl).toEqual(
@@ -331,8 +357,10 @@ describe('test create saved search report', () => {
     const { dataUrl } = await createSavedSearchReport(
       input,
       client,
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
 
     expect(dataUrl).toEqual(
@@ -354,8 +382,10 @@ describe('test create saved search report', () => {
     const { dataUrl } = await createSavedSearchReport(
       input,
       client,
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
 
     expect(dataUrl).toEqual(
@@ -383,8 +413,10 @@ describe('test create saved search report', () => {
     const { dataUrl } = await createSavedSearchReport(
       input,
       client,
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
 
     expect(dataUrl).toEqual(
@@ -405,15 +437,53 @@ test('create report for data set contains null field value', async () => {
     hit({ category: 'c3', customer_gender: null }),
   ];
   const client = mockOpenSearchClient(hits);
-    const { dataUrl } = await createSavedSearchReport(
-      input,
-      client,
-      'MM/DD/YYYY h:mm:ss.SSS a',
-      ','
-    );
+  const { dataUrl } = await createSavedSearchReport(
+    input,
+    client,
+    mockDateFormat,
+    ',',
+    undefined,
+    mockLogger
+  );
 
   expect(dataUrl).toEqual(
     'category,customer_gender\n' + 'c1,Ma\n' + 'c2,le\n' + 'c3, '
+  );
+}, 20000);
+
+test('create report for data set with metadata fields', async () => {
+  const metadataFields = { _index: 'nameofindex', _id: 'someid' };
+  let hits = [
+    hit({ category: 'c1', customer_gender: 'Male' }),
+    hit({ category: 'c2', customer_gender: 'Male' }),
+    hit({ category: 'c3', customer_gender: 'Male' }),
+    hit({ category: 'c4', customer_gender: 'Male' }),
+    hit({ category: 'c5', customer_gender: 'Male' }),
+  ];
+  hits.forEach((i) => {
+    _.merge(i, metadataFields);
+  });
+
+  const client = mockOpenSearchClient(
+    hits,
+    '"category", "customer_gender","_index","_id"'
+  );
+  const { dataUrl } = await createSavedSearchReport(
+    input,
+    client,
+    mockDateFormat,
+    ',',
+    undefined,
+    mockLogger
+  );
+
+  expect(dataUrl).toEqual(
+    'category,customer_gender,_index,_id\n' +
+      'c1,Male,nameofindex,someid\n' +
+      'c2,Male,nameofindex,someid\n' +
+      'c3,Male,nameofindex,someid\n' +
+      'c4,Male,nameofindex,someid\n' +
+      'c5,Male,nameofindex,someid'
   );
 }, 20000);
 
