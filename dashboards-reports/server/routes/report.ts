@@ -53,6 +53,7 @@ export default function (router: IRouter) {
         query: schema.object({
           timezone: schema.maybe(schema.string()),
           dateFormat: schema.maybe(schema.string()),
+          csvSeparator: schema.maybe(schema.string()),
         }),
       },
     },
@@ -112,7 +113,8 @@ export default function (router: IRouter) {
         }),
         query: schema.object({
           timezone: schema.string(),
-          dateFormat: schema.maybe(schema.string()),
+          dateFormat: schema.string(),
+          csvSeparator: schema.string(),
         }),
       },
     },
@@ -174,7 +176,8 @@ export default function (router: IRouter) {
         }),
         query: schema.object({
           timezone: schema.string(),
-          dateFormat: schema.maybe(schema.string()),
+          dateFormat: schema.string(),
+          csvSeparator: schema.string(),
         }),
       },
     },
