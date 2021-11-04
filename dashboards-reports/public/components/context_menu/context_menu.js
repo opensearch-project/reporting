@@ -105,9 +105,9 @@ const generateInContextReport = async (
   };
 
   fetch(
-    `../api/reporting/generateReport?timezone=${
-      Intl.DateTimeFormat().resolvedOptions().timeZone
-    }&dateFormat=${uiSettingsService.get('dateFormat')}`,
+    `../api/reporting/generateReport?${new URLSearchParams(
+      uiSettingsService.getSearchParams()
+    )}`,
     {
       headers: {
         'Content-Type': 'application/json',

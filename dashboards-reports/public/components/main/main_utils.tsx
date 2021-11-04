@@ -164,10 +164,7 @@ export const generateReportFromDefinitionId = async (
       headers: {
         'Content-Type': 'application/json',
       },
-      query: {
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        dateFormat: uiSettingsService.get('dateFormat'),
-      },
+      query: uiSettingsService.getSearchParams(),
     })
     .then(async (response: any) => {
       // for emailing a report, this API response doesn't have response body
@@ -200,10 +197,7 @@ export const generateReportById = async (
 ) => {
   await httpClient
     .get(`../api/reporting/generateReport/${reportId}`, {
-      query: {
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        dateFormat: uiSettingsService.get('dateFormat'),
-      },
+      query: uiSettingsService.getSearchParams(),
     })
     .then(async (response) => {
       //TODO: duplicate code, extract to be a function that can reuse. e.g. handleResponse(response)
