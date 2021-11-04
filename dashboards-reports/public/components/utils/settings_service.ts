@@ -20,4 +20,18 @@ export const uiSettingsService = {
   get: (key: string, defaultOverride?: any) => {
     return uiSettings?.get(key, defaultOverride) || '';
   },
+  getSearchParams: function () {
+    const rawTimeZone = this.get('dateFormat:tz');
+    const timezone =
+      !rawTimeZone || rawTimeZone === 'Browser'
+        ? Intl.DateTimeFormat().resolvedOptions().timeZone
+        : rawTimeZone;
+    const dateFormat = this.get('dateFormat');
+    const csvSeparator = this.get('csv:separator');
+    return {
+      timezone,
+      dateFormat,
+      csvSeparator,
+    };
+  },
 };

@@ -69,6 +69,8 @@ export const createReport = async (
   // @ts-ignore
   const dateFormat =
     request.query.dateFormat || DATA_REPORT_CONFIG.excelDateFormat;
+  // @ts-ignore
+  const csvSeparator = request.query.csvSeparator || ',';
 
   let createReportResult: CreateReportResultType;
   let reportId;
@@ -92,6 +94,7 @@ export const createReport = async (
         report,
         opensearchClient,
         dateFormat,
+        csvSeparator,
         isScheduledTask,
         logger
       );
