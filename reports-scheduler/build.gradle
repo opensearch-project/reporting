@@ -239,10 +239,7 @@ integTest {
     }
 
     if (System.getProperty("tests.clustername") != null) {
-         exclude 'org/opensearch/reportsscheduler/ReportsSchedulerPluginIT.class'
-    } else {
-        // assuming that opensearch-notifications will be installed when running integTest against a remote cluster
-        exclude 'org/opensearch/reportsscheduler/rest/ReportWithNotificationIT.class'
+        exclude 'org/opensearch/reportsscheduler/ReportsSchedulerPluginIT.class'
     }
 }
 
