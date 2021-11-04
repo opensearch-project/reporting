@@ -64,7 +64,7 @@ const input = {
   },
 };
 
-const mockDateFormat = 'date_hour_minute_second_fraction';
+const mockDateFormat = 'MM/DD/YYYY h:mm:ss.SSS a';
 
 /**
  * Max result window size in OpenSearch index settings.
@@ -84,6 +84,7 @@ describe('test create saved search report', () => {
       input,
       client,
       mockDateFormat,
+      ',',
       undefined,
       mockLogger
     );
@@ -95,6 +96,7 @@ describe('test create saved search report', () => {
       input,
       mockOpenSearchClient([]),
       mockDateFormat,
+      ',',
       undefined,
       mockLogger
     );
@@ -105,6 +107,7 @@ describe('test create saved search report', () => {
       input,
       mockOpenSearchClient([]),
       mockDateFormat,
+      ',',
       undefined,
       mockLogger
     );
@@ -118,6 +121,7 @@ describe('test create saved search report', () => {
       input,
       client,
       mockDateFormat,
+      ',',
       undefined,
       mockLogger
     );
@@ -137,6 +141,7 @@ describe('test create saved search report', () => {
       input,
       client,
       mockDateFormat,
+      ',',
       undefined,
       mockLogger
     );
@@ -170,6 +175,7 @@ describe('test create saved search report', () => {
       input,
       client,
       mockDateFormat,
+      ',',
       undefined,
       mockLogger
     );
@@ -206,6 +212,7 @@ describe('test create saved search report', () => {
       input,
       client,
       mockDateFormat,
+      ',',
       undefined,
       mockLogger
     );
@@ -234,6 +241,7 @@ describe('test create saved search report', () => {
       input,
       client,
       mockDateFormat,
+      ',',
       undefined,
       mockLogger
     );
@@ -266,6 +274,7 @@ describe('test create saved search report', () => {
       input,
       client,
       mockDateFormat,
+      ',',
       undefined,
       mockLogger
     );
@@ -292,6 +301,7 @@ describe('test create saved search report', () => {
       input,
       client,
       mockDateFormat,
+      ',',
       undefined,
       mockLogger
     );
@@ -301,6 +311,30 @@ describe('test create saved search report', () => {
         '",c1","Ma,le"\n' +
         '"c2,","M,ale"\n' +
         '",,c3","Male,,,"'
+    );
+  }, 20000);
+
+  test('create report for data set with comma and custom separator', async () => {
+    const hits = [
+      hit({ category: ',c1', customer_gender: 'Ma,le' }),
+      hit({ category: 'c2,', customer_gender: 'M,ale' }),
+      hit({ category: ',,c3', customer_gender: 'Male,,,' }),
+    ];
+    const client = mockOpenSearchClient(hits);
+    const { dataUrl } = await createSavedSearchReport(
+      input,
+      client,
+      mockDateFormat,
+      '|',
+      undefined,
+      mockLogger
+    );
+
+    expect(dataUrl).toEqual(
+      'category|customer_gender\n' +
+        ',c1|Ma,le\n' +
+        'c2,|M,ale\n' +
+        ',,c3|Male,,,'
     );
   }, 20000);
 
@@ -324,6 +358,7 @@ describe('test create saved search report', () => {
       input,
       client,
       mockDateFormat,
+      ',',
       undefined,
       mockLogger
     );
@@ -348,6 +383,7 @@ describe('test create saved search report', () => {
       input,
       client,
       mockDateFormat,
+      ',',
       undefined,
       mockLogger
     );
@@ -378,6 +414,7 @@ describe('test create saved search report', () => {
       input,
       client,
       mockDateFormat,
+      ',',
       undefined,
       mockLogger
     );
@@ -404,6 +441,7 @@ test('create report for data set contains null field value', async () => {
     input,
     client,
     mockDateFormat,
+    ',',
     undefined,
     mockLogger
   );
@@ -434,6 +472,7 @@ test('create report for data set with metadata fields', async () => {
     input,
     client,
     mockDateFormat,
+    ',',
     undefined,
     mockLogger
   );
