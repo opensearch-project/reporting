@@ -33,7 +33,7 @@ Complete OpenSearch Dashboards Report feature is composed of 2 plugins.
 
 ## Notifications Integration
 
-OpenSearch Dashboards Reports integration with [Notifications](https://github.com/opensearch-project/notifications) is currently in progress, tracking for the 8/30 OpenSearch 1.1 release.
+OpenSearch Dashboards Reports integration with [Notifications](https://github.com/opensearch-project/notifications) is currently in progress. Tracking [here](https://github.com/opensearch-project/dashboards-reports/issues/72)
 
 ## Troubleshooting
 
