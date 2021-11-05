@@ -51,7 +51,7 @@ internal class InContextReportCreateAction @Inject constructor(
     actionFilters,
     ::InContextReportCreateRequest) {
     companion object {
-        private const val NAME = "cluster:admin/opensearch/reports/menu/download"
+        private const val NAME = "cluster:admin/opendistro/reports/menu/download"
         internal val ACTION_TYPE = ActionType(NAME, ::InContextReportCreateResponse)
     }
 
