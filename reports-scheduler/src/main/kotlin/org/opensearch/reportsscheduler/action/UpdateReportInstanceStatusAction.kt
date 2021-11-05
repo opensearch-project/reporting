@@ -51,7 +51,7 @@ internal class UpdateReportInstanceStatusAction @Inject constructor(
     actionFilters,
     ::UpdateReportInstanceStatusRequest) {
     companion object {
-        private const val NAME = "cluster:admin/opensearch/reports/instance/update_status"
+        private const val NAME = "cluster:admin/opendistro/reports/instance/update_status"
         internal val ACTION_TYPE = ActionType(NAME, ::UpdateReportInstanceStatusResponse)
     }
 
