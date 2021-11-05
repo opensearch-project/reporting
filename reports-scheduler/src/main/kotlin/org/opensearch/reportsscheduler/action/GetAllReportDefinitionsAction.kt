@@ -51,7 +51,7 @@ internal class GetAllReportDefinitionsAction @Inject constructor(
     actionFilters,
     ::GetAllReportDefinitionsRequest) {
     companion object {
-        private const val NAME = "cluster:admin/opensearch/reports/definition/list"
+        private const val NAME = "cluster:admin/opendistro/reports/definition/list"
         internal val ACTION_TYPE = ActionType(NAME, ::GetAllReportDefinitionsResponse)
     }
 
