@@ -9,10 +9,6 @@ Compatible with OpenSearch and OpenSearch Dashboards Version 1.2.0
 * Revert backend paths to opendistro  ([#218](https://github.com/opensearch-project/dashboards-reports/pull/218))
 
 
-### Infrastructure
-* Integrate notifications backend ([#129](https://github.com/opensearch-project/dashboards-reports/pull/129))
-
-
 ### Enhancements
 * Add metrics for notifications ([#173](https://github.com/opensearch-project/dashboards-reports/pull/173))
 * Add logic to build report detail page link and send as part of message for non-email channels ([#182](https://github.com/opensearch-project/dashboards-reports/pull/182))
@@ -27,6 +23,7 @@ Compatible with OpenSearch and OpenSearch Dashboards Version 1.2.0
 * Remove calling notifications in reports scheduler ([#211](https://github.com/opensearch-project/dashboards-reports/pull/211))
 * Taking RBAC settings from Alerting plugin default to false ([#165](https://github.com/opensearch-project/dashboards-reports/pull/165))
 * Support range filters for csv reports ([#185](https://github.com/opensearch-project/dashboards-reports/pull/185))
+* Integrate notifications backend ([#129](https://github.com/opensearch-project/dashboards-reports/pull/129))
 
 
 ### Documentation
