@@ -51,7 +51,7 @@ internal class GetAllReportInstancesAction @Inject constructor(
     actionFilters,
     ::GetAllReportInstancesRequest) {
     companion object {
-        private const val NAME = "cluster:admin/opensearch/reports/instance/list"
+        private const val NAME = "cluster:admin/opendistro/reports/instance/list"
         internal val ACTION_TYPE = ActionType(NAME, ::GetAllReportInstancesResponse)
     }
 
