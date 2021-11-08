@@ -42,13 +42,13 @@ import {
 } from './utils/converters/backendToUi';
 import { addToMetric } from './utils/metricHelper';
 import { validateReport } from '../../server/utils/validationHelper';
-import { AccessInfoType } from 'server';
+import { ReportingConfig } from 'server';
 
-export default function (router: IRouter, accessInfo: AccessInfoType) {
-  const {
-    basePath,
-    serverInfo: { protocol, port, hostname },
-  } = accessInfo;
+export default function (router: IRouter, config: ReportingConfig) {
+  const protocol = config.get('osd_server', 'protocol');
+  const hostname = config.get('osd_server', 'hostname');
+  const port = config.get('osd_server', 'port');
+  const basePath = config.osdConfig.get('server', 'basePath');
   // generate report (with provided metadata)
   router.post(
     {
@@ -71,7 +71,6 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       //@ts-ignore
       const logger: Logger = context.reporting_plugin.logger;
       let report = request.body;
-
       // input validation
       try {
         report.report_definition.report_params.core_params.origin = `${protocol}://${hostname}:${port}${basePath}`;
@@ -87,12 +86,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       }
 
       try {
-        const reportData = await createReport(
-          request,
-          context,
-          report,
-          accessInfo
-        );
+        const reportData = await createReport(request, context, report, config);
 
         // if not deliver to user himself , no need to send actual file data to client
         const delivery = report.report_definition.delivery;
@@ -136,7 +130,6 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       addToMetric('report', 'download', 'count');
       //@ts-ignore
       const logger: Logger = context.reporting_plugin.logger;
-      let report: any;
       try {
         const savedReportId = request.params.reportId;
         // @ts-ignore
@@ -160,7 +153,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
           request,
           context,
           report,
-          accessInfo,
+          config,
           savedReportId
         );
         addToMetric('report', 'download', 'count', report);
@@ -231,7 +224,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
           request,
           context,
           report,
-          accessInfo,
+          config,
           reportId
         );
         addToMetric('report', 'create_from_definition', 'count', report);

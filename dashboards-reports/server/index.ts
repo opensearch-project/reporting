@@ -24,21 +24,19 @@
  * permissions and limitations under the License.
  */
 
-import {
-  HttpServerInfo,
-  PluginInitializerContext,
-} from '../../../src/core/server';
+import { PluginInitializerContext } from '../../../src/core/server';
+import { ReportingConfigType } from './config';
 import { ReportsDashboardsPlugin } from './plugin';
 
-export type AccessInfoType = {
-  basePath: string;
-  serverInfo: HttpServerInfo;
-};
+export { config } from './config';
+export { ReportingConfig } from './config/config';
+export { ReportsDashboardsPlugin as Plugin };
 
 //  This exports static code and TypeScript types,
 //  as well as, OpenSearch Dashboards Platform `plugin()` initializer.
-
-export function plugin(initializerContext: PluginInitializerContext) {
+export function plugin(
+  initializerContext: PluginInitializerContext<ReportingConfigType>
+) {
   return new ReportsDashboardsPlugin(initializerContext);
 }
 

@@ -46,14 +46,14 @@ import { SetCookie, Headers } from 'puppeteer-core';
 import { updateReportState } from './updateReportState';
 import { saveReport } from './saveReport';
 import { SemaphoreInterface } from 'async-mutex';
-import { AccessInfoType } from 'server';
+import { ReportingConfig } from 'server';
 import _ from 'lodash';
 
 export const createReport = async (
   request: OpenSearchDashboardsRequest,
   context: RequestHandlerContext,
   report: ReportSchemaType,
-  accessInfo: AccessInfoType,
+  config: ReportingConfig,
   savedReportId?: string
 ): Promise<CreateReportResultType> => {
   const isScheduledTask = false;
@@ -73,10 +73,10 @@ export const createReport = async (
     request.query.dateFormat || DATA_REPORT_CONFIG.excelDateFormat;
   // @ts-ignore
   const csvSeparator = request.query.csvSeparator || ',';
-  const {
-    basePath,
-    serverInfo: { protocol, port, hostname },
-  } = accessInfo;
+  const protocol = config.get('osd_server', 'protocol');
+  const hostname = config.get('osd_server', 'hostname');
+  const port = config.get('osd_server', 'port');
+  const basePath = config.osdConfig.get('server', 'basePath');
 
   let createReportResult: CreateReportResultType;
   let reportId;

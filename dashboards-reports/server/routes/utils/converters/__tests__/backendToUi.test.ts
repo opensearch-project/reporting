@@ -24,7 +24,7 @@
  * permissions and limitations under the License.
  */
 
-import { AccessInfoType } from 'server';
+import { ReportingConfig } from 'server/config/config';
 import {
   BackendReportInstanceType,
   BACKEND_DELIVERY_FORMAT,
@@ -83,19 +83,10 @@ const input: BackendReportInstanceType = {
   status: BACKEND_REPORT_STATE.success,
 };
 
-const testAccessInfo: AccessInfoType = {
-  basePath: '',
-  serverInfo: {
-    name: '',
-    hostname: 'localhost',
-    port: 5601,
-    protocol: 'http',
-  },
-};
+const sampleServerBasePath = '/test';
 
 const output = {
-  query_url:
-    "/app/dashboards#/view/722b74f0-b882-11e8-a6d9-e546fe2bba5f?_g=(time:(from:'2020-11-11T00:32:00.000Z',to:'2020-11-11T01:02:00.000Z'))",
+  query_url: `${sampleServerBasePath}/app/dashboards#/view/722b74f0-b882-11e8-a6d9-e546fe2bba5f?_g=(time:(from:'2020-11-11T00:32:00.000Z',to:'2020-11-11T01:02:00.000Z'))`,
   time_from: 1605054720000,
   time_to: 1605056520000,
   last_updated: 1605056644321,
@@ -107,7 +98,7 @@ const output = {
       report_source: 'Dashboard',
       description: 'some random',
       core_params: {
-        base_url: '/app/dashboards#/view/722b74f0-b882-11e8-a6d9-e546fe2bba5f',
+        base_url: `${sampleServerBasePath}/app/dashboards#/view/722b74f0-b882-11e8-a6d9-e546fe2bba5f`,
         report_format: 'pdf',
         header: '<p>test header</p>',
         footer: '<p>fake footer</p>',
@@ -141,7 +132,7 @@ const output = {
 
 describe('test backend to ui model conversion', () => {
   test('convert backend to ui report', async () => {
-    const res = backendToUiReport(input, testAccessInfo.basePath);
+    const res = backendToUiReport(input, sampleServerBasePath);
     expect(res).toEqual(output);
   }, 20000);
 });

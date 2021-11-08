@@ -5,5 +5,6 @@
   "requiredPlugins": ["navigation", "data", "opensearchDashboardsUtils"],
   "optionalPlugins": ["share"],
   "server": true,
-  "ui": true
+  "ui": true,
+  "configPath": ["opensearch_reporting"]
 }
