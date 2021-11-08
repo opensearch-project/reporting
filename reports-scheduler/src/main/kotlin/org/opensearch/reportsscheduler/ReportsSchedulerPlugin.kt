@@ -26,7 +26,6 @@
  */
 package org.opensearch.reportsscheduler
 
-import org.opensearch.OpenSearchStatusException
 import org.opensearch.jobscheduler.spi.JobSchedulerExtension
 import org.opensearch.jobscheduler.spi.ScheduledJobParser
 import org.opensearch.jobscheduler.spi.ScheduledJobRunner
@@ -56,7 +55,6 @@ import org.opensearch.reportsscheduler.settings.PluginSettings
 import org.opensearch.action.ActionRequest
 import org.opensearch.action.ActionResponse
 import org.opensearch.client.Client
-import org.opensearch.client.node.NodeClient
 import org.opensearch.cluster.metadata.IndexNameExpressionResolver
 import org.opensearch.cluster.node.DiscoveryNodes
 import org.opensearch.cluster.service.ClusterService
@@ -71,11 +69,9 @@ import org.opensearch.env.Environment
 import org.opensearch.env.NodeEnvironment
 import org.opensearch.plugins.ActionPlugin
 import org.opensearch.plugins.Plugin
-import org.opensearch.reportsscheduler.notifications.NotificationsActions
 import org.opensearch.repositories.RepositoriesService
 import org.opensearch.rest.RestController
 import org.opensearch.rest.RestHandler
-import org.opensearch.rest.RestStatus
 import org.opensearch.script.ScriptService
 import org.opensearch.threadpool.ThreadPool
 import org.opensearch.watcher.ResourceWatcherService
@@ -122,12 +118,6 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, JobSchedulerExtension {
         PluginSettings.addSettingsUpdateConsumer(clusterService)
         ReportDefinitionsIndex.initialize(client, clusterService)
         ReportInstancesIndex.initialize(client, clusterService)
-        (client as? NodeClient)?.let { NotificationsActions.initialize(it) } ?: run {
-            throw OpenSearchStatusException(
-                "Unable to cast client to NodeClient for Notifications call",
-                RestStatus.INTERNAL_SERVER_ERROR
-            )
-        }
         return emptyList()
     }
 
