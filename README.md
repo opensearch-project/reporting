@@ -49,7 +49,7 @@ There could be two reasons for this problem
 Chromium may not have all of the dependencies you may require to be able to view all of the content of your reports.
 
 If you are using a CentOS/RHEL system, install the following packages:
-* [`ipa-gothic-fonts`](https://centos.pkgs.org/8/raven-x86_64/ipa-gothic-fonts-003.03-15.el8.noarch.rpm.html)
+* [`ipa-gothic-fonts`](https://centos.pkgs.org/7/centos-x86_64/ipa-gothic-fonts-003.03-5.el7.noarch.rpm.html)
 * [`xorg-x11-fonts-100dpi`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-100dpi-7.5-9.el7.noarch.rpm.html)
 * [`xorg-x11-fonts-75dpi`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-75dpi-7.5-9.el7.noarch.rpm.html)
 * [`xorg-x11-utils`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-utils-7.5-23.el7.x86_64.rpm.html)
@@ -59,9 +59,12 @@ If you are using a CentOS/RHEL system, install the following packages:
 * [`fontconfig`](https://www.freedesktop.org/wiki/Software/fontconfig/)
 * [`freetype`](https://freetype.org/)
 
+
 If you are using a Ubuntu/Debian system, install the following packages:
 * [`fonts-liberation`](https://packages.debian.org/search?keywords=fonts-liberation)
 * [`libfontconfig1`](https://packages.debian.org/sid/libfontconfig1)
+
+The installation command for both systems can be found [here](./dashboards-reports/rendering-engine/headless-chrome/README.md).
 
 ## Code of Conduct
 
