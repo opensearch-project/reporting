@@ -3,10 +3,10 @@ name: Test and Build Reports Scheduler
 on: [push, pull_request]
 
 env:
-  OPENSEARCH_VERSION: '1.1.0-SNAPSHOT'
+  OPENSEARCH_VERSION: '1.1.0'
   OPENSEARCH_BRANCH: '1.1'
-  COMMON_UTILS_BRANCH: 'main'
-  JOB_SCHEDULER_BRANCH: 'main'
+  COMMON_UTILS_BRANCH: '1.1.0.0'
+  JOB_SCHEDULER_BRANCH: '1.1'
 
 jobs:
   build:
