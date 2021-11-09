@@ -42,13 +42,14 @@ import { updateReportDefinition } from './lib/updateReportDefinition';
 import { DEFAULT_MAX_SIZE } from './utils/constants';
 import { addToMetric } from './utils/metricHelper';
 import { validateReportDefinition } from '../../server/utils/validationHelper';
-import { AccessInfoType } from 'server';
+import { ReportingConfig } from 'server';
 
-export default function (router: IRouter, accessInfo: AccessInfoType) {
-  const {
-    basePath,
-    serverInfo: { protocol, port, hostname },
-  } = accessInfo;
+export default function (router: IRouter, config: ReportingConfig) {
+  const protocol = config.get('osd_server', 'protocol');
+  const hostname = config.get('osd_server', 'hostname');
+  const port = config.get('osd_server', 'port');
+  const basePath = config.osdConfig.get('server', 'basePath');
+
   // Create report Definition
   router.post(
     {

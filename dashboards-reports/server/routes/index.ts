@@ -30,11 +30,11 @@ import registerReportSourceRoute from './reportSource';
 import registerMetricRoute from './metric';
 import registerNotificationRoute from './notifications';
 import { IRouter } from '../../../../src/core/server';
-import { AccessInfoType } from 'server';
+import { ReportingConfig } from 'server/config/config';
 
-export default function (router: IRouter, accessInfo: AccessInfoType) {
-  registerReportRoute(router, accessInfo);
-  registerReportDefinitionRoute(router, accessInfo);
+export default function (router: IRouter, config: ReportingConfig) {
+  registerReportRoute(router, config);
+  registerReportDefinitionRoute(router, config);
   registerReportSourceRoute(router);
   registerMetricRoute(router);
   registerNotificationRoute(router);

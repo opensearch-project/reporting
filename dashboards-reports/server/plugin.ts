@@ -42,8 +42,9 @@ import {
 import registerRoutes from './routes';
 import { pollAndExecuteJob } from './executor/executor';
 import { POLL_INTERVAL } from './utils/constants';
-import { AccessInfoType } from 'server';
 import { NotificationsPlugin } from './clusters/notificationsPlugin';
+import { buildConfig, ReportingConfigType } from './config';
+import { ReportingConfig } from './config/config';
 
 export interface ReportsPluginRequestContext {
   logger: Logger;
@@ -61,24 +62,40 @@ export class ReportsDashboardsPlugin
     Plugin<ReportsDashboardsPluginSetup, ReportsDashboardsPluginStart> {
   private readonly logger: Logger;
   private readonly semaphore: SemaphoreInterface;
+  private readonly initializerContext: PluginInitializerContext<
+    ReportingConfigType
+  >;
+  private reportingConfig?: ReportingConfig;
 
-  constructor(initializerContext: PluginInitializerContext) {
-    this.logger = initializerContext.logger.get();
-
+  constructor(context: PluginInitializerContext<ReportingConfigType>) {
+    this.logger = context.logger.get();
+    this.initializerContext = context;
     const timeoutError = new Error('Server busy');
     timeoutError.statusCode = 503;
     this.semaphore = withTimeout(new Semaphore(1), 180000, timeoutError);
   }
 
-  public setup(core: CoreSetup) {
+  public async setup(core: CoreSetup) {
     this.logger.debug('reports-dashboards: Setup');
 
-    const config = core.http.getServerInfo();
-    const serverBasePath = core.http.basePath.serverBasePath;
-    const accessInfo: AccessInfoType = {
-      basePath: serverBasePath,
-      serverInfo: config,
-    };
+    try {
+      const config = await buildConfig(
+        this.initializerContext,
+        core,
+        this.logger
+      );
+      this.reportingConfig = config;
+      this.logger.debug('Setup complete');
+    } catch (error) {
+      this.logger.error(
+        `Error in Reporting setup, reporting may not function properly`
+      );
+      this.logger.error(error);
+    }
+
+    if (!this.reportingConfig) {
+      throw new Error('Reporting Config is not initialized');
+    }
 
     const router = core.http.createRouter();
     // Deprecated API. Switch to the new opensearch client as soon as https://github.com/elastic/kibana/issues/35508 done.
@@ -97,7 +114,7 @@ export class ReportsDashboardsPlugin
     );
 
     // Register server side APIs
-    registerRoutes(router, accessInfo);
+    registerRoutes(router, this.reportingConfig);
 
     // put logger into route handler context, so that we don't need to pass through parameters
     core.http.registerRouteHandlerContext(
@@ -108,7 +125,7 @@ export class ReportsDashboardsPlugin
           logger: this.logger,
           semaphore: this.semaphore,
           opensearchReportsClient,
-          notificationsClient
+          notificationsClient,
         };
       }
     );
