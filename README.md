@@ -45,7 +45,7 @@ There could be two reasons for this problem
 
 2. Missing additional dependencies. Please refer to [additional dependencies section](./dashboards-reports/rendering-engine/headless-chrome/README.md#additional-libaries) to install required dependencies according to your operating system.
 
-### System Dependencies
+### Missing Font Dependencies
 Chromium may not have all of the dependencies you may require to be able to view all of the content of your reports.
 
 If you are using a CentOS/RHEL system, install the following packages:
