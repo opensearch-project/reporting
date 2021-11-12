@@ -2,7 +2,7 @@
  * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
  */
- 
+
 package org.opensearch.reportsscheduler.rest
 
 import org.opensearch.reportsscheduler.PluginRestTestCase

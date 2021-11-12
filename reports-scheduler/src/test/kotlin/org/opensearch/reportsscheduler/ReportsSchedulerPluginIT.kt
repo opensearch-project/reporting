@@ -2,7 +2,7 @@
  * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
  */
- 
+
 package org.opensearch.reportsscheduler
 
 import org.opensearch.action.admin.cluster.health.ClusterHealthRequest
