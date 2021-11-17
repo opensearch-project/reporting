@@ -76,7 +76,7 @@ const createReportDefinitionNotebookInput: ReportDefinitionSchemaType = {
     report_source: REPORT_TYPE.notebook,
     description: 'Hi this is your Notebook on demand',
     core_params: {
-      base_url: `/app/observability#/notebooks/${SAMPLE_SAVED_OBJECT_ID}`,
+      base_url: `/app/observability-dashboards#/notebooks/${SAMPLE_SAVED_OBJECT_ID}`,
       window_width: 1300,
       window_height: 900,
       report_format: FORMAT.pdf,
