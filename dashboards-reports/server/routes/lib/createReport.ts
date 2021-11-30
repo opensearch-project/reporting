@@ -5,8 +5,6 @@
 
 import {
   REPORT_TYPE,
-  REPORT_STATE,
-  DELIVERY_TYPE,
   DATA_REPORT_CONFIG,
   EXTRA_HEADERS,
 } from '../utils/constants';
@@ -21,8 +19,6 @@ import { createSavedSearchReport } from '../utils/savedSearchReportHelper';
 import { ReportSchemaType } from '../../model';
 import { CreateReportResultType } from '../utils/types';
 import { createVisualReport } from '../utils/visual_report/visualReportHelper';
-import { SetCookie, Headers } from 'puppeteer-core';
-import { updateReportState } from './updateReportState';
 import { saveReport } from './saveReport';
 import { SemaphoreInterface } from 'async-mutex';
 import { ReportingConfig } from 'server';

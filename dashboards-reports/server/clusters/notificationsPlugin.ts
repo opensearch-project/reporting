@@ -29,7 +29,7 @@ export function NotificationsPlugin(Client: any, config: any, components: any) {
       },
     },
     method: 'GET',
-  })
+  });
 
   notifications.sendTestMessage = clientAction({
     url: {
