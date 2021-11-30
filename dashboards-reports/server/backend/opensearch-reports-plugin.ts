@@ -143,14 +143,4 @@ export default function (Client: any, config: any, components: any) {
     },
     method: 'DELETE',
   });
-
-  /**
-   * Poller API
-   */
-  opensearchReports.pollReportInstance = clientAction({
-    url: {
-      fmt: `${OPENSEARCH_REPORTS_API.POLL_REPORT_INSTANCE}`,
-    },
-    method: 'GET',
-  });
 }
