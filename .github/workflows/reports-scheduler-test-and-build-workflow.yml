@@ -22,7 +22,7 @@ jobs:
       - name: Build with Gradle
         run: |
           cd reports-scheduler
-          ./gradlew build -Dopensearch.version=${{ env.OPENSEARCH_VERSION }}
+          ./gradlew build -Dopensearch.version=${{ env.OPENSEARCH_VERSION }} -Dbuild.snapshot=false
 
       - name: Upload coverage
         uses: codecov/codecov-action@v1
