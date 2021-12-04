@@ -324,7 +324,6 @@ export function ReportTrigger(props: ReportTriggerProps) {
     return (
       <div>
         <EuiFormRow
-          // id="recurringByIntervalNumber"
           label={i18n.translate(
             'opensearch.reports.reportTrigger.recurring.every',
             { defaultMessage: 'every' }

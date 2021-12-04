@@ -212,14 +212,14 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -256,7 +256,7 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -1395,14 +1395,14 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -1439,7 +1439,7 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -2585,14 +2585,14 @@ exports[`<ReportSettings /> panel render component 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -2629,7 +2629,7 @@ exports[`<ReportSettings /> panel render component 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -3195,14 +3195,14 @@ exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -3239,7 +3239,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -3820,14 +3820,14 @@ exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -3864,7 +3864,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -4445,14 +4445,14 @@ exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -4489,7 +4489,7 @@ exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -5070,14 +5070,14 @@ exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -5114,7 +5114,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -5695,14 +5695,14 @@ exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -5739,7 +5739,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -6316,14 +6316,14 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -6360,7 +6360,7 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -7499,14 +7499,14 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -7543,7 +7543,7 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
