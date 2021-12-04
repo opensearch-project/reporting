@@ -324,6 +324,7 @@ export function ReportTrigger(props: ReportTriggerProps) {
     return (
       <div>
         <EuiFormRow
+          // id="recurringByIntervalNumber"
           label={i18n.translate(
             'opensearch.reports.reportTrigger.recurring.every',
             { defaultMessage: 'every' }
@@ -337,6 +338,7 @@ export function ReportTrigger(props: ReportTriggerProps) {
           <EuiFlexGroup>
             <EuiFlexItem grow={false}>
               <EuiFieldText
+                id="recurringByIntervalNumber"
                 placeholder={i18n.translate(
                   'opensearch.reports.reportTrigger.recurring.placeholder.mustBeANumber',
                   { defaultMessage: 'Must be a number' }
@@ -496,6 +498,7 @@ export function ReportTrigger(props: ReportTriggerProps) {
     return (
       <div>
         <EuiFormRow
+          id="cronExpressionFieldText"
           label={i18n.translate(
             'opensearch.reports.reportTrigger.cron.customCronExpression',
             { defaultMessage: 'custom cron expression' }
@@ -515,6 +518,7 @@ export function ReportTrigger(props: ReportTriggerProps) {
           }
         >
           <EuiFieldText
+            id="cronExpressionFieldText"
             placeholder={i18n.translate(
               'opensearch.reports.reportTrigger.cron.placeholder.formula',
               {
@@ -553,9 +557,9 @@ export function ReportTrigger(props: ReportTriggerProps) {
             'opensearch.reports.reportTrigger.scheduleTriggerRecurring.frequency',
             { defaultMessage: 'frequency' }
           )}
+          id="recurringFrequencySelect"
         >
           <EuiSelect
-            id="recurringFrequencySelect"
             options={SCHEDULE_RECURRING_OPTIONS}
             value={scheduleRecurringFrequency}
             onChange={handleScheduleRecurringFrequency}
