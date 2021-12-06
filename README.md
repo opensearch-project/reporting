@@ -1,12 +1,8 @@
-[![OpenSearch Dashboards Reports CI](https://github.com/opensearch-project/dashboards-reports/workflows/Test%20and%20Build%20OpenSearch%20Dashboards%20Reports/badge.svg)](https://github.com/opensearch-project/dashboards-reports/actions?query=workflow%3A%22Test+and+Build+OpenSearch+Dashboards+Reports%22)
-[![Reports Scheduler CI](https://github.com/opensearch-project/dashboards-reports/workflows/Test%20and%20Build%20Reports%20Scheduler/badge.svg)](https://github.com/opensearch-project/dashboards-reports/actions?query=workflow%3A%22Test+and+Build+Reports+Scheduler%22)
-[![codecov](https://codecov.io/gh/opensearch-project/dashboards-reports/branch/main/graph/badge.svg?token=YOX0XBW2NA)](https://codecov.io/gh/opensearch-project/dashboards-reports)
-[![Documentation](https://img.shields.io/badge/documentation-blue.svg)](https://opensearch.org/docs/dashboards/reporting/)
-![PRs welcome!](https://img.shields.io/badge/PRs-welcome!-success)
-
 <img src="https://opensearch.org/assets/img/opensearch-logo-themed.svg" height="64px">
 
 - [OpenSearch Dashboards Reports](#opensearch-dashboards-reports)
+- [Code Summary](#code-summary)
+- [Documentation](#documentation)
 - [Contributing](#contributing)
 - [Setup](#setup-&-build)
 - [Notifications Integration](#notifications-integration)
@@ -19,6 +15,55 @@
 # OpenSearch Dashboards Reports
 
 OpenSearch Dashboards Reports allows ‘Report Owner’ (engineers, including but not limited to developers, DevOps, IT Engineer, and IT admin) export and share reports from OpenSearch Dashboards dashboards, saved search, alerts and visualizations. It helps automate the process of scheduling reports on an on-demand or a periodical basis (on cron schedules as well). Further, it also automates the process of exporting and sharing reports triggered for various alerts. The feature is present in the Dashboard, Discover, and Visualization tabs. We are currently working on integrating Dashboards Reports with Notifications to enable sharing functionality. After the support is introduced, scheduled reports can be sent to (shared with) self or various stakeholders within the organization. These stakeholders include but are not limited to, executives, managers, engineers (developers, DevOps, IT Engineer) in the form of pdf, hyperlinks, csv, excel via various channels such as email, Slack, and Amazon Chime. However, in order to export, schedule and share reports, report owners should have the necessary permissions as defined under Roles and Privileges.
+
+## Code Summary
+
+| Type   | Badge        | Module   |
+|--------|--------------|----------|
+| Build  | [![Developer certificate of origin][dco-badge]][dco-badge-link] |  |
+|        | [![Link Checker][link-check-badge]][link-check-link]             |  |
+|        | [![Observability Dashboards CI][dashboard-build-badge]][dashboard-build-link]          | Dashboards-Plugin |
+|        | [![Observability OpenSearch Build CI][opensearch-build-badge]][opensearch-build-link]     | OpenSearch-Plugin  |
+| Unit tests    |    [![codecov][dashboard-codecov-badge]][codecov-link]          | Dashboards-Plugin |
+|        |    [![codecov][opensearch-codecov-badge]][codecov-link]            | OpenSearch-Plugin  |
+| Integration tests    |   [![cypress tests][cypress-test-badge]][cypress-test-link]           | Dashboards-Plugin |
+|        |   [![plugin IT tests][opensearch-it-badge]][opensearch-it-link]          | OpenSearch-Plugin  |
+| Backward compatibility tests    |   [![BWC tests][bwc-tests-badge]][bwc-tests-badge]           | OpenSearch-Plugin  |
+| Issues | [![good first issues open][good-first-badge]][good-first-link]         |          |
+|        | [![features open][feature-badge]][feature-link]        |          |
+|        | [![enhancements open][enhancement-badge]][enhancement-link] |          |
+|        | [![bugs open][bug-badge]][bug-link]        |          |
+
+
+[dco-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dco.yml/badge.svg
+[dco-badge-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dco.yml
+[link-check-badge]:https://github.com/opensearch-project/dashboards-reports/actions/workflows/link-checker.yml/badge.svg
+[link-check-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/link-checker.yml
+[dashboard-build-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dashboards-reports-test-and-build-workflow.yml/badge.svg
+[dashboard-build-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dashboards-reports-test-and-build-workflow.yml
+[opensearch-build-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/reports-scheduler-test-and-build-workflow.yml/badge.svg
+[opensearch-build-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/reports-scheduler-test-and-build-workflow.yml
+[dashboard-codecov-badge]: https://codecov.io/gh/opensearch-project/dashboards-reports/branch/main/graphs/badge.svg?flag=dashboards-reports
+[opensearch-codecov-badge]: https://codecov.io/gh/opensearch-project/dashboards-reports/branch/main/graphs/badge.svg?flag=reports-scheduler
+[codecov-link]: https://codecov.io/gh/opensearch-project/dashboards-reports
+[cypress-test-badge]: https://img.shields.io/badge/Cypress%20tests-success-green
+[cypress-test-link]: https://github.com/opensearch-project/dashboards-reports/tree/main/dashboards-reports/.cypress/integration
+[opensearch-it-badge]: https://img.shields.io/badge/Plugin%20IT%20tests-success-green
+[opensearch-it-link]: https://github.com/opensearch-project/dashboards-reports/blob/main/reports-scheduler/src/test/kotlin/org/opensearch/reportsscheduler/ReportsSchedulerPluginIT.kt
+[bwc-tests-badge]: https://img.shields.io/badge/BWC%20tests-in%20progress-yellow
+[bwc-tests-badge]: https://github.com/opensearch-project/dashboards-reports/issues/240
+[good-first-badge]: https://img.shields.io/github/issues/opensearch-project/dashboards-reports/good%20first%20issue.svg
+[good-first-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22
+[feature-badge]: https://img.shields.io/github/issues/opensearch-project/dashboards-reports/feature%20request.svg
+[feature-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+label%3A%22feature+request%22+
+[bug-badge]: https://img.shields.io/github/issues/opensearch-project/dashboards-reports/bug.svg 
+[bug-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+label%3Abug+
+[enhancement-badge]: https://img.shields.io/github/issues/opensearch-project/dashboards-reports/enhancement.svg 
+[enhancement-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement+
+
+## Documentation
+
+Please see our technical [documentation](https://opensearch.org/docs/dashboards/reporting/) to learn more about its features.
 
 ## Contributing
 
