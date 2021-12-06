@@ -11,7 +11,6 @@ import {
   Logger,
   ILegacyClusterClient,
 } from '../../../src/core/server';
-import { setIntervalAsync } from 'set-interval-async/dynamic';
 import { Semaphore, SemaphoreInterface, withTimeout } from 'async-mutex';
 import opensearchReportsPlugin from './backend/opensearch-reports-plugin';
 import {
@@ -19,8 +18,6 @@ import {
   ReportsDashboardsPluginStart,
 } from './types';
 import registerRoutes from './routes';
-import { pollAndExecuteJob } from './executor/executor';
-import { POLL_INTERVAL } from './utils/constants';
 import { NotificationsPlugin } from './clusters/notificationsPlugin';
 import { buildConfig, ReportingConfigType } from './config';
 import { ReportingConfig } from './config/config';
@@ -114,31 +111,6 @@ export class ReportsDashboardsPlugin
 
   public start(core: CoreStart) {
     this.logger.debug('reports-dashboards: Started');
-    const opensearchReportsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
-      'opensearch_reports',
-      {
-        plugins: [opensearchReportsPlugin],
-      }
-    );
-
-    const opensearchClient: ILegacyClusterClient =
-      core.opensearch.legacy.client;
-    /*
-    setIntervalAsync provides the same familiar interface as built-in setInterval for asynchronous functions,
-    while preventing multiple executions from overlapping in time.
-    Polling at at a 5 min fixed interval
-    
-    TODO: need further optimization polling with a mix approach of
-    random delay and dynamic delay based on the amount of jobs. 
-    */
-    // setIntervalAsync(
-    //   pollAndExecuteJob,
-    //   POLL_INTERVAL,
-    //   opensearchReportsClient,
-    //   notificationClient,
-    //   opensearchClient,
-    //   this.logger
-    // );
     return {};
   }
 
