@@ -18,26 +18,42 @@ OpenSearch Dashboards Reports allows ‘Report Owner’ (engineers, including bu
 
 ## Code Summary
 
-| Type   | Badge        | Module   |
-|--------|--------------|----------|
-| Build  | [![Developer certificate of origin][dco-badge]][dco-badge-link] |  |
-|        | [![Link Checker][link-check-badge]][link-check-link]             |  |
-|        | [![Observability Dashboards CI][dashboard-build-badge]][dashboard-build-link]          | Dashboards-Plugin |
-|        | [![Observability OpenSearch Build CI][opensearch-build-badge]][opensearch-build-link]     | OpenSearch-Plugin  |
-| Unit tests    |    [![codecov][dashboard-codecov-badge]][codecov-link]          | Dashboards-Plugin |
-|        |    [![codecov][opensearch-codecov-badge]][codecov-link]            | OpenSearch-Plugin  |
-| Integration tests    |   [![cypress tests][cypress-test-badge]][cypress-test-link]           | Dashboards-Plugin |
-|        |   [![plugin IT tests][opensearch-it-badge]][opensearch-it-link]          | OpenSearch-Plugin  |
-| Backward compatibility tests    |   [![BWC tests][bwc-tests-badge]][bwc-tests-badge]           | OpenSearch-Plugin  |
-| Issues | [![good first issues open][good-first-badge]][good-first-link]         |          |
-|        | [![features open][feature-badge]][feature-link]        |          |
-|        | [![enhancements open][enhancement-badge]][enhancement-link] |          |
-|        | [![bugs open][bug-badge]][bug-link]        |          |
+### OpenSearch-Plugin
 
+|                              |                                                                                                                                              |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Test and build               | [![Observability OpenSearch Build CI][opensearch-build-badge]][opensearch-build-link]                                                        |
+| Code coverage                | [![codecov][opensearch-codecov-badge]][codecov-link]                                                                                         |
+| Distribution build tests     | [![OpenSearch IT tests][opensearch-it-badge]][opensearch-it-link] [![OpenSearch IT code][opensearch-it-code-badge]][opensearch-it-code-link] |
+| Backward compatibility tests | [![BWC tests][bwc-tests-badge]][bwc-tests-link]                                                                                              |
+
+### OpenSearch Dashboards-Plugin
+
+|                          |                                                                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Test and build           | [![Observability Dashboards CI][dashboard-build-badge]][dashboard-build-link]                                      |
+| Code coverage            | [![codecov][dashboard-codecov-badge]][codecov-link]                                                                |
+| Distribution build tests | [![cypress tests][cypress-test-badge]][cypress-test-link] [![cypress code][cypress-code-badge]][cypress-code-link] |
+
+### Repository Checks
+
+|              |                                                                 |
+| ------------ | --------------------------------------------------------------- |
+| DCO Checker  | [![Developer certificate of origin][dco-badge]][dco-badge-link] |
+| Link Checker | [![Link Checker][link-check-badge]][link-check-link]            |
+
+### Issues
+
+|                                                                |
+| -------------------------------------------------------------- |
+| [![good first issues open][good-first-badge]][good-first-link] |
+| [![features open][feature-badge]][feature-link]                |
+| [![enhancements open][enhancement-badge]][enhancement-link]    |
+| [![bugs open][bug-badge]][bug-link]                            |
 
 [dco-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dco.yml/badge.svg
 [dco-badge-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dco.yml
-[link-check-badge]:https://github.com/opensearch-project/dashboards-reports/actions/workflows/link-checker.yml/badge.svg
+[link-check-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/link-checker.yml/badge.svg
 [link-check-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/link-checker.yml
 [dashboard-build-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dashboards-reports-test-and-build-workflow.yml/badge.svg
 [dashboard-build-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dashboards-reports-test-and-build-workflow.yml
@@ -46,19 +62,23 @@ OpenSearch Dashboards Reports allows ‘Report Owner’ (engineers, including bu
 [dashboard-codecov-badge]: https://codecov.io/gh/opensearch-project/dashboards-reports/branch/main/graphs/badge.svg?flag=dashboards-reports
 [opensearch-codecov-badge]: https://codecov.io/gh/opensearch-project/dashboards-reports/branch/main/graphs/badge.svg?flag=reports-scheduler
 [codecov-link]: https://codecov.io/gh/opensearch-project/dashboards-reports
-[cypress-test-badge]: https://img.shields.io/badge/Cypress%20tests-success-green
-[cypress-test-link]: https://github.com/opensearch-project/dashboards-reports/tree/main/dashboards-reports/.cypress/integration
-[opensearch-it-badge]: https://img.shields.io/badge/Plugin%20IT%20tests-success-green
-[opensearch-it-link]: https://github.com/opensearch-project/dashboards-reports/blob/main/reports-scheduler/src/test/kotlin/org/opensearch/reportsscheduler/ReportsSchedulerPluginIT.kt
+[cypress-test-badge]: https://img.shields.io/badge/Cypress%20tests-in%20progress-yellow
+[cypress-test-link]: https://github.com/opensearch-project/opensearch-build/issues/1124
+[cypress-code-badge]: https://img.shields.io/badge/Cypress%20code-blue
+[cypress-code-link]: https://github.com/opensearch-project/dashboards-reports/tree/main/dashboards-reports/.cypress/integration
+[opensearch-it-badge]: https://img.shields.io/badge/OpenSearch%20Plugin%20IT%20tests-in%20progress-yellow
+[opensearch-it-link]: https://github.com/opensearch-project/opensearch-build/issues/1124
+[opensearch-it-code-badge]: https://img.shields.io/badge/OpenSearch%20IT%20code-blue
+[opensearch-it-code-link]: https://github.com/opensearch-project/dashboards-reports/blob/main/reports-scheduler/src/test/kotlin/org/opensearch/observability/ObservabilityPluginIT.kt
 [bwc-tests-badge]: https://img.shields.io/badge/BWC%20tests-in%20progress-yellow
-[bwc-tests-badge]: https://github.com/opensearch-project/dashboards-reports/issues/240
+[bwc-tests-link]: https://github.com/opensearch-project/dashboards-reports/issues/240
 [good-first-badge]: https://img.shields.io/github/issues/opensearch-project/dashboards-reports/good%20first%20issue.svg
-[good-first-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22
+[good-first-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22+
 [feature-badge]: https://img.shields.io/github/issues/opensearch-project/dashboards-reports/feature%20request.svg
 [feature-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+label%3A%22feature+request%22+
-[bug-badge]: https://img.shields.io/github/issues/opensearch-project/dashboards-reports/bug.svg 
+[bug-badge]: https://img.shields.io/github/issues/opensearch-project/dashboards-reports/bug.svg
 [bug-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+label%3Abug+
-[enhancement-badge]: https://img.shields.io/github/issues/opensearch-project/dashboards-reports/enhancement.svg 
+[enhancement-badge]: https://img.shields.io/github/issues/opensearch-project/dashboards-reports/enhancement.svg
 [enhancement-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement+
 
 ## Documentation
@@ -91,23 +111,25 @@ There could be two reasons for this problem
 2. Missing additional dependencies. Please refer to [additional dependencies section](./dashboards-reports/rendering-engine/headless-chrome/README.md#additional-libaries) to install required dependencies according to your operating system.
 
 ### Missing Font Dependencies
+
 Chromium may not have all of the dependencies you may require to be able to view all of the content of your reports.
 
 If you are using a CentOS/RHEL system, install the following packages:
-* [`ipa-gothic-fonts`](https://centos.pkgs.org/7/centos-x86_64/ipa-gothic-fonts-003.03-5.el7.noarch.rpm.html)
-* [`xorg-x11-fonts-100dpi`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-100dpi-7.5-9.el7.noarch.rpm.html)
-* [`xorg-x11-fonts-75dpi`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-75dpi-7.5-9.el7.noarch.rpm.html)
-* [`xorg-x11-utils`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-utils-7.5-23.el7.x86_64.rpm.html)
-* [`xorg-x11-fonts-cyrillic`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-cyrillic-7.5-9.el7.noarch.rpm.html)
-* [`xorg-x11-fonts-Type1`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-Type1-7.5-9.el7.noarch.rpm.html)
-* [`xorg-x11-fonts-misc`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-misc-7.5-9.el7.noarch.rpm.html)
-* [`fontconfig`](https://www.freedesktop.org/wiki/Software/fontconfig/)
-* [`freetype`](https://freetype.org/)
 
+- [`ipa-gothic-fonts`](https://centos.pkgs.org/7/centos-x86_64/ipa-gothic-fonts-003.03-5.el7.noarch.rpm.html)
+- [`xorg-x11-fonts-100dpi`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-100dpi-7.5-9.el7.noarch.rpm.html)
+- [`xorg-x11-fonts-75dpi`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-75dpi-7.5-9.el7.noarch.rpm.html)
+- [`xorg-x11-utils`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-utils-7.5-23.el7.x86_64.rpm.html)
+- [`xorg-x11-fonts-cyrillic`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-cyrillic-7.5-9.el7.noarch.rpm.html)
+- [`xorg-x11-fonts-Type1`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-Type1-7.5-9.el7.noarch.rpm.html)
+- [`xorg-x11-fonts-misc`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-misc-7.5-9.el7.noarch.rpm.html)
+- [`fontconfig`](https://www.freedesktop.org/wiki/Software/fontconfig/)
+- [`freetype`](https://freetype.org/)
 
 If you are using a Ubuntu/Debian system, install the following packages:
-* [`fonts-liberation`](https://packages.debian.org/search?keywords=fonts-liberation)
-* [`libfontconfig1`](https://packages.debian.org/sid/libfontconfig1)
+
+- [`fonts-liberation`](https://packages.debian.org/search?keywords=fonts-liberation)
+- [`libfontconfig1`](https://packages.debian.org/sid/libfontconfig1)
 
 The installation command for both systems can be found [here](./dashboards-reports/rendering-engine/headless-chrome/README.md).
 
