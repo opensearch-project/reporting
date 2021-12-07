@@ -32,6 +32,7 @@ jobs:
 
       - name: Add Chromium Binary to Reporting for Testing
         run: |
+          sudo apt update
           sudo apt install -y libnss3-dev fonts-liberation libfontconfig1
           cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
           wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip 
