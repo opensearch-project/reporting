@@ -64,9 +64,12 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
         return true
     }
 
+    open fun preserveODFEIndicesAfterTest(): Boolean = false
+
     @Throws(IOException::class)
     @After
     open fun wipeAllODFEIndices() {
+        if (preserveODFEIndicesAfterTest()) return
         val response = client().performRequest(Request("GET", "/_cat/indices?format=json&expand_wildcards=all"))
         val xContentType = XContentType.fromMediaTypeOrFormat(response.entity.contentType.value)
         xContentType.xContent().createParser(
