@@ -677,6 +677,7 @@ export function ReportSettings(props: ReportSettingProps) {
     reportSourceId === 'dashboardReportSource' ? (
       <div>
         <EuiFormRow
+        id="reportSourceDashboardSelect"
           label={i18n.translate(
             'opensearch.reports.reportSettingProps.selectDashboard',
             { defaultMessage: 'Select dashboard' }
@@ -685,7 +686,7 @@ export function ReportSettings(props: ReportSettingProps) {
           error={settingsReportSourceErrorMessage}
         >
           <EuiComboBox
-            id="reportSourceDashboardSelect"
+            id="reportSourceDashboardSelector"
             placeholder={i18n.translate(
               'opensearch.reports.reportSettingProps.placeholder.selectDashboard',
               { defaultMessage: 'Select a dashboard' }
