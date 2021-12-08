@@ -65,7 +65,7 @@ fi
 
 mkdir -p $OUTPUT
 
-./gradlew assemble --no-daemon --refresh-dependencies -DskipTests=true -Dopensearch.version=$VERSION -Dbuild.snapshot=$SNAPSHOT
+./gradlew assemble --no-daemon --refresh-dependencies -DskipTests=true -Dopensearch.version=1.1.0 -Dbuild.snapshot=$SNAPSHOT
 
 zipPath=$(find . -path \*build/distributions/*.zip)
 distributions="$(dirname "${zipPath}")"
