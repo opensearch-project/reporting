@@ -200,6 +200,7 @@ exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition d
               <a
                 class="euiLink euiLink--primary"
                 href=""
+                id="reportDefinitionSourceURL"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -242,7 +243,7 @@ exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition d
             >
               <button
                 class="euiLink euiLink--primary"
-                id="generateReportFromDetailsButton"
+                id="generateReportFromDetailsFileFormat"
                 type="button"
               >
                 undefined 
@@ -592,6 +593,7 @@ exports[`<ReportDefinitionDetails /> panel render disabled daily definition, cli
               <a
                 class="euiLink euiLink--primary"
                 href=""
+                id="reportDefinitionSourceURL"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -634,7 +636,7 @@ exports[`<ReportDefinitionDetails /> panel render disabled daily definition, cli
             >
               <button
                 class="euiLink euiLink--primary"
-                id="generateReportFromDetailsButton"
+                id="generateReportFromDetailsFileFormat"
                 type="button"
               >
                 undefined 
@@ -984,6 +986,7 @@ exports[`<ReportDefinitionDetails /> panel render on demand definition details 1
               <a
                 class="euiLink euiLink--primary"
                 href=""
+                id="reportDefinitionSourceURL"
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -1026,7 +1029,7 @@ exports[`<ReportDefinitionDetails /> panel render on demand definition details 1
             >
               <button
                 class="euiLink euiLink--primary"
-                id="generateReportFromDetailsButton"
+                id="generateReportFromDetailsFileFormat"
                 type="button"
               >
                 undefined 
