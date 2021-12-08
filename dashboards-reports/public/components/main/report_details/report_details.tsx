@@ -302,7 +302,10 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
 
   const sourceURL = (data: ReportDetails) => {
     return (
-      <EuiLink href={`${data.queryUrl}`} target="_blank">
+      <EuiLink
+        id="reportDetailsSourceURL"
+        href={`${data.queryUrl}`} target="_blank"
+      >
         {data['source']}
       </EuiLink>
     );
