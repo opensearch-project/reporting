@@ -168,8 +168,8 @@ test {
 File repo = file("$buildDir/testclusters/repo")
 def _numNodes = findProperty('numNodes') as Integer ?: 1
 
-def es_tmp_dir = rootProject.file('build/private/es_tmp').absoluteFile
-es_tmp_dir.mkdirs()
+def opensearch_tmp_dir = rootProject.file('build/private/es_tmp').absoluteFile
+opensearch_tmp_dir.mkdirs()
 
 // As of ES 7.7 the sample-extension-plugin is being added to the list of plugins for the testCluster during build before
 // the job-scheduler plugin is causing build failures.
@@ -190,15 +190,16 @@ tasks.withType(licenseHeaders.class) {
 }
 
 task integTest(type: RestIntegTestTask) {
-    description = "Run tests against a cluster that has security enabled"
+    description = "Run tests against a cluster"
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = sourceSets.test.runtimeClasspath
 }
 tasks.named("check").configure { dependsOn(integTest) }
 
 integTest {
+    dependsOn "bundlePlugin"
     systemProperty 'tests.security.manager', 'false'
-    systemProperty 'java.io.tmpdir', es_tmp_dir.absolutePath
+    systemProperty 'java.io.tmpdir', opensearch_tmp_dir.absolutePath
 
     systemProperty "https", System.getProperty("https")
     systemProperty "user", System.getProperty("user")
@@ -234,6 +235,8 @@ integTest {
         }
     }
 }
+
+
 
 Zip bundle = (Zip) project.getTasks().getByName("bundlePlugin");
 integTest.dependsOn(bundle)
@@ -431,6 +434,23 @@ task bwcTestSuite(type: StandaloneRestIntegTestTask) {
     dependsOn tasks.named("${baseName}#fullRestartClusterTask")
 }
 
+task integTestRemote(type: RestIntegTestTask) {
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    systemProperty 'tests.security.manager', 'false'
+    systemProperty 'java.io.tmpdir', opensearch_tmp_dir.absolutePath
+
+    systemProperty "https", System.getProperty("https")
+    systemProperty "user", System.getProperty("user")
+    systemProperty "password", System.getProperty("password")
+
+    // Only rest case can run with remote cluster
+    if (System.getProperty("tests.rest.cluster") != null) {
+        filter {
+            includeTestsMatching "org.opensearch.reportsscheduler.rest.*IT"
+        }
+    }
+}
 
 run {
     doFirst {
