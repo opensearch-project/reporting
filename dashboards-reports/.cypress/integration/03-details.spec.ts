@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { visitReportingLandingPage } from "../support/constants";
+import { visitReportingLandingPage } from "../support/utils";
 
 describe('Cypress', () => {
   it('Visit report definition details page', () => {
