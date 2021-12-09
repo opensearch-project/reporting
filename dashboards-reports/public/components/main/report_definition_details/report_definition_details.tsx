@@ -497,7 +497,7 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
     return (
       <EuiLink
         onClick={downloadIconDownload}
-        id="generateReportFromDetailsButton"
+        id="generateReportFromDetailsFileFormat"
       >
         {formatUpper + ' '}
         <EuiIcon type="importAction" />
@@ -507,7 +507,10 @@ export function ReportDefinitionDetails(props: { match?: any; setBreadcrumbs?: a
 
   const sourceURL = (data: ReportDefinitionDetails) => {
     return (
-      <EuiLink href={`${data.baseUrl}`} target="_blank">
+      <EuiLink
+        id="reportDefinitionSourceURL"
+        href={`${data.baseUrl}`} target="_blank"
+      >
         {data['source']}
       </EuiLink>
     );

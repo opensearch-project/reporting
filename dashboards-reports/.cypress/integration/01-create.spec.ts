@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { visitReportingLandingPage } from "../support/utils";
+
 describe('Adding sample data', () => {
   it('Adds sample data', () => {
     cy.visit(`${Cypress.env('opensearchDashboards')}/app/home#/tutorial_directory/sampleData`);
@@ -194,14 +196,6 @@ describe('Cypress', () => {
     verifyOnReportingLandingPage();
   });
 });
-
-function visitReportingLandingPage() {
-  cy.visit(`${Cypress.env('opensearchDashboards')}/app/reports-dashboards#/`);
-  cy.location('pathname', { timeout: 60000 }).should(
-    'include',
-    '/reports-dashboards'
-  );
-}
 
 function visitCreateReportDefinitionPage() {
   cy.visit(`${Cypress.env('opensearchDashboards')}/app/reports-dashboards#/`);
