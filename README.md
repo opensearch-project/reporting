@@ -50,6 +50,8 @@ OpenSearch Dashboards Reports allows ‘Report Owner’ (engineers, including bu
 | [![features open][feature-badge]][feature-link]                |
 | [![enhancements open][enhancement-badge]][enhancement-link]    |
 | [![bugs open][bug-badge]][bug-link]                            |
+| [![untriaged open][untriaged-badge]][untriaged-link]           |
+| [![nolabel open][nolabel-badge]][nolabel-link]                 |
 
 [dco-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dco.yml/badge.svg
 [dco-badge-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dco.yml
@@ -80,6 +82,10 @@ OpenSearch Dashboards Reports allows ‘Report Owner’ (engineers, including bu
 [bug-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+label%3Abug+
 [enhancement-badge]: https://img.shields.io/github/issues/opensearch-project/dashboards-reports/enhancement.svg
 [enhancement-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement+
+[untriaged-badge]: https://img.shields.io/github/issues/opensearch-project/dashboards-reports/untriaged.svg
+[untriaged-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+label%3Auntriaged+
+[nolabel-badge]: https://img.shields.io/github/issues-search/opensearch-project/dashboards-reports?color=yellow&label=no%20label%20issues&query=is%3Aopen%20is%3Aissue%20no%3Alabel
+[nolabel-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+no%3Alabel+
 
 ## Documentation
 
