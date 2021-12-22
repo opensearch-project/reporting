@@ -226,12 +226,12 @@ integTest {
     }
 
     if (System.getProperty("tests.clustername") != null) {
-        exclude 'org/opensearch/reportsscheduler/ReportsSchedulerPluginIT.class'
+        exclude 'org/opensearch/integTest/ReportsSchedulerPluginIT.class'
     }
 
     if (System.getProperty("tests.rest.bwcsuite") == null) {
         filter {
-            excludeTestsMatching "org.opensearch.reportsscheduler.bwc.*IT"
+            excludeTestsMatching "org.opensearch.integTest.bwc.*IT"
         }
     }
 }
@@ -340,7 +340,7 @@ task prepareBwcTests {
         dependsOn 'prepareBwcTests'
         useCluster testClusters."${baseName}$i"
         filter {
-            includeTestsMatching "org.opensearch.reportsscheduler.bwc.*IT"
+            includeTestsMatching "org.opensearch.integTest.bwc.*IT"
         }
         systemProperty 'tests.rest.bwcsuite', 'old_cluster'
         systemProperty 'tests.rest.bwcsuite_round', 'old'
@@ -360,7 +360,7 @@ task "${baseName}#mixedClusterTask"(type: StandaloneRestIntegTestTask) {
         testClusters."${baseName}0".upgradeNodeAndPluginToNextVersion(plugins)
     }
     filter {
-        includeTestsMatching "org.opensearch.reportsscheduler.bwc.*IT"
+        includeTestsMatching "org.opensearch.integTest.bwc.*IT"
     }
     systemProperty 'tests.rest.bwcsuite', 'mixed_cluster'
     systemProperty 'tests.rest.bwcsuite_round', 'first'
@@ -379,7 +379,7 @@ task "${baseName}#twoThirdsUpgradedClusterTask"(type: StandaloneRestIntegTestTas
         testClusters."${baseName}0".upgradeNodeAndPluginToNextVersion(plugins)
     }
     filter {
-        includeTestsMatching "org.opensearch.reportsscheduler.bwc.*IT"
+        includeTestsMatching "org.opensearch.integTest.bwc.*IT"
     }
     systemProperty 'tests.rest.bwcsuite', 'mixed_cluster'
     systemProperty 'tests.rest.bwcsuite_round', 'second'
@@ -398,7 +398,7 @@ task "${baseName}#rollingUpgradeClusterTask"(type: StandaloneRestIntegTestTask) 
         testClusters."${baseName}0".upgradeNodeAndPluginToNextVersion(plugins)
     }
     filter {
-        includeTestsMatching "org.opensearch.reportsscheduler.bwc.*IT"
+        includeTestsMatching "org.opensearch.integTest.bwc.*IT"
     }
     mustRunAfter "${baseName}#mixedClusterTask"
     systemProperty 'tests.rest.bwcsuite', 'mixed_cluster'
@@ -417,7 +417,7 @@ task "${baseName}#fullRestartClusterTask"(type: StandaloneRestIntegTestTask) {
         testClusters."${baseName}1".upgradeAllNodesAndPluginsToNextVersion(plugins)
     }
     filter {
-        includeTestsMatching "org.opensearch.reportsscheduler.bwc.*IT"
+        includeTestsMatching "org.opensearch.integTest.bwc.*IT"
     }
     systemProperty 'tests.rest.bwcsuite', 'upgraded_cluster'
     systemProperty 'tests.plugin_bwc_version', bwcVersion
@@ -447,7 +447,7 @@ task integTestRemote(type: RestIntegTestTask) {
     // Only rest case can run with remote cluster
     if (System.getProperty("tests.rest.cluster") != null) {
         filter {
-            includeTestsMatching "org.opensearch.reportsscheduler.rest.*IT"
+            includeTestsMatching "org.opensearch.integTest.rest.*IT"
         }
     }
 }

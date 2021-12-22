@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.opensearch.reportsscheduler
+package org.opensearch.integTest
 
 import org.opensearch.test.OpenSearchTestCase
 

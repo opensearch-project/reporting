@@ -5,71 +5,92 @@
 
 package org.opensearch.reportsscheduler
 
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
-import org.junit.Assert
+import org.opensearch.common.xcontent.DeprecationHandler
+import org.opensearch.common.xcontent.NamedXContentRegistry
+import org.opensearch.common.xcontent.ToXContent
+import org.opensearch.common.xcontent.XContentFactory
+import org.opensearch.common.xcontent.XContentParser
+import org.opensearch.common.xcontent.XContentType
+import org.opensearch.reportsscheduler.model.ReportDefinition
+import org.opensearch.reportsscheduler.model.ReportDefinitionDetails
+import org.opensearch.reportsscheduler.model.ReportInstance
+import java.io.ByteArrayOutputStream
+import java.time.Duration
 import java.time.Instant
-import kotlin.test.assertTrue
 
-private const val DEFAULT_TIME_ACCURACY_SEC = 5L
-
-fun constructReportDefinitionRequest(
-    trigger: String = """
-            "trigger":{
-                "triggerType":"OnDemand"
-            },
-        """.trimIndent(),
-    name: String = "report_definition",
-    delivery: String = ""
-): String {
-    return """
-            {
-                "reportDefinition":{
-                    "name":"$name",
-                    "isEnabled":true,
-                    "source":{
-                        "description":"description",
-                        "type":"Dashboard",
-                        "origin":"localhost:5601",
-                        "id":"id"
-                    },
-                    $trigger
-                    $delivery
-                    "format":{
-                        "duration":"PT1H",
-                        "fileFormat":"Pdf",
-                        "limit":1000,
-                        "header":"optional header",
-                        "footer":"optional footer"
-                    }
-                }
-            }
-            """.trimIndent()
+fun getJsonString(xContent: ToXContent): String {
+    ByteArrayOutputStream().use { byteArrayOutputStream ->
+        val builder = XContentFactory.jsonBuilder(byteArrayOutputStream)
+        xContent.toXContent(builder, ToXContent.EMPTY_PARAMS)
+        builder.close()
+        return byteArrayOutputStream.toString("UTF8")
+    }
 }
 
-fun jsonify(text: String): JsonObject {
-    return JsonParser.parseString(text).asJsonObject
+inline fun <reified CreateType> createObjectFromJsonString(
+    jsonString: String,
+    block: (XContentParser) -> CreateType
+): CreateType {
+    val parser = XContentType.JSON.xContent()
+        .createParser(NamedXContentRegistry.EMPTY, DeprecationHandler.IGNORE_DEPRECATIONS, jsonString)
+    parser.nextToken()
+    return block(parser)
 }
 
-fun validateTimeNearRefTime(time: Instant, refTime: Instant, accuracySeconds: Long) {
-    assertTrue(time.plusSeconds(accuracySeconds).isAfter(refTime), "$time + $accuracySeconds > $refTime")
-    assertTrue(time.minusSeconds(accuracySeconds).isBefore(refTime), "$time - $accuracySeconds < $refTime")
+internal fun createReportDefinitionObject(): ReportDefinition {
+    val source = ReportDefinition.Source(
+        description = "description",
+        type = ReportDefinition.SourceType.Dashboard,
+        origin = "http://localhost:5601",
+        id = "id"
+    )
+
+    val format = ReportDefinition.Format(
+        duration = Duration.parse("PT1H"),
+        fileFormat = ReportDefinition.FileFormat.Pdf,
+        limit = 1000,
+        header = "optional header",
+        footer = "optional footer"
+    )
+
+    val trigger = ReportDefinition.Trigger(
+        triggerType = ReportDefinition.TriggerType.OnDemand,
+        schedule = null
+    )
+
+    return ReportDefinition(
+        name = "sample_report_definition",
+        isEnabled = true,
+        source = source,
+        format = format,
+        trigger = trigger,
+        delivery = null
+    )
 }
 
-fun validateTimeRecency(time: Instant, accuracySeconds: Long = DEFAULT_TIME_ACCURACY_SEC) {
-    validateTimeNearRefTime(time, Instant.now(), accuracySeconds)
+internal fun createReportInstance(): ReportInstance {
+    return ReportInstance(
+        "id",
+        Instant.ofEpochMilli(1603506908773),
+        Instant.ofEpochMilli(1603506908773),
+        Instant.ofEpochMilli(1603506908773),
+        Instant.ofEpochMilli(1603506908773),
+        tenant = "__user__",
+        access = listOf(),
+        null,
+        ReportInstance.Status.Success,
+        statusText = "200",
+        inContextDownloadUrlPath = "/app/dashboard#view/dashboard-id"
+    )
 }
 
-fun validateErrorResponse(response: JsonObject, statusCode: Int, errorType: String = "status_exception") {
-    Assert.assertNotNull("Error response content should be generated", response)
-    val status = response.get("status").asInt
-    val error = response.get("error").asJsonObject
-    val rootCause = error.get("root_cause").asJsonArray
-    val type = error.get("type").asString
-    val reason = error.get("reason").asString
-    Assert.assertEquals(statusCode, status)
-    Assert.assertEquals(errorType, type)
-    Assert.assertNotNull(reason)
-    Assert.assertNotNull(rootCause)
-    Assert.assertTrue(rootCause.size() > 0)
+internal fun createReportDefinitionDetails(): ReportDefinitionDetails {
+    return ReportDefinitionDetails(
+        "id",
+        Instant.ofEpochMilli(1603506908773),
+        Instant.ofEpochMilli(1603506908773),
+        "__user__",
+        listOf(),
+        reportDefinition = createReportDefinitionObject()
+    )
 }

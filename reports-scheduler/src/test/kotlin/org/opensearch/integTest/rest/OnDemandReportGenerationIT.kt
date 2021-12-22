@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.opensearch.reportsscheduler.rest
+package org.opensearch.integTest.rest
 
-import org.opensearch.reportsscheduler.PluginRestTestCase
+import org.opensearch.integTest.PluginRestTestCase
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
-import org.opensearch.reportsscheduler.jsonify
-import org.opensearch.reportsscheduler.validateErrorResponse
-import org.opensearch.reportsscheduler.validateTimeNearRefTime
-import org.opensearch.reportsscheduler.validateTimeRecency
+import org.opensearch.integTest.jsonify
+import org.opensearch.integTest.validateErrorResponse
+import org.opensearch.integTest.validateTimeNearRefTime
+import org.opensearch.integTest.validateTimeRecency
 import org.opensearch.rest.RestRequest
 import org.opensearch.rest.RestStatus
 import org.junit.Assert
