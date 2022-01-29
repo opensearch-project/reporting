@@ -41,8 +41,7 @@
     "react-router-dom": "^5.2.0",
     "react-toast-notifications": "^2.4.0",
     "set-interval-async": "1.0.33",
-    "showdown": "^1.9.1",
-    "ws": "^7.4.6"
+    "showdown": "^1.9.1"
   },
   "devDependencies": {
     "@elastic/eslint-import-resolver-kibana": "link:../../packages/osd-eslint-import-resolver-opensearch-dashboards",
@@ -76,7 +75,7 @@
     "glob-parent": "^5.1.2",
     "css-what": "^5.0.1",
     "ansi-regex": "5.0.1",
-    "json-schema": "0.4.0"
-
+    "json-schema": "0.4.0",
+    "ws": "^7.4.6"
   }
 }
