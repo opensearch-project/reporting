@@ -44,3 +44,9 @@ Example output: `./build/reports-dashboards-0.0.1.zip`
 - `yarn test:jest`
 
   Runs the plugin tests.
+
+### Backports
+
+The Github workflow in [`backport.yml`](../.github/workflows/backport.yml) creates backport PRs automatically when the
+original PR with an appropriate label `backport <backport-branch-name>` is merged to main with the backport workflow
+run successfully on the PR. For example, if a PR on main needs to be backported to `1.x` branch, add a label
