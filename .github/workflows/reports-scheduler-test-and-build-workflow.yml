@@ -10,7 +10,6 @@ jobs:
     strategy:
       matrix:
         java: [8, 11, 14, 17]
-
     runs-on: ubuntu-latest
 
     steps:
@@ -34,6 +33,8 @@ jobs:
         run: |
           cd reports-scheduler
           ./gradlew build -Dopensearch.version=${{ env.OPENSEARCH_VERSION }}
+        with:
+          java-version: ${{ matrix.java }}
 
       - name: Upload coverage
         uses: codecov/codecov-action@v1
