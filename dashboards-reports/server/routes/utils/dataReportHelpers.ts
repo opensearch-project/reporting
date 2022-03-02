@@ -118,11 +118,23 @@ export const getOpenSearchData = (
     for (let data of valueRes.hits) {
       const fields = data.fields;
       // get all the fields of type date and format them to excel format
-      for (let dateType of report._source.dateFields) {
-        if (data._source[dateType]) {
-          data._source[dateType] = moment(fields[dateType][0]).format(
-            dateFormat
-          );
+      for (let dateField of report._source.dateFields) {
+        const dateValue = data._source[dateField];
+        if (dateValue && dateValue.length !== 0) {
+          if (dateValue instanceof Array) {
+            // loop through array
+            dateValue.forEach((element, index) => {
+              data._source[dateField][index] = moment(
+                fields[dateField][index]
+              ).format(dateFormat);
+            });
+          } else {
+            // The fields response always returns an array of values for each field
+            // https://www.elastic.co/guide/en/elasticsearch/reference/master/search-fields.html#search-fields-response
+            data._source[dateField] = moment(fields[dateField][0]).format(
+              dateFormat
+            );
+          }
         }
       }
       delete data['fields'];
