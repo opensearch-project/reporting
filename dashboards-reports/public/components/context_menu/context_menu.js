@@ -125,10 +125,11 @@ const generateInContextReport = async (
     });
 };
 
-// try to match uuid followed by '?' in URL, which would be the saved search id for discover URL
+// try to match uuid and user entered custom-id followed by '?' in URL, which would be the saved search id for discover URL
+// custom id example: v1s-f00-b4r1-01
 const getUuidFromUrl = () =>
   window.location.href.match(
-    /(\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b)\?/
+    /([0-9a-z]+-[0-9a-z]+)+\?/
   );
 const isDiscover = () => window.location.href.includes('discover');
 
