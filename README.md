@@ -122,13 +122,13 @@ Chromium may not have all of the dependencies you may require to be able to view
 
 If you are using a CentOS/RHEL system, install the following packages:
 
-- [`ipa-gothic-fonts`](https://yum-info.contradodigital.com/view-package/base/ipa-gothic-fonts/)
-- [`xorg-x11-fonts-100dpi`](https://yum-info.contradodigital.com/view-package/base/xorg-x11-fonts-100dpi/)
-- [`xorg-x11-fonts-75dpi`](https://yum-info.contradodigital.com/view-package/base/xorg-x11-fonts-75dpi/)
-- [`xorg-x11-utils`](https://yum-info.contradodigital.com/view-package/base/xorg-x11-utils/)
-- [`xorg-x11-fonts-cyrillic`](https://yum-info.contradodigital.com/view-package/base/xorg-x11-fonts-cyrillic/)
-- [`xorg-x11-fonts-Type1`](https://yum-info.contradodigital.com/view-package/installed/xorg-x11-fonts-Type1/)
-- [`xorg-x11-fonts-misc`](https://yum-info.contradodigital.com/view-package/base/xorg-x11-fonts-misc/)
+- [`ipa-gothic-fonts`](https://centos.pkgs.org/7/centos-x86_64/ipa-gothic-fonts-003.03-5.el7.noarch.rpm.html)
+- [`xorg-x11-fonts-100dpi`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-100dpi-7.5-9.el7.noarch.rpm.html)
+- [`xorg-x11-fonts-75dpi`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-75dpi-7.5-9.el7.noarch.rpm.html)
+- [`xorg-x11-utils`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-utils-7.5-23.el7.x86_64.rpm.html)
+- [`xorg-x11-fonts-cyrillic`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-cyrillic-7.5-9.el7.noarch.rpm.html)
+- [`xorg-x11-fonts-Type1`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-Type1-7.5-9.el7.noarch.rpm.html)
+- [`xorg-x11-fonts-misc`](https://centos.pkgs.org/7/centos-x86_64/xorg-x11-fonts-misc-7.5-9.el7.noarch.rpm.html)
 - [`fontconfig`](https://www.freedesktop.org/wiki/Software/fontconfig/)
 - [`freetype`](https://freetype.org/)
 
