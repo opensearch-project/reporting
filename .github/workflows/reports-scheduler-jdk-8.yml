@@ -32,6 +32,6 @@ jobs:
       - name: Test with Java 8
         run: |
           cd reports-scheduler
-          ./gradlew test -Dopensearch.version=${{ env.OPENSEARCH_VERSION }}
+          ./gradlew integTest -Dopensearch.version=${{ env.OPENSEARCH_VERSION }}
 
     
