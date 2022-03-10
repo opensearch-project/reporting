@@ -93,7 +93,7 @@ internal object PluginSettings {
 
     init {
         var settings: Settings? = null
-        val configDirName = BootstrapInfo.getSystemProperties()?.get("es.path.conf")?.toString()
+        val configDirName = BootstrapInfo.getSystemProperties()?.get("opensearch.path.conf")?.toString()
         if (configDirName != null) {
             val defaultSettingYmlFile = Paths.get(configDirName, PLUGIN_NAME, "reports-scheduler.yml")
             try {
