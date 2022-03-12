@@ -1,6 +1,6 @@
 ### Version 1.3.0.0 Release Notes
 
-Compatible with OpenSearch Version 1.3.0 and OpenSearch Dashboards Version 1.3.x
+Compatible with OpenSearch and OpenSearch Dashboards Version 1.3.0
 
 ### Infrastructure
 * Remove jcenter repo from gradle build ([#278](https://github.com/opensearch-project/dashboards-reports/pull/278))
