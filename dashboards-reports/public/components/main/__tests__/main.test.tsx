@@ -17,7 +17,7 @@ function setBreadcrumbs(array: []) {
 
 describe('<Main /> panel', () => {
   configure({ adapter: new Adapter() });
-  test('render component', async (done) => {
+  test('render component', (done) => {
     window = Object.create(window);
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -27,7 +27,7 @@ describe('<Main /> panel', () => {
       },
     });
 
-    const { container } = await render(
+    const { container } = render(
       <Main httpClient={httpClientMock} setBreadcrumbs={setBreadcrumbs} />
     );
 
