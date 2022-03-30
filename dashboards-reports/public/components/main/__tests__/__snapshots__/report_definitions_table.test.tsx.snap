@@ -17,7 +17,7 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
           >
             <input
               aria-label="This is a search bar. As you type, the results lower in the page will automatically filter."
-              class="euiFieldSearch euiFieldSearch--fullWidth euiFieldSearch-isClearable"
+              class="euiFieldSearch euiFieldSearch--fullWidth"
               placeholder="Search..."
               type="search"
               value=""
@@ -88,7 +88,7 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
                       >
                         <svg
                           aria-hidden="true"
-                          class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonContent__icon"
+                          class="euiIcon euiIcon--small euiIcon--inherit euiIcon-isLoading euiButtonContent__icon"
                           focusable="false"
                           height="16"
                           role="img"
@@ -125,7 +125,7 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
                 role="columnheader"
                 scope="col"
               >
-                <div
+                <span
                   class="euiTableCellContent"
                 >
                   <span
@@ -134,7 +134,7 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
                   >
                     Name
                   </span>
-                </div>
+                </span>
               </th>
               <th
                 class="euiTableHeaderCell"
@@ -142,7 +142,7 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
                 role="columnheader"
                 scope="col"
               >
-                <div
+                <span
                   class="euiTableCellContent"
                 >
                   <span
@@ -151,7 +151,7 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
                   >
                     Source
                   </span>
-                </div>
+                </span>
               </th>
               <th
                 aria-live="polite"
@@ -175,11 +175,6 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
                     >
                       Type
                     </span>
-                    <span
-                      class="euiScreenReaderOnly"
-                    >
-                      Click to sort in ascending order
-                    </span>
                   </span>
                 </button>
               </th>
@@ -189,7 +184,7 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
                 role="columnheader"
                 scope="col"
               >
-                <div
+                <span
                   class="euiTableCellContent"
                 >
                   <span
@@ -198,7 +193,7 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
                   >
                     Schedule details
                   </span>
-                </div>
+                </span>
               </th>
               <th
                 class="euiTableHeaderCell"
@@ -206,7 +201,7 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
                 role="columnheader"
                 scope="col"
               >
-                <div
+                <span
                   class="euiTableCellContent"
                 >
                   <span
@@ -215,7 +210,7 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
                   >
                     Last Updated
                   </span>
-                </div>
+                </span>
               </th>
               <th
                 aria-live="polite"
@@ -238,11 +233,6 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
                       title="Status"
                     >
                       Status
-                    </span>
-                    <span
-                      class="euiScreenReaderOnly"
-                    >
-                      Click to sort in ascending order
                     </span>
                   </span>
                 </button>
@@ -490,7 +480,7 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
             class="euiFlexItem euiFlexItem--flexGrowZero"
           >
             <div
-              class="euiPopover euiPopover--anchorUpRight euiPopover--withTitle"
+              class="euiPopover euiPopover--anchorUpRight"
             >
               <div
                 class="euiPopover__anchor"
@@ -505,7 +495,7 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonContent__icon"
+                      class="euiIcon euiIcon--small euiIcon--inherit euiIcon-isLoading euiButtonContent__icon"
                       focusable="false"
                       height="16"
                       role="img"
@@ -533,14 +523,14 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
             >
               <button
                 aria-label="Previous page"
-                class="euiButtonIcon euiButtonIcon--text"
+                class="euiButtonIcon euiButtonIcon--text euiButtonIcon--empty euiButtonIcon--xSmall"
                 data-test-subj="pagination-button-previous"
                 disabled=""
                 type="button"
               >
                 <svg
                   aria-hidden="true"
-                  class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonIcon__icon"
+                  class="euiIcon euiIcon--medium euiIcon--inherit euiIcon-isLoading euiButtonIcon__icon"
                   focusable="false"
                   height="16"
                   role="img"
@@ -559,7 +549,7 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
                     aria-controls="random_html_id"
                     aria-current="true"
                     aria-label="Page 1 of 1"
-                    class="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--xSmall euiButtonEmpty-isDisabled euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
+                    class="euiButtonEmpty euiButtonEmpty--text euiButtonEmpty--small euiButtonEmpty-isDisabled euiPaginationButton euiPaginationButton-isActive euiPaginationButton--hideOnMobile"
                     data-test-subj="pagination-button-0"
                     disabled=""
                     type="button"
@@ -578,14 +568,14 @@ exports[`<ReportDefinitions /> panel render component 1`] = `
               </ul>
               <button
                 aria-label="Next page"
-                class="euiButtonIcon euiButtonIcon--text"
+                class="euiButtonIcon euiButtonIcon--text euiButtonIcon--empty euiButtonIcon--xSmall"
                 data-test-subj="pagination-button-next"
                 disabled=""
                 type="button"
               >
                 <svg
                   aria-hidden="true"
-                  class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonIcon__icon"
+                  class="euiIcon euiIcon--medium euiIcon--inherit euiIcon-isLoading euiButtonIcon__icon"
                   focusable="false"
                   height="16"
                   role="img"
@@ -620,7 +610,7 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
           >
             <input
               aria-label="This is a search bar. As you type, the results lower in the page will automatically filter."
-              class="euiFieldSearch euiFieldSearch--fullWidth euiFieldSearch-isClearable"
+              class="euiFieldSearch euiFieldSearch--fullWidth"
               placeholder="Search..."
               type="search"
               value=""
@@ -695,7 +685,7 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                       >
                         <svg
                           aria-hidden="true"
-                          class="euiIcon euiIcon--medium euiButtonContent__icon"
+                          class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                           focusable="false"
                           height="16"
                           role="img"
@@ -737,7 +727,7 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                 role="columnheader"
                 scope="col"
               >
-                <div
+                <span
                   class="euiTableCellContent"
                 >
                   <span
@@ -746,7 +736,7 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                   >
                     Name
                   </span>
-                </div>
+                </span>
               </th>
               <th
                 class="euiTableHeaderCell"
@@ -754,7 +744,7 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                 role="columnheader"
                 scope="col"
               >
-                <div
+                <span
                   class="euiTableCellContent"
                 >
                   <span
@@ -763,7 +753,7 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                   >
                     Source
                   </span>
-                </div>
+                </span>
               </th>
               <th
                 aria-live="polite"
@@ -787,11 +777,6 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                     >
                       Type
                     </span>
-                    <span
-                      class="euiScreenReaderOnly"
-                    >
-                      Click to sort in ascending order
-                    </span>
                   </span>
                 </button>
               </th>
@@ -801,7 +786,7 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                 role="columnheader"
                 scope="col"
               >
-                <div
+                <span
                   class="euiTableCellContent"
                 >
                   <span
@@ -810,7 +795,7 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                   >
                     Schedule details
                   </span>
-                </div>
+                </span>
               </th>
               <th
                 class="euiTableHeaderCell"
@@ -818,7 +803,7 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                 role="columnheader"
                 scope="col"
               >
-                <div
+                <span
                   class="euiTableCellContent"
                 >
                   <span
@@ -827,7 +812,7 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                   >
                     Last Updated
                   </span>
-                </div>
+                </span>
               </th>
               <th
                 aria-live="polite"
@@ -851,11 +836,6 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                     >
                       Status
                     </span>
-                    <span
-                      class="euiScreenReaderOnly"
-                    >
-                      Click to sort in ascending order
-                    </span>
                   </span>
                 </button>
               </th>
@@ -878,14 +858,14 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                     <div
                       class="euiEmptyPrompt"
                     >
+                      <h3
+                        class="euiTitle euiTitle--xsmall"
+                      >
+                        No report definitions to display
+                      </h3>
                       <span
                         class="euiTextColor euiTextColor--subdued"
                       >
-                        <h3
-                          class="euiTitle euiTitle--xsmall"
-                        >
-                          No report definitions to display
-                        </h3>
                         <div
                           class="euiSpacer euiSpacer--m"
                         />
@@ -920,6 +900,22 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                                   width="16"
                                   xmlns="http://www.w3.org/2000/svg"
                                 />
+                                <svg
+                                  aria-hidden="true"
+                                  aria-label="External link"
+                                  class="euiIcon euiIcon--small euiIcon-isLoading euiLink__externalIcon"
+                                  focusable="false"
+                                  height="16"
+                                  role="img"
+                                  viewBox="0 0 16 16"
+                                  width="16"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                />
+                                <span
+                                  class="euiScreenReaderOnly"
+                                >
+                                  (opens in a new tab or window)
+                                </span>
                               </a>
                             </div>
                           </div>
@@ -927,9 +923,6 @@ exports[`<ReportDefinitions /> panel render empty table 1`] = `
                       </span>
                       <div
                         class="euiSpacer euiSpacer--l"
-                      />
-                      <div
-                        class="euiSpacer euiSpacer--s"
                       />
                       <div>
                         <button

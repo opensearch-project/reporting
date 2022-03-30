@@ -3,7 +3,7 @@
 exports[`<Main /> panel render component 1`] = `
 <div>
   <div
-    class="euiPanel euiPanel--paddingLarge"
+    class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow"
   >
     <div
       class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--justifyContentSpaceEvenly euiFlexGroup--directionRow euiFlexGroup--responsive"
@@ -37,7 +37,7 @@ exports[`<Main /> panel render component 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonContent__icon"
+              class="euiIcon euiIcon--medium euiIcon--inherit euiIcon-isLoading euiButtonContent__icon"
               focusable="false"
               height="16"
               role="img"
@@ -72,7 +72,7 @@ exports[`<Main /> panel render component 1`] = `
             >
               <input
                 aria-label="This is a search bar. As you type, the results lower in the page will automatically filter."
-                class="euiFieldSearch euiFieldSearch--fullWidth euiFieldSearch-isClearable"
+                class="euiFieldSearch euiFieldSearch--fullWidth"
                 placeholder="Search..."
                 type="search"
                 value=""
@@ -120,7 +120,7 @@ exports[`<Main /> panel render component 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonContent__icon"
+                      class="euiIcon euiIcon--medium euiIcon--inherit euiIcon-isLoading euiButtonContent__icon"
                       focusable="false"
                       height="16"
                       role="img"
@@ -159,7 +159,7 @@ exports[`<Main /> panel render component 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonContent__icon"
+                      class="euiIcon euiIcon--medium euiIcon--inherit euiIcon-isLoading euiButtonContent__icon"
                       focusable="false"
                       height="16"
                       role="img"
@@ -222,7 +222,7 @@ exports[`<Main /> panel render component 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonContent__icon"
+                            class="euiIcon euiIcon--small euiIcon--inherit euiIcon-isLoading euiButtonContent__icon"
                             focusable="false"
                             height="16"
                             role="img"
@@ -259,7 +259,7 @@ exports[`<Main /> panel render component 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -268,7 +268,7 @@ exports[`<Main /> panel render component 1`] = `
                     >
                       Name
                     </span>
-                  </div>
+                  </span>
                 </th>
                 <th
                   class="euiTableHeaderCell"
@@ -276,7 +276,7 @@ exports[`<Main /> panel render component 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -285,7 +285,7 @@ exports[`<Main /> panel render component 1`] = `
                     >
                       Source
                     </span>
-                  </div>
+                  </span>
                 </th>
                 <th
                   aria-live="polite"
@@ -309,11 +309,6 @@ exports[`<Main /> panel render component 1`] = `
                       >
                         Type
                       </span>
-                      <span
-                        class="euiScreenReaderOnly"
-                      >
-                        Click to sort in ascending order
-                      </span>
                     </span>
                   </button>
                 </th>
@@ -323,7 +318,7 @@ exports[`<Main /> panel render component 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -332,7 +327,7 @@ exports[`<Main /> panel render component 1`] = `
                     >
                       Creation time
                     </span>
-                  </div>
+                  </span>
                 </th>
                 <th
                   aria-live="polite"
@@ -356,11 +351,6 @@ exports[`<Main /> panel render component 1`] = `
                       >
                         State
                       </span>
-                      <span
-                        class="euiScreenReaderOnly"
-                      >
-                        Click to sort in ascending order
-                      </span>
                     </span>
                   </button>
                 </th>
@@ -370,7 +360,7 @@ exports[`<Main /> panel render component 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -379,7 +369,7 @@ exports[`<Main /> panel render component 1`] = `
                     >
                       Generate
                     </span>
-                  </div>
+                  </span>
                 </th>
               </tr>
             </thead>
@@ -400,14 +390,14 @@ exports[`<Main /> panel render component 1`] = `
                       <div
                         class="euiEmptyPrompt"
                       >
+                        <h3
+                          class="euiTitle euiTitle--xsmall"
+                        >
+                          No reports to display
+                        </h3>
                         <span
                           class="euiTextColor euiTextColor--subdued"
                         >
-                          <h3
-                            class="euiTitle euiTitle--xsmall"
-                          >
-                            No reports to display
-                          </h3>
                           <div
                             class="euiSpacer euiSpacer--m"
                           />
@@ -442,6 +432,22 @@ exports[`<Main /> panel render component 1`] = `
                                     width="16"
                                     xmlns="http://www.w3.org/2000/svg"
                                   />
+                                  <svg
+                                    aria-hidden="true"
+                                    aria-label="External link"
+                                    class="euiIcon euiIcon--small euiIcon-isLoading euiLink__externalIcon"
+                                    focusable="false"
+                                    height="16"
+                                    role="img"
+                                    viewBox="0 0 16 16"
+                                    width="16"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  />
+                                  <span
+                                    class="euiScreenReaderOnly"
+                                  >
+                                    (opens in a new tab or window)
+                                  </span>
                                 </a>
                               </div>
                             </div>
@@ -462,7 +468,7 @@ exports[`<Main /> panel render component 1`] = `
     class="euiSpacer euiSpacer--l"
   />
   <div
-    class="euiPanel euiPanel--paddingLarge"
+    class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow"
   >
     <div
       class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--justifyContentSpaceEvenly euiFlexGroup--directionRow euiFlexGroup--responsive"
@@ -496,7 +502,7 @@ exports[`<Main /> panel render component 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonContent__icon"
+              class="euiIcon euiIcon--medium euiIcon--inherit euiIcon-isLoading euiButtonContent__icon"
               focusable="false"
               height="16"
               role="img"
@@ -551,7 +557,7 @@ exports[`<Main /> panel render component 1`] = `
               >
                 <input
                   aria-label="This is a search bar. As you type, the results lower in the page will automatically filter."
-                  class="euiFieldSearch euiFieldSearch--fullWidth euiFieldSearch-isClearable"
+                  class="euiFieldSearch euiFieldSearch--fullWidth"
                   placeholder="Search..."
                   type="search"
                   value=""
@@ -622,7 +628,7 @@ exports[`<Main /> panel render component 1`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiIcon-isLoading euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -659,7 +665,7 @@ exports[`<Main /> panel render component 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -668,7 +674,7 @@ exports[`<Main /> panel render component 1`] = `
                       >
                         Name
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     class="euiTableHeaderCell"
@@ -676,7 +682,7 @@ exports[`<Main /> panel render component 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -685,7 +691,7 @@ exports[`<Main /> panel render component 1`] = `
                       >
                         Source
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     aria-live="polite"
@@ -709,11 +715,6 @@ exports[`<Main /> panel render component 1`] = `
                         >
                           Type
                         </span>
-                        <span
-                          class="euiScreenReaderOnly"
-                        >
-                          Click to sort in ascending order
-                        </span>
                       </span>
                     </button>
                   </th>
@@ -723,7 +724,7 @@ exports[`<Main /> panel render component 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -732,7 +733,7 @@ exports[`<Main /> panel render component 1`] = `
                       >
                         Schedule details
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     class="euiTableHeaderCell"
@@ -740,7 +741,7 @@ exports[`<Main /> panel render component 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -749,7 +750,7 @@ exports[`<Main /> panel render component 1`] = `
                       >
                         Last Updated
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     aria-live="polite"
@@ -773,11 +774,6 @@ exports[`<Main /> panel render component 1`] = `
                         >
                           Status
                         </span>
-                        <span
-                          class="euiScreenReaderOnly"
-                        >
-                          Click to sort in ascending order
-                        </span>
                       </span>
                     </button>
                   </th>
@@ -800,14 +796,14 @@ exports[`<Main /> panel render component 1`] = `
                         <div
                           class="euiEmptyPrompt"
                         >
+                          <h3
+                            class="euiTitle euiTitle--xsmall"
+                          >
+                            No report definitions to display
+                          </h3>
                           <span
                             class="euiTextColor euiTextColor--subdued"
                           >
-                            <h3
-                              class="euiTitle euiTitle--xsmall"
-                            >
-                              No report definitions to display
-                            </h3>
                             <div
                               class="euiSpacer euiSpacer--m"
                             />
@@ -842,6 +838,22 @@ exports[`<Main /> panel render component 1`] = `
                                       width="16"
                                       xmlns="http://www.w3.org/2000/svg"
                                     />
+                                    <svg
+                                      aria-hidden="true"
+                                      aria-label="External link"
+                                      class="euiIcon euiIcon--small euiIcon-isLoading euiLink__externalIcon"
+                                      focusable="false"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    />
+                                    <span
+                                      class="euiScreenReaderOnly"
+                                    >
+                                      (opens in a new tab or window)
+                                    </span>
                                   </a>
                                 </div>
                               </div>
@@ -849,9 +861,6 @@ exports[`<Main /> panel render component 1`] = `
                           </span>
                           <div
                             class="euiSpacer euiSpacer--l"
-                          />
-                          <div
-                            class="euiSpacer euiSpacer--s"
                           />
                           <div>
                             <button
@@ -892,7 +901,7 @@ exports[`<Main /> panel render component 1`] = `
 exports[`<Main /> panel render component after create success 1`] = `
 <div>
   <div
-    class="euiPanel euiPanel--paddingLarge"
+    class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow"
   >
     <div
       class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--justifyContentSpaceEvenly euiFlexGroup--directionRow euiFlexGroup--responsive"
@@ -926,7 +935,7 @@ exports[`<Main /> panel render component after create success 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="euiIcon euiIcon--medium euiButtonContent__icon"
+              class="euiIcon euiIcon--medium euiIcon--inherit euiButtonContent__icon"
               focusable="false"
               height="16"
               role="img"
@@ -965,7 +974,7 @@ exports[`<Main /> panel render component after create success 1`] = `
             >
               <input
                 aria-label="This is a search bar. As you type, the results lower in the page will automatically filter."
-                class="euiFieldSearch euiFieldSearch--fullWidth euiFieldSearch-isClearable"
+                class="euiFieldSearch euiFieldSearch--fullWidth"
                 placeholder="Search..."
                 type="search"
                 value=""
@@ -1017,7 +1026,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="euiIcon euiIcon--medium euiButtonContent__icon"
+                      class="euiIcon euiIcon--medium euiIcon--inherit euiButtonContent__icon"
                       focusable="false"
                       height="16"
                       role="img"
@@ -1061,7 +1070,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="euiIcon euiIcon--medium euiButtonContent__icon"
+                      class="euiIcon euiIcon--medium euiIcon--inherit euiButtonContent__icon"
                       focusable="false"
                       height="16"
                       role="img"
@@ -1129,7 +1138,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="euiIcon euiIcon--medium euiButtonContent__icon"
+                            class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                             focusable="false"
                             height="16"
                             role="img"
@@ -1171,7 +1180,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -1180,7 +1189,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                     >
                       Name
                     </span>
-                  </div>
+                  </span>
                 </th>
                 <th
                   class="euiTableHeaderCell"
@@ -1188,7 +1197,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -1197,7 +1206,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                     >
                       Source
                     </span>
-                  </div>
+                  </span>
                 </th>
                 <th
                   aria-live="polite"
@@ -1221,11 +1230,6 @@ exports[`<Main /> panel render component after create success 1`] = `
                       >
                         Type
                       </span>
-                      <span
-                        class="euiScreenReaderOnly"
-                      >
-                        Click to sort in ascending order
-                      </span>
                     </span>
                   </button>
                 </th>
@@ -1235,7 +1239,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -1244,7 +1248,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                     >
                       Creation time
                     </span>
-                  </div>
+                  </span>
                 </th>
                 <th
                   aria-live="polite"
@@ -1268,11 +1272,6 @@ exports[`<Main /> panel render component after create success 1`] = `
                       >
                         State
                       </span>
-                      <span
-                        class="euiScreenReaderOnly"
-                      >
-                        Click to sort in ascending order
-                      </span>
                     </span>
                   </button>
                 </th>
@@ -1282,7 +1281,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -1291,7 +1290,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                     >
                       Generate
                     </span>
-                  </div>
+                  </span>
                 </th>
               </tr>
             </thead>
@@ -1312,14 +1311,14 @@ exports[`<Main /> panel render component after create success 1`] = `
                       <div
                         class="euiEmptyPrompt"
                       >
+                        <h3
+                          class="euiTitle euiTitle--xsmall"
+                        >
+                          No reports to display
+                        </h3>
                         <span
                           class="euiTextColor euiTextColor--subdued"
                         >
-                          <h3
-                            class="euiTitle euiTitle--xsmall"
-                          >
-                            No reports to display
-                          </h3>
                           <div
                             class="euiSpacer euiSpacer--m"
                           />
@@ -1358,6 +1357,25 @@ exports[`<Main /> panel render component after create success 1`] = `
                                       d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
                                     />
                                   </svg>
+                                  <svg
+                                    aria-label="External link"
+                                    class="euiIcon euiIcon--small euiLink__externalIcon"
+                                    focusable="false"
+                                    height="16"
+                                    role="img"
+                                    viewBox="0 0 16 16"
+                                    width="16"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
+                                    />
+                                  </svg>
+                                  <span
+                                    class="euiScreenReaderOnly"
+                                  >
+                                    (opens in a new tab or window)
+                                  </span>
                                 </a>
                               </div>
                             </div>
@@ -1378,7 +1396,7 @@ exports[`<Main /> panel render component after create success 1`] = `
     class="euiSpacer euiSpacer--l"
   />
   <div
-    class="euiPanel euiPanel--paddingLarge"
+    class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow"
   >
     <div
       class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--justifyContentSpaceEvenly euiFlexGroup--directionRow euiFlexGroup--responsive"
@@ -1412,7 +1430,7 @@ exports[`<Main /> panel render component after create success 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="euiIcon euiIcon--medium euiButtonContent__icon"
+              class="euiIcon euiIcon--medium euiIcon--inherit euiButtonContent__icon"
               focusable="false"
               height="16"
               role="img"
@@ -1471,7 +1489,7 @@ exports[`<Main /> panel render component after create success 1`] = `
               >
                 <input
                   aria-label="This is a search bar. As you type, the results lower in the page will automatically filter."
-                  class="euiFieldSearch euiFieldSearch--fullWidth euiFieldSearch-isClearable"
+                  class="euiFieldSearch euiFieldSearch--fullWidth"
                   placeholder="Search..."
                   type="search"
                   value=""
@@ -1546,7 +1564,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -1588,7 +1606,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -1597,7 +1615,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                       >
                         Name
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     class="euiTableHeaderCell"
@@ -1605,7 +1623,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -1614,7 +1632,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                       >
                         Source
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     aria-live="polite"
@@ -1638,11 +1656,6 @@ exports[`<Main /> panel render component after create success 1`] = `
                         >
                           Type
                         </span>
-                        <span
-                          class="euiScreenReaderOnly"
-                        >
-                          Click to sort in ascending order
-                        </span>
                       </span>
                     </button>
                   </th>
@@ -1652,7 +1665,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -1661,7 +1674,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                       >
                         Schedule details
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     class="euiTableHeaderCell"
@@ -1669,7 +1682,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -1678,7 +1691,7 @@ exports[`<Main /> panel render component after create success 1`] = `
                       >
                         Last Updated
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     aria-live="polite"
@@ -1702,11 +1715,6 @@ exports[`<Main /> panel render component after create success 1`] = `
                         >
                           Status
                         </span>
-                        <span
-                          class="euiScreenReaderOnly"
-                        >
-                          Click to sort in ascending order
-                        </span>
                       </span>
                     </button>
                   </th>
@@ -1729,14 +1737,14 @@ exports[`<Main /> panel render component after create success 1`] = `
                         <div
                           class="euiEmptyPrompt"
                         >
+                          <h3
+                            class="euiTitle euiTitle--xsmall"
+                          >
+                            No report definitions to display
+                          </h3>
                           <span
                             class="euiTextColor euiTextColor--subdued"
                           >
-                            <h3
-                              class="euiTitle euiTitle--xsmall"
-                            >
-                              No report definitions to display
-                            </h3>
                             <div
                               class="euiSpacer euiSpacer--m"
                             />
@@ -1775,6 +1783,25 @@ exports[`<Main /> panel render component after create success 1`] = `
                                         d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
                                       />
                                     </svg>
+                                    <svg
+                                      aria-label="External link"
+                                      class="euiIcon euiIcon--small euiLink__externalIcon"
+                                      focusable="false"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
+                                      />
+                                    </svg>
+                                    <span
+                                      class="euiScreenReaderOnly"
+                                    >
+                                      (opens in a new tab or window)
+                                    </span>
                                   </a>
                                 </div>
                               </div>
@@ -1782,9 +1809,6 @@ exports[`<Main /> panel render component after create success 1`] = `
                           </span>
                           <div
                             class="euiSpacer euiSpacer--l"
-                          />
-                          <div
-                            class="euiSpacer euiSpacer--s"
                           />
                           <div>
                             <button
@@ -1874,7 +1898,7 @@ exports[`<Main /> panel render component after create success 1`] = `
 exports[`<Main /> panel render component after delete success 1`] = `
 <div>
   <div
-    class="euiPanel euiPanel--paddingLarge"
+    class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow"
   >
     <div
       class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--justifyContentSpaceEvenly euiFlexGroup--directionRow euiFlexGroup--responsive"
@@ -1908,7 +1932,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="euiIcon euiIcon--medium euiButtonContent__icon"
+              class="euiIcon euiIcon--medium euiIcon--inherit euiButtonContent__icon"
               focusable="false"
               height="16"
               role="img"
@@ -1947,7 +1971,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
             >
               <input
                 aria-label="This is a search bar. As you type, the results lower in the page will automatically filter."
-                class="euiFieldSearch euiFieldSearch--fullWidth euiFieldSearch-isClearable"
+                class="euiFieldSearch euiFieldSearch--fullWidth"
                 placeholder="Search..."
                 type="search"
                 value=""
@@ -1999,7 +2023,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="euiIcon euiIcon--medium euiButtonContent__icon"
+                      class="euiIcon euiIcon--medium euiIcon--inherit euiButtonContent__icon"
                       focusable="false"
                       height="16"
                       role="img"
@@ -2043,7 +2067,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="euiIcon euiIcon--medium euiButtonContent__icon"
+                      class="euiIcon euiIcon--medium euiIcon--inherit euiButtonContent__icon"
                       focusable="false"
                       height="16"
                       role="img"
@@ -2111,7 +2135,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="euiIcon euiIcon--medium euiButtonContent__icon"
+                            class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                             focusable="false"
                             height="16"
                             role="img"
@@ -2153,7 +2177,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -2162,7 +2186,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                     >
                       Name
                     </span>
-                  </div>
+                  </span>
                 </th>
                 <th
                   class="euiTableHeaderCell"
@@ -2170,7 +2194,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -2179,7 +2203,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                     >
                       Source
                     </span>
-                  </div>
+                  </span>
                 </th>
                 <th
                   aria-live="polite"
@@ -2203,11 +2227,6 @@ exports[`<Main /> panel render component after delete success 1`] = `
                       >
                         Type
                       </span>
-                      <span
-                        class="euiScreenReaderOnly"
-                      >
-                        Click to sort in ascending order
-                      </span>
                     </span>
                   </button>
                 </th>
@@ -2217,7 +2236,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -2226,7 +2245,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                     >
                       Creation time
                     </span>
-                  </div>
+                  </span>
                 </th>
                 <th
                   aria-live="polite"
@@ -2250,11 +2269,6 @@ exports[`<Main /> panel render component after delete success 1`] = `
                       >
                         State
                       </span>
-                      <span
-                        class="euiScreenReaderOnly"
-                      >
-                        Click to sort in ascending order
-                      </span>
                     </span>
                   </button>
                 </th>
@@ -2264,7 +2278,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -2273,7 +2287,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                     >
                       Generate
                     </span>
-                  </div>
+                  </span>
                 </th>
               </tr>
             </thead>
@@ -2294,14 +2308,14 @@ exports[`<Main /> panel render component after delete success 1`] = `
                       <div
                         class="euiEmptyPrompt"
                       >
+                        <h3
+                          class="euiTitle euiTitle--xsmall"
+                        >
+                          No reports to display
+                        </h3>
                         <span
                           class="euiTextColor euiTextColor--subdued"
                         >
-                          <h3
-                            class="euiTitle euiTitle--xsmall"
-                          >
-                            No reports to display
-                          </h3>
                           <div
                             class="euiSpacer euiSpacer--m"
                           />
@@ -2340,6 +2354,25 @@ exports[`<Main /> panel render component after delete success 1`] = `
                                       d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
                                     />
                                   </svg>
+                                  <svg
+                                    aria-label="External link"
+                                    class="euiIcon euiIcon--small euiLink__externalIcon"
+                                    focusable="false"
+                                    height="16"
+                                    role="img"
+                                    viewBox="0 0 16 16"
+                                    width="16"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
+                                    />
+                                  </svg>
+                                  <span
+                                    class="euiScreenReaderOnly"
+                                  >
+                                    (opens in a new tab or window)
+                                  </span>
                                 </a>
                               </div>
                             </div>
@@ -2360,7 +2393,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
     class="euiSpacer euiSpacer--l"
   />
   <div
-    class="euiPanel euiPanel--paddingLarge"
+    class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow"
   >
     <div
       class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--justifyContentSpaceEvenly euiFlexGroup--directionRow euiFlexGroup--responsive"
@@ -2394,7 +2427,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="euiIcon euiIcon--medium euiButtonContent__icon"
+              class="euiIcon euiIcon--medium euiIcon--inherit euiButtonContent__icon"
               focusable="false"
               height="16"
               role="img"
@@ -2453,7 +2486,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
               >
                 <input
                   aria-label="This is a search bar. As you type, the results lower in the page will automatically filter."
-                  class="euiFieldSearch euiFieldSearch--fullWidth euiFieldSearch-isClearable"
+                  class="euiFieldSearch euiFieldSearch--fullWidth"
                   placeholder="Search..."
                   type="search"
                   value=""
@@ -2528,7 +2561,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -2570,7 +2603,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -2579,7 +2612,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                       >
                         Name
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     class="euiTableHeaderCell"
@@ -2587,7 +2620,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -2596,7 +2629,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                       >
                         Source
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     aria-live="polite"
@@ -2620,11 +2653,6 @@ exports[`<Main /> panel render component after delete success 1`] = `
                         >
                           Type
                         </span>
-                        <span
-                          class="euiScreenReaderOnly"
-                        >
-                          Click to sort in ascending order
-                        </span>
                       </span>
                     </button>
                   </th>
@@ -2634,7 +2662,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -2643,7 +2671,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                       >
                         Schedule details
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     class="euiTableHeaderCell"
@@ -2651,7 +2679,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -2660,7 +2688,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
                       >
                         Last Updated
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     aria-live="polite"
@@ -2684,11 +2712,6 @@ exports[`<Main /> panel render component after delete success 1`] = `
                         >
                           Status
                         </span>
-                        <span
-                          class="euiScreenReaderOnly"
-                        >
-                          Click to sort in ascending order
-                        </span>
                       </span>
                     </button>
                   </th>
@@ -2711,14 +2734,14 @@ exports[`<Main /> panel render component after delete success 1`] = `
                         <div
                           class="euiEmptyPrompt"
                         >
+                          <h3
+                            class="euiTitle euiTitle--xsmall"
+                          >
+                            No report definitions to display
+                          </h3>
                           <span
                             class="euiTextColor euiTextColor--subdued"
                           >
-                            <h3
-                              class="euiTitle euiTitle--xsmall"
-                            >
-                              No report definitions to display
-                            </h3>
                             <div
                               class="euiSpacer euiSpacer--m"
                             />
@@ -2757,6 +2780,25 @@ exports[`<Main /> panel render component after delete success 1`] = `
                                         d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
                                       />
                                     </svg>
+                                    <svg
+                                      aria-label="External link"
+                                      class="euiIcon euiIcon--small euiLink__externalIcon"
+                                      focusable="false"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
+                                      />
+                                    </svg>
+                                    <span
+                                      class="euiScreenReaderOnly"
+                                    >
+                                      (opens in a new tab or window)
+                                    </span>
                                   </a>
                                 </div>
                               </div>
@@ -2764,9 +2806,6 @@ exports[`<Main /> panel render component after delete success 1`] = `
                           </span>
                           <div
                             class="euiSpacer euiSpacer--l"
-                          />
-                          <div
-                            class="euiSpacer euiSpacer--s"
                           />
                           <div>
                             <button
@@ -2865,7 +2904,7 @@ exports[`<Main /> panel render component after delete success 1`] = `
 exports[`<Main /> panel render component after edit success 1`] = `
 <div>
   <div
-    class="euiPanel euiPanel--paddingLarge"
+    class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow"
   >
     <div
       class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--justifyContentSpaceEvenly euiFlexGroup--directionRow euiFlexGroup--responsive"
@@ -2899,7 +2938,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="euiIcon euiIcon--medium euiButtonContent__icon"
+              class="euiIcon euiIcon--medium euiIcon--inherit euiButtonContent__icon"
               focusable="false"
               height="16"
               role="img"
@@ -2938,7 +2977,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
             >
               <input
                 aria-label="This is a search bar. As you type, the results lower in the page will automatically filter."
-                class="euiFieldSearch euiFieldSearch--fullWidth euiFieldSearch-isClearable"
+                class="euiFieldSearch euiFieldSearch--fullWidth"
                 placeholder="Search..."
                 type="search"
                 value=""
@@ -2990,7 +3029,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="euiIcon euiIcon--medium euiButtonContent__icon"
+                      class="euiIcon euiIcon--medium euiIcon--inherit euiButtonContent__icon"
                       focusable="false"
                       height="16"
                       role="img"
@@ -3034,7 +3073,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                   >
                     <svg
                       aria-hidden="true"
-                      class="euiIcon euiIcon--medium euiButtonContent__icon"
+                      class="euiIcon euiIcon--medium euiIcon--inherit euiButtonContent__icon"
                       focusable="false"
                       height="16"
                       role="img"
@@ -3102,7 +3141,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                         >
                           <svg
                             aria-hidden="true"
-                            class="euiIcon euiIcon--medium euiButtonContent__icon"
+                            class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                             focusable="false"
                             height="16"
                             role="img"
@@ -3144,7 +3183,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -3153,7 +3192,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                     >
                       Name
                     </span>
-                  </div>
+                  </span>
                 </th>
                 <th
                   class="euiTableHeaderCell"
@@ -3161,7 +3200,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -3170,7 +3209,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                     >
                       Source
                     </span>
-                  </div>
+                  </span>
                 </th>
                 <th
                   aria-live="polite"
@@ -3194,11 +3233,6 @@ exports[`<Main /> panel render component after edit success 1`] = `
                       >
                         Type
                       </span>
-                      <span
-                        class="euiScreenReaderOnly"
-                      >
-                        Click to sort in ascending order
-                      </span>
                     </span>
                   </button>
                 </th>
@@ -3208,7 +3242,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -3217,7 +3251,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                     >
                       Creation time
                     </span>
-                  </div>
+                  </span>
                 </th>
                 <th
                   aria-live="polite"
@@ -3241,11 +3275,6 @@ exports[`<Main /> panel render component after edit success 1`] = `
                       >
                         State
                       </span>
-                      <span
-                        class="euiScreenReaderOnly"
-                      >
-                        Click to sort in ascending order
-                      </span>
                     </span>
                   </button>
                 </th>
@@ -3255,7 +3284,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                   role="columnheader"
                   scope="col"
                 >
-                  <div
+                  <span
                     class="euiTableCellContent"
                   >
                     <span
@@ -3264,7 +3293,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                     >
                       Generate
                     </span>
-                  </div>
+                  </span>
                 </th>
               </tr>
             </thead>
@@ -3285,14 +3314,14 @@ exports[`<Main /> panel render component after edit success 1`] = `
                       <div
                         class="euiEmptyPrompt"
                       >
+                        <h3
+                          class="euiTitle euiTitle--xsmall"
+                        >
+                          No reports to display
+                        </h3>
                         <span
                           class="euiTextColor euiTextColor--subdued"
                         >
-                          <h3
-                            class="euiTitle euiTitle--xsmall"
-                          >
-                            No reports to display
-                          </h3>
                           <div
                             class="euiSpacer euiSpacer--m"
                           />
@@ -3331,6 +3360,25 @@ exports[`<Main /> panel render component after edit success 1`] = `
                                       d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
                                     />
                                   </svg>
+                                  <svg
+                                    aria-label="External link"
+                                    class="euiIcon euiIcon--small euiLink__externalIcon"
+                                    focusable="false"
+                                    height="16"
+                                    role="img"
+                                    viewBox="0 0 16 16"
+                                    width="16"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
+                                    />
+                                  </svg>
+                                  <span
+                                    class="euiScreenReaderOnly"
+                                  >
+                                    (opens in a new tab or window)
+                                  </span>
                                 </a>
                               </div>
                             </div>
@@ -3351,7 +3399,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
     class="euiSpacer euiSpacer--l"
   />
   <div
-    class="euiPanel euiPanel--paddingLarge"
+    class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow"
   >
     <div
       class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--justifyContentSpaceEvenly euiFlexGroup--directionRow euiFlexGroup--responsive"
@@ -3385,7 +3433,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="euiIcon euiIcon--medium euiButtonContent__icon"
+              class="euiIcon euiIcon--medium euiIcon--inherit euiButtonContent__icon"
               focusable="false"
               height="16"
               role="img"
@@ -3444,7 +3492,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
               >
                 <input
                   aria-label="This is a search bar. As you type, the results lower in the page will automatically filter."
-                  class="euiFieldSearch euiFieldSearch--fullWidth euiFieldSearch-isClearable"
+                  class="euiFieldSearch euiFieldSearch--fullWidth"
                   placeholder="Search..."
                   type="search"
                   value=""
@@ -3519,7 +3567,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -3561,7 +3609,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -3570,7 +3618,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                       >
                         Name
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     class="euiTableHeaderCell"
@@ -3578,7 +3626,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -3587,7 +3635,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                       >
                         Source
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     aria-live="polite"
@@ -3611,11 +3659,6 @@ exports[`<Main /> panel render component after edit success 1`] = `
                         >
                           Type
                         </span>
-                        <span
-                          class="euiScreenReaderOnly"
-                        >
-                          Click to sort in ascending order
-                        </span>
                       </span>
                     </button>
                   </th>
@@ -3625,7 +3668,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -3634,7 +3677,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                       >
                         Schedule details
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     class="euiTableHeaderCell"
@@ -3642,7 +3685,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                     role="columnheader"
                     scope="col"
                   >
-                    <div
+                    <span
                       class="euiTableCellContent"
                     >
                       <span
@@ -3651,7 +3694,7 @@ exports[`<Main /> panel render component after edit success 1`] = `
                       >
                         Last Updated
                       </span>
-                    </div>
+                    </span>
                   </th>
                   <th
                     aria-live="polite"
@@ -3675,11 +3718,6 @@ exports[`<Main /> panel render component after edit success 1`] = `
                         >
                           Status
                         </span>
-                        <span
-                          class="euiScreenReaderOnly"
-                        >
-                          Click to sort in ascending order
-                        </span>
                       </span>
                     </button>
                   </th>
@@ -3702,14 +3740,14 @@ exports[`<Main /> panel render component after edit success 1`] = `
                         <div
                           class="euiEmptyPrompt"
                         >
+                          <h3
+                            class="euiTitle euiTitle--xsmall"
+                          >
+                            No report definitions to display
+                          </h3>
                           <span
                             class="euiTextColor euiTextColor--subdued"
                           >
-                            <h3
-                              class="euiTitle euiTitle--xsmall"
-                            >
-                              No report definitions to display
-                            </h3>
                             <div
                               class="euiSpacer euiSpacer--m"
                             />
@@ -3748,6 +3786,25 @@ exports[`<Main /> panel render component after edit success 1`] = `
                                         d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
                                       />
                                     </svg>
+                                    <svg
+                                      aria-label="External link"
+                                      class="euiIcon euiIcon--small euiLink__externalIcon"
+                                      focusable="false"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
+                                      />
+                                    </svg>
+                                    <span
+                                      class="euiScreenReaderOnly"
+                                    >
+                                      (opens in a new tab or window)
+                                    </span>
                                   </a>
                                 </div>
                               </div>
@@ -3755,9 +3812,6 @@ exports[`<Main /> panel render component after edit success 1`] = `
                           </span>
                           <div
                             class="euiSpacer euiSpacer--l"
-                          />
-                          <div
-                            class="euiSpacer euiSpacer--s"
                           />
                           <div>
                             <button

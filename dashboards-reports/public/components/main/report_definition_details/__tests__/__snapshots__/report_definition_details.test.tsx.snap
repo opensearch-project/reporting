@@ -2,10 +2,10 @@
 
 exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition details 1`] = `
 <div
-  class="euiPage"
+  class="euiPage euiPage--paddingMedium euiPage--grow"
 >
-  <main
-    class="euiPageBody"
+  <div
+    class="euiPageBody euiPageBody--borderRadiusNone"
   >
     <h1
       class="euiTitle euiTitle--large"
@@ -16,10 +16,11 @@ exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition d
       class="euiSpacer euiSpacer--m"
     />
     <div
-      class="euiPanel euiPanel--paddingLarge euiPageContent"
+      class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow euiPageContent"
+      role="main"
     >
-      <div
-        class="euiPageHeader euiPageHeader--responsive"
+      <header
+        class="euiPageHeader euiPageHeader--responsive euiPageHeader--center"
       >
         <div
           class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionRow euiFlexGroup--responsive"
@@ -97,7 +98,7 @@ exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition d
             </button>
           </div>
         </div>
-      </div>
+      </header>
       <hr
         class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginLarge"
       />
@@ -205,6 +206,25 @@ exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition d
                 target="_blank"
               >
                 
+                <svg
+                  aria-label="External link"
+                  class="euiIcon euiIcon--small euiLink__externalIcon"
+                  focusable="false"
+                  height="16"
+                  role="img"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
+                  />
+                </svg>
+                <span
+                  class="euiScreenReaderOnly"
+                >
+                  (opens in a new tab or window)
+                </span>
               </a>
             </dd>
           </dl>
@@ -389,16 +409,16 @@ exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition d
       class="euiGlobalToastList euiGlobalToastList--right"
       role="region"
     />
-  </main>
+  </div>
 </div>
 `;
 
 exports[`<ReportDefinitionDetails /> panel render disabled daily definition, click 1`] = `
 <div
-  class="euiPage"
+  class="euiPage euiPage--paddingMedium euiPage--grow"
 >
-  <main
-    class="euiPageBody"
+  <div
+    class="euiPageBody euiPageBody--borderRadiusNone"
   >
     <h1
       class="euiTitle euiTitle--large"
@@ -409,10 +429,11 @@ exports[`<ReportDefinitionDetails /> panel render disabled daily definition, cli
       class="euiSpacer euiSpacer--m"
     />
     <div
-      class="euiPanel euiPanel--paddingLarge euiPageContent"
+      class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow euiPageContent"
+      role="main"
     >
-      <div
-        class="euiPageHeader euiPageHeader--responsive"
+      <header
+        class="euiPageHeader euiPageHeader--responsive euiPageHeader--center"
       >
         <div
           class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionRow euiFlexGroup--responsive"
@@ -490,7 +511,7 @@ exports[`<ReportDefinitionDetails /> panel render disabled daily definition, cli
             </button>
           </div>
         </div>
-      </div>
+      </header>
       <hr
         class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginLarge"
       />
@@ -598,6 +619,25 @@ exports[`<ReportDefinitionDetails /> panel render disabled daily definition, cli
                 target="_blank"
               >
                 
+                <svg
+                  aria-label="External link"
+                  class="euiIcon euiIcon--small euiLink__externalIcon"
+                  focusable="false"
+                  height="16"
+                  role="img"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13 8.5a.5.5 0 111 0V12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2h3.5a.5.5 0 010 1H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V8.5zm-5.12.339a.5.5 0 11-.706-.707L13.305 2H10.5a.5.5 0 110-1H14a1 1 0 011 1v3.5a.5.5 0 11-1 0V2.72L7.88 8.838z"
+                  />
+                </svg>
+                <span
+                  class="euiScreenReaderOnly"
+                >
+                  (opens in a new tab or window)
+                </span>
               </a>
             </dd>
           </dl>
@@ -782,16 +822,16 @@ exports[`<ReportDefinitionDetails /> panel render disabled daily definition, cli
       class="euiGlobalToastList euiGlobalToastList--right"
       role="region"
     />
-  </main>
+  </div>
 </div>
 `;
 
 exports[`<ReportDefinitionDetails /> panel render on demand definition details 1`] = `
 <div
-  class="euiPage"
+  class="euiPage euiPage--paddingMedium euiPage--grow"
 >
-  <main
-    class="euiPageBody"
+  <div
+    class="euiPageBody euiPageBody--borderRadiusNone"
   >
     <h1
       class="euiTitle euiTitle--large"
@@ -802,10 +842,11 @@ exports[`<ReportDefinitionDetails /> panel render on demand definition details 1
       class="euiSpacer euiSpacer--m"
     />
     <div
-      class="euiPanel euiPanel--paddingLarge euiPageContent"
+      class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow euiPageContent"
+      role="main"
     >
-      <div
-        class="euiPageHeader euiPageHeader--responsive"
+      <header
+        class="euiPageHeader euiPageHeader--responsive euiPageHeader--center"
       >
         <div
           class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionRow euiFlexGroup--responsive"
@@ -883,7 +924,7 @@ exports[`<ReportDefinitionDetails /> panel render on demand definition details 1
             </button>
           </div>
         </div>
-      </div>
+      </header>
       <hr
         class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginLarge"
       />
@@ -991,6 +1032,22 @@ exports[`<ReportDefinitionDetails /> panel render on demand definition details 1
                 target="_blank"
               >
                 
+                <svg
+                  aria-hidden="true"
+                  aria-label="External link"
+                  class="euiIcon euiIcon--small euiIcon-isLoading euiLink__externalIcon"
+                  focusable="false"
+                  height="16"
+                  role="img"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  xmlns="http://www.w3.org/2000/svg"
+                />
+                <span
+                  class="euiScreenReaderOnly"
+                >
+                  (opens in a new tab or window)
+                </span>
               </a>
             </dd>
           </dl>
@@ -1171,6 +1228,6 @@ exports[`<ReportDefinitionDetails /> panel render on demand definition details 1
       class="euiGlobalToastList euiGlobalToastList--right"
       role="region"
     />
-  </main>
+  </div>
 </div>
 `;
