@@ -2,17 +2,18 @@
 
 exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
 <div
-  class="euiPanel euiPanel--paddingLarge euiPageContent"
+  class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow euiPageContent"
+  role="main"
 >
-  <div
-    class="euiPageHeader euiPageHeader--responsive"
+  <header
+    class="euiPageHeader euiPageHeader--responsive euiPageHeader--center"
   >
     <h2
       class="euiTitle euiTitle--medium"
     >
       Report settings
     </h2>
-  </div>
+  </header>
   <hr
     class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginLarge"
   />
@@ -50,7 +51,7 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
                 class="euiFormControlLayout__childrenWrapper"
               >
                 <input
-                  aria-describedby="reportSettingsName-help"
+                  aria-describedby="reportSettingsName-help-0"
                   class="euiFieldText"
                   id="reportSettingsName"
                   placeholder="Report name (e.g Log Traffic Daily Report)"
@@ -61,7 +62,7 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
             </div>
             <div
               class="euiFormHelpText euiFormRow__text"
-              id="reportSettingsName-help"
+              id="reportSettingsName-help-0"
             >
               Valid characters are a-z, A-Z, 0-9, (), [], _ (underscore), - (hyphen) and (space).
             </div>
@@ -333,7 +334,6 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
                   >
                     <div
                       class="euiPopover euiPopover--anchorDownLeft"
-                      id="QuickSelectPopover"
                     >
                       <div
                         class="euiPopover__anchor euiQuickSelectPopover__anchor"
@@ -349,7 +349,7 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -437,7 +437,7 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
               </div>
               <div
                 class="euiFormHelpText euiFormRow__text"
-                id="random_html_id-help"
+                id="random_html_id-help-0"
               >
                 Time range is relative to the report creation date on the report trigger.
               </div>
@@ -1185,17 +1185,18 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
 
 exports[`<ReportSettings /> panel display errors on create 1`] = `
 <div
-  class="euiPanel euiPanel--paddingLarge euiPageContent"
+  class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow euiPageContent"
+  role="main"
 >
-  <div
-    class="euiPageHeader euiPageHeader--responsive"
+  <header
+    class="euiPageHeader euiPageHeader--responsive euiPageHeader--center"
   >
     <h2
       class="euiTitle euiTitle--medium"
     >
       Report settings
     </h2>
-  </div>
+  </header>
   <hr
     class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginLarge"
   />
@@ -1233,7 +1234,7 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
                 class="euiFormControlLayout__childrenWrapper"
               >
                 <input
-                  aria-describedby="reportSettingsName-help"
+                  aria-describedby="reportSettingsName-help-0"
                   class="euiFieldText"
                   id="reportSettingsName"
                   placeholder="Report name (e.g Log Traffic Daily Report)"
@@ -1244,7 +1245,7 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
             </div>
             <div
               class="euiFormHelpText euiFormRow__text"
-              id="reportSettingsName-help"
+              id="reportSettingsName-help-0"
             >
               Valid characters are a-z, A-Z, 0-9, (), [], _ (underscore), - (hyphen) and (space).
             </div>
@@ -1516,7 +1517,6 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
                   >
                     <div
                       class="euiPopover euiPopover--anchorDownLeft"
-                      id="QuickSelectPopover"
                     >
                       <div
                         class="euiPopover__anchor euiQuickSelectPopover__anchor"
@@ -1532,7 +1532,7 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -1627,7 +1627,7 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
               </div>
               <div
                 class="euiFormHelpText euiFormRow__text"
-                id="random_html_id-help"
+                id="random_html_id-help-0"
               >
                 Time range is relative to the report creation date on the report trigger.
               </div>
@@ -2375,17 +2375,18 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
 
 exports[`<ReportSettings /> panel render component 1`] = `
 <div
-  class="euiPanel euiPanel--paddingLarge euiPageContent"
+  class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow euiPageContent"
+  role="main"
 >
-  <div
-    class="euiPageHeader euiPageHeader--responsive"
+  <header
+    class="euiPageHeader euiPageHeader--responsive euiPageHeader--center"
   >
     <h2
       class="euiTitle euiTitle--medium"
     >
       Report settings
     </h2>
-  </div>
+  </header>
   <hr
     class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginLarge"
   />
@@ -2423,7 +2424,7 @@ exports[`<ReportSettings /> panel render component 1`] = `
                 class="euiFormControlLayout__childrenWrapper"
               >
                 <input
-                  aria-describedby="reportSettingsName-help"
+                  aria-describedby="reportSettingsName-help-0"
                   class="euiFieldText"
                   id="reportSettingsName"
                   placeholder="Report name (e.g Log Traffic Daily Report)"
@@ -2434,7 +2435,7 @@ exports[`<ReportSettings /> panel render component 1`] = `
             </div>
             <div
               class="euiFormHelpText euiFormRow__text"
-              id="reportSettingsName-help"
+              id="reportSettingsName-help-0"
             >
               Valid characters are a-z, A-Z, 0-9, (), [], _ (underscore), - (hyphen) and (space).
             </div>
@@ -2701,7 +2702,6 @@ exports[`<ReportSettings /> panel render component 1`] = `
                   >
                     <div
                       class="euiPopover euiPopover--anchorDownLeft"
-                      id="QuickSelectPopover"
                     >
                       <div
                         class="euiPopover__anchor euiQuickSelectPopover__anchor"
@@ -2717,7 +2717,7 @@ exports[`<ReportSettings /> panel render component 1`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiIcon-isLoading euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiIcon-isLoading euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -2767,7 +2767,7 @@ exports[`<ReportSettings /> panel render component 1`] = `
               </div>
               <div
                 class="euiFormHelpText euiFormRow__text"
-                id="random_html_id-help"
+                id="random_html_id-help-0"
               >
                 Time range is relative to the report creation date on the report trigger.
               </div>
@@ -2981,17 +2981,18 @@ exports[`<ReportSettings /> panel render component 1`] = `
 
 exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
 <div
-  class="euiPanel euiPanel--paddingLarge euiPageContent"
+  class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow euiPageContent"
+  role="main"
 >
-  <div
-    class="euiPageHeader euiPageHeader--responsive"
+  <header
+    class="euiPageHeader euiPageHeader--responsive euiPageHeader--center"
   >
     <h2
       class="euiTitle euiTitle--medium"
     >
       Report settings
     </h2>
-  </div>
+  </header>
   <hr
     class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginLarge"
   />
@@ -3029,7 +3030,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
                 class="euiFormControlLayout__childrenWrapper"
               >
                 <input
-                  aria-describedby="reportSettingsName-help"
+                  aria-describedby="reportSettingsName-help-0"
                   class="euiFieldText"
                   id="reportSettingsName"
                   placeholder="Report name (e.g Log Traffic Daily Report)"
@@ -3040,7 +3041,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
             </div>
             <div
               class="euiFormHelpText euiFormRow__text"
-              id="reportSettingsName-help"
+              id="reportSettingsName-help-0"
             >
               Valid characters are a-z, A-Z, 0-9, (), [], _ (underscore), - (hyphen) and (space).
             </div>
@@ -3316,7 +3317,6 @@ exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
                   >
                     <div
                       class="euiPopover euiPopover--anchorDownLeft"
-                      id="QuickSelectPopover"
                     >
                       <div
                         class="euiPopover__anchor euiQuickSelectPopover__anchor"
@@ -3332,7 +3332,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -3392,7 +3392,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
               </div>
               <div
                 class="euiFormHelpText euiFormRow__text"
-                id="random_html_id-help"
+                id="random_html_id-help-0"
               >
                 Time range is relative to the report creation date on the report trigger.
               </div>
@@ -3606,17 +3606,18 @@ exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
 
 exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
 <div
-  class="euiPanel euiPanel--paddingLarge euiPageContent"
+  class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow euiPageContent"
+  role="main"
 >
-  <div
-    class="euiPageHeader euiPageHeader--responsive"
+  <header
+    class="euiPageHeader euiPageHeader--responsive euiPageHeader--center"
   >
     <h2
       class="euiTitle euiTitle--medium"
     >
       Report settings
     </h2>
-  </div>
+  </header>
   <hr
     class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginLarge"
   />
@@ -3654,7 +3655,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
                 class="euiFormControlLayout__childrenWrapper"
               >
                 <input
-                  aria-describedby="reportSettingsName-help"
+                  aria-describedby="reportSettingsName-help-0"
                   class="euiFieldText"
                   id="reportSettingsName"
                   placeholder="Report name (e.g Log Traffic Daily Report)"
@@ -3665,7 +3666,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
             </div>
             <div
               class="euiFormHelpText euiFormRow__text"
-              id="reportSettingsName-help"
+              id="reportSettingsName-help-0"
             >
               Valid characters are a-z, A-Z, 0-9, (), [], _ (underscore), - (hyphen) and (space).
             </div>
@@ -3941,7 +3942,6 @@ exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
                   >
                     <div
                       class="euiPopover euiPopover--anchorDownLeft"
-                      id="QuickSelectPopover"
                     >
                       <div
                         class="euiPopover__anchor euiQuickSelectPopover__anchor"
@@ -3957,7 +3957,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -4017,7 +4017,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
               </div>
               <div
                 class="euiFormHelpText euiFormRow__text"
-                id="random_html_id-help"
+                id="random_html_id-help-0"
               >
                 Time range is relative to the report creation date on the report trigger.
               </div>
@@ -4231,17 +4231,18 @@ exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
 
 exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
 <div
-  class="euiPanel euiPanel--paddingLarge euiPageContent"
+  class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow euiPageContent"
+  role="main"
 >
-  <div
-    class="euiPageHeader euiPageHeader--responsive"
+  <header
+    class="euiPageHeader euiPageHeader--responsive euiPageHeader--center"
   >
     <h2
       class="euiTitle euiTitle--medium"
     >
       Report settings
     </h2>
-  </div>
+  </header>
   <hr
     class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginLarge"
   />
@@ -4279,7 +4280,7 @@ exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
                 class="euiFormControlLayout__childrenWrapper"
               >
                 <input
-                  aria-describedby="reportSettingsName-help"
+                  aria-describedby="reportSettingsName-help-0"
                   class="euiFieldText"
                   id="reportSettingsName"
                   placeholder="Report name (e.g Log Traffic Daily Report)"
@@ -4290,7 +4291,7 @@ exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
             </div>
             <div
               class="euiFormHelpText euiFormRow__text"
-              id="reportSettingsName-help"
+              id="reportSettingsName-help-0"
             >
               Valid characters are a-z, A-Z, 0-9, (), [], _ (underscore), - (hyphen) and (space).
             </div>
@@ -4566,7 +4567,6 @@ exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
                   >
                     <div
                       class="euiPopover euiPopover--anchorDownLeft"
-                      id="QuickSelectPopover"
                     >
                       <div
                         class="euiPopover__anchor euiQuickSelectPopover__anchor"
@@ -4582,7 +4582,7 @@ exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -4642,7 +4642,7 @@ exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
               </div>
               <div
                 class="euiFormHelpText euiFormRow__text"
-                id="random_html_id-help"
+                id="random_html_id-help-0"
               >
                 Time range is relative to the report creation date on the report trigger.
               </div>
@@ -4856,17 +4856,18 @@ exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
 
 exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
 <div
-  class="euiPanel euiPanel--paddingLarge euiPageContent"
+  class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow euiPageContent"
+  role="main"
 >
-  <div
-    class="euiPageHeader euiPageHeader--responsive"
+  <header
+    class="euiPageHeader euiPageHeader--responsive euiPageHeader--center"
   >
     <h2
       class="euiTitle euiTitle--medium"
     >
       Report settings
     </h2>
-  </div>
+  </header>
   <hr
     class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginLarge"
   />
@@ -4904,7 +4905,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
                 class="euiFormControlLayout__childrenWrapper"
               >
                 <input
-                  aria-describedby="reportSettingsName-help"
+                  aria-describedby="reportSettingsName-help-0"
                   class="euiFieldText"
                   id="reportSettingsName"
                   placeholder="Report name (e.g Log Traffic Daily Report)"
@@ -4915,7 +4916,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
             </div>
             <div
               class="euiFormHelpText euiFormRow__text"
-              id="reportSettingsName-help"
+              id="reportSettingsName-help-0"
             >
               Valid characters are a-z, A-Z, 0-9, (), [], _ (underscore), - (hyphen) and (space).
             </div>
@@ -5191,7 +5192,6 @@ exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
                   >
                     <div
                       class="euiPopover euiPopover--anchorDownLeft"
-                      id="QuickSelectPopover"
                     >
                       <div
                         class="euiPopover__anchor euiQuickSelectPopover__anchor"
@@ -5207,7 +5207,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -5267,7 +5267,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
               </div>
               <div
                 class="euiFormHelpText euiFormRow__text"
-                id="random_html_id-help"
+                id="random_html_id-help-0"
               >
                 Time range is relative to the report creation date on the report trigger.
               </div>
@@ -5481,17 +5481,18 @@ exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
 
 exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
 <div
-  class="euiPanel euiPanel--paddingLarge euiPageContent"
+  class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow euiPageContent"
+  role="main"
 >
-  <div
-    class="euiPageHeader euiPageHeader--responsive"
+  <header
+    class="euiPageHeader euiPageHeader--responsive euiPageHeader--center"
   >
     <h2
       class="euiTitle euiTitle--medium"
     >
       Report settings
     </h2>
-  </div>
+  </header>
   <hr
     class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginLarge"
   />
@@ -5529,7 +5530,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
                 class="euiFormControlLayout__childrenWrapper"
               >
                 <input
-                  aria-describedby="reportSettingsName-help"
+                  aria-describedby="reportSettingsName-help-0"
                   class="euiFieldText"
                   id="reportSettingsName"
                   placeholder="Report name (e.g Log Traffic Daily Report)"
@@ -5540,7 +5541,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
             </div>
             <div
               class="euiFormHelpText euiFormRow__text"
-              id="reportSettingsName-help"
+              id="reportSettingsName-help-0"
             >
               Valid characters are a-z, A-Z, 0-9, (), [], _ (underscore), - (hyphen) and (space).
             </div>
@@ -5816,7 +5817,6 @@ exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
                   >
                     <div
                       class="euiPopover euiPopover--anchorDownLeft"
-                      id="QuickSelectPopover"
                     >
                       <div
                         class="euiPopover__anchor euiQuickSelectPopover__anchor"
@@ -5832,7 +5832,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -5892,7 +5892,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
               </div>
               <div
                 class="euiFormHelpText euiFormRow__text"
-                id="random_html_id-help"
+                id="random_html_id-help-0"
               >
                 Time range is relative to the report creation date on the report trigger.
               </div>
@@ -6106,17 +6106,18 @@ exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
 
 exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
 <div
-  class="euiPanel euiPanel--paddingLarge euiPageContent"
+  class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow euiPageContent"
+  role="main"
 >
-  <div
-    class="euiPageHeader euiPageHeader--responsive"
+  <header
+    class="euiPageHeader euiPageHeader--responsive euiPageHeader--center"
   >
     <h2
       class="euiTitle euiTitle--medium"
     >
       Report settings
     </h2>
-  </div>
+  </header>
   <hr
     class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginLarge"
   />
@@ -6154,7 +6155,7 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
                 class="euiFormControlLayout__childrenWrapper"
               >
                 <input
-                  aria-describedby="reportSettingsName-help"
+                  aria-describedby="reportSettingsName-help-0"
                   class="euiFieldText"
                   id="reportSettingsName"
                   placeholder="Report name (e.g Log Traffic Daily Report)"
@@ -6165,7 +6166,7 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
             </div>
             <div
               class="euiFormHelpText euiFormRow__text"
-              id="reportSettingsName-help"
+              id="reportSettingsName-help-0"
             >
               Valid characters are a-z, A-Z, 0-9, (), [], _ (underscore), - (hyphen) and (space).
             </div>
@@ -6437,7 +6438,6 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
                   >
                     <div
                       class="euiPopover euiPopover--anchorDownLeft"
-                      id="QuickSelectPopover"
                     >
                       <div
                         class="euiPopover__anchor euiQuickSelectPopover__anchor"
@@ -6453,7 +6453,7 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -6541,7 +6541,7 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
               </div>
               <div
                 class="euiFormHelpText euiFormRow__text"
-                id="random_html_id-help"
+                id="random_html_id-help-0"
               >
                 Time range is relative to the report creation date on the report trigger.
               </div>
@@ -7289,17 +7289,18 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
 
 exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
 <div
-  class="euiPanel euiPanel--paddingLarge euiPageContent"
+  class="euiPanel euiPanel--paddingLarge euiPanel--borderRadiusMedium euiPanel--plain euiPanel--hasShadow euiPageContent"
+  role="main"
 >
-  <div
-    class="euiPageHeader euiPageHeader--responsive"
+  <header
+    class="euiPageHeader euiPageHeader--responsive euiPageHeader--center"
   >
     <h2
       class="euiTitle euiTitle--medium"
     >
       Report settings
     </h2>
-  </div>
+  </header>
   <hr
     class="euiHorizontalRule euiHorizontalRule--full euiHorizontalRule--marginLarge"
   />
@@ -7337,7 +7338,7 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
                 class="euiFormControlLayout__childrenWrapper"
               >
                 <input
-                  aria-describedby="reportSettingsName-help"
+                  aria-describedby="reportSettingsName-help-0"
                   class="euiFieldText"
                   id="reportSettingsName"
                   placeholder="Report name (e.g Log Traffic Daily Report)"
@@ -7348,7 +7349,7 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
             </div>
             <div
               class="euiFormHelpText euiFormRow__text"
-              id="reportSettingsName-help"
+              id="reportSettingsName-help-0"
             >
               Valid characters are a-z, A-Z, 0-9, (), [], _ (underscore), - (hyphen) and (space).
             </div>
@@ -7620,7 +7621,6 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
                   >
                     <div
                       class="euiPopover euiPopover--anchorDownLeft"
-                      id="QuickSelectPopover"
                     >
                       <div
                         class="euiPopover__anchor euiQuickSelectPopover__anchor"
@@ -7636,7 +7636,7 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
                           >
                             <svg
                               aria-hidden="true"
-                              class="euiIcon euiIcon--medium euiButtonContent__icon"
+                              class="euiIcon euiIcon--small euiIcon--inherit euiButtonContent__icon"
                               focusable="false"
                               height="16"
                               role="img"
@@ -7724,7 +7724,7 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
               </div>
               <div
                 class="euiFormHelpText euiFormRow__text"
-                id="random_html_id-help"
+                id="random_html_id-help-0"
               >
                 Time range is relative to the report creation date on the report trigger.
               </div>
