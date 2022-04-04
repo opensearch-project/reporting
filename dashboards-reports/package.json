@@ -21,7 +21,7 @@
     "cron-validator": "^1.1.1",
     "dompurify": "^2.1.1",
     "elastic-builder": "^2.7.1",
-    "enzyme-adapter-react-16": "^1.15.2",
+    "enzyme-adapter-react-16": "^1.15.5",
     "jest-fetch-mock": "^3.0.3",
     "jquery": "^3.5.0",
     "jsdom": "13.1.0",

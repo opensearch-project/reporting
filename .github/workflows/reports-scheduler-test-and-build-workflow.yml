@@ -2,17 +2,14 @@ name: Test and Build Reports Scheduler
 
 on: [push, pull_request]
 
-env:
-  OPENSEARCH_VERSION: '1.3.0-SNAPSHOT'
-
 jobs:
   build:
     strategy:
       matrix:
         java:
-          - 8
           - 11
           - 14
+          - 17
     runs-on: ubuntu-latest
 
     steps:
@@ -35,7 +32,7 @@ jobs:
       - name: Build with Gradle
         run: |
           cd reports-scheduler
-          ./gradlew build -Dopensearch.version=${{ env.OPENSEARCH_VERSION }}
+          ./gradlew build
 
       - name: Upload coverage
         uses: codecov/codecov-action@v1

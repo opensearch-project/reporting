@@ -66,7 +66,7 @@ internal object ReportInstancesIndex {
             val indexMappingSource = classLoader.getResource(REPORT_INSTANCES_MAPPING_FILE_NAME)?.readText()!!
             val indexSettingsSource = classLoader.getResource(REPORT_INSTANCES_SETTINGS_FILE_NAME)?.readText()!!
             val request = CreateIndexRequest(REPORT_INSTANCES_INDEX_NAME)
-                .mapping(MAPPING_TYPE, indexMappingSource, XContentType.YAML)
+                .mapping(indexMappingSource, XContentType.YAML)
                 .settings(indexSettingsSource, XContentType.YAML)
             try {
                 val actionFuture = client.admin().indices().create(request)

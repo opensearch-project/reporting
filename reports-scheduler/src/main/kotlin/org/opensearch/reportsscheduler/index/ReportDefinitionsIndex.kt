@@ -5,16 +5,6 @@
 
 package org.opensearch.reportsscheduler.index
 
-import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
-import org.opensearch.reportsscheduler.metrics.Metrics
-import org.opensearch.reportsscheduler.model.ReportDefinitionDetails
-import org.opensearch.reportsscheduler.model.ReportDefinitionDetailsSearchResults
-import org.opensearch.reportsscheduler.model.RestTag.ACCESS_LIST_FIELD
-import org.opensearch.reportsscheduler.model.RestTag.TENANT_FIELD
-import org.opensearch.reportsscheduler.model.RestTag.UPDATED_TIME_FIELD
-import org.opensearch.reportsscheduler.settings.PluginSettings
-import org.opensearch.reportsscheduler.util.SecureIndexClient
-import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.ResourceAlreadyExistsException
 import org.opensearch.action.DocWriteResponse
 import org.opensearch.action.admin.indices.create.CreateIndexRequest
@@ -30,6 +20,16 @@ import org.opensearch.common.xcontent.LoggingDeprecationHandler
 import org.opensearch.common.xcontent.NamedXContentRegistry
 import org.opensearch.common.xcontent.XContentType
 import org.opensearch.index.query.QueryBuilders
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
+import org.opensearch.reportsscheduler.metrics.Metrics
+import org.opensearch.reportsscheduler.model.ReportDefinitionDetails
+import org.opensearch.reportsscheduler.model.ReportDefinitionDetailsSearchResults
+import org.opensearch.reportsscheduler.model.RestTag.ACCESS_LIST_FIELD
+import org.opensearch.reportsscheduler.model.RestTag.TENANT_FIELD
+import org.opensearch.reportsscheduler.model.RestTag.UPDATED_TIME_FIELD
+import org.opensearch.reportsscheduler.settings.PluginSettings
+import org.opensearch.reportsscheduler.util.SecureIndexClient
+import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.search.builder.SearchSourceBuilder
 import java.util.concurrent.TimeUnit
 
@@ -66,7 +66,7 @@ internal object ReportDefinitionsIndex {
             val indexMappingSource = classLoader.getResource(REPORT_DEFINITIONS_MAPPING_FILE_NAME)?.readText()!!
             val indexSettingsSource = classLoader.getResource(REPORT_DEFINITIONS_SETTINGS_FILE_NAME)?.readText()!!
             val request = CreateIndexRequest(REPORT_DEFINITIONS_INDEX_NAME)
-                .mapping(MAPPING_TYPE, indexMappingSource, XContentType.YAML)
+                .mapping(indexMappingSource, XContentType.YAML)
                 .settings(indexSettingsSource, XContentType.YAML)
             try {
                 val actionFuture = client.admin().indices().create(request)
@@ -131,9 +131,11 @@ internal object ReportDefinitionsIndex {
             log.warn("$LOG_PREFIX:getReportDefinition - $id not found; response:$response")
             null
         } else {
-            val parser = XContentType.JSON.xContent().createParser(NamedXContentRegistry.EMPTY,
+            val parser = XContentType.JSON.xContent().createParser(
+                NamedXContentRegistry.EMPTY,
                 LoggingDeprecationHandler.INSTANCE,
-                response.sourceAsString)
+                response.sourceAsString
+            )
             parser.nextToken()
             ReportDefinitionDetails.parse(parser, id)
         }
@@ -170,8 +172,10 @@ internal object ReportDefinitionsIndex {
         val actionFuture = client.search(searchRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         val result = ReportDefinitionDetailsSearchResults(from.toLong(), response)
-        log.info("$LOG_PREFIX:getAllReportDefinitions from:$from, maxItems:$maxItems," +
-            " retCount:${result.objectList.size}, totalCount:${result.totalHits}")
+        log.info(
+            "$LOG_PREFIX:getAllReportDefinitions from:$from, maxItems:$maxItems," +
+                " retCount:${result.objectList.size}, totalCount:${result.totalHits}"
+        )
         return result
     }
 
