@@ -251,6 +251,8 @@ Zip bundle = (Zip) project.getTasks().getByName("bundlePlugin");
 integTest.dependsOn(bundle)
 integTest.getClusters().forEach{c -> c.plugin(project.getObjects().fileProperty().value(bundle.getArchiveFile()))}
 
+String jobSchedulerURL = "https://ci.opensearch.org/ci/dbc/distribution-build-opensearch/" + opensearch_version.replace("-SNAPSHOT", "") + "/latest/linux/x64/builds/opensearch/plugins/opensearch-job-scheduler-" + opensearch_build.replace("-SNAPSHOT", "") + ".zip"
+
 testClusters.integTest {
     testDistribution = "INTEG_TEST"
     // need to install job-scheduler first, need to assemble job-scheduler first
@@ -260,6 +262,14 @@ testClusters.integTest {
             return new RegularFile() {
                 @Override
                 File getAsFile() {
+                    File dir = new File("src/test/resources/job-scheduler")
+                    if (!dir.exists()) {
+                        dir.mkdirs()
+                    }
+                    File file = new File(dir, "opensearch-job-scheduler-" + opensearch_build + ".zip")
+                    if (!file.exists()) {
+                        new URL(jobSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
+                    }
                     return fileTree("src/test/resources/job-scheduler").getSingleFile()
                 }
             }
@@ -285,6 +295,8 @@ testClusters.integTest {
 String bwcVersion = "1.13.0.0"
 String baseName = "reportsSchedulerBwcCluster"
 String bwcFilePath = "src/test/resources/bwc"
+String bwcJobSchedulerURL = "https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-job-scheduler/opendistro-job-scheduler-" + bwcVersion + ".zip"
+String bwcReportsSchedulerURL = "https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-reports-scheduler/opendistro-reports-scheduler-" + bwcVersion + ".zip"
 
 2.times {i ->
     testClusters {
@@ -298,6 +310,14 @@ String bwcFilePath = "src/test/resources/bwc"
                     return new RegularFile() {
                         @Override
                         File getAsFile() {
+                            File dir = new File(bwcFilePath + "/job-scheduler/" + bwcVersion)
+                            if (!dir.exists()) {
+                                dir.mkdirs()
+                            }
+                            File file = new File(dir, "opendistro-job-scheduler-" + bwcVersion + ".zip")
+                            if (!file.exists()) {
+                                new URL(bwcJobSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
+                            }
                             return fileTree(bwcFilePath + "/job-scheduler/" + bwcVersion).getSingleFile()
                         }
                     }
@@ -309,6 +329,14 @@ String bwcFilePath = "src/test/resources/bwc"
                     return new RegularFile() {
                         @Override
                         File getAsFile() {
+                            File dir = new File(bwcFilePath + "/reports-scheduler/" + bwcVersion)
+                            if (!dir.exists()) {
+                                dir.mkdirs()
+                            }
+                            File file = new File(dir, "opendistro-reports-scheduler-" + bwcVersion + ".zip")
+                            if (!file.exists()) {
+                                new URL(bwcReportsSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
+                            }
                             return fileTree(bwcFilePath + "/reports-scheduler/" + bwcVersion).getSingleFile()
                         }
                     }
@@ -333,6 +361,14 @@ task prepareBwcTests {
                         return new RegularFile() {
                             @Override
                             File getAsFile() {
+                                File dir = new File(bwcFilePath + "/job-scheduler/" + project.version)
+                                if (!dir.exists()) {
+                                    dir.mkdirs()
+                                }
+                                File file = new File(dir, "opendistro-reports-scheduler-" + project.version + ".zip")
+                                if (!file.exists()) {
+                                    new URL(jobSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
+                                }
                                 return fileTree(bwcFilePath + "/job-scheduler/" + project.version).getSingleFile()
                             }
                         }
