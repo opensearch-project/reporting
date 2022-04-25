@@ -1,0 +1,171 @@
+/*
+ * Copyright OpenSearch Contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import puppeteer from 'puppeteer-core';
+import createDOMPurify from 'dompurify';
+import { JSDOM } from 'jsdom';
+import { CHROMIUM_PATH, REPORT_TYPES, FORMAT } from './constants.js';
+
+
+export async function downloadVisualReport(url, type, object_id, format) {
+  const window = new JSDOM('').window;
+  const DOMPurify = createDOMPurify(window);
+
+  const browser = await puppeteer.launch({
+    headless: true,
+    /**
+     * TODO: temp fix to disable sandbox when launching chromium on Linux instance
+     * https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#setting-up-chrome-linux-sandbox
+     */
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-gpu',
+      '--no-zygote',
+      '--single-process',
+      '--font-render-hinting=none',
+    ],
+    executablePath: CHROMIUM_PATH,
+    ignoreHTTPSErrors: true,
+    env: {
+      TZ: 'UTC', // leave as UTC for now
+    },
+  });
+
+  const page = await browser.newPage();
+  page.setDefaultNavigationTimeout(0);
+  page.setDefaultTimeout(100000);
+
+  let queryUrl = '';
+  if (url != undefined) {
+    queryUrl = url;
+  }
+  else {
+    queryUrl = 'localhost:5601/app/';
+    // create URL from report source type and saved object ID
+    if (type.toUpperCase() === 'DASHBOARD') {
+      queryUrl += REPORT_TYPES.DASHBOARD;
+    }
+    else if (type.toUpperCase() === 'VISUALIZATION') {
+      queryUrl += REPORT_TYPES.VISUALIZATION;
+    }
+    else if (type.toUpperCase() === 'SAVED SEARCH') {
+      queryUrl += REPORT_TYPES.SAVED_SEARCH;
+    }
+    else if (type.toUpperCase() === 'NOTEBOOK') {
+      queryUrl += REPORT_TYPES.NOTEBOOK;
+    }
+    queryUrl += '/' + object_id;
+  }
+  await page.goto(queryUrl, { waitUntil: 'networkidle0' });
+  await page.setViewport({
+    width: 1680, // temp constants
+    height: 2560,
+  });
+
+  // if its a report 
+  await page.evaluate(
+    /* istanbul ignore next */
+    (reportSource, REPORT_TYPE) => {
+      // remove buttons
+      document
+        .querySelectorAll("[class^='euiButton']")
+        .forEach((e) => e.remove());
+      // remove top navBar
+      document
+        .querySelectorAll("[class^='euiHeader']")
+        .forEach((e) => e.remove());
+      // remove visualization editor
+      if (reportSource === REPORT_TYPE.visualization) {
+        document
+          .querySelector('[data-test-subj="splitPanelResizer"]')
+          ?.remove();
+        document.querySelector('.visEditor__collapsibleSidebar')?.remove();
+      }
+      document.body.style.paddingTop = '0px';
+    },
+    reportSource,
+    REPORT_TYPE
+  );
+  
+    // force wait for any resize to load after the above DOM modification
+    await page.waitFor(1000);
+    switch (reportSource) {
+      case REPORT_TYPE.dashboard:
+        await page.waitForSelector(SELECTOR.dashboard, {
+          visible: true,
+        });
+        break;
+      case REPORT_TYPE.visualization:
+        await page.waitForSelector(SELECTOR.visualization, {
+          visible: true,
+        });
+        break;
+      case REPORT_TYPE.notebook:
+        await page.waitForSelector(SELECTOR.notebook, {
+          visible: true,
+        });
+        break;
+      default:
+        throw Error(
+          `report source can only be one of [Dashboard, Visualization]`
+        );
+    }
+
+    await waitForDynamicContent(page);
+}
+
+const waitForDynamicContent = async (
+  page,
+  timeout = 30000,
+  interval = 1000,
+  checks = 5
+) => {
+  const maxChecks = timeout / interval;
+  let passedChecks = 0;
+  let previousLength = 0;
+
+  let i = 0;
+  while (i++ <= maxChecks) {
+    let pageContent = await page.content();
+    let currentLength = pageContent.length;
+
+    previousLength === 0 || previousLength != currentLength
+      ? (passedChecks = 0)
+      : passedChecks++;
+    if (passedChecks >= checks) {
+      break;
+    }
+
+    previousLength = currentLength;
+    await page.waitFor(interval);
+  }
+
+  let buffer;
+  // create pdf or png accordingly
+  if (format === FORMAT.PDF) {
+    const scrollHeight = await page.evaluate(
+      /* istanbul ignore next */
+      () => document.documentElement.scrollHeight
+    );
+
+    buffer = await page.pdf({
+      margin: undefined,
+      width: windowWidth,
+      height: scrollHeight + 'px',
+      printBackground: true,
+      pageRanges: '1',
+    });
+  } else if (format === FORMAT.PNG) {
+    buffer = await page.screenshot({
+      fullPage: true,
+    });
+  }
+
+  const curTime = new Date();
+  const timeCreated = curTime.valueOf();
+  await browser.close();
+  return { timeCreated, dataUrl: buffer.toString('base64'), fileName };
+};
