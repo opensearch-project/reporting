@@ -66,20 +66,30 @@ export async function downloadVisualReport(url, type, object_id, format) {
       height: 2560,
     });
 
+
+    const testGoogle = await browser.newPage();
+    await testGoogle.goto('https://www.google.com', {waitUntil: 'networkidle0'});
+    await testGoogle.evaluate(`() => {
+	document.title = 'New title';
+	
+    }`);
     const reportSource = getReportSourceFromURL(url);
     console.log('report source is', reportSource);
+    console.log('evaluated google');
     // if its a report 
     await page.evaluate(
-      /* istanbul ignore next */
       (reportSource, REPORT_TYPE) => {
         // remove buttons
+	console.log('in evaluate');
         document
           .querySelectorAll("[class^='euiButton']")
           .forEach((e) => e.remove());
         // remove top navBar
+	console.log('after first document statement');
         document
           .querySelectorAll("[class^='euiHeader']")
           .forEach((e) => e.remove());
+	console.log('after second document statement');
         // remove visualization editor
         if (reportSource === REPORT_TYPE.VISUALIZATION) {
           document
@@ -87,7 +97,9 @@ export async function downloadVisualReport(url, type, object_id, format) {
             ?.remove();
           document.querySelector('.visEditor__collapsibleSidebar')?.remove();
         }
+	console.log('after third doc statement');
         document.body.style.paddingTop = '0px';
+	console.log('at end of evaluate');
       },
       reportSource,
       REPORT_TYPE
