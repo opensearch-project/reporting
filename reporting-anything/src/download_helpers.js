@@ -69,27 +69,7 @@ export async function downloadVisualReport(url, type, object_id, format) {
     const reportSource = getReportSourceFromURL(url);
     console.log('report source is', reportSource);
     // if its a report 
-    await page.evaluate(
-      /* istanbul ignore next */
-      (reportSource) => {
-        // remove buttons
-        document.querySelectorAll("[class^='euiButton']")
-          .forEach((e) => e.remove());
-        // remove top navBar
-        document
-          .querySelectorAll("[class^='euiHeader']")
-          .forEach((e) => e.remove());
-        // remove visualization editor
-        if (reportSource === 'Visualization') {
-          document
-            .querySelector('[data-test-subj="splitPanelResizer"]')
-            ?.remove();
-          document.querySelector('.visEditor__collapsibleSidebar')?.remove();
-        }
-        document.body.style.paddingTop = '0px';
-      },
-      reportSource
-    );
+    await page.evaluate(puppeteerEvaluate(`(${puppeteerEvaluate(reportSource).toString()})()`));
     
       // force wait for any resize to load after the above DOM modification
       await page.waitFor(1000);
@@ -188,4 +168,23 @@ const getReportSourceFromURL = (url) => {
   else if (url.includes('notebooks')) {
     return 'Notebook';
   }
+}
+
+function puppeteerEvaluate(reportSource) {
+  // remove buttons
+  document
+    .querySelectorAll("[class^='euiButton']")
+    .forEach((e) => e.remove());
+  // remove top navBar
+  document
+    .querySelectorAll("[class^='euiHeader']")
+    .forEach((e) => e.remove());
+  // remove visualization editor
+  if (reportSource === 'Visualization') {
+    document
+      .querySelector('[data-test-subj="splitPanelResizer"]')
+      ?.remove();
+    document.querySelector('.visEditor__collapsibleSidebar')?.remove();
+  }
+  document.body.style.paddingTop = '0px';
 }
