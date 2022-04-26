@@ -66,20 +66,21 @@ export async function downloadVisualReport(url, type, object_id, format) {
       height: 2560,
     });
 
+    const reportSource = getReportSourceFromURL(url);
+    console.log('report source is', reportSource);
     // if its a report 
     await page.evaluate(
       /* istanbul ignore next */
-      (reportSource, REPORT_TYPE) => {
+      (reportSource) => {
         // remove buttons
-        document
-          .querySelectorAll("[class^='euiButton']")
+        document.querySelectorAll("[class^='euiButton']")
           .forEach((e) => e.remove());
         // remove top navBar
         document
           .querySelectorAll("[class^='euiHeader']")
           .forEach((e) => e.remove());
         // remove visualization editor
-        if (reportSource === REPORT_TYPE.visualization) {
+        if (reportSource === 'Visualization') {
           document
             .querySelector('[data-test-subj="splitPanelResizer"]')
             ?.remove();
@@ -87,24 +88,23 @@ export async function downloadVisualReport(url, type, object_id, format) {
         }
         document.body.style.paddingTop = '0px';
       },
-      reportSource,
-      REPORT_TYPE
+      reportSource
     );
     
       // force wait for any resize to load after the above DOM modification
       await page.waitFor(1000);
       switch (reportSource) {
-        case REPORT_TYPE.dashboard:
+        case 'Dashboard':
           await page.waitForSelector(SELECTOR.dashboard, {
             visible: true,
           });
           break;
-        case REPORT_TYPE.visualization:
+        case 'Visualization':
           await page.waitForSelector(SELECTOR.visualization, {
             visible: true,
           });
           break;
-        case REPORT_TYPE.notebook:
+        case 'Notebook':
           await page.waitForSelector(SELECTOR.notebook, {
             visible: true,
           });
@@ -118,6 +118,7 @@ export async function downloadVisualReport(url, type, object_id, format) {
       await waitForDynamicContent(page);
   } catch (e) {
     console.log('error is', e);
+    process.exit(1);
   }
 }
 
@@ -173,3 +174,18 @@ const waitForDynamicContent = async (
   await browser.close();
   return { timeCreated, dataUrl: buffer.toString('base64'), fileName };
 };
+
+const getReportSourceFromURL = (url) => {
+  if (url.includes('dashboards')) {
+    return 'Dashboard';
+  }
+  else if (url.includes('visualize')) {
+    return 'Visualization';
+  }
+  else if (url.includes('discover')) {
+    return 'Saved search';
+  }
+  else if (url.includes('notebooks')) {
+    return 'Notebook';
+  }
+}
