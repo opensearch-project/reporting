@@ -6,7 +6,7 @@
 import puppeteer from 'puppeteer-core';
 import createDOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
-import { CHROMIUM_PATH, REPORT_TYPES, FORMAT } from './constants.js';
+import { CHROMIUM_PATH, REPORT_TYPE_URLS, FORMAT, REPORT_TYPE } from './constants.js';
 
 
 export async function downloadVisualReport(url, type, object_id, format) {
@@ -47,16 +47,16 @@ export async function downloadVisualReport(url, type, object_id, format) {
       queryUrl = 'localhost:5601/app/';
       // create URL from report source type and saved object ID
       if (type.toUpperCase() === 'DASHBOARD') {
-        queryUrl += REPORT_TYPES.DASHBOARD;
+        queryUrl += REPORT_TYPE_URLS.DASHBOARD;
       }
       else if (type.toUpperCase() === 'VISUALIZATION') {
-        queryUrl += REPORT_TYPES.VISUALIZATION;
+        queryUrl += REPORT_TYPE_URLS.VISUALIZATION;
       }
       else if (type.toUpperCase() === 'SAVED SEARCH') {
-        queryUrl += REPORT_TYPES.SAVED_SEARCH;
+        queryUrl += REPORT_TYPE_URLS.SAVED_SEARCH;
       }
       else if (type.toUpperCase() === 'NOTEBOOK') {
-        queryUrl += REPORT_TYPES.NOTEBOOK;
+        queryUrl += REPORT_TYPE_URLS.NOTEBOOK;
       }
       queryUrl += '/' + object_id;
     }
@@ -69,7 +69,29 @@ export async function downloadVisualReport(url, type, object_id, format) {
     const reportSource = getReportSourceFromURL(url);
     console.log('report source is', reportSource);
     // if its a report 
-    await page.evaluate(puppeteerEvaluate(`(${puppeteerEvaluate(reportSource).toString()})()`));
+    await page.evaluate(
+      /* istanbul ignore next */
+      (reportSource, REPORT_TYPE) => {
+        // remove buttons
+        document
+          .querySelectorAll("[class^='euiButton']")
+          .forEach((e) => e.remove());
+        // remove top navBar
+        document
+          .querySelectorAll("[class^='euiHeader']")
+          .forEach((e) => e.remove());
+        // remove visualization editor
+        if (reportSource === REPORT_TYPE.VISUALIZATION) {
+          document
+            .querySelector('[data-test-subj="splitPanelResizer"]')
+            ?.remove();
+          document.querySelector('.visEditor__collapsibleSidebar')?.remove();
+        }
+        document.body.style.paddingTop = '0px';
+      },
+      reportSource,
+      REPORT_TYPE
+    );
     
       // force wait for any resize to load after the above DOM modification
       await page.waitFor(1000);
