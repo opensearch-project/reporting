@@ -5,12 +5,6 @@
 
 export const CHROMIUM_PATH = '../.chromium/headless_shell';
 
-export const REPORT_TYPE_URLS = {
-  DASHBOARD: 'dashboards#/view',
-  VISUALIZATION: 'visualize#/edit',
-  NOTEBOOK: 'observability-dashboards#/notebooks'
-}
-
 export const REPORT_TYPE = {
   DASHBOARD: 'Dashboard',
   VISUALIZATION: 'Visualization',

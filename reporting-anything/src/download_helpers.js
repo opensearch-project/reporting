@@ -4,15 +4,13 @@
  */
 
 import puppeteer from 'puppeteer-core';
-import createDOMPurify from 'dompurify';
 import fs from 'fs';
 import { JSDOM } from 'jsdom';
-import { CHROMIUM_PATH, REPORT_TYPE_URLS, FORMAT, REPORT_TYPE, SELECTOR } from './constants.js';
+import { CHROMIUM_PATH, FORMAT, REPORT_TYPE, SELECTOR } from './constants.js';
 
 
-export async function downloadVisualReport(url, type, object_id, format, width, height) {
+export async function downloadVisualReport(url, format, width, height, filename) {
   const window = new JSDOM('').window;
-  const DOMPurify = createDOMPurify(window);
 
   try {
     const browser = await puppeteer.launch({
@@ -40,37 +38,13 @@ export async function downloadVisualReport(url, type, object_id, format, width, 
     page.setDefaultNavigationTimeout(0);
     page.setDefaultTimeout(100000);
 
-    let queryUrl = '';
-    if (url != undefined) {
-      queryUrl = url;
-    }
-    else {
-      queryUrl = 'http://localhost:5601/app/';
-      // create URL from report source type and saved object ID
-      if (type.toUpperCase() === 'DASHBOARD') {
-        queryUrl += REPORT_TYPE_URLS.DASHBOARD;
-      }
-      else if (type.toUpperCase() === 'VISUALIZATION') {
-        queryUrl += REPORT_TYPE_URLS.VISUALIZATION;
-      }
-      else if (type.toUpperCase() === 'NOTEBOOK') {
-        queryUrl += REPORT_TYPE_URLS.NOTEBOOK;
-      }
-      queryUrl += '/' + object_id;
-    }
-    await page.goto(queryUrl, { waitUntil: 'networkidle0' });
+    await page.goto(url, { waitUntil: 'networkidle0' });
     await page.setViewport({
       width: width,
       height: height,
     });
 
-    let reportSource;
-    if (url !== undefined) {
-      reportSource = getReportSourceFromURL(url);
-    }
-    else {
-      reportSource = type;
-    }
+    const reportSource = getReportSourceFromURL(url);
 
     // if its an OpenSearch report, remove extra elements
     if (reportSource !== 'Other') {
@@ -143,7 +117,7 @@ export async function downloadVisualReport(url, type, object_id, format, width, 
         });
       }
     
-      const fileName = `reporting_anything.${format}`;
+      const fileName = `${filename}.${format}`;
       const curTime = new Date();
       const timeCreated = curTime.valueOf();
       await browser.close();
@@ -209,6 +183,6 @@ export const readStreamToFile = async (
 };
 
 export const getFileFormatPrefix = (fileFormat) => {
-  var fileFormatPrefix = 'data:' + fileFormat + ';base64,';
+  const fileFormatPrefix = 'data:' + fileFormat + ';base64,';
   return fileFormatPrefix;
 };
