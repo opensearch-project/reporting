@@ -1,7 +1,7 @@
 {
   "id": "reportsDashboards",
-  "version": "1.3.1.0",
-  "opensearchDashboardsVersion": "1.3.1",
+  "version": "1.3.2.0",
+  "opensearchDashboardsVersion": "1.3.2",
   "requiredPlugins": ["navigation", "data", "opensearchDashboardsUtils"],
   "optionalPlugins": ["share"],
   "server": true,
