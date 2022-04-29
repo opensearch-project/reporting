@@ -27,12 +27,16 @@ import org.opensearch.client.ResponseException
 import org.opensearch.client.RestClient
 import org.opensearch.client.RestClientBuilder
 import org.opensearch.client.WarningFailureException
+import org.opensearch.client.WarningsHandler
+import org.opensearch.common.io.PathUtils
 import org.opensearch.common.settings.Settings
 import org.opensearch.common.unit.TimeValue
 import org.opensearch.common.util.concurrent.ThreadContext
 import org.opensearch.common.xcontent.DeprecationHandler
 import org.opensearch.common.xcontent.NamedXContentRegistry
 import org.opensearch.common.xcontent.XContentType
+import org.opensearch.commons.ConfigConstants
+import org.opensearch.commons.rest.SecureRestClientBuilder
 import org.opensearch.test.rest.OpenSearchRestTestCase
 import java.io.BufferedReader
 import java.io.IOException
