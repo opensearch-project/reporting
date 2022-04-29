@@ -6,17 +6,7 @@
 package org.opensearch.integTest
 
 import com.google.gson.JsonObject
-import org.apache.http.Header
 import org.apache.http.HttpHost
-import org.apache.http.auth.AuthScope
-import org.apache.http.auth.UsernamePasswordCredentials
-import org.apache.http.client.CredentialsProvider
-import org.apache.http.client.config.RequestConfig
-import org.apache.http.conn.ssl.NoopHostnameVerifier
-import org.apache.http.impl.client.BasicCredentialsProvider
-import org.apache.http.impl.nio.client.HttpAsyncClientBuilder
-import org.apache.http.message.BasicHeader
-import org.apache.http.ssl.SSLContextBuilder
 import org.junit.After
 import org.junit.AfterClass
 import org.junit.Before
@@ -25,13 +15,10 @@ import org.opensearch.client.RequestOptions
 import org.opensearch.client.Response
 import org.opensearch.client.ResponseException
 import org.opensearch.client.RestClient
-import org.opensearch.client.RestClientBuilder
 import org.opensearch.client.WarningFailureException
 import org.opensearch.client.WarningsHandler
 import org.opensearch.common.io.PathUtils
 import org.opensearch.common.settings.Settings
-import org.opensearch.common.unit.TimeValue
-import org.opensearch.common.util.concurrent.ThreadContext
 import org.opensearch.common.xcontent.DeprecationHandler
 import org.opensearch.common.xcontent.NamedXContentRegistry
 import org.opensearch.common.xcontent.XContentType
@@ -44,7 +31,6 @@ import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.security.cert.X509Certificate
 import javax.management.MBeanServerInvocationHandler
 import javax.management.ObjectName
 import javax.management.remote.JMXConnectorFactory
