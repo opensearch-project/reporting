@@ -1,12 +1,16 @@
+#!/usr/bin/env node
 /*
  * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
  */
 
+
 import _ from 'lodash';
 import { ArgumentParser } from 'argparse';
 import { exit } from 'process';
 import { downloadVisualReport } from './download_helpers.js';
+
+"use strict";
 
 // url OR report source type and ID
 const parser = new ArgumentParser({
@@ -18,6 +22,7 @@ parser.add_argument('-f', '--format', {help: 'File format of the report'});
 parser.add_argument('-w', '--width', { help: 'Window width of the report'});
 parser.add_argument('-t', '--height', {help: 'Window height of the report'});
 parser.add_argument('-n', '--filename', {help: 'File name of the report'});
+parser.add_argument('-c', '--credentials', {help: 'login credentials in the format of username:password'});
 
 const parsed_args = parser.parse_args();
 
@@ -47,7 +52,7 @@ let width, height;
 if (parsed_args.width === undefined) {
   width = 1680;
 }
-if (parsed_args.height  === undefined) {
+if (parsed_args.height === undefined) {
   height = 2560;
 }
 
@@ -59,4 +64,11 @@ else {
   filename = 'reporting_anything';
 }
 
-const data = await downloadVisualReport(parsed_args.url, format, width, height, filename);
+let username, password;
+if (parsed_args.credentials !== undefined) {
+  const split = parsed_args.credentials.split(':');
+  username = split[0];
+  password = split[1];
+}
+
+await downloadVisualReport(parsed_args.url, format, width, height, filename, username, password);
