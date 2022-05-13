@@ -9,7 +9,7 @@ import { JSDOM } from 'jsdom';
 import { CHROMIUM_PATH, FORMAT, REPORT_TYPE, SELECTOR } from './constants.js';
 
 
-export async function downloadVisualReport(url, format, width, height, filename) {
+export async function downloadVisualReport(url, format, width, height, filename, username, password) {
   const window = new JSDOM('').window;
 
   try {
@@ -26,6 +26,8 @@ export async function downloadVisualReport(url, format, width, height, filename)
         '--no-zygote',
         '--single-process',
         '--font-render-hinting=none',
+        '--enable-features=NetworkService',
+        '--ignore-certificate-errors',
       ],
       executablePath: CHROMIUM_PATH,
       ignoreHTTPSErrors: true,
@@ -38,14 +40,29 @@ export async function downloadVisualReport(url, format, width, height, filename)
     page.setDefaultNavigationTimeout(0);
     page.setDefaultTimeout(100000);
 
-    await page.goto(url, { waitUntil: 'networkidle0' });
+    // auth 
+    if (username !== undefined && password !== undefined) {
+      await page.goto(url, { waitUntil: 'networkidle0' });
+      console.log('authenticating');
+      await page.waitFor(10000);
+      await page.type('input[data-test-subj="user-name"]', username);
+      await page.type('[data-test-subj="password"]', password);
+      await page.click('button[type=submit]');
+      await page.waitFor(5000);
+      await page.click('label[for=global]');
+      await page.click('button[data-test-subj="confirm"]');
+    }
+    // no auth
+    else {
+      await page.goto(url, { waitUntil: 'networkidle0' });
+    }
+
     await page.setViewport({
       width: width,
       height: height,
     });
 
     const reportSource = getReportSourceFromURL(url);
-
     // if its an OpenSearch report, remove extra elements
     if (reportSource !== 'Other') {
       await page.evaluate(
