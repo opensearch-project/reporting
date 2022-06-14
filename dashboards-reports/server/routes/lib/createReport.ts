@@ -7,6 +7,7 @@ import {
   REPORT_TYPE,
   DATA_REPORT_CONFIG,
   EXTRA_HEADERS,
+  replaceBlockedKeywords,
 } from '../utils/constants';
 
 import {
@@ -93,9 +94,11 @@ export const createReport = async (
       try {
         if (reportParams.core_params.header !== '') {
           reportParams.core_params.header = converter.makeHtml(reportParams.core_params.header);
+          reportParams.core_params.header = replaceBlockedKeywords(reportParams.core_params.header);
         }
         if (reportParams.core_params.footer !== '') {
           reportParams.core_params.footer = converter.makeHtml(reportParams.core_params.footer);
+          reportParams.core_params.footer = replaceBlockedKeywords(reportParams.core_params.footer);
         }
         createReportResult = await createVisualReport(
           reportParams,

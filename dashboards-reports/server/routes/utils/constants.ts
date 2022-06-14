@@ -6,14 +6,6 @@
 import { CountersType } from './types';
 import Showdown from 'showdown';
 
-export const converter = new Showdown.Converter({
-  tables: true,
-  simplifiedAutoLink: true,
-  strikethrough: true,
-  tasklists: true,
-  noHeaderId: true,
-});
-
 export enum FORMAT {
   pdf = 'pdf',
   png = 'png',
@@ -86,6 +78,25 @@ export const EXTRA_HEADERS = [
   'x-proxy-roles',
   'x-forwarded-for',
 ];
+
+export const converter = new Showdown.Converter({
+  tables: true,
+  simplifiedAutoLink: true,
+  strikethrough: true,
+  tasklists: true,
+  noHeaderId: true,
+});
+
+export const replaceBlockedKeywords = (htmlString: string) => {
+  htmlString = htmlString.replace('iframe', 'BLOCKED_KEYWORD');
+  htmlString = htmlString.replace('localhost', 'BLOCKED_KEYWORD');
+  htmlString = htmlString.replace('127.0.0.1', 'BLOCKED_KEYWORD');
+  htmlString = htmlString.replace('0.0.0.0', 'BLOCKED_KEYWORD');
+  htmlString = htmlString.replace('0:', 'BLOCKED_KEYWORD');
+  htmlString = htmlString.replace('169.254.169.254', 'BLOCKED_KEYWORD');
+  htmlString = htmlString.replace('[fd00:ec2::254]', 'BLOCKED_KEYWORD');
+  return htmlString;
+}
 
 export const CHROMIUM_PATH = `${__dirname}/../../../.chromium/headless_shell`;
 
