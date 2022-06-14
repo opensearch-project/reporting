@@ -88,13 +88,13 @@ export const converter = new Showdown.Converter({
 });
 
 export const replaceBlockedKeywords = (htmlString: string) => {
-  htmlString = htmlString.replaceAll('iframe', 'BLOCKED_KEYWORD');
-  htmlString = htmlString.replaceAll('localhost', 'BLOCKED_KEYWORD');
-  htmlString = htmlString.replaceAll('127.0.0.1', 'BLOCKED_KEYWORD');
-  htmlString = htmlString.replaceAll('0.0.0.0', 'BLOCKED_KEYWORD');
-  htmlString = htmlString.replaceAll('0:', 'BLOCKED_KEYWORD');
-  htmlString = htmlString.replaceAll('169.254.169.254', 'BLOCKED_KEYWORD');
-  htmlString = htmlString.replaceAll('[fd00:ec2::254]', 'BLOCKED_KEYWORD');
+  htmlString = htmlString.replace(/iframe/g, 'BLOCKED_KEYWORD');
+  htmlString = htmlString.replace(/localhost/g, 'BLOCKED_KEYWORD');
+  htmlString = htmlString.replace(/127.0.0.1/g, 'BLOCKED_KEYWORD');
+  htmlString = htmlString.replace(/0.0.0.0/g, 'BLOCKED_KEYWORD');
+  htmlString = htmlString.replace(/0:/g, 'BLOCKED_KEYWORD');
+  htmlString = htmlString.replace(/169.254.169.254/g, 'BLOCKED_KEYWORD');
+  htmlString = htmlString.replace(/[fd00:ec2::254]/g, 'BLOCKED_KEYWORD');
   return htmlString;
 }
 
