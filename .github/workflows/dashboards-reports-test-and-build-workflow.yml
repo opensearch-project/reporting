@@ -20,7 +20,7 @@ jobs:
         with:
           repository: opensearch-project/Opensearch-Dashboards
           ref: ${{ env.OPENSEARCH_VERSION }}
-          path: dashboards-reports/OpenSearch-Dashboards
+          path: private-dashboards-reports/OpenSearch-Dashboards
 
       - name: Setup Node
         uses: actions/setup-node@v1
