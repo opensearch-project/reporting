@@ -72,7 +72,6 @@ export const createReport = async (
     }
     // generate report
     if (reportSource === REPORT_TYPE.savedSearch) {
-      console.log('in saved search report');
       createReportResult = await createSavedSearchReport(
         report,
         opensearchClient,
