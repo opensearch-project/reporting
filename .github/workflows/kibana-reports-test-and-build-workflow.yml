@@ -18,7 +18,7 @@ jobs:
         with:
           repository: elastic/kibana
           ref: v7.9.1
-          path: dashboards-reports/kibana
+          path: private-dashboards-reports/kibana
 
       - name: Setup Node
         uses: actions/setup-node@v1
