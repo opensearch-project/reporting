@@ -37,6 +37,8 @@ export async function createSavedSearchReport(
   const reportFormat = params.core_params.report_format;
   const reportName = params.report_name;
 
+  console.log('in createSavedSearchReport, report is', report);
+
   await populateMetaData(client, report, isScheduledTask, logger);
   const data = await generateReportData(
     client,

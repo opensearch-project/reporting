@@ -22,6 +22,7 @@ import { createVisualReport } from '../utils/visual_report/visualReportHelper';
 import { saveReport } from './saveReport';
 import { SemaphoreInterface } from 'async-mutex';
 import { ReportingConfig } from 'server';
+import { converter } from '../utils/constants';
 import _ from 'lodash';
 
 export const createReport = async (
@@ -71,6 +72,7 @@ export const createReport = async (
     }
     // generate report
     if (reportSource === REPORT_TYPE.savedSearch) {
+      console.log('in saved search report');
       createReportResult = await createSavedSearchReport(
         report,
         opensearchClient,
@@ -90,6 +92,12 @@ export const createReport = async (
 
       const [value, release] = await semaphore.acquire();
       try {
+        if (reportParams.core_params.header !== '') {
+          reportParams.core_params.header = converter.makeHtml(reportParams.core_params.header);
+        }
+        if (reportParams.core_params.footer !== '') {
+          reportParams.core_params.footer = converter.makeHtml(reportParams.core_params.footer);
+        }
         createReportResult = await createVisualReport(
           reportParams,
           completeQueryUrl,

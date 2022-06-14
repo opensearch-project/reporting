@@ -250,16 +250,14 @@ export function CreateReport(props: { [x: string]: any; setBreadcrumbs?: any; ht
       setPreErrorData(metadata);
       setComingFromError(true);
     } else {
-      // convert header and footer to html
+      // replace blocked keyword 'iframe'
       if ('header' in metadata.report_params.core_params) {
-        metadata.report_params.core_params.header = converter.makeHtml(
-          metadata.report_params.core_params.header
-        );
+        let new_header = metadata.report_params.core_params.header.replace('iframe', 'BLOCKED_KEYWORD');
+        metadata.report_params.core_params.header = new_header;
       }
       if ('footer' in metadata.report_params.core_params) {
-        metadata.report_params.core_params.footer = converter.makeHtml(
-          metadata.report_params.core_params.footer
-        );
+        let new_footer = metadata.report_params.core_params.footer.replace('iframe', 'BLOCKED_KEYWORD');
+        metadata.report_params.core_params.footer = new_footer;
       }
       httpClient
         .post('../api/reporting/reportDefinition', {

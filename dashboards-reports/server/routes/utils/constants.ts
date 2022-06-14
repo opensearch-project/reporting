@@ -4,6 +4,15 @@
  */
 
 import { CountersType } from './types';
+import Showdown from 'showdown';
+
+export const converter = new Showdown.Converter({
+  tables: true,
+  simplifiedAutoLink: true,
+  strikethrough: true,
+  tasklists: true,
+  noHeaderId: true,
+});
 
 export enum FORMAT {
   pdf = 'pdf',
