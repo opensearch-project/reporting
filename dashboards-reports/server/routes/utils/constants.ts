@@ -88,14 +88,7 @@ export const converter = new Showdown.Converter({
 });
 
 export const replaceBlockedKeywords = (htmlString: string) => {
-  htmlString = htmlString.replace(/iframe/g, 'BLOCKED_KEYWORD');
-  htmlString = htmlString.replace(/localhost/g, 'BLOCKED_KEYWORD');
-  htmlString = htmlString.replace(/127.0.0.1/g, 'BLOCKED_KEYWORD');
-  htmlString = htmlString.replace(/0.0.0.0/g, 'BLOCKED_KEYWORD');
-  htmlString = htmlString.replace(/0:/g, 'BLOCKED_KEYWORD');
-  htmlString = htmlString.replace(/169.254.169.254/g, 'BLOCKED_KEYWORD');
-  htmlString = htmlString.replace(/[fd00:ec2::254]/g, 'BLOCKED_KEYWORD');
-  return htmlString;
+  return htmlString.replace(/iframe|localhost:|127\.0\.0\.1|0\.0\.0\.0|0:|169\.254\.169\.254|\[fd00:ec2::254\]/g, 'BLOCKED_KEYWORD');
 }
 
 export const CHROMIUM_PATH = `${__dirname}/../../../.chromium/headless_shell`;
