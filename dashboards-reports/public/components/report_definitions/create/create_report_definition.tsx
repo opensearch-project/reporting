@@ -250,17 +250,6 @@ export function CreateReport(props: { [x: string]: any; setBreadcrumbs?: any; ht
       setPreErrorData(metadata);
       setComingFromError(true);
     } else {
-      // convert header and footer to html
-      if ('header' in metadata.report_params.core_params) {
-        metadata.report_params.core_params.header = converter.makeHtml(
-          metadata.report_params.core_params.header
-        );
-      }
-      if ('footer' in metadata.report_params.core_params) {
-        metadata.report_params.core_params.footer = converter.makeHtml(
-          metadata.report_params.core_params.footer
-        );
-      }
       httpClient
         .post('../api/reporting/reportDefinition', {
           body: JSON.stringify(metadata),

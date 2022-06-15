@@ -23,7 +23,7 @@
     "async-mutex": "^0.2.6",
     "babel-polyfill": "^6.26.0",
     "cron-validator": "^1.1.1",
-    "dompurify": "^2.1.1",
+    "dompurify": "^2.3.8",
     "elastic-builder": "^2.7.1",
     "enzyme-adapter-react-16": "^1.15.2",
     "jest-fetch-mock": "^3.0.3",
@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@elastic/eslint-import-resolver-kibana": "link:../../packages/osd-eslint-import-resolver-opensearch-dashboards",
-    "@types/dompurify": "^2.0.4",
+    "@types/dompurify": "^2.3.3",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jsdom": "^16.2.3",
     "@types/puppeteer-core": "^2.0.0",
