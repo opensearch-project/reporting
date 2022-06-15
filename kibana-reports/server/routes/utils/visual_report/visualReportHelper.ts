@@ -28,6 +28,7 @@ import {
 import { getFileName } from '../helpers';
 import { CreateReportResultType } from '../types';
 import { ReportParamsSchemaType, VisualReportSchemaType } from 'server/model';
+import { converter, replaceBlockedKeywords } from '../constants';
 import fs from 'fs';
 import cheerio from 'cheerio';
 
@@ -55,10 +56,21 @@ export const createVisualReport = async (
   const window = new JSDOM('').window;
   const DOMPurify = createDOMPurify(window);
 
-  const reportHeader = header
-    ? DOMPurify.sanitize(header)
+  let keywordFilteredHeader = header 
+    ? converter.makeHtml(header) 
     : DEFAULT_REPORT_HEADER;
-  const reportFooter = footer ? DOMPurify.sanitize(footer) : '';
+  let keywordFilteredFooter = footer ? converter.makeHtml(footer) : '';
+
+  keywordFilteredHeader = DOMPurify.sanitize(keywordFilteredHeader);
+  keywordFilteredFooter = DOMPurify.sanitize(keywordFilteredFooter);
+
+  // filter blocked keywords in header and footer
+  if (keywordFilteredHeader !== '') {
+    keywordFilteredHeader = replaceBlockedKeywords(keywordFilteredHeader);
+  }
+  if (keywordFilteredFooter !== '') {
+    keywordFilteredFooter = replaceBlockedKeywords(keywordFilteredFooter);
+  }
 
   // add waitForDynamicContent function
   const waitForDynamicContent = async (
@@ -177,8 +189,8 @@ export const createVisualReport = async (
   const screenshot = await page.screenshot({ fullPage: true });
 
   const templateHtml = composeReportHtml(
-    reportHeader,
-    reportFooter,
+    keywordFilteredHeader,
+    keywordFilteredFooter,
     screenshot.toString('base64')
   );
   await page.setContent(templateHtml);
