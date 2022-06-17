@@ -55,6 +55,7 @@ apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'idea'
 apply plugin: 'opensearch.opensearchplugin'
+apply plugin: 'opensearch.pluginzip'
 apply plugin: 'opensearch.testclusters'
 apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: 'org.jetbrains.kotlin.jvm'
@@ -70,6 +71,29 @@ opensearchplugin {
     description 'Scheduler for Dashboards Reports Plugin'
     classname "org.opensearch.reportsscheduler.ReportsSchedulerPlugin"
     extendedPlugins = ['opensearch-job-scheduler']
+}
+
+publishing {
+    publications {
+        pluginZip(MavenPublication) { publication ->
+            pom {
+                name = 'opensearch-reports-scheduler'
+                description = 'Scheduler for Dashboards Reports Plugin'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        name = 'OpenSearch'
+                        url = 'https://github.com/opensearch-project/dashboards-reports'
+                    }
+                }
+            }
+        }
+    }
 }
 
 allOpen {

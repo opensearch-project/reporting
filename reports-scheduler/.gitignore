@@ -297,3 +297,5 @@ local.properties
 
 local-test
 .local-*
+
+/artifacts/
