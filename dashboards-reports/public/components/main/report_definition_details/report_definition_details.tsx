@@ -34,7 +34,6 @@ import {
 } from '../main_utils';
 import { ReportDefinitionSchemaType } from '../../../../server/model';
 import moment from 'moment';
-import { converter } from '../../report_definitions/utils';
 import {
   permissionsMissingToast,
   permissionsMissingActions,

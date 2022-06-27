@@ -26,7 +26,6 @@ import {
 import { fileFormatsUpper, generateReportById } from '../main_utils';
 import { GenerateReportLoadingModal } from '../loading_modal';
 import { ReportSchemaType } from '../../../../server/model';
-import { converter } from '../../report_definitions/utils';
 import dateMath from '@elastic/datemath';
 import {
   permissionsMissingActions,
