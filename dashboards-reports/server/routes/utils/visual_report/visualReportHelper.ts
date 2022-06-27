@@ -18,6 +18,7 @@ import {
 import { getFileName } from '../helpers';
 import { CreateReportResultType } from '../types';
 import { ReportParamsSchemaType, VisualReportSchemaType } from 'server/model';
+import { converter, replaceBlockedKeywords } from '../constants';
 import fs from 'fs';
 import _ from 'lodash';
 
@@ -45,10 +46,21 @@ export const createVisualReport = async (
   const window = new JSDOM('').window;
   const DOMPurify = createDOMPurify(window);
 
-  const reportHeader = header
-    ? DOMPurify.sanitize(header)
+  let keywordFilteredHeader = header 
+    ? converter.makeHtml(header) 
     : DEFAULT_REPORT_HEADER;
-  const reportFooter = footer ? DOMPurify.sanitize(footer) : '';
+  let keywordFilteredFooter = footer ? converter.makeHtml(footer) : '';
+
+  keywordFilteredHeader = DOMPurify.sanitize(keywordFilteredHeader);
+  keywordFilteredFooter = DOMPurify.sanitize(keywordFilteredFooter);
+
+  // filter blocked keywords in header and footer
+  if (keywordFilteredHeader !== '') {
+    keywordFilteredHeader = replaceBlockedKeywords(keywordFilteredHeader);
+  }
+  if (keywordFilteredFooter !== '') {
+    keywordFilteredFooter = replaceBlockedKeywords(keywordFilteredFooter);
+  }
 
   // set up puppeteer
   const browser = await puppeteer.launch({
@@ -151,8 +163,8 @@ export const createVisualReport = async (
   await waitForDynamicContent(page);
 
   await addReportStyle(page);
-  await addReportHeader(page, reportHeader);
-  await addReportFooter(page, reportFooter);
+  await addReportHeader(page, keywordFilteredHeader);
+  await addReportFooter(page, keywordFilteredFooter);
 
   // create pdf or png accordingly
   if (reportFormat === FORMAT.pdf) {
