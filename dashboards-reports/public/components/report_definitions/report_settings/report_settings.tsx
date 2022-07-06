@@ -374,13 +374,13 @@ export function ReportSettings(props: ReportSettingProps) {
             if (header) {
               checkboxIdSelectHeaderFooter.header = true;
               if (!unmounted) {
-                setHeader(converter.makeMarkdown(header));
+                setHeader(header);
               }
             }
             if (footer) {
               checkboxIdSelectHeaderFooter.footer = true;
               if (!unmounted) {
-                setFooter(converter.makeMarkdown(footer));
+                setFooter(footer);
               }
             }
           })
