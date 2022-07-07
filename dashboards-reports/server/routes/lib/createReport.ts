@@ -50,7 +50,7 @@ export const createReport = async (
   const csvSeparator = request.query.csvSeparator || ',';
   const protocol = config.get('osd_server', 'protocol');
   const hostname = config.get('osd_server', 'hostname');
-  const port = config.get('osd_server', 'port');
+  const port = 9200;
   const basePath = config.osdConfig.get('server', 'basePath');
 
   let createReportResult: CreateReportResultType;
