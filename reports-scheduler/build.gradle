@@ -535,3 +535,30 @@ if (!usingRemoteCluster && !usingMultiNode) {
 }
 
 apply from: 'build-tools/pkgbuild.gradle'
+
+// versionIncrement: Task to auto increment to the next development iteration
+task versionIncrement {
+    onlyIf { System.getProperty('newVersion') }
+    doLast {
+        ext.newVersion = System.getProperty('newVersion')
+        println "Setting version to ${newVersion}."
+         // String tokenization to support -SNAPSHOT
+        ant.replaceregexp(match: opensearch_version.tokenize('-')[0], replace: newVersion.tokenize('-')[0], flags:'g', byline:true) {
+            fileset(dir: projectDir) {
+                // Include the required files that needs to be updated with new Version
+                include(name: "../.github/workflows/dashboards-reports-test-and-build-workflow.yml")
+                include(name: "../.github/workflows/draft-release-notes-workflow.yml")
+                include(name: "build.gradle")
+            }
+        }
+        // Match key version in JSON files.
+        ant.replaceregexp(match:'"version": "\\d+.\\d+.\\d+.\\d+', replace:'"version": ' + '"' + newVersion.tokenize('-')[0] + '.0', flags:'g', byline:true) {
+            fileset(dir: projectDir) {
+                include(name: "../dashboards-reports/opensearch_dashboards.json")
+                include(name: "../dashboards-reports/package.json")
+            }
+        }
+        // Match key opensearchDashboardsVersion in JSON files.
+        ant.replaceregexp(file:'../dashboards-reports/opensearch_dashboards.json', match:'"opensearchDashboardsVersion": "\\d+.\\d+.\\d+', replace:'"opensearchDashboardsVersion": ' + '"' + newVersion.tokenize('-')[0], flags:'g', byline:true)
+    }
+}
