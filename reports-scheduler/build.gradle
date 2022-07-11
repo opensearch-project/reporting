@@ -55,7 +55,6 @@ apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'idea'
 apply plugin: 'opensearch.opensearchplugin'
-apply plugin: 'opensearch.pluginzip'
 apply plugin: 'opensearch.testclusters'
 apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: 'org.jetbrains.kotlin.jvm'
@@ -71,29 +70,6 @@ opensearchplugin {
     description 'Scheduler for Dashboards Reports Plugin'
     classname "org.opensearch.reportsscheduler.ReportsSchedulerPlugin"
     extendedPlugins = ['opensearch-job-scheduler']
-}
-
-publishing {
-    publications {
-        pluginZip(MavenPublication) { publication ->
-            pom {
-                name = 'opensearch-reports-scheduler'
-                description = 'Scheduler for Dashboards Reports Plugin'
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        name = 'OpenSearch'
-                        url = 'https://github.com/opensearch-project/dashboards-reports'
-                    }
-                }
-            }
-        }
-    }
 }
 
 allOpen {
@@ -567,17 +543,12 @@ task versionIncrement {
         ext.newVersion = System.getProperty('newVersion')
         println "Setting version to ${newVersion}."
          // String tokenization to support -SNAPSHOT
-        ant.replaceregexp(match: opensearch_version.tokenize('-')[0], replace: newVersion.tokenize('-')[0], flags:'g', byline:true) {
-            fileset(dir: projectDir) {
-                // Include the required files that needs to be updated with new Version
-                include(name: "build.gradle")
-            }
-        }
+        ant.replaceregexp(file:'build.gradle', match: '"opensearch.version", "\\d.*"', replace: '"opensearch.version", "' + newVersion.tokenize('-')[0] + '-SNAPSHOT"', flags:'g', byline:true)
         ant.replaceregexp(file:'../.github/workflows/dashboards-reports-test-and-build-workflow.yml', match:'OPENSEARCH_PLUGIN_VERSION: \\d+.\\d+.\\d+.\\d+', replace:'OPENSEARCH_PLUGIN_VERSION: ' + newVersion.tokenize('-')[0] + '.0', flags:'g', byline:true)
-       ant.replaceregexp(file:'../.github/workflows/draft-release-notes-workflow.yml', match:'version: \\d+.\\d+.\\d+.\\d+', replace:'version: ' + newVersion.tokenize('-')[0] + '.0', flags:'g', byline:true)
+        ant.replaceregexp(file:'../.github/workflows/draft-release-notes-workflow.yml', match:'version: \\d+.\\d+.\\d+.\\d+', replace:'version: ' + newVersion.tokenize('-')[0] + '.0', flags:'g', byline:true)
         // Match key version in JSON files.
-        ant.replaceregexp(file:'../dashboards-reports/opensearch_dashboards.json', match:'"version": "\\d+.\\d+.\\d+.\\d+', replace:'"version": ' + "'" + newVersion.tokenize('-')[0] + '.0', flags:'g', byline:true)
-        ant.replaceregexp(file:'../dashboards-reports/package.json', match:'"version": "\\d+.\\d+.\\d+.\\d+', replace:'"version": ' + "'" + newVersion.tokenize('-')[0] + '.0', flags:'g', byline:true)
+        ant.replaceregexp(file:'../dashboards-reports/opensearch_dashboards.json', match:'"version": "\\d+.\\d+.\\d+.\\d+', replace:'"version": ' + '"' + newVersion.tokenize('-')[0] + '.0', flags:'g', byline:true)
+        ant.replaceregexp(file:'../dashboards-reports/package.json', match:'"version": "\\d+.\\d+.\\d+.\\d+', replace:'"version": ' + '"' + newVersion.tokenize('-')[0] + '.0', flags:'g', byline:true)
         // Match key opensearchDashboardsVersion in JSON files.
         ant.replaceregexp(file:'../dashboards-reports/opensearch_dashboards.json', match:'"opensearchDashboardsVersion": "\\d+.\\d+.\\d+', replace:'"opensearchDashboardsVersion": ' + '"' + newVersion.tokenize('-')[0], flags:'g', byline:true)
     }
