@@ -12,9 +12,9 @@ buildscript {
         opensearch_group = "org.opensearch"
 
         isSnapshot = "true" == System.getProperty("build.snapshot", "true")
-        opensearch_version = System.getProperty("opensearch.version", "2.0.0-SNAPSHOT")
+        opensearch_version = System.getProperty("opensearch.version", "2.1.0-SNAPSHOT")
         buildVersionQualifier = System.getProperty("build.version_qualifier", "")
-        // 2.0.0-rc1-SNAPSHOT -> 2.0.0.0-rc1-SNAPSHOT
+        // 2.1.0-rc1-SNAPSHOT -> 2.1.0.0-rc1-SNAPSHOT
         version_tokens = opensearch_version.tokenize('-')
         opensearch_build = version_tokens[0] + '.0'
         if (buildVersionQualifier) {
@@ -546,18 +546,14 @@ task versionIncrement {
         ant.replaceregexp(match: opensearch_version.tokenize('-')[0], replace: newVersion.tokenize('-')[0], flags:'g', byline:true) {
             fileset(dir: projectDir) {
                 // Include the required files that needs to be updated with new Version
-                include(name: "../.github/workflows/dashboards-reports-test-and-build-workflow.yml")
-                include(name: "../.github/workflows/draft-release-notes-workflow.yml")
                 include(name: "build.gradle")
             }
         }
+        ant.replaceregexp(file:'../.github/workflows/dashboards-reports-test-and-build-workflow.yml', match:'OPENSEARCH_PLUGIN_VERSION: \\d+.\\d+.\\d+.\\d+', replace:'OPENSEARCH_PLUGIN_VERSION: ' + newVersion.tokenize('-')[0] + '.0', flags:'g', byline:true)
+       ant.replaceregexp(file:'../.github/workflows/draft-release-notes-workflow.yml', match:'version: \\d+.\\d+.\\d+.\\d+', replace:'version: ' + newVersion.tokenize('-')[0] + '.0', flags:'g', byline:true)
         // Match key version in JSON files.
-        ant.replaceregexp(match:'"version": "\\d+.\\d+.\\d+.\\d+', replace:'"version": ' + '"' + newVersion.tokenize('-')[0] + '.0', flags:'g', byline:true) {
-            fileset(dir: projectDir) {
-                include(name: "../dashboards-reports/opensearch_dashboards.json")
-                include(name: "../dashboards-reports/package.json")
-            }
-        }
+        ant.replaceregexp(file:'../dashboards-reports/opensearch_dashboards.json', match:'"version": "\\d+.\\d+.\\d+.\\d+', replace:'"version": ' + "'" + newVersion.tokenize('-')[0] + '.0', flags:'g', byline:true)
+        ant.replaceregexp(file:'../dashboards-reports/package.json', match:'"version": "\\d+.\\d+.\\d+.\\d+', replace:'"version": ' + "'" + newVersion.tokenize('-')[0] + '.0', flags:'g', byline:true)
         // Match key opensearchDashboardsVersion in JSON files.
         ant.replaceregexp(file:'../dashboards-reports/opensearch_dashboards.json', match:'"opensearchDashboardsVersion": "\\d+.\\d+.\\d+', replace:'"opensearchDashboardsVersion": ' + '"' + newVersion.tokenize('-')[0], flags:'g', byline:true)
     }
