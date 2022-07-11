@@ -22,6 +22,7 @@ parser.add_argument('-f', '--format', {help: 'File format of the report'});
 parser.add_argument('-w', '--width', { help: 'Window width of the report'});
 parser.add_argument('-t', '--height', {help: 'Window height of the report'});
 parser.add_argument('-n', '--filename', {help: 'File name of the report'});
+parser.add_argument('-a', '--auth', {help: 'authentication type of the report; options are bas'});
 parser.add_argument('-c', '--credentials', {help: 'login credentials in the format of username:password'});
 
 const parsed_args = parser.parse_args();
@@ -64,6 +65,14 @@ else {
   filename = 'reporting_anything';
 }
 
+let authType;
+if (parsed_args.auth !== undefined) {
+  authType = parsed_args.auth;
+}
+else {
+  authType = 'basic';
+}
+
 let username, password;
 if (parsed_args.credentials !== undefined) {
   const split = parsed_args.credentials.split(':');
@@ -71,4 +80,4 @@ if (parsed_args.credentials !== undefined) {
   password = split[1];
 }
 
-await downloadVisualReport(parsed_args.url, format, width, height, filename, username, password);
+await downloadVisualReport(parsed_args.url, format, width, height, filename, authType, username, password);

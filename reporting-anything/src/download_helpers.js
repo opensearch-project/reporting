@@ -9,7 +9,7 @@ import { JSDOM } from 'jsdom';
 import { CHROMIUM_PATH, FORMAT, REPORT_TYPE, SELECTOR } from './constants.js';
 
 
-export async function downloadVisualReport(url, format, width, height, filename, username, password) {
+export async function downloadVisualReport(url, format, width, height, filename, authType, username, password) {
   const window = new JSDOM('').window;
 
   try {
@@ -42,15 +42,36 @@ export async function downloadVisualReport(url, format, width, height, filename,
 
     // auth 
     if (username !== undefined && password !== undefined) {
-      await page.goto(url, { waitUntil: 'networkidle0' });
-      console.log('authenticating');
-      await page.waitFor(10000);
-      await page.type('input[data-test-subj="user-name"]', username);
-      await page.type('[data-test-subj="password"]', password);
-      await page.click('button[type=submit]');
-      await page.waitFor(5000);
-      await page.click('label[for=global]');
-      await page.click('button[data-test-subj="confirm"]');
+      if(authType == 'basic'){
+        console.log(authType);
+        await page.goto(url, { waitUntil: 'networkidle0' });
+        console.log('authenticating');
+        await page.waitFor(10000);
+        await page.type('input[data-test-subj="user-name"]', username);
+        await page.type('[data-test-subj="password"]', password);
+        await page.click('button[type=submit]');
+        await page.waitForTimeout(30000);
+        await page.click('label[for=global]');
+        await page.click('button[data-test-subj="confirm"]');
+        // await page.goto(url, { waitUntil: 'networkidle0' });
+      }
+      else if(authType == 'SAML'){
+        await page.goto(url, { waitUntil: 'networkidle0' });
+        console.log('SAML authenticating');
+        await page.waitFor(10000);
+        let refUrl;
+        await getUrl(url).then((value) => {
+          refUrl = value;
+        });
+        await page.type('[name="identifier"]', username);
+        await page.type('[name="credentials.passcode"]', password);
+        await page.click('[value="Sign in"]')
+        await page.waitForTimeout(30000);
+        await page.click('label[for=global]');
+        await page.click('button[data-test-subj="confirm"]');
+        await page.waitForTimeout(25000);
+        await page.click(`a[href='${refUrl}']`);
+      }
     }
     // no auth
     else {
@@ -188,6 +209,12 @@ const getReportSourceFromURL = (url) => {
   }
   return 'Other';
 }
+
+const getUrl = async (url) =>{
+  let a = url.split("#");
+  let b = "#"+a[1];
+  return b;
+};
 
 export const readStreamToFile = async (
   stream,
