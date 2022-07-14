@@ -37,12 +37,15 @@ export async function downloadVisualReport(url, format, width, height, filename,
     });
 
     const page = await browser.newPage();
+    const page2 = await browser.newPage();
     page.setDefaultNavigationTimeout(0);
     page.setDefaultTimeout(100000);
+    page2.setDefaultNavigationTimeout(0);
+    page2.setDefaultTimeout(100000);
 
     // auth 
     if (username !== undefined && password !== undefined) {
-      if(authType == 'basic'){
+      if(authType === 'basic'){
         console.log(authType);
         await page.goto(url, { waitUntil: 'networkidle0' });
         console.log('authenticating');
@@ -53,9 +56,12 @@ export async function downloadVisualReport(url, format, width, height, filename,
         await page.waitForTimeout(30000);
         await page.click('label[for=global]');
         await page.click('button[data-test-subj="confirm"]');
-        // await page.goto(url, { waitUntil: 'networkidle0' });
+        await page.waitForTimeout(25000);
+        await page2.goto(url,{ waitUntil: 'networkidle0' });
+        await page2.waitForTimeout(5000);
+        await page.goto(url,{ waitUntil: 'networkidle0' });
       }
-      else if(authType == 'SAML'){
+      else if(authType === 'SAML'){
         await page.goto(url, { waitUntil: 'networkidle0' });
         console.log('SAML authenticating');
         await page.waitFor(10000);
@@ -71,6 +77,23 @@ export async function downloadVisualReport(url, format, width, height, filename,
         await page.click('button[data-test-subj="confirm"]');
         await page.waitForTimeout(25000);
         await page.click(`a[href='${refUrl}']`);
+      }
+      else if (authType === 'cognito'){
+        await page.goto(url, { waitUntil: 'networkidle0' });
+        console. log('cognito authenticating');
+        await page.waitFor(10000);
+        await page.type(  '[name="username" ]', username);
+        await page.type( ' [name="password"]', password);
+        await page.click( '[name="signInSubmitButton"]');
+        await page.waitForTimeout(30000);
+        await page.click('label[for=global]');
+        await page.click('button[data-test-subj="confirm"]');
+        await page.waitForTimeout(25000);
+        await page2.goto(url,{ waitUntil: 'networkidle0' });
+        await page2.click('label[for=global]');
+        await page2.click('button[data-test-subj="confirm"]');
+        await page2.waitForTimeout(5000);
+        await page.goto(url,{ waitUntil: 'networkidle0' });
       }
     }
     // no auth
