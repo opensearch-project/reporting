@@ -37,18 +37,17 @@ export async function downloadVisualReport(url, format, width, height, filename,
     });
 
     const page = await browser.newPage();
-    const page2 = await browser.newPage();
+    const overridePage = await browser.newPage();
     page.setDefaultNavigationTimeout(0);
     page.setDefaultTimeout(100000);
-    page2.setDefaultNavigationTimeout(0);
-    page2.setDefaultTimeout(100000);
+    overridePage.setDefaultNavigationTimeout(0);
+    overridePage.setDefaultTimeout(100000);
 
     // auth 
     if (username !== undefined && password !== undefined) {
       if(authType === 'basic'){
-        console.log(authType);
         await page.goto(url, { waitUntil: 'networkidle0' });
-        console.log('authenticating');
+        console.log('basic authenticating');
         await page.waitFor(10000);
         await page.type('input[data-test-subj="user-name"]', username);
         await page.type('[data-test-subj="password"]', password);
@@ -57,8 +56,8 @@ export async function downloadVisualReport(url, format, width, height, filename,
         await page.click('label[for=global]');
         await page.click('button[data-test-subj="confirm"]');
         await page.waitForTimeout(25000);
-        await page2.goto(url,{ waitUntil: 'networkidle0' });
-        await page2.waitForTimeout(5000);
+        await overridePage.goto(url,{ waitUntil: 'networkidle0' });
+        await overridePage.waitForTimeout(5000);
         await page.goto(url,{ waitUntil: 'networkidle0' });
       }
       else if(authType === 'SAML'){
@@ -89,10 +88,10 @@ export async function downloadVisualReport(url, format, width, height, filename,
         await page.click('label[for=global]');
         await page.click('button[data-test-subj="confirm"]');
         await page.waitForTimeout(25000);
-        await page2.goto(url,{ waitUntil: 'networkidle0' });
-        await page2.click('label[for=global]');
-        await page2.click('button[data-test-subj="confirm"]');
-        await page2.waitForTimeout(5000);
+        await overridePage.goto(url,{ waitUntil: 'networkidle0' });
+        await overridePage.click('label[for=global]');
+        await overridePage.click('button[data-test-subj="confirm"]');
+        await overridePage.waitForTimeout(5000);
         await page.goto(url,{ waitUntil: 'networkidle0' });
       }
     }
@@ -234,9 +233,9 @@ const getReportSourceFromURL = (url) => {
 }
 
 const getUrl = async (url) =>{
-  let a = url.split("#");
-  let b = "#"+a[1];
-  return b;
+  let urlExt = url.split("#");
+  let urlRef = "#"+urlExt[1];
+  return urlRef;
 };
 
 export const readStreamToFile = async (

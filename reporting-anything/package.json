@@ -4,7 +4,6 @@
   "main": "download_report.js",
   "type": "module",
   "dependencies": {
-    "@opensearch-project/opensearch": "^1.1.0",
     "argparse": "^2.0.1",
     "commander": "^9.2.0",
     "dompurify": "^2.1.1",
