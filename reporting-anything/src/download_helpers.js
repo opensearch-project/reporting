@@ -46,53 +46,13 @@ export async function downloadVisualReport(url, format, width, height, filename,
     // auth 
     if (username !== undefined && password !== undefined) {
       if(authType === 'basic'){
-        await page.goto(url, { waitUntil: 'networkidle0' });
-        console.log('basic authenticating');
-        await page.waitFor(10000);
-        await page.type('input[data-test-subj="user-name"]', username);
-        await page.type('[data-test-subj="password"]', password);
-        await page.click('button[type=submit]');
-        await page.waitForTimeout(30000);
-        await page.click('label[for=global]');
-        await page.click('button[data-test-subj="confirm"]');
-        await page.waitForTimeout(25000);
-        await overridePage.goto(url,{ waitUntil: 'networkidle0' });
-        await overridePage.waitForTimeout(5000);
-        await page.goto(url,{ waitUntil: 'networkidle0' });
+        await basicAuthentication(page, overridePage, url, username, password)
       }
       else if(authType === 'SAML'){
-        await page.goto(url, { waitUntil: 'networkidle0' });
-        console.log('SAML authenticating');
-        await page.waitFor(10000);
-        let refUrl;
-        await getUrl(url).then((value) => {
-          refUrl = value;
-        });
-        await page.type('[name="identifier"]', username);
-        await page.type('[name="credentials.passcode"]', password);
-        await page.click('[value="Sign in"]')
-        await page.waitForTimeout(30000);
-        await page.click('label[for=global]');
-        await page.click('button[data-test-subj="confirm"]');
-        await page.waitForTimeout(25000);
-        await page.click(`a[href='${refUrl}']`);
+        await samlAuthentication(page, overridePage, url, username, password)
       }
       else if (authType === 'cognito'){
-        await page.goto(url, { waitUntil: 'networkidle0' });
-        console. log('cognito authenticating');
-        await page.waitFor(10000);
-        await page.type(  '[name="username" ]', username);
-        await page.type( ' [name="password"]', password);
-        await page.click( '[name="signInSubmitButton"]');
-        await page.waitForTimeout(30000);
-        await page.click('label[for=global]');
-        await page.click('button[data-test-subj="confirm"]');
-        await page.waitForTimeout(25000);
-        await overridePage.goto(url,{ waitUntil: 'networkidle0' });
-        await overridePage.click('label[for=global]');
-        await overridePage.click('button[data-test-subj="confirm"]');
-        await overridePage.waitForTimeout(5000);
-        await page.goto(url,{ waitUntil: 'networkidle0' });
+        await cognitoAuthentication(page, overridePage, url, username, password)
       }
     }
     // no auth
@@ -237,6 +197,59 @@ const getUrl = async (url) =>{
   let urlRef = "#"+urlExt[1];
   return urlRef;
 };
+
+const basicAuthentication = async (page, overridePage, url, username, password) => {
+  await page.goto(url, { waitUntil: 'networkidle0' });
+  console.log('basic authenticating');
+  await page.waitFor(10000);
+  await page.type('input[data-test-subj="user-name"]', username);
+  await page.type('[data-test-subj="password"]', password);
+  await page.click('button[type=submit]');
+  await page.waitForTimeout(30000);
+  await page.click('label[for=global]');
+  await page.click('button[data-test-subj="confirm"]');
+  await page.waitForTimeout(25000);
+  await overridePage.goto(url,{ waitUntil: 'networkidle0' });
+  await overridePage.waitForTimeout(5000);
+  await page.goto(url,{ waitUntil: 'networkidle0' });
+};
+
+const samlAuthentication = async (page, overridePage, url, username, password) => {
+  await page.goto(url, { waitUntil: 'networkidle0' });
+  console.log('SAML authenticating');
+  await page.waitFor(10000);
+  let refUrl;
+  await getUrl(url).then((value) => {
+    refUrl = value;
+  });
+  await page.type('[name="identifier"]', username);
+  await page.type('[name="credentials.passcode"]', password);
+  await page.click('[value="Sign in"]')
+  await page.waitForTimeout(30000);
+  await page.click('label[for=global]');
+  await page.click('button[data-test-subj="confirm"]');
+  await page.waitForTimeout(25000);
+  await page.click(`a[href='${refUrl}']`);
+}
+
+const cognitoAuthentication = async (page, overridePage, url, username, password) => {
+  await page.goto(url, { waitUntil: 'networkidle0' });
+  console. log('cognito authenticating');
+  await page.waitFor(10000);
+  await page.type(  '[name="username" ]', username);
+  await page.type( ' [name="password"]', password);
+  await page.click( '[name="signInSubmitButton"]');
+  await page.waitForTimeout(30000);
+  await page.click('label[for=global]');
+  await page.click('button[data-test-subj="confirm"]');
+  await page.waitForTimeout(25000);
+  await overridePage.goto(url,{ waitUntil: 'networkidle0' });
+  await overridePage.click('label[for=global]');
+  await overridePage.click('button[data-test-subj="confirm"]');
+  await overridePage.waitForTimeout(5000);
+  await page.goto(url,{ waitUntil: 'networkidle0' });
+}
+
 
 export const readStreamToFile = async (
   stream,
