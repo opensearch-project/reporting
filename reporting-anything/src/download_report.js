@@ -53,8 +53,14 @@ let width, height;
 if (parsed_args.width === undefined) {
   width = 1680;
 }
+else {
+  width = Number(parsed_args.width)
+}
 if (parsed_args.height === undefined) {
   height = 2560;
+}
+else {
+  height = Number(parsed_args.height)
 }
 
 let filename;
