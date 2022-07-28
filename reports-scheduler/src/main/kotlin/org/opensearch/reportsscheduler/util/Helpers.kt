@@ -1,28 +1,6 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- *
  */
 
 package org.opensearch.reportsscheduler.util
@@ -39,7 +17,9 @@ import org.opensearch.common.xcontent.XContentParser
 import org.opensearch.common.xcontent.XContentParser.Token
 import org.opensearch.common.xcontent.XContentParserUtils
 import org.opensearch.common.xcontent.XContentType
+import org.opensearch.reportsscheduler.model.ReportInstance
 import org.opensearch.rest.RestRequest
+import java.net.URI
 
 internal fun StreamInput.createJsonParser(): XContentParser {
     return XContentType.JSON.xContent().createParser(NamedXContentRegistry.EMPTY, DeprecationHandler.IGNORE_DEPRECATIONS, this)
@@ -77,4 +57,22 @@ internal fun XContentBuilder.objectIfNotNull(name: String, xContentObject: ToXCo
         xContentObject.toXContent(this, ToXContent.EMPTY_PARAMS)
     }
     return this
+}
+
+/**
+ * Helper function of notification feature, to build report link and send as message
+ * @param origin [ReportInstance] url prefix
+ * @param tenant [String]
+ * @param reportInstanceId[String]
+ * @return [String] the actual report link
+ */
+internal fun buildReportLink(origin: String, tenant: String, reportInstanceId: String): String {
+    var tenantValueInUrl = tenant
+    tenantValueInUrl = when (tenant) {
+        "__user__" -> "private"
+        "" -> "global"
+        // Use this as equivalent to Javascript encodeURIComponents() https://stackoverflow.com/a/35294242
+        else -> URI(null, null, tenantValueInUrl, null).rawPath
+    }
+    return "$origin/app/reports-dashboards?security_tenant=$tenantValueInUrl#/report_details/$reportInstanceId"
 }

@@ -1,0 +1,26 @@
+@startuml
+
+package "Reporting Plugins" {
+  component [Reporting Dashboards] as rd
+  component [Reporting OpenSearch] as ros
+  component [Reporting Index] as ri
+  component [Reporting JobScheduler] as rjs
+  rd --> ros : CRUD operations on Report \n instances and Report Definitions
+  ros --> ri : Document Index operations
+  ros --> rjs : Initialize SPI
+  rjs --> ri : Listen for updates
+  rjs --> ros : executeJob callback
+}
+
+package "Notification Plugins" {
+  component [Notifications Dashboards] as nd
+  component [Notifications OpenSearch] as nos
+  component [Notifications SPI] as nspi
+  nd --> nos : CRUD operations on \n notification configurations
+  nos --> nspi : Send notification operations
+}
+
+ros -> nos : SendNotification Request
+rd --> nos : GetNotificationFeatureChannelList
+
+@enduml

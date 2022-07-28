@@ -1,32 +1,11 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 /* eslint-disable no-restricted-globals */
 import $ from 'jquery';
-import dateMath from '@elastic/datemath';
+import { i18n } from '@osd/i18n';
 import { readStreamToFile } from '../main/main_utils';
 import {
   contextMenuCreateReportDefinition,
@@ -41,9 +20,8 @@ import {
   popoverMenuDiscover,
   getMenuItem,
 } from './context_menu_ui';
-import { timeRangeMatcher } from '../utils/utils';
 import { parse } from 'url';
-import { unhashUrl } from '../../../../../src/plugins/opensearch_dashboards_utils/public';
+import { uiSettingsService } from '../utils/settings_service';
 
 const generateInContextReport = async (
   timeRanges,
@@ -65,11 +43,11 @@ const generateInContextReport = async (
   }
 
   let reportSource = '';
-  if (baseUrl.includes('dashboard')) {
+  if (/\/app\/dashboards/.test(baseUrl)) {
     reportSource = 'Dashboard';
-  } else if (baseUrl.includes('visualize')) {
+  } else if (/\/app\/visualize/.test(baseUrl)) {
     reportSource = 'Visualization';
-  } else if (baseUrl.includes('discover')) {
+  } else if (/\/app\/discover/.test(baseUrl)) {
     reportSource = 'Saved search';
   }
 
@@ -91,10 +69,10 @@ const generateInContextReport = async (
         },
       },
       delivery: {
-        delivery_type: 'OpenSearch Dashboards user',
-        delivery_params: {
-          opensearch_dashboards_recipients: [],
-        },
+        configIds: [''],
+        title: '',
+        textDescription: '',
+        htmlDescription: '',
       },
       trigger: {
         trigger_type: 'On demand',
@@ -103,9 +81,9 @@ const generateInContextReport = async (
   };
 
   fetch(
-    `../api/reporting/generateReport?timezone=${
-      Intl.DateTimeFormat().resolvedOptions().timeZone
-    }`,
+    `../api/reporting/generateReport?${new URLSearchParams(
+      uiSettingsService.getSearchParams()
+    )}`,
     {
       headers: {
         'Content-Type': 'application/json',
@@ -144,11 +122,9 @@ const generateInContextReport = async (
     });
 };
 
-// try to match uuid followed by '?' in URL, which would be the saved search id for discover URL
-const getUuidFromUrl = () =>
-  window.location.href.match(
-    /(\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b)\?/
-  );
+// try to match uuid and user entered custom-id followed by '?' in URL, which would be the saved search id for discover URL
+// custom id example: v1s-f00-b4r1-01, Filebeat-Apache-Dashboard-ecs,
+const getUuidFromUrl = () => window.location.href.match(/([0-9a-zA-Z-]+)\?/);
 const isDiscover = () => window.location.href.includes('discover');
 
 // open Download drop-down
@@ -280,7 +256,11 @@ function locationHashChanged() {
           return;
         }
         const menuItem = document.createElement('div');
-        menuItem.innerHTML = getMenuItem('Reporting');
+        menuItem.innerHTML = getMenuItem(
+          i18n.translate('opensearch.reports.menu.name', {
+            defaultMessage: 'Reporting',
+          })
+        );
         navMenu[0].insertBefore(menuItem.children[0], navMenu[0].lastChild);
       } catch (e) {
         console.log(e);

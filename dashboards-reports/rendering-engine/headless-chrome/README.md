@@ -28,8 +28,8 @@ headless-chrome.sh chrome-version-SHA (arch_name (arm64))
 . Linux arm64: ./build_headless_chrome.sh <chrome-version-SHA> arm64
 
 # How to call in Command line:
-. PNG report: ./headless_shell --headless --disable-gpu --screenshot=test.png https://docs-beta.opensearch.org/
-. PDF report: ./headless_shell --headless --disable-gpu --print-to-pdf=test.pdf https://docs-beta.opensearch.org/
+. PNG report: ./headless_shell --headless --disable-gpu --screenshot=test.png https://opensearch.org/docs/
+. PDF report: ./headless_shell --headless --disable-gpu --print-to-pdf=test.pdf https://opensearch.org/docs/
 
 ## Headless Chromium for MAC
 # Files:
@@ -51,6 +51,6 @@ sudo apt install -y libnss3-dev fonts-liberation libfontconfig1
 ```
 - RedHat/CentOS/Amazon Linux 2 needs additional dependencies to run chromium
 ```
-sudo yum install -y libnss3.so xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-utils xorg-x11-fonts-cyrillic xorg-x11-fonts-Type1 xorg-x11-fonts-misc fontconfig freetype
+sudo yum install -y libnss3.so xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-utils xorg-x11-fonts-cyrillic xorg-x11-fonts-Type1 xorg-x11-fonts-misc fontconfig freetype ipa-gothic-fonts
 ```
 

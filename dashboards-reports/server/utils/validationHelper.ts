@@ -1,27 +1,6 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import { RequestParams } from '@elastic/elasticsearch';
@@ -37,7 +16,10 @@ import { REPORT_TYPE } from '../../server/routes/utils/constants';
 
 export const isValidRelativeUrl = (relativeUrl: string) => {
   let normalizedRelativeUrl = relativeUrl
-  if (!relativeUrl.includes('notebooks-dashboards')) {
+  if (
+    !relativeUrl.includes('observability#/notebooks') &&
+    !relativeUrl.includes('notebooks-dashboards')
+  ) {
     normalizedRelativeUrl = path.posix.normalize(relativeUrl);
   }
   
@@ -55,7 +37,7 @@ export const isValidRelativeUrl = (relativeUrl: string) => {
 export const regexDuration = /^(-?)P(?=\d|T\d)(?:(\d+)Y)?(?:(\d+)M)?(?:(\d+)([DW]))?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$/;
 export const regexEmailAddress = /\S+@\S+\.\S+/;
 export const regexReportName = /^[\w\-\s\(\)\[\]\,\_\-+]+$/;
-export const regexRelativeUrl = /^\/(_plugin\/kibana\/app|app)\/(dashboards|visualize|discover|notebooks-dashboards\?view=output_only)(\?security_tenant=.+|)#\/(view\/|edit\/)?[^\/]+$/;
+export const regexRelativeUrl = /^\/(_plugin\/kibana\/|_dashboards\/)?app\/(dashboards|visualize|discover|observability-dashboards|notebooks-dashboards\?view=output_only)([?&]security_tenant=.+|)#\/(notebooks\/|view\/|edit\/)?[^\/]+$/;
 
 export const validateReport = async (
   client: ILegacyScopedClusterClient,
@@ -137,7 +119,7 @@ const validateSavedObject = async (
   else {
     savedObjectId = `${getType(source)}:${getId(url)}`;
     const params: RequestParams.Exists = {
-      index: '.opensearch_dashboards',
+      index: '.kibana',
       id: savedObjectId,
     };
     exist = await client.callAsCurrentUser('exists', params);  

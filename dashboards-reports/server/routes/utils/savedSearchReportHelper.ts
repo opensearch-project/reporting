@@ -1,31 +1,10 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import {
-  buildQuery,
+  buildRequestBody,
   convertToCSV,
   getOpenSearchData,
   getSelectedFields,
@@ -34,9 +13,12 @@ import {
 import {
   ILegacyClusterClient,
   ILegacyScopedClusterClient,
+  Logger,
 } from '../../../../../src/core/server';
 import { getFileName, callCluster } from './helpers';
 import { CreateReportResultType } from './types';
+import { RequestParams } from '@elastic/elasticsearch';
+import esb from 'elastic-builder';
 
 /**
  * Specify how long scroll context should be maintained for scrolled search
@@ -46,17 +28,23 @@ const scrollTimeout = '1m';
 export async function createSavedSearchReport(
   report: any,
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
-  isScheduledTask: boolean = true
+  dateFormat: string,
+  csvSeparator: string,
+  isScheduledTask: boolean = true,
+  logger: Logger
 ): Promise<CreateReportResultType> {
   const params = report.report_definition.report_params;
   const reportFormat = params.core_params.report_format;
   const reportName = params.report_name;
 
-  await populateMetaData(client, report, isScheduledTask);
+  await populateMetaData(client, report, isScheduledTask, logger);
   const data = await generateReportData(
     client,
     params.core_params,
-    isScheduledTask
+    dateFormat,
+    csvSeparator,
+    isScheduledTask,
+    logger
   );
 
   const curTime = new Date();
@@ -77,7 +65,8 @@ export async function createSavedSearchReport(
 async function populateMetaData(
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
   report: any,
-  isScheduledTask: boolean
+  isScheduledTask: boolean,
+  logger: Logger
 ) {
   metaData.saved_search_id =
     report.report_definition.report_params.core_params.saved_search_id;
@@ -89,28 +78,28 @@ async function populateMetaData(
   // Get saved search info
   let resIndexPattern: any = {};
   const ssParams = {
-    index: '.opensearch_dashboards',
+    index: '.kibana',
     id: 'search:' + metaData.saved_search_id,
   };
   const ssInfos = await callCluster(client, 'get', ssParams, isScheduledTask);
 
   metaData.sorting = ssInfos._source.search.sort;
   metaData.type = ssInfos._source.type;
-  metaData.filters =
-    ssInfos._source.search.opensearchDashboardsSavedObjectMeta.searchSourceJSON;
+  metaData.searchSourceJSON =
+    ssInfos._source.search.kibanaSavedObjectMeta.searchSourceJSON;
 
   // Get the list of selected columns in the saved search.Otherwise select all the fields under the _source
   await getSelectedFields(ssInfos._source.search.columns);
 
   // Get index name
   for (const item of ssInfos._source.references) {
-    if (item.name === JSON.parse(metaData.filters).indexRefName) {
+    if (item.name === JSON.parse(metaData.searchSourceJSON).indexRefName) {
       // Get index-pattern information
       const indexPattern = await callCluster(
         client,
         'get',
         {
-          index: '.opensearch_dashboards',
+          index: '.kibana',
           id: 'index-pattern:' + item.id,
         },
         isScheduledTask
@@ -139,7 +128,10 @@ async function populateMetaData(
 async function generateReportData(
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
   params: any,
-  isScheduledTask: boolean
+  dateFormat: string,
+  csvSeparator: string,
+  isScheduledTask: boolean,
+  logger: Logger
 ) {
   let opensearchData: any = {};
   const arrayHits: any = [];
@@ -153,7 +145,10 @@ async function generateReportData(
     return '';
   }
 
-  const reqBody = buildRequestBody(buildQuery(report, 0));
+  const reqBody = buildRequestBody(report, 0);
+  logger.info(
+    `[Reporting csv module] DSL request body: ${JSON.stringify(reqBody)}`
+  );
   if (total > maxResultSize) {
     await getOpenSearchDataByScroll();
   } else {
@@ -187,29 +182,30 @@ async function generateReportData(
 
   // Build the OpenSearch Count query to count the size of result
   async function getOpenSearchDataSize() {
-    const countReq = buildQuery(report, 1);
+    const countReq = buildRequestBody(report, 1);
     return await callCluster(
       client,
       'count',
       {
         index: indexPattern,
-        body: countReq.toJSON(),
+        body: countReq,
       },
       isScheduledTask
     );
   }
 
   async function getOpenSearchDataByScroll() {
+    const searchParams: RequestParams.Search = {
+      index: report._source.paternName,
+      scroll: scrollTimeout,
+      body: reqBody,
+      size: maxResultSize,
+    };
     // Open scroll context by fetching first batch
     opensearchData = await callCluster(
       client,
       'search',
-      {
-        index: report._source.paternName,
-        scroll: scrollTimeout,
-        body: reqBody,
-        size: maxResultSize,
-      },
+      searchParams,
       isScheduledTask
     );
     arrayHits.push(opensearchData.hits);
@@ -243,38 +239,26 @@ async function generateReportData(
   }
 
   async function getOpenSearchDataBySearch() {
+    const searchParams: RequestParams.Search = {
+      index: report._source.paternName,
+      body: reqBody,
+      size: total,
+    };
+
     opensearchData = await callCluster(
       client,
       'search',
-      {
-        index: report._source.paternName,
-        body: reqBody,
-        size: total,
-      },
+      searchParams,
       isScheduledTask
     );
+
     arrayHits.push(opensearchData.hits);
-  }
-
-  function buildRequestBody(query: any) {
-    const docvalues = [];
-    for (const dateType of report._source.dateFields) {
-      docvalues.push({
-        field: dateType,
-        format: 'date_hour_minute',
-      });
-    }
-
-    return {
-      query: query.toJSON().query,
-      docvalue_fields: docvalues,
-    };
   }
 
   // Parse OpenSearch data and convert to CSV
   async function convertOpenSearchDataToCsv() {
     const dataset: any = [];
-    dataset.push(getOpenSearchData(arrayHits, report, params));
-    return await convertToCSV(dataset);
+    dataset.push(getOpenSearchData(arrayHits, report, params, dateFormat));
+    return await convertToCSV(dataset, csvSeparator);
   }
 }

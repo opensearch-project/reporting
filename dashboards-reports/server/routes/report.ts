@@ -1,27 +1,6 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import { schema } from '@osd/config-schema';
@@ -42,10 +21,13 @@ import {
 } from './utils/converters/backendToUi';
 import { addToMetric } from './utils/metricHelper';
 import { validateReport } from '../../server/utils/validationHelper';
-import { AccessInfoType } from 'server';
+import { ReportingConfig } from 'server';
 
-export default function (router: IRouter, accessInfo: AccessInfoType) {
-  const { basePath } = accessInfo;
+export default function (router: IRouter, config: ReportingConfig) {
+  const protocol = config.get('osd_server', 'protocol');
+  const hostname = config.get('osd_server', 'hostname');
+  const port = config.get('osd_server', 'port');
+  const basePath = config.osdConfig.get('server', 'basePath');
   // generate report (with provided metadata)
   router.post(
     {
@@ -54,6 +36,8 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         body: schema.any(),
         query: schema.object({
           timezone: schema.maybe(schema.string()),
+          dateFormat: schema.maybe(schema.string()),
+          csvSeparator: schema.maybe(schema.string()),
         }),
       },
     },
@@ -66,11 +50,9 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       //@ts-ignore
       const logger: Logger = context.reporting_plugin.logger;
       let report = request.body;
-
       // input validation
       try {
-        report.report_definition.report_params.core_params.origin =
-          request.headers.origin;
+        report.report_definition.report_params.core_params.origin = `${protocol}://${hostname}:${port}${basePath}`;
         report = await validateReport(
           context.core.opensearch.legacy.client,
           report,
@@ -83,29 +65,17 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       }
 
       try {
-        const reportData = await createReport(
-          request,
-          context,
-          report,
-          accessInfo
-        );
+        const reportData = await createReport(request, context, report, config);
 
         // if not deliver to user himself , no need to send actual file data to client
         const delivery = report.report_definition.delivery;
         addToMetric('report', 'create', 'count', report);
-        if (
-          delivery.delivery_type === DELIVERY_TYPE.opensearchDashboardsUser &&
-          delivery.delivery_params.opensearch_dashboards_recipients.length === 0
-        ) {
-          return response.ok({
-            body: {
-              data: reportData.dataUrl,
-              filename: reportData.fileName,
-            },
-          });
-        } else {
-          return response.ok();
-        }
+        return response.ok({
+          body: {
+            data: reportData.dataUrl,
+            filename: reportData.fileName,
+          },
+        });
       } catch (error) {
         // TODO: better error handling for delivery and stages in generating report, pass logger to deeper level
         logger.error(`Failed to generate report: ${error}`);
@@ -126,6 +96,8 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         }),
         query: schema.object({
           timezone: schema.string(),
+          dateFormat: schema.string(),
+          csvSeparator: schema.string(),
         }),
       },
     },
@@ -137,7 +109,6 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       addToMetric('report', 'download', 'count');
       //@ts-ignore
       const logger: Logger = context.reporting_plugin.logger;
-      let report: any;
       try {
         const savedReportId = request.params.reportId;
         // @ts-ignore
@@ -152,13 +123,16 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
           }
         );
         // convert report to use UI model
-        const report = backendToUiReport(opensearchResp.reportInstance, basePath);
+        const report = backendToUiReport(
+          opensearchResp.reportInstance,
+          basePath
+        );
         // generate report
         const reportData = await createReport(
           request,
           context,
           report,
-          accessInfo,
+          config,
           savedReportId
         );
         addToMetric('report', 'download', 'count', report);
@@ -188,6 +162,8 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         }),
         query: schema.object({
           timezone: schema.string(),
+          dateFormat: schema.string(),
+          csvSeparator: schema.string(),
         }),
       },
     },
@@ -218,13 +194,16 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         );
         const reportId = opensearchResp.reportInstance.id;
         // convert report to use UI model
-        const report = backendToUiReport(opensearchResp.reportInstance, basePath);
+        const report = backendToUiReport(
+          opensearchResp.reportInstance,
+          basePath
+        );
         // generate report
         const reportData = await createReport(
           request,
           context,
           report,
-          accessInfo,
+          config,
           reportId
         );
         addToMetric('report', 'create_from_definition', 'count', report);
@@ -331,7 +310,10 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
           }
         );
 
-        const report = backendToUiReport(opensearchResp.reportInstance, basePath);
+        const report = backendToUiReport(
+          opensearchResp.reportInstance,
+          basePath
+        );
 
         return response.ok({
           body: report,

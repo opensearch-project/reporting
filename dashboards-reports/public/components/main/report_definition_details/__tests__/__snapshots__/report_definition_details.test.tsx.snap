@@ -199,10 +199,13 @@ exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition d
             >
               <a
                 class="euiLink euiLink--primary"
-                href="undefined"
+                href=""
+                id="reportDefinitionSourceURL"
                 rel="noopener noreferrer"
                 target="_blank"
-              />
+              >
+                
+              </a>
             </dd>
           </dl>
         </div>
@@ -220,7 +223,7 @@ exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition d
             <dd
               class="euiDescriptionList__description"
             >
-              Last undefined
+              Last 
             </dd>
           </dl>
         </div>
@@ -240,7 +243,7 @@ exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition d
             >
               <button
                 class="euiLink euiLink--primary"
-                id="generateReportFromDetailsButton"
+                id="generateReportFromDetailsFileFormat"
                 type="button"
               >
                 undefined 
@@ -314,14 +317,6 @@ exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition d
       <div
         class="euiSpacer euiSpacer--l"
       />
-      <h3
-        class="euiTitle euiTitle--medium"
-      >
-        Report trigger
-      </h3>
-      <div
-        class="euiSpacer euiSpacer--l"
-      />
       <div
         class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionRow euiFlexGroup--responsive"
       >
@@ -334,7 +329,7 @@ exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition d
             <dt
               class="euiDescriptionList__title"
             >
-              Trigger type
+              Report trigger
             </dt>
             <dd
               class="euiDescriptionList__description"
@@ -388,9 +383,6 @@ exports[`<ReportDefinitionDetails /> panel render 5 hours recurring definition d
           </dl>
         </div>
       </div>
-      <div
-        class="euiSpacer euiSpacer--l"
-      />
     </div>
     <div
       aria-live="polite"
@@ -600,10 +592,13 @@ exports[`<ReportDefinitionDetails /> panel render disabled daily definition, cli
             >
               <a
                 class="euiLink euiLink--primary"
-                href="undefined"
+                href=""
+                id="reportDefinitionSourceURL"
                 rel="noopener noreferrer"
                 target="_blank"
-              />
+              >
+                
+              </a>
             </dd>
           </dl>
         </div>
@@ -621,7 +616,7 @@ exports[`<ReportDefinitionDetails /> panel render disabled daily definition, cli
             <dd
               class="euiDescriptionList__description"
             >
-              Last undefined
+              Last 
             </dd>
           </dl>
         </div>
@@ -641,7 +636,7 @@ exports[`<ReportDefinitionDetails /> panel render disabled daily definition, cli
             >
               <button
                 class="euiLink euiLink--primary"
-                id="generateReportFromDetailsButton"
+                id="generateReportFromDetailsFileFormat"
                 type="button"
               >
                 undefined 
@@ -715,14 +710,6 @@ exports[`<ReportDefinitionDetails /> panel render disabled daily definition, cli
       <div
         class="euiSpacer euiSpacer--l"
       />
-      <h3
-        class="euiTitle euiTitle--medium"
-      >
-        Report trigger
-      </h3>
-      <div
-        class="euiSpacer euiSpacer--l"
-      />
       <div
         class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionRow euiFlexGroup--responsive"
       >
@@ -735,7 +722,7 @@ exports[`<ReportDefinitionDetails /> panel render disabled daily definition, cli
             <dt
               class="euiDescriptionList__title"
             >
-              Trigger type
+              Report trigger
             </dt>
             <dd
               class="euiDescriptionList__description"
@@ -789,9 +776,6 @@ exports[`<ReportDefinitionDetails /> panel render disabled daily definition, cli
           </dl>
         </div>
       </div>
-      <div
-        class="euiSpacer euiSpacer--l"
-      />
     </div>
     <div
       aria-live="polite"
@@ -1001,10 +985,13 @@ exports[`<ReportDefinitionDetails /> panel render on demand definition details 1
             >
               <a
                 class="euiLink euiLink--primary"
-                href="undefined"
+                href=""
+                id="reportDefinitionSourceURL"
                 rel="noopener noreferrer"
                 target="_blank"
-              />
+              >
+                
+              </a>
             </dd>
           </dl>
         </div>
@@ -1022,7 +1009,7 @@ exports[`<ReportDefinitionDetails /> panel render on demand definition details 1
             <dd
               class="euiDescriptionList__description"
             >
-              Last undefined
+              Last 
             </dd>
           </dl>
         </div>
@@ -1042,7 +1029,7 @@ exports[`<ReportDefinitionDetails /> panel render on demand definition details 1
             >
               <button
                 class="euiLink euiLink--primary"
-                id="generateReportFromDetailsButton"
+                id="generateReportFromDetailsFileFormat"
                 type="button"
               >
                 undefined 
@@ -1112,14 +1099,6 @@ exports[`<ReportDefinitionDetails /> panel render on demand definition details 1
       <div
         class="euiSpacer euiSpacer--l"
       />
-      <h3
-        class="euiTitle euiTitle--medium"
-      >
-        Report trigger
-      </h3>
-      <div
-        class="euiSpacer euiSpacer--l"
-      />
       <div
         class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--directionRow euiFlexGroup--responsive"
       >
@@ -1132,7 +1111,7 @@ exports[`<ReportDefinitionDetails /> panel render on demand definition details 1
             <dt
               class="euiDescriptionList__title"
             >
-              Trigger type
+              Report trigger
             </dt>
             <dd
               class="euiDescriptionList__description"
@@ -1186,9 +1165,6 @@ exports[`<ReportDefinitionDetails /> panel render on demand definition details 1
           </dl>
         </div>
       </div>
-      <div
-        class="euiSpacer euiSpacer--l"
-      />
     </div>
     <div
       aria-live="polite"

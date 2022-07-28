@@ -1,32 +1,13 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import 'regenerator-runtime/runtime';
 import { createSavedSearchReport } from '../savedSearchReportHelper';
 import { reportSchema } from '../../../model';
+import { mockLogger } from '../../../../test/__mocks__/loggerMock';
+import _ from 'lodash';
 
 /**
  * The mock and sample input for saved search export function.
@@ -51,16 +32,18 @@ const input = {
       },
     },
     delivery: {
-      delivery_type: 'OpenSearch Dashboards user',
-      delivery_params: {
-        opensearch_dashboards_recipients: [],
-      },
+      configIds: [],
+      title: 'title',
+      textDescription: 'text description',
+      htmlDescription: 'html description',
     },
     trigger: {
       trigger_type: 'On demand',
     },
   },
 };
+
+const mockDateFormat = 'MM/DD/YYYY h:mm:ss.SSS a';
 
 /**
  * Max result window size in OpenSearch index settings.
@@ -78,7 +61,11 @@ describe('test create saved search report', () => {
     const client = mockOpenSearchClient(hits);
     const { timeCreated, fileName } = await createSavedSearchReport(
       input,
-      client
+      client,
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
     expect(fileName).toContain(`test report table order_`);
   }, 20000);
@@ -86,14 +73,22 @@ describe('test create saved search report', () => {
   test('create report with expected file name extension', async () => {
     const csvReport = await createSavedSearchReport(
       input,
-      mockOpenSearchClient([])
+      mockOpenSearchClient([]),
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
     expect(csvReport.fileName).toContain('.csv');
 
     input.report_definition.report_params.core_params.report_format = 'xlsx';
     const xlsxReport = await createSavedSearchReport(
       input,
-      mockOpenSearchClient([])
+      mockOpenSearchClient([]),
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
     );
     expect(xlsxReport.fileName).toContain('.xlsx');
   }, 20000);
@@ -101,7 +96,14 @@ describe('test create saved search report', () => {
   test('create report for empty data set', async () => {
     const hits: Array<{ _source: any }> = [];
     const client = mockOpenSearchClient(hits);
-    const { dataUrl } = await createSavedSearchReport(input, client);
+    const { dataUrl } = await createSavedSearchReport(
+      input,
+      client,
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
+    );
     expect(dataUrl).toEqual('');
   }, 20000);
 
@@ -114,7 +116,14 @@ describe('test create saved search report', () => {
       hit({ category: 'c5', customer_gender: 'Male' }),
     ];
     const client = mockOpenSearchClient(hits);
-    const { dataUrl } = await createSavedSearchReport(input, client);
+    const { dataUrl } = await createSavedSearchReport(
+      input,
+      client,
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
+    );
 
     expect(dataUrl).toEqual(
       'category,customer_gender\n' +
@@ -141,7 +150,14 @@ describe('test create saved search report', () => {
       hit({ category: 'c11', customer_gender: 'Male' }),
     ];
     const client = mockOpenSearchClient(hits);
-    const { dataUrl } = await createSavedSearchReport(input, client);
+    const { dataUrl } = await createSavedSearchReport(
+      input,
+      client,
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
+    );
 
     expect(dataUrl).toEqual(
       'category,customer_gender\n' +
@@ -171,7 +187,14 @@ describe('test create saved search report', () => {
       hit({ category: 'c5', customer_gender: 'Male' }),
     ];
     const client = mockOpenSearchClient(hits);
-    const { dataUrl } = await createSavedSearchReport(input, client);
+    const { dataUrl } = await createSavedSearchReport(
+      input,
+      client,
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
+    );
 
     expect(dataUrl).toEqual('category,customer_gender\n' + 'c1,Male');
   }, 20000);
@@ -193,7 +216,14 @@ describe('test create saved search report', () => {
       hit({ category: 'c10', customer_gender: 'Female' }),
     ];
     const client = mockOpenSearchClient(hits);
-    const { dataUrl } = await createSavedSearchReport(input, client);
+    const { dataUrl } = await createSavedSearchReport(
+      input,
+      client,
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
+    );
 
     expect(dataUrl).toEqual(
       'category,customer_gender\n' +
@@ -219,7 +249,14 @@ describe('test create saved search report', () => {
       hit({ category: 'c6', customer_gender: 'Female' }),
     ];
     const client = mockOpenSearchClient(hits);
-    const { dataUrl } = await createSavedSearchReport(input, client);
+    const { dataUrl } = await createSavedSearchReport(
+      input,
+      client,
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
+    );
 
     expect(dataUrl).toEqual(
       'category,customer_gender\n' +
@@ -239,13 +276,44 @@ describe('test create saved search report', () => {
       hit({ category: ',,c3', customer_gender: 'Male,,,' }),
     ];
     const client = mockOpenSearchClient(hits);
-    const { dataUrl } = await createSavedSearchReport(input, client);
+    const { dataUrl } = await createSavedSearchReport(
+      input,
+      client,
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
+    );
 
     expect(dataUrl).toEqual(
       'category,customer_gender\n' +
         '",c1","Ma,le"\n' +
         '"c2,","M,ale"\n' +
         '",,c3","Male,,,"'
+    );
+  }, 20000);
+
+  test('create report for data set with comma and custom separator', async () => {
+    const hits = [
+      hit({ category: ',c1', customer_gender: 'Ma,le' }),
+      hit({ category: 'c2,', customer_gender: 'M,ale' }),
+      hit({ category: ',,c3', customer_gender: 'Male,,,' }),
+    ];
+    const client = mockOpenSearchClient(hits);
+    const { dataUrl } = await createSavedSearchReport(
+      input,
+      client,
+      mockDateFormat,
+      '|',
+      undefined,
+      mockLogger
+    );
+
+    expect(dataUrl).toEqual(
+      'category|customer_gender\n' +
+        ',c1|Ma,le\n' +
+        'c2,|M,ale\n' +
+        ',,c3|Male,,,'
     );
   }, 20000);
 
@@ -265,7 +333,14 @@ describe('test create saved search report', () => {
       hits,
       '"geoip.country_iso_code", "geoip.city_name", "geoip.location"'
     );
-    const { dataUrl } = await createSavedSearchReport(input, client);
+    const { dataUrl } = await createSavedSearchReport(
+      input,
+      client,
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
+    );
 
     expect(dataUrl).toEqual(
       'geoip.country_iso_code,geoip.location.lon,geoip.location.lat,geoip.city_name\n' +
@@ -283,7 +358,14 @@ describe('test create saved search report', () => {
       hit({ category: ',,,@c5', customer_gender: 'Male' }),
     ];
     const client = mockOpenSearchClient(hits);
-    const { dataUrl } = await createSavedSearchReport(input, client);
+    const { dataUrl } = await createSavedSearchReport(
+      input,
+      client,
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
+    );
 
     expect(dataUrl).toEqual(
       'category,customer_gender\n' +
@@ -307,7 +389,14 @@ describe('test create saved search report', () => {
       hit({ category: ',,,@c5', customer_gender: 'Male' }),
     ];
     const client = mockOpenSearchClient(hits);
-    const { dataUrl } = await createSavedSearchReport(input, client);
+    const { dataUrl } = await createSavedSearchReport(
+      input,
+      client,
+      mockDateFormat,
+      ',',
+      undefined,
+      mockLogger
+    );
 
     expect(dataUrl).toEqual(
       'category,customer_gender\n' +
@@ -327,10 +416,106 @@ test('create report for data set contains null field value', async () => {
     hit({ category: 'c3', customer_gender: null }),
   ];
   const client = mockOpenSearchClient(hits);
-  const { dataUrl } = await createSavedSearchReport(input, client);
+  const { dataUrl } = await createSavedSearchReport(
+    input,
+    client,
+    mockDateFormat,
+    ',',
+    undefined,
+    mockLogger
+  );
 
   expect(dataUrl).toEqual(
     'category,customer_gender\n' + 'c1,Ma\n' + 'c2,le\n' + 'c3, '
+  );
+}, 20000);
+
+test('create report for data set with metadata fields', async () => {
+  const metadataFields = { _index: 'nameofindex', _id: 'someid' };
+  let hits = [
+    hit({ category: 'c1', customer_gender: 'Male' }),
+    hit({ category: 'c2', customer_gender: 'Male' }),
+    hit({ category: 'c3', customer_gender: 'Male' }),
+    hit({ category: 'c4', customer_gender: 'Male' }),
+    hit({ category: 'c5', customer_gender: 'Male' }),
+  ];
+  hits.forEach((i) => {
+    _.merge(i, metadataFields);
+  });
+
+  const client = mockOpenSearchClient(
+    hits,
+    '"category", "customer_gender","_index","_id"'
+  );
+  const { dataUrl } = await createSavedSearchReport(
+    input,
+    client,
+    mockDateFormat,
+    ',',
+    undefined,
+    mockLogger
+  );
+
+  expect(dataUrl).toEqual(
+    'category,customer_gender,_index,_id\n' +
+      'c1,Male,nameofindex,someid\n' +
+      'c2,Male,nameofindex,someid\n' +
+      'c3,Male,nameofindex,someid\n' +
+      'c4,Male,nameofindex,someid\n' +
+      'c5,Male,nameofindex,someid'
+  );
+}, 20000);
+
+test('create report with empty/one/multiple(list) date values', async () => {
+  const hits = [
+    hit(
+      { category: 'c1', customer_gender: 'Ma', order_date: [] },
+      { order_date: [] }
+    ),
+    hit(
+      {
+        category: 'c2',
+        customer_gender: 'le',
+        order_date: ['2021-12-16T14:04:55'],
+      },
+      { order_date: ['2021-12-16T14:04:55'] }
+    ),
+    hit(
+      {
+        category: 'c3',
+        customer_gender: 'he',
+        order_date: ['2021-12-17T14:04:55', '2021-12-18T14:04:55'],
+      },
+      { order_date: ['2021-12-17T14:04:55', '2021-12-18T14:04:55'] }
+    ),
+    hit(
+      {
+        category: 'c4',
+        customer_gender: 'te',
+        order_date: '2021-12-19T14:04:55',
+      },
+      { order_date: ['2021-12-19T14:04:55'] }
+    ),
+  ];
+  const client = mockOpenSearchClient(
+    hits,
+    '"category", "customer_gender", "order_date"'
+  );
+  const { dataUrl } = await createSavedSearchReport(
+    input,
+    client,
+    mockDateFormat,
+    ',',
+    undefined,
+    mockLogger
+  );
+
+  expect(dataUrl).toEqual(
+    'category,customer_gender,order_date\n' +
+      'c1,Ma,[]\n' +
+      'c2,le,"[""12/16/2021 2:04:55.000 pm""]"\n' +
+      'c3,he,"[""12/17/2021 2:04:55.000 pm"",""12/18/2021 2:04:55.000 pm""]"\n' +
+      'c4,te,12/19/2021 2:04:55.000 pm'
   );
 }, 20000);
 
@@ -399,13 +584,13 @@ function mockSavedSearch(columns = '"category", "customer_gender"') {
       "columns": [ ${columns} ],
       "sort": [],
       "version": 1,
-      "opensearchDashboardsSavedObjectMeta": {
-        "searchSourceJSON": "{\\"highlightAll\\":true,\\"version\\":true,\\"query\\":{\\"query\\":\\"\\",\\"language\\":\\"kuery\\"},\\"indexRefName\\":\\"opensearchDashboardsSavedObjectMeta.searchSourceJSON.index\\",\\"filter\\":[]}"
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\\"highlightAll\\":true,\\"version\\":true,\\"query\\":{\\"query\\":\\"\\",\\"language\\":\\"kuery\\"},\\"indexRefName\\":\\"kibanaSavedObjectMeta.searchSourceJSON.index\\",\\"filter\\":[]}"
       }
     },
     "references": [
       {
-        "name": "opensearchDashboardsSavedObjectMeta.searchSourceJSON.index",
+        "name": "kibanaSavedObjectMeta.searchSourceJSON.index",
         "type": "index-pattern",
         "id": "ff959d40-b880-11e8-a6d9-e546fe2bba5f"
       }
@@ -456,8 +641,9 @@ function mockIndexSettings() {
   `);
 }
 
-function hit(kv: any) {
+function hit(source_kv: any, fields_kv = {}) {
   return {
-    _source: kv,
+    _source: source_kv,
+    fields: fields_kv,
   };
 }

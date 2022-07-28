@@ -1,35 +1,18 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
  */
 
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
-
-import { DATA_REPORT_CONFIG } from './constants';
-
-import esb from 'elastic-builder';
-import moment from 'moment';
+import esb, { Sort } from 'elastic-builder';
 import converter from 'json-2-csv';
 import _ from 'lodash';
+import moment from 'moment';
+import { DATA_REPORT_CONFIG } from './constants';
+import {
+  buildOpenSearchQuery,
+  Filter,
+  Query,
+} from '../../../../../src/plugins/data/common';
 
 export var metaData = {
   saved_search_id: <string>null,
@@ -43,97 +26,43 @@ export var metaData = {
   fields_exist: <boolean>false,
   selectedFields: <any>[],
   paternName: <string>null,
-  filters: <any>[],
+  searchSourceJSON: <any>[],
   dateFields: <any>[],
 };
 
 // Get the selected columns by the user.
 export const getSelectedFields = async (columns) => {
   const selectedFields = [];
+  let fields_exist = false;
   for (let column of columns) {
     if (column !== '_source') {
-      metaData.fields_exist = true;
+      fields_exist = true;
       selectedFields.push(column);
     } else {
+      fields_exist = false;
       selectedFields.push('_source');
     }
   }
+  metaData.fields_exist = fields_exist;
   metaData.selectedFields = selectedFields;
 };
 
-//Build the OpenSearch query from the meta data
+// Build the OpenSearch query from the meta data
 // is_count is set to 1 if we building the count query but 0 if we building the fetch data query
-export const buildQuery = (report, is_count) => {
-  let requestBody = esb.boolQuery();
-  const filters = report._source.filters;
-  for (let item of JSON.parse(filters).filter) {
-    if (item.meta.disabled === false) {
-      switch (item.meta.negate) {
-        case false:
-          switch (item.meta.type) {
-            case 'phrase':
-              requestBody.must(
-                esb.matchPhraseQuery(item.meta.key, item.meta.params.query)
-              );
-              break;
-            case 'exists':
-              requestBody.must(esb.existsQuery(item.meta.key));
-              break;
-            case 'phrases':
-              if (item.meta.value.indexOf(',') > -1) {
-                const valueSplit = item.meta.value.split(', ');
-                for (const [key, incr] of valueSplit.entries()) {
-                  requestBody.should(esb.matchPhraseQuery(item.meta.key, incr));
-                }
-              } else {
-                requestBody.should(
-                  esb.matchPhraseQuery(item.meta.key, item.meta.value)
-                );
-              }
-              requestBody.minimumShouldMatch(1);
-              break;
-          }
-          break;
-        case true:
-          switch (item.meta.type) {
-            case 'phrase':
-              requestBody.mustNot(
-                esb.matchPhraseQuery(item.meta.key, item.meta.params.query)
-              );
-              break;
-            case 'exists':
-              requestBody.mustNot(esb.existsQuery(item.meta.key));
-              break;
-            case 'phrases':
-              let negatedBody = esb.boolQuery();
-              if (item.meta.value.indexOf(',') > -1) {
-                const valueSplit = item.meta.value.split(', ');
-                for (const [key, incr] of valueSplit.entries()) {
-                  negatedBody.should(esb.matchPhraseQuery(item.meta.key, incr));
-                }
-              } else {
-                negatedBody.should(
-                  esb.matchPhraseQuery(item.meta.key, item.meta.value)
-                );
-              }
-              negatedBody.minimumShouldMatch(1);
-              requestBody.mustNot(negatedBody);
-              break;
-          }
-          break;
-      }
-    }
-  }
-  //search part
-  let searchQuery = JSON.parse(filters)
-    .query.query.replace(/ and /g, ' AND ')
-    .replace(/ or /g, ' OR ')
-    .replace(/ not /g, ' NOT ');
-  if (searchQuery) {
-    requestBody.must(esb.queryStringQuery(searchQuery));
-  }
+export const buildRequestBody = (report: any, is_count: number) => {
+  let esbBoolQuery = esb.boolQuery();
+  const searchSourceJSON = report._source.searchSourceJSON;
+
+  const savedObjectQuery: Query = JSON.parse(searchSourceJSON).query;
+  const savedObjectFilter: Filter = JSON.parse(searchSourceJSON).filter;
+  const QueryFromSavedObject = buildOpenSearchQuery(
+    undefined,
+    savedObjectQuery,
+    savedObjectFilter
+  );
+  // Add time range
   if (report._source.timeFieldName && report._source.timeFieldName.length > 0) {
-    requestBody.must(
+    esbBoolQuery.must(
       esb
         .rangeQuery(report._source.timeFieldName)
         .format('epoch_millis')
@@ -142,47 +71,75 @@ export const buildQuery = (report, is_count) => {
     );
   }
   if (is_count) {
-    return esb.requestBodySearch().query(requestBody);
+    return esb.requestBodySearch().query(esbBoolQuery);
   }
 
-  //Add the Sort to the query
-  let reqBody = esb.requestBodySearch().query(requestBody).version(true);
+  // Add sorting to the query
+  let esbSearchQuery = esb
+    .requestBodySearch()
+    .query(esbBoolQuery)
+    .version(true);
 
   if (report._source.sorting.length > 0) {
-    if (report._source.sorting.length === 1)
-      reqBody.sort(
-        esb.sort(report._source.sorting[0][0], report._source.sorting[0][1])
-      );
-    else
-      reqBody.sort(
-        esb.sort(report._source.sorting[0], report._source.sorting[1])
-      );
+    const sortings: Sort[] = report._source.sorting.map((element: string[]) => {
+      return esb.sort(element[0], element[1]);
+    });
+    esbSearchQuery.sorts(sortings);
   }
 
-  //get the selected fields only
+  // add selected fields to query
   if (report._source.fields_exist) {
-    reqBody.source({ includes: report._source.selectedFields });
+    esbSearchQuery.source({ includes: report._source.selectedFields });
   }
-  return reqBody;
+  // Add a customizer to merge queries to generate request body
+  let requestBody = _.mergeWith(
+    { query: QueryFromSavedObject },
+    esbSearchQuery.toJSON(),
+    (objValue, srcValue) => {
+      if (_.isArray(objValue)) {
+        return objValue.concat(srcValue);
+      }
+    }
+  );
+
+  requestBody = addDocValueFields(report, requestBody);
+  return requestBody;
 };
 
 // Fetch the data from OpenSearch
-export const getOpenSearchData = (arrayHits, report, params) => {
+export const getOpenSearchData = (
+  arrayHits,
+  report,
+  params,
+  dateFormat: string
+) => {
   let hits: any = [];
   for (let valueRes of arrayHits) {
     for (let data of valueRes.hits) {
       const fields = data.fields;
-      //get  all the fields of type date and fromat them to excel format
-      for (let dateType of report._source.dateFields) {
-        if (data._source[dateType]) {
-          data._source[dateType] = moment(fields[dateType][0]).format(
-            DATA_REPORT_CONFIG.excelDateFormat
-          );
+      // get all the fields of type date and format them to excel format
+      for (let dateField of report._source.dateFields) {
+        const dateValue = data._source[dateField];
+        if (dateValue && dateValue.length !== 0) {
+          if (dateValue instanceof Array) {
+            // loop through array
+            dateValue.forEach((element, index) => {
+              data._source[dateField][index] = moment(
+                fields[dateField][index]
+              ).format(dateFormat);
+            });
+          } else {
+            // The fields response always returns an array of values for each field
+            // https://www.elastic.co/guide/en/elasticsearch/reference/master/search-fields.html#search-fields-response
+            data._source[dateField] = moment(fields[dateField][0]).format(
+              dateFormat
+            );
+          }
         }
       }
       delete data['fields'];
       if (report._source.fields_exist === true) {
-        let result = traverse(data._source, report._source.selectedFields);
+        let result = traverse(data, report._source.selectedFields);
         hits.push(params.excel ? sanitize(result) : result);
       } else {
         hits.push(params.excel ? sanitize(data) : data);
@@ -197,10 +154,10 @@ export const getOpenSearchData = (arrayHits, report, params) => {
 };
 
 //Convert the data to Csv format
-export const convertToCSV = async (dataset) => {
+export const convertToCSV = async (dataset, csvSeparator) => {
   let convertedData: any = [];
   const options = {
-    delimiter: { field: ',', eol: '\n' },
+    delimiter: { field: csvSeparator, eol: '\n' },
     emptyFieldValue: ' ',
   };
   await converter.json2csvAsync(dataset[0], options).then((csv) => {
@@ -220,7 +177,7 @@ function flattenHits(hits, result = {}, prefix = '') {
     ) {
       flattenHits(value, result, prefix + key + '.');
     } else {
-      result[prefix + key] = value;
+      result[prefix.replace(/^_source\./, '') + key] = value;
     }
   }
   return result;
@@ -249,11 +206,11 @@ function traverse(data, keys, result = {}) {
  */
 function sanitize(doc: any) {
   for (const field in doc) {
-    if (doc[field] == null)
-      continue
+    if (doc[field] == null) continue;
     if (
       doc[field].toString().startsWith('+') ||
-      (doc[field].toString().startsWith('-') && typeof doc[field] !== "number") ||
+      (doc[field].toString().startsWith('-') &&
+        typeof doc[field] !== 'number') ||
       doc[field].toString().startsWith('=') ||
       doc[field].toString().startsWith('@')
     ) {
@@ -262,3 +219,20 @@ function sanitize(doc: any) {
   }
   return doc;
 }
+
+const addDocValueFields = (report: any, requestBody: any) => {
+  const docValues = [];
+  for (const dateType of report._source.dateFields) {
+    docValues.push({
+      field: dateType,
+      format: 'date_hour_minute_second_fraction',
+    });
+  }
+  // elastic-builder doesn't provide function to build docvalue_fields with format,
+  // this is a workaround which appends docvalues field to the request body.
+  requestBody = {
+    ...requestBody,
+    docvalue_fields: docValues,
+  };
+  return requestBody;
+};

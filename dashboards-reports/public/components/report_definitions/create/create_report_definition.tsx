@@ -1,30 +1,10 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import React, { useEffect, useState } from 'react';
+import { i18n } from '@osd/i18n';
 import {
   EuiButtonEmpty,
   EuiFlexGroup,
@@ -36,8 +16,6 @@ import {
   EuiSpacer,
 } from '@elastic/eui';
 import { ReportSettings } from '../report_settings';
-import { ReportDelivery } from '../delivery';
-import { ReportTrigger } from '../report_trigger';
 import { generateReportFromDefinitionId } from '../../main/main_utils';
 import { converter } from '../utils';
 import {
@@ -72,8 +50,10 @@ interface triggerType {
 }
 
 interface deliveryType {
-  delivery_type: string;
-  delivery_params: any;
+  configIds: Array<string>;
+  title: string;
+  textDescription: string;
+  htmlDescription: string;
 }
 
 export interface TriggerParamsType {
@@ -109,7 +89,7 @@ export interface timeRangeParams {
   timeTo: Date;
 }
 
-export function CreateReport(props) {
+export function CreateReport(props: { [x: string]: any; setBreadcrumbs?: any; httpClient?: any; }) {
   let createReportDefinitionRequest: reportDefinitionParams = {
     report_params: {
       report_name: '',
@@ -122,8 +102,10 @@ export function CreateReport(props) {
       },
     },
     delivery: {
-      delivery_type: '',
-      delivery_params: {},
+      configIds: [],
+      title: '',
+      textDescription: '',
+      htmlDescription: ''
     },
     trigger: {
       trigger_type: '',
@@ -144,24 +126,17 @@ export function CreateReport(props) {
   ] = useState('');
   const [
     showSettingsReportSourceError,
-    setShowSettingsReportSourceError
+    setShowSettingsReportSourceError,
   ] = useState(false);
   const [
     settingsReportSourceErrorMessage,
-    setSettingsReportSourceErrorMessage
+    setSettingsReportSourceErrorMessage,
   ] = useState('');
   const [
     showTriggerIntervalNaNError,
     setShowTriggerIntervalNaNError,
   ] = useState(false);
   const [showCronError, setShowCronError] = useState(false);
-  const [showEmailRecipientsError, setShowEmailRecipientsError] = useState(
-    false
-  );
-  const [
-    emailRecipientsErrorMessage,
-    setEmailRecipientsErrorMessage,
-  ] = useState('');
   const [showTimeRangeError, setShowTimeRangeError] = useState(false);
 
   // preserve the state of the request after an invalid create report definition request
@@ -171,11 +146,18 @@ export function CreateReport(props) {
 
   const addInputValidationErrorToastHandler = () => {
     const errorToast = {
-      title: 'One or more fields have an error. Please check and try again.',
+      title: i18n.translate(
+        'opensearch.reports.createReportDefinition.error.fieldsHaveAnError',
+        {
+          defaultMessage:
+            'One or more fields have an error. Please check and try again.',
+        }
+      ),
       color: 'danger',
       iconType: 'alert',
       id: 'errorToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(errorToast));
   };
 
@@ -191,12 +173,16 @@ export function CreateReport(props) {
       );
     } else if (errorType === 'API') {
       toast = {
-        title: 'Error creating report definition.',
+        title: i18n.translate(
+          'opensearch.reports.createReportDefinition.error.errorCreating',
+          { defaultMessage: 'Error creating report definition.' }
+        ),
         color: 'danger',
         iconType: 'alert',
         id: 'errorToast',
       };
     }
+    // @ts-ignore
     setToasts(toasts.concat(toast));
   };
 
@@ -206,11 +192,15 @@ export function CreateReport(props) {
 
   const addInvalidTimeRangeToastHandler = () => {
     const errorToast = {
-      title: 'Invalid time range selected.',
+      title: i18n.translate(
+        'opensearch.reports.createReportDefinition.error.invalidTimeRange',
+        { defaultMessage: 'Invalid time range selected.' }
+      ),
       color: 'danger',
       iconType: 'alert',
       id: 'timeRangeErrorToast',
     };
+    // @ts-ignore
     setToasts(toasts.concat(errorToast));
   };
 
@@ -218,8 +208,8 @@ export function CreateReport(props) {
     addInvalidTimeRangeToastHandler();
   };
 
-  const removeToast = (removedToast) => {
-    setToasts(toasts.filter((toast) => toast.id !== removedToast.id));
+  const removeToast = (removedToast: { id: string; }) => {
+    setToasts(toasts.filter((toast: any) => toast.id !== removedToast.id));
   };
 
   let timeRange = {
@@ -242,7 +232,7 @@ export function CreateReport(props) {
 
     let error = false;
     await definitionInputValidation(
-      metadata, 
+      metadata,
       error,
       setShowSettingsReportNameError,
       setSettingsReportNameErrorMessage,
@@ -252,8 +242,6 @@ export function CreateReport(props) {
       timeRange,
       setShowTimeRangeError,
       setShowCronError,
-      setShowEmailRecipientsError,
-      setEmailRecipientsErrorMessage
     ).then((response) => {
       error = response;
     });
@@ -262,17 +250,6 @@ export function CreateReport(props) {
       setPreErrorData(metadata);
       setComingFromError(true);
     } else {
-      // convert header and footer to html
-      if ('header' in metadata.report_params.core_params) {
-        metadata.report_params.core_params.header = converter.makeHtml(
-          metadata.report_params.core_params.header
-        );
-      }
-      if ('footer' in metadata.report_params.core_params) {
-        metadata.report_params.core_params.footer = converter.makeHtml(
-          metadata.report_params.core_params.footer
-        );
-      }
       httpClient
         .post('../api/reporting/reportDefinition', {
           body: JSON.stringify(metadata),
@@ -280,15 +257,16 @@ export function CreateReport(props) {
             'Content-Type': 'application/json',
           },
         })
-        .then(async (resp) => {
+        .then(async (resp: { scheduler_response: { reportDefinitionId: string; }; }) => {
           //TODO: consider handle the on demand report generation from server side instead
           if (metadata.trigger.trigger_type === 'On demand') {
-            const reportDefinitionId = resp.scheduler_response.reportDefinitionId;
+            const reportDefinitionId =
+              resp.scheduler_response.reportDefinitionId;
             generateReportFromDefinitionId(reportDefinitionId, httpClient);
           }
           window.location.assign(`reports-dashboards#/create=success`);
         })
-        .catch((error) => {
+        .catch((error: {body: { statusCode: number; }; }) => {
           console.log('error in creating report definition: ' + error);
           if (error.body.statusCode === 403) {
             handleErrorOnCreateToast('permissions');
@@ -303,11 +281,17 @@ export function CreateReport(props) {
     window.scrollTo(0, 0);
     props.setBreadcrumbs([
       {
-        text: 'Reporting',
+        text: i18n.translate(
+          'opensearch.reports.createReportDefinition.breadcrumb.reporting',
+          { defaultMessage: 'Reporting' }
+        ),
         href: '#',
       },
       {
-        text: 'Create report definition',
+        text: i18n.translate(
+          'opensearch.reports.createReportDefinition.breadcrumb.createReportDefinition',
+          { defaultMessage: 'Create report definition' }
+        ),
         href: '#/create',
       },
     ]);
@@ -317,11 +301,16 @@ export function CreateReport(props) {
     <div>
       <EuiPageBody>
         <EuiTitle>
-          <h1>Create report definition</h1>
+          <h1>
+            {i18n.translate('opensearch.reports.createReportDefinition.title', {
+              defaultMessage: 'Create report definition',
+            })}
+          </h1>
         </EuiTitle>
         <EuiSpacer />
         <ReportSettings
           edit={false}
+          editDefinitionId={''} // empty string since we are coming from create
           reportDefinitionRequest={createReportDefinitionRequest}
           httpClientProps={props['httpClient']}
           timeRange={timeRange}
@@ -330,20 +319,8 @@ export function CreateReport(props) {
           showSettingsReportSourceError={showSettingsReportSourceError}
           settingsReportSourceErrorMessage={settingsReportSourceErrorMessage}
           showTimeRangeError={showTimeRangeError}
-        />
-        <EuiSpacer />
-        <ReportTrigger
-          edit={false}
-          reportDefinitionRequest={createReportDefinitionRequest}
           showTriggerIntervalNaNError={showTriggerIntervalNaNError}
           showCronError={showCronError}
-        />
-        <EuiSpacer />
-        <ReportDelivery
-          edit={false}
-          reportDefinitionRequest={createReportDefinitionRequest}
-          showEmailRecipientsError={showEmailRecipientsError}
-          emailRecipientsErrorMessage={emailRecipientsErrorMessage}
         />
         <EuiSpacer />
         <EuiFlexGroup justifyContent="flexEnd">
@@ -353,7 +330,10 @@ export function CreateReport(props) {
                 window.location.assign(`reports-dashboards#/`);
               }}
             >
-              Cancel
+              {i18n.translate(
+                'opensearch.reports.createReportDefinition.cancel',
+                { defaultMessage: 'Cancel' }
+              )}
             </EuiButtonEmpty>
           </EuiFlexItem>
           <EuiFlexItem grow={false}>
@@ -367,7 +347,10 @@ export function CreateReport(props) {
               }
               id={'createNewReportDefinition'}
             >
-              Create
+              {i18n.translate(
+                'opensearch.reports.createReportDefinition.create',
+                { defaultMessage: 'Create' }
+              )}
             </EuiButton>
           </EuiFlexItem>
         </EuiFlexGroup>

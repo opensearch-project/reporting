@@ -1,27 +1,6 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import React from 'react';
@@ -59,8 +38,10 @@ describe('<ReportDetails /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'On demand',
@@ -70,6 +51,7 @@ describe('<ReportDetails /> panel', () => {
     httpClientMock.get = jest.fn().mockResolvedValue({
       report_definition,
       query_url: `http://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g=(time:(from:'2020-10-23T20:53:35.315Z',to:'2020-10-23T21:23:35.316Z'))`,
+      config_list: []
     });
 
     const { container } = render(
@@ -100,8 +82,10 @@ describe('<ReportDetails /> panel', () => {
         },
       },
       delivery: {
-        delivery_type: '',
-        delivery_params: {},
+        configIds: [],
+        title: '',
+        textDescription: '',
+        htmlDescription: ''
       },
       trigger: {
         trigger_type: 'Schedule',
@@ -123,6 +107,7 @@ describe('<ReportDetails /> panel', () => {
     httpClientMock.get = jest.fn().mockResolvedValue({
       report_definition,
       query_url: `http://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g=(time:(from:'2020-10-23T20:53:35.315Z',to:'2020-10-23T21:23:35.316Z'))`,
+      config_list: []
     });
 
     const { container } = render(

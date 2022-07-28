@@ -1,27 +1,6 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import dateMath from '@elastic/datemath';
@@ -48,15 +27,13 @@ export const getTimeFieldsFromUrl = () => {
   const url = unhashUrl(window.location.href);
 
   let [, fromDateString, toDateString] = url.match(timeRangeMatcher);
-  fromDateString = fromDateString.replace(/[']+/g, '');
+  fromDateString = decodeURIComponent(fromDateString.replace(/[']+/g, ''));
   // convert time range to from date format in case time range is relative
   const fromDateFormat = dateMath.parse(fromDateString);
-  toDateString = toDateString.replace(/[']+/g, '');
-  const toDateFormat = dateMath.parse(toDateString);
+  toDateString = decodeURIComponent(toDateString.replace(/[']+/g, ''));
+  const toDateFormat = dateMath.parse(toDateString, { roundUp: true });
 
-  const timeDuration = moment.duration(
-    dateMath.parse(toDateString).diff(dateMath.parse(fromDateString))
-  );
+  const timeDuration = moment.duration(toDateFormat.diff(fromDateFormat));
 
   return {
     time_from: fromDateFormat,
@@ -71,11 +48,11 @@ export const contextMenuCreateReportDefinition = (baseURI) => {
   const timeRanges = getTimeFieldsFromUrl();
 
   // check report source
-  if (baseURI.includes('dashboard')) {
+  if (/\/app\/dashboards/.test(baseURI)) {
     reportSource = 'dashboard:';
-  } else if (baseURI.includes('visualize')) {
+  } else if (/\/app\/visualize/.test(baseURI)) {
     reportSource = 'visualize:';
-  } else if (baseURI.includes('discover')) {
+  } else if (/\/app\/discover/.test(baseURI)) {
     reportSource = 'discover:';
   }
   reportSource += reportSourceId.toString();
@@ -141,22 +118,23 @@ export const replaceQueryURL = (pageUrl) => {
   // we unhash the url in case OpenSearch Dashboards advanced UI setting 'state:storeInSessionStorage' is turned on
   const unhashedUrl = new URL(unhashUrl(pageUrl));
   let queryUrl = unhashedUrl.pathname + unhashedUrl.hash;
-  let [, fromDateString, toDateString] = queryUrl.match(timeRangeMatcher);
-  fromDateString = fromDateString.replace(/[']+/g, '');
+  let [, fromDateStringMatch, toDateStringMatch] =
+    queryUrl.match(timeRangeMatcher);
+  const fromDateString = decodeURIComponent(fromDateStringMatch.replace(/[']+/g, ''));
 
   // convert time range to from date format in case time range is relative
   const fromDateFormat = dateMath.parse(fromDateString);
-  toDateString = toDateString.replace(/[']+/g, '');
-  const toDateFormat = dateMath.parse(toDateString);
+  const toDateString = decodeURIComponent(toDateStringMatch.replace(/[']+/g, ''));
+  const toDateFormat = dateMath.parse(toDateString, { roundUp: true });
 
   // replace to and from dates with absolute date
   queryUrl = queryUrl.replace(
-    fromDateString,
+    fromDateStringMatch,
     "'" + fromDateFormat.toISOString() + "'"
   );
   queryUrl = queryUrl.replace(
-    toDateString + '))',
-    "'" + toDateFormat.toISOString() + "'))"
+    toDateStringMatch,
+    "'" + toDateFormat.toISOString() + "'"
   );
   return queryUrl;
 };

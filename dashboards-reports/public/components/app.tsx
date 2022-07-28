@@ -1,27 +1,6 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import React from 'react';
@@ -49,6 +28,7 @@ import { Main } from './main/main';
 import { ReportDetails } from './main/report_details/report_details';
 import { ReportDefinitionDetails } from './main/report_definition_details/report_definition_details';
 import { EditReportDefinition } from './report_definitions/edit/edit_report_definition';
+import { i18n } from '@osd/i18n';
 
 export interface CoreInterface {
   http: CoreStart['http'];
@@ -93,7 +73,10 @@ export const ReportsDashboardsApp = ({
                     path="/report_details/:reportId"
                     render={(props) => (
                       <ReportDetails
-                        title="Report Details"
+                        title={i18n.translate(
+                          'opensearch.reports.app.reportDetails',
+                          { defaultMessage: 'Report Details' }
+                        )}
                         httpClient={http}
                         {...props}
                         setBreadcrumbs={chrome.setBreadcrumbs}
@@ -104,7 +87,10 @@ export const ReportsDashboardsApp = ({
                     path="/report_definition_details/:reportDefinitionId"
                     render={(props) => (
                       <ReportDefinitionDetails
-                        title="Report Definition Details"
+                        title={i18n.translate(
+                          'opensearch.reports.app.reportDefinitionDetails',
+                          { defaultMessage: 'Report Definition Details' }
+                        )}
                         httpClient={http}
                         {...props}
                         setBreadcrumbs={chrome.setBreadcrumbs}
@@ -115,7 +101,10 @@ export const ReportsDashboardsApp = ({
                     path="/create"
                     render={(props) => (
                       <CreateReport
-                        title="Create Report"
+                        title={i18n.translate(
+                          'opensearch.reports.app.createReport',
+                          { defaultMessage: 'Create Report' }
+                        )}
                         httpClient={http}
                         {...props}
                         setBreadcrumbs={chrome.setBreadcrumbs}
@@ -126,7 +115,10 @@ export const ReportsDashboardsApp = ({
                     path="/edit/:reportDefinitionId"
                     render={(props) => (
                       <EditReportDefinition
-                        title="Edit Report Definition"
+                        title={i18n.translate(
+                          'opensearch.reports.app.editReportDefinition',
+                          { defaultMessage: 'Edit Report Definition' }
+                        )}
                         httpClient={http}
                         {...props}
                         setBreadcrumbs={chrome.setBreadcrumbs}
@@ -137,7 +129,10 @@ export const ReportsDashboardsApp = ({
                     path="/"
                     render={(props) => (
                       <Main
-                        title="Reporting Homepage"
+                        title={i18n.translate(
+                          'opensearch.reports.app.reportingHomepage',
+                          { defaultMessage: 'Reporting Homepage' }
+                        )}
                         httpClient={http}
                         {...props}
                         setBreadcrumbs={chrome.setBreadcrumbs}

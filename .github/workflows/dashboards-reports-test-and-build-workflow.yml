@@ -4,8 +4,9 @@ on: [pull_request, push]
 
 env:
   PLUGIN_NAME: reportsDashboards
-  OPENSEARCH_VERSION: '1.0'
-  OPENSEARCH_PLUGIN_VERSION: 1.0.0.0-rc1
+  ARTIFACT_NAME: reports-dashboards
+  OPENSEARCH_VERSION: '1.3'
+  OPENSEARCH_PLUGIN_VERSION: 1.3.4.0
 
 jobs:
   build:
@@ -24,13 +25,14 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: "10.23.1"
+          node-version: "10.24.1"
 
       - name: Move Dashboards Reports to Plugins Dir
         run: mv dashboards-reports OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
 
       - name: Add Chromium Binary to Reporting for Testing
         run: |
+          sudo apt update
           sudo apt install -y libnss3-dev fonts-liberation libfontconfig1
           cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
           wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip 
@@ -49,7 +51,14 @@ jobs:
         with:
           timeout_minutes: 30
           max_attempts: 3
-          command: cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}; yarn test
+          command: cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}; yarn test --coverage
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v1
+        with:
+          flags: dashboards-reports
+          directory: OpenSearch-Dashboards/plugins/
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Build Artifact
         run: |
@@ -58,45 +67,45 @@ jobs:
 
           cd build
           mkdir -p ./{linux-x64,linux-arm64,windows-x64}/opensearch-dashboards/${{ env.PLUGIN_NAME }}
-          cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-x64/${{ env.PLUGIN_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-x64.zip
-          cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-arm64/${{ env.PLUGIN_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-arm64.zip
-          mv ./${{ env.PLUGIN_NAME }}-*.zip ./windows-x64/${{ env.PLUGIN_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-windows-x64.zip
+          cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-x64/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-x64.zip
+          cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-arm64/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-arm64.zip
+          mv ./${{ env.PLUGIN_NAME }}-*.zip ./windows-x64/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-windows-x64.zip
 
           cd linux-x64
-          wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip
+          wget https://github.com/opensearch-project/dashboards-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip
           unzip chromium-linux-x64.zip -d ./opensearch-dashboards/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./opensearch-dashboards
-          mv ./${{ env.PLUGIN_NAME }}-*.zip ..
+          zip -ur ./${{ env.ARTIFACT_NAME }}-*.zip ./opensearch-dashboards
+          mv ./${{ env.ARTIFACT_NAME }}-*.zip ..
           cd ..
 
           cd linux-arm64
-          wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-arm64.zip
+          wget https://github.com/opensearch-project/dashboards-reports/releases/download/chromium-1.12.0.0/chromium-linux-arm64.zip
           unzip chromium-linux-arm64.zip -d ./opensearch-dashboards/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./opensearch-dashboards
-          mv ./${{ env.PLUGIN_NAME }}-*.zip ..
+          zip -ur ./${{ env.ARTIFACT_NAME }}-*.zip ./opensearch-dashboards
+          mv ./${{ env.ARTIFACT_NAME }}-*.zip ..
           cd ..
 
           cd windows-x64
-          wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip
+          wget https://github.com/opensearch-project/dashboards-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip
           unzip chromium-windows-x64.zip -d ./opensearch-dashboards/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./opensearch-dashboards
-          mv ./${{ env.PLUGIN_NAME }}-*.zip ..
+          zip -ur ./${{ env.ARTIFACT_NAME }}-*.zip ./opensearch-dashboards
+          mv ./${{ env.ARTIFACT_NAME }}-*.zip ..
           cd ..
 
       - name: Upload Artifact For Linux x64
         uses: actions/upload-artifact@v1
         with:
           name: dashboards-reports-linux-x64
-          path: OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-x64.zip
+          path: OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-x64.zip
 
       - name: Upload Artifact For Linux arm64
         uses: actions/upload-artifact@v1
         with:
           name: dashboards-reports-linux-arm64
-          path: OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-arm64.zip
+          path: OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-arm64.zip
 
       - name: Upload Artifact For Windows
         uses: actions/upload-artifact@v1
         with:
           name: dashboards-reports-windows-x64
-          path: OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-windows-x64.zip
+          path: OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-windows-x64.zip

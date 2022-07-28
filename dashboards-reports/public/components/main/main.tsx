@@ -1,30 +1,10 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import React, { Fragment, useState, useEffect } from 'react';
+import { i18n } from '@osd/i18n';
 import {
   EuiFlexGroup,
   EuiFlexItem,
@@ -80,7 +60,10 @@ export function Main(props) {
       );
     } else if (errorType === 'API') {
       toast = {
-        title: 'Error generating reports table.',
+        title: i18n.translate(
+          'opensearch.reports.main.errorGeneratingReportsTable.',
+          { defaultMessage: 'Error generating reports table.' }
+        ),
         color: 'danger',
         iconType: 'alert',
         id: 'reportsTableErrorToast',
@@ -101,7 +84,10 @@ export function Main(props) {
       );
     } else if (errorType === 'API') {
       toast = {
-        title: 'Error generating report definitions table.',
+        title: i18n.translate(
+          'opensearch.reports.main.errorGeneratingReportDefinitionsTable.',
+          { defaultMessage: 'Error generating report definitions table.' }
+        ),
         color: 'danger',
         iconType: 'alert',
         id: 'reportDefinitionsTableErrorToast',
@@ -114,7 +100,12 @@ export function Main(props) {
     addReportDefinitionsTableErrorToastHandler(errorType);
   };
 
-  const addErrorOnDemandDownloadToastHandler = (title = 'Error downloading report.', text = '') => {
+  const addErrorOnDemandDownloadToastHandler = (
+    title = i18n.translate('opensearch.reports.main.errorDownloadingReport', {
+      defaultMessage: 'Error downloading report.',
+    }),
+    text = ''
+  ) => {
     const errorToast = {
       title,
       text,
@@ -131,7 +122,10 @@ export function Main(props) {
 
   const addSuccessOnDemandDownloadToastHandler = () => {
     const successToast = {
-      title: 'Successfully downloaded report.',
+      title: i18n.translate(
+        'opensearch.reports.main.successfullyDownloadedReport',
+        { defaultMessage: 'Successfully downloaded report.' }
+      ),
       color: 'success',
       iconType: 'check',
       id: 'onDemandDownloadSuccessToast',
@@ -145,7 +139,10 @@ export function Main(props) {
 
   const addCreateReportDefinitionSuccessToastHandler = () => {
     const successToast = {
-      title: 'Successfully created report definition.',
+      title: i18n.translate(
+        'opensearch.reports.main.successfullyCreatedReportDefinition',
+        { defaultMessage: 'Successfully created report definition.' }
+      ),
       color: 'success',
       iconType: 'check',
       id: 'createReportDefinitionSuccessToast',
@@ -159,7 +156,10 @@ export function Main(props) {
 
   const addEditReportDefinitionSuccessToastHandler = () => {
     const successToast = {
-      title: 'Successfully updated report definition.',
+      title: i18n.translate(
+        'opensearch.reports.main.successfullyUpdatedReportDefinition',
+        { defaultMessage: 'Successfully updated report definition.' }
+      ),
       color: 'success',
       iconType: 'check',
       id: 'editReportDefinitionSuccessToast',
@@ -173,17 +173,20 @@ export function Main(props) {
 
   const addDeleteReportDefinitionSuccessToastHandler = () => {
     const successToast = {
-      title: 'Successfully deleted report definition.',
+      title: i18n.translate(
+        'opensearch.reports.main.successfullyDeletedReportDefinition',
+        { defaultMessage: 'Successfully deleted report definition.' }
+      ),
       color: 'success',
       iconType: 'check',
-      id: 'deleteReportDefinitionSuccessToast'
+      id: 'deleteReportDefinitionSuccessToast',
     };
     setToasts(toasts.concat(successToast));
-  }
+  };
 
   const handleDeleteReportDefinitionSuccessToast = () => {
     addDeleteReportDefinitionSuccessToastHandler();
-  }
+  };
 
   const removeToast = (removedToast) => {
     setToasts(toasts.filter((toast) => toast.id !== removedToast.id));
@@ -197,7 +200,9 @@ export function Main(props) {
   useEffect(() => {
     props.setBreadcrumbs([
       {
-        text: 'Reporting',
+        text: i18n.translate('opensearch.reports.main.title.reporting', {
+          defaultMessage: 'Reporting',
+        }),
         href: '#',
       },
     ]);
@@ -272,18 +277,23 @@ export function Main(props) {
           <EuiFlexItem>
             <EuiTitle>
               <h2>
-                Reports{' '}
+                {i18n.translate('opensearch.reports.main.title.reports', {
+                  defaultMessage: 'Reports',
+                })}{' '}
                 <p style={reportCountStyles}> ({reportsTableContent.length})</p>
               </h2>
             </EuiTitle>
           </EuiFlexItem>
           <EuiFlexItem component="span" grow={false}>
-            <EuiButton 
-              onClick={refreshReportsTable} 
-              iconSide='left' 
-              iconType='refresh'
+            <EuiButton
+              onClick={refreshReportsTable}
+              iconSide="left"
+              iconType="refresh"
             >
-              Refresh
+              {i18n.translate(
+                'opensearch.reports.main.reports.button.refresh',
+                { defaultMessage: 'Refresh' }
+              )}
             </EuiButton>
           </EuiFlexItem>
         </EuiFlexGroup>
@@ -303,7 +313,10 @@ export function Main(props) {
           <EuiFlexItem>
             <EuiTitle>
               <h2>
-                Report definitions
+                {i18n.translate(
+                  'opensearch.reports.main.title.reportDefinitions',
+                  { defaultMessage: 'Report definitions' }
+                )}
                 <p style={reportCountStyles}>
                   {' '}
                   ({reportDefinitionsTableContent.length})
@@ -312,12 +325,15 @@ export function Main(props) {
             </EuiTitle>
           </EuiFlexItem>
           <EuiFlexItem grow={false}>
-            <EuiButton 
-              onClick={refreshReportsDefinitionsTable} 
-              iconSide='left' 
-              iconType='refresh'
+            <EuiButton
+              onClick={refreshReportsDefinitionsTable}
+              iconSide="left"
+              iconType="refresh"
             >
-              Refresh
+              {i18n.translate(
+                'opensearch.reports.main.reportDefinitions.button.refresh',
+                { defaultMessage: 'Refresh' }
+              )}
             </EuiButton>
           </EuiFlexItem>
           <EuiFlexItem component="span" grow={false}>
@@ -328,7 +344,10 @@ export function Main(props) {
               }}
               id={'createReportHomepageButton'}
             >
-              Create
+              {i18n.translate(
+                'opensearch.reports.main.reportDefinitions.button.create',
+                { defaultMessage: 'Create' }
+              )}
             </EuiButton>
           </EuiFlexItem>
         </EuiFlexGroup>

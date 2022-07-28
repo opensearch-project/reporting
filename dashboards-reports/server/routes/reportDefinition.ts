@@ -1,27 +1,6 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import { schema } from '@osd/config-schema';
@@ -42,10 +21,14 @@ import { updateReportDefinition } from './lib/updateReportDefinition';
 import { DEFAULT_MAX_SIZE } from './utils/constants';
 import { addToMetric } from './utils/metricHelper';
 import { validateReportDefinition } from '../../server/utils/validationHelper';
-import { AccessInfoType } from 'server';
+import { ReportingConfig } from 'server';
 
-export default function (router: IRouter, accessInfo: AccessInfoType) {
-  const { basePath, serverInfo } = accessInfo;
+export default function (router: IRouter, config: ReportingConfig) {
+  const protocol = config.get('osd_server', 'protocol');
+  const hostname = config.get('osd_server', 'hostname');
+  const port = config.get('osd_server', 'port');
+  const basePath = config.osdConfig.get('server', 'basePath');
+
   // Create report Definition
   router.post(
     {
@@ -65,8 +48,7 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
       const logger = context.reporting_plugin.logger;
       // input validation
       try {
-        reportDefinition.report_params.core_params.origin =
-          request.headers.origin;
+        reportDefinition.report_params.core_params.origin = `${protocol}://${hostname}:${port}${basePath}`;
         reportDefinition = await validateReportDefinition(
           context.core.opensearch.legacy.client,
           reportDefinition,
@@ -181,13 +163,11 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
         fromIndex: number;
         maxItems: number;
       };
-
       try {
         // @ts-ignore
         const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
           request
         );
-
         const opensearchResp = await opensearchReportsClient.callAsCurrentUser(
           'opensearch_reports.getReportDefinitions',
           {
@@ -195,12 +175,10 @@ export default function (router: IRouter, accessInfo: AccessInfoType) {
             maxItems: maxItems || DEFAULT_MAX_SIZE,
           }
         );
-
         const reportDefinitionsList = backendToUiReportDefinitionsList(
           opensearchResp.reportDefinitionDetailsList,
           basePath
         );
-
         return response.ok({
           body: {
             data: reportDefinitionsList,

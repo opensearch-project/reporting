@@ -1,39 +1,37 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import 'babel-polyfill';
+import { i18n } from '@osd/i18n';
 import { HttpFetchOptions, HttpSetup } from '../../../../../src/core/public';
+import { uiSettingsService } from '../utils/settings_service';
 
-export const fileFormatsUpper = {
+export const getAvailableNotificationsChannels = (configList: any) => {
+  let availableChannels = [];
+  for (let i = 0; i < configList.length; ++i) {
+    let channelEntry = {};
+    channelEntry = {
+      label: configList[i].config.name,
+      id: configList[i].config_id
+    }
+    availableChannels.push(channelEntry);
+  }
+  return availableChannels;
+}
+
+type fileFormatsOptions = {
+  [key: string]: string
+}
+
+export const fileFormatsUpper: fileFormatsOptions = {
   csv: 'CSV',
   pdf: 'PDF',
   png: 'PNG',
 };
 
-export const humanReadableDate = (date) => {
+export const humanReadableDate = (date: string | number | Date) => {
   let readableDate = new Date(date);
   return (
     readableDate.toDateString() + ' @ ' + readableDate.toLocaleTimeString()
@@ -54,7 +52,7 @@ export const getFileFormatPrefix = (fileFormat: string) => {
   return fileFormatPrefix;
 };
 
-export const addReportsTableContent = (data) => {
+export const addReportsTableContent = (data: string | any[]) => {
   let reportsTableItems = [];
   for (let index = 0; index < data.length; ++index) {
     let item = data[index];
@@ -109,7 +107,7 @@ export const addReportDefinitionsTableContent = (data: any) => {
   return reportDefinitionsTableItems;
 };
 
-export const removeDuplicatePdfFileFormat = (filename) => {
+export const removeDuplicatePdfFileFormat = (filename: string) => {
   return filename.substring(0, filename.length - 4);
 };
 
@@ -152,7 +150,7 @@ export const readStreamToFile = async (
 };
 
 export const generateReportFromDefinitionId = async (
-  reportDefinitionId,
+  reportDefinitionId: string,
   httpClient: HttpSetup
 ) => {
   let status = false;
@@ -162,7 +160,7 @@ export const generateReportFromDefinitionId = async (
       headers: {
         'Content-Type': 'application/json',
       },
-      query: { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone },
+      query: uiSettingsService.getSearchParams(),
     })
     .then(async (response: any) => {
       // for emailing a report, this API response doesn't have response body
@@ -187,7 +185,7 @@ export const generateReportFromDefinitionId = async (
 };
 
 export const generateReportById = async (
-  reportId,
+  reportId: string,
   httpClient: HttpSetup,
   handleSuccessToast,
   handleErrorToast,
@@ -195,7 +193,7 @@ export const generateReportById = async (
 ) => {
   await httpClient
     .get(`../api/reporting/generateReport/${reportId}`, {
-      query: { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone },
+      query: uiSettingsService.getSearchParams(),
     })
     .then(async (response) => {
       //TODO: duplicate code, extract to be a function that can reuse. e.g. handleResponse(response)
@@ -211,8 +209,15 @@ export const generateReportById = async (
         handlePermissionsMissingToast();
       } else if (error.body.statusCode === 503) {
         handleErrorToast(
-          'Error generating report.',
-          `Timed out generating report ID ${reportId}. Try again later.`
+          i18n.translate('opensearch.reports.utils.errorTitle', {
+            defaultMessage: 'Error generating report.',
+          }),
+          i18n.translate('opensearch.reports.utils.errorText', {
+            defaultMessage:
+              'Timed out generating report ID {reportId}. Try again later.',
+            values: { reportId: reportId },
+            description: 'Error number toast',
+          })
         );
       } else {
         handleErrorToast();

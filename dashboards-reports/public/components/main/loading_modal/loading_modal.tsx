@@ -1,49 +1,27 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
  */
 
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+import {
+  EuiOverlayMask,
+  EuiModal,
+  EuiModalHeader,
+  EuiTitle,
+  EuiText,
+  EuiModalBody,
+  EuiSpacer,
+  EuiFlexGroup,
+  EuiFlexItem,
+  EuiLoadingSpinner,
+  EuiButton,
+} from '@elastic/eui';
+import { i18n } from '@osd/i18n';
+import React, { useState } from 'react';
 
-import { 
-  EuiOverlayMask, 
-  EuiModal, 
-  EuiModalHeader, 
-  EuiTitle, 
-  EuiText, 
-  EuiModalBody, 
-  EuiSpacer, 
-  EuiFlexGroup, 
-  EuiFlexItem, 
-  EuiLoadingSpinner, 
-  EuiButton 
-} from "@elastic/eui";
-import React, { useState } from "react";
+export function GenerateReportLoadingModal(props: { setShowLoading: any }) {
+  const { setShowLoading } = props;
 
-export function GenerateReportLoadingModal(props: { setShowLoading: any; }) {
-  const {
-    setShowLoading
-  } = props;
-  
   const [isModalVisible, setIsModalVisible] = useState(true);
 
   const closeModal = () => {
@@ -63,14 +41,26 @@ export function GenerateReportLoadingModal(props: { setShowLoading: any; }) {
           <EuiModalHeader>
             <EuiTitle>
               <EuiText textAlign="right">
-                <h2>Generating report</h2>
+                <h2>
+                  {i18n.translate(
+                    'opensearch.reports.loading.generatingReport',
+                    { defaultMessage: 'Generating report' }
+                  )}
+                </h2>
               </EuiText>
             </EuiTitle>
           </EuiModalHeader>
           <EuiModalBody>
-            <EuiText>Preparing your file for download.</EuiText>
             <EuiText>
-              You can close this dialog while we continue in the background.
+              {i18n.translate('opensearch.reports.loading.preparingYourFile', {
+                defaultMessage: 'Preparing your file for download.',
+              })}
+            </EuiText>
+            <EuiText>
+              {i18n.translate('opensearch.reports.loading.youCanClose', {
+                defaultMessage:
+                  'You can close this dialog while we continue in the background.',
+              })}
             </EuiText>
             <EuiSpacer />
             <EuiFlexGroup justifyContent="center" alignItems="center">
@@ -84,7 +74,11 @@ export function GenerateReportLoadingModal(props: { setShowLoading: any; }) {
             <EuiSpacer size="l" />
             <EuiFlexGroup alignItems="flexEnd" justifyContent="flexEnd">
               <EuiFlexItem grow={false}>
-                <EuiButton onClick={closeModal}>Close</EuiButton>
+                <EuiButton onClick={closeModal}>
+                  {i18n.translate('opensearch.reports.loading.close', {
+                    defaultMessage: 'Close',
+                  })}
+                </EuiButton>
               </EuiFlexItem>
             </EuiFlexGroup>
           </EuiModalBody>
@@ -92,4 +86,4 @@ export function GenerateReportLoadingModal(props: { setShowLoading: any; }) {
       </EuiOverlayMask>
     </div>
   );
-};
+}

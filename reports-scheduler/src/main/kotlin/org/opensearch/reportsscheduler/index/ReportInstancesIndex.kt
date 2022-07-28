@@ -1,44 +1,10 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- *
  */
 
 package org.opensearch.reportsscheduler.index
 
-import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
-import org.opensearch.reportsscheduler.model.ReportInstance
-import org.opensearch.reportsscheduler.model.ReportInstance.Status
-import org.opensearch.reportsscheduler.model.ReportInstanceDoc
-import org.opensearch.reportsscheduler.model.ReportInstanceSearchResults
-import org.opensearch.reportsscheduler.model.RestTag.ACCESS_LIST_FIELD
-import org.opensearch.reportsscheduler.model.RestTag.STATUS_FIELD
-import org.opensearch.reportsscheduler.model.RestTag.TENANT_FIELD
-import org.opensearch.reportsscheduler.model.RestTag.UPDATED_TIME_FIELD
-import org.opensearch.reportsscheduler.settings.PluginSettings
-import org.opensearch.reportsscheduler.util.SecureIndexClient
-import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.ResourceAlreadyExistsException
 import org.opensearch.action.DocWriteResponse
 import org.opensearch.action.admin.indices.create.CreateIndexRequest
@@ -54,8 +20,17 @@ import org.opensearch.common.xcontent.LoggingDeprecationHandler
 import org.opensearch.common.xcontent.NamedXContentRegistry
 import org.opensearch.common.xcontent.XContentType
 import org.opensearch.index.query.QueryBuilders
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
+import org.opensearch.reportsscheduler.model.ReportInstance
+import org.opensearch.reportsscheduler.model.ReportInstanceDoc
+import org.opensearch.reportsscheduler.model.ReportInstanceSearchResults
+import org.opensearch.reportsscheduler.model.RestTag.ACCESS_LIST_FIELD
+import org.opensearch.reportsscheduler.model.RestTag.TENANT_FIELD
+import org.opensearch.reportsscheduler.model.RestTag.UPDATED_TIME_FIELD
+import org.opensearch.reportsscheduler.settings.PluginSettings
+import org.opensearch.reportsscheduler.util.SecureIndexClient
+import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.search.builder.SearchSourceBuilder
-import java.time.Instant
 import java.util.concurrent.TimeUnit
 
 /**
@@ -255,43 +230,5 @@ internal object ReportInstancesIndex {
             log.warn("$LOG_PREFIX:deleteReportInstance failed for $id; response:$response")
         }
         return response.result == DocWriteResponse.Result.DELETED
-    }
-
-    /**
-     * Get pending report instances
-     * @return ReportInstanceDoc list
-     */
-    fun getPendingReportInstances(): MutableList<ReportInstanceDoc> {
-        createIndex()
-        val query = QueryBuilders.termsQuery(STATUS_FIELD,
-            Status.Scheduled.name,
-            Status.Executing.name
-        )
-        val sourceBuilder = SearchSourceBuilder()
-            .timeout(TimeValue(PluginSettings.operationTimeoutMs, TimeUnit.MILLISECONDS))
-            .size(PluginSettings.defaultItemsQueryCount)
-            .query(query)
-        val searchRequest = SearchRequest()
-            .indices(REPORT_INSTANCES_INDEX_NAME)
-            .source(sourceBuilder)
-        val actionFuture = client.search(searchRequest)
-        val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
-        val hits = response.hits
-        log.info("$LOG_PREFIX:getPendingReportInstances; totalHits:${hits.totalHits}, retHits:${hits.hits.size}")
-        val mutableList: MutableList<ReportInstanceDoc> = mutableListOf()
-        val currentTime = Instant.now()
-        val refTime = currentTime.minusSeconds(PluginSettings.jobLockDurationSeconds.toLong())
-        hits.forEach {
-            val parser = XContentType.JSON.xContent().createParser(NamedXContentRegistry.EMPTY,
-                LoggingDeprecationHandler.INSTANCE,
-                it.sourceAsString)
-            parser.nextToken()
-            val reportInstance = ReportInstance.parse(parser, it.id)
-            if (reportInstance.status == Status.Scheduled || // If still in Scheduled state
-                reportInstance.updatedTime.isBefore(refTime)) { // or when timeout happened
-                mutableList.add(ReportInstanceDoc(reportInstance, it.seqNo, it.primaryTerm))
-            }
-        }
-        return mutableList
     }
 }

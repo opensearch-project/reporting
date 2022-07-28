@@ -1,27 +1,6 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import {
@@ -32,18 +11,16 @@ import {
   Logger,
   ILegacyClusterClient,
 } from '../../../src/core/server';
-import { setIntervalAsync } from 'set-interval-async/dynamic';
 import { Semaphore, SemaphoreInterface, withTimeout } from 'async-mutex';
-import opensearchReportsPlugin from './backend/opendistro-opensearch-reports-plugin';
-import notificationPlugin from './backend/opendistro-notification-plugin';
+import opensearchReportsPlugin from './backend/opensearch-reports-plugin';
 import {
   ReportsDashboardsPluginSetup,
   ReportsDashboardsPluginStart,
 } from './types';
 import registerRoutes from './routes';
-import { pollAndExecuteJob } from './executor/executor';
-import { POLL_INTERVAL } from './utils/constants';
-import { AccessInfoType } from 'server';
+import { NotificationsPlugin } from './clusters/notificationsPlugin';
+import { buildConfig, ReportingConfigType } from './config';
+import { ReportingConfig } from './config/config';
 
 export interface ReportsPluginRequestContext {
   logger: Logger;
@@ -58,48 +35,62 @@ declare module 'kibana/server' {
 
 export class ReportsDashboardsPlugin
   implements
-    Plugin<
-      ReportsDashboardsPluginSetup,
-      ReportsDashboardsPluginStart
-    > {
+    Plugin<ReportsDashboardsPluginSetup, ReportsDashboardsPluginStart> {
   private readonly logger: Logger;
   private readonly semaphore: SemaphoreInterface;
+  private readonly initializerContext: PluginInitializerContext<
+    ReportingConfigType
+  >;
+  private reportingConfig?: ReportingConfig;
 
-  constructor(initializerContext: PluginInitializerContext) {
-    this.logger = initializerContext.logger.get();
-
+  constructor(context: PluginInitializerContext<ReportingConfigType>) {
+    this.logger = context.logger.get();
+    this.initializerContext = context;
     const timeoutError = new Error('Server busy');
     timeoutError.statusCode = 503;
     this.semaphore = withTimeout(new Semaphore(1), 180000, timeoutError);
   }
 
-  public setup(core: CoreSetup) {
+  public async setup(core: CoreSetup) {
     this.logger.debug('reports-dashboards: Setup');
 
-    const config = core.http.getServerInfo();
-    const serverBasePath = core.http.basePath.serverBasePath;
-    const accessInfo: AccessInfoType = {
-      basePath: serverBasePath,
-      serverInfo: config,
-    };
+    try {
+      const config = await buildConfig(
+        this.initializerContext,
+        core,
+        this.logger
+      );
+      this.reportingConfig = config;
+      this.logger.debug('Setup complete');
+    } catch (error) {
+      this.logger.error(
+        `Error in Reporting setup, reporting may not function properly`
+      );
+      this.logger.error(error);
+    }
+
+    if (!this.reportingConfig) {
+      throw new Error('Reporting Config is not initialized');
+    }
 
     const router = core.http.createRouter();
     // Deprecated API. Switch to the new opensearch client as soon as https://github.com/elastic/kibana/issues/35508 done.
     const opensearchReportsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
       'opensearch_reports',
       {
-        plugins: [opensearchReportsPlugin],
+        plugins: [opensearchReportsPlugin, NotificationsPlugin],
       }
     );
 
-    const notificationClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
-      'notification',
+    const notificationsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
+      'opensearch_notifications',
       {
-        plugins: [notificationPlugin],
+        plugins: [NotificationsPlugin],
       }
     );
+
     // Register server side APIs
-    registerRoutes(router, accessInfo);
+    registerRoutes(router, this.reportingConfig);
 
     // put logger into route handler context, so that we don't need to pass through parameters
     core.http.registerRouteHandlerContext(
@@ -109,8 +100,8 @@ export class ReportsDashboardsPlugin
         return {
           logger: this.logger,
           semaphore: this.semaphore,
-          notificationClient,
           opensearchReportsClient,
+          notificationsClient,
         };
       }
     );
@@ -120,36 +111,6 @@ export class ReportsDashboardsPlugin
 
   public start(core: CoreStart) {
     this.logger.debug('reports-dashboards: Started');
-    const opensearchReportsClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
-      'opensearch_reports',
-      {
-        plugins: [opensearchReportsPlugin],
-      }
-    );
-
-    const notificationClient: ILegacyClusterClient = core.opensearch.legacy.createClient(
-      'notification',
-      {
-        plugins: [notificationPlugin],
-      }
-    );
-    const opensearchClient: ILegacyClusterClient = core.opensearch.legacy.client;
-    /*
-    setIntervalAsync provides the same familiar interface as built-in setInterval for asynchronous functions,
-    while preventing multiple executions from overlapping in time.
-    Polling at at a 5 min fixed interval
-    
-    TODO: need further optimization polling with a mix approach of
-    random delay and dynamic delay based on the amount of jobs. 
-    */
-    // setIntervalAsync(
-    //   pollAndExecuteJob,
-    //   POLL_INTERVAL,
-    //   opensearchReportsClient,
-    //   notificationClient,
-    //   opensearchClient,
-    //   this.logger
-    // );
     return {};
   }
 

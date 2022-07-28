@@ -1,28 +1,6 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- *
  */
 
 package org.opensearch.reportsscheduler.model
@@ -80,7 +58,7 @@ import java.time.Duration
  *       "title":"title",
  *       "textDescription":"textDescription",
  *       "htmlDescription":"optional htmlDescription",
- *       "channelIds":["optional_channelIds"]
+ *       "configIds":["optional_configIds"]
  *   }
  * }
  * }</pre>
@@ -381,20 +359,17 @@ internal data class ReportDefinition(
      * Report definition delivery data class
      */
     internal data class Delivery(
-        val recipients: List<String>,
-        val deliveryFormat: DeliveryFormat,
         val title: String,
         val textDescription: String,
         val htmlDescription: String?,
-        val channelIds: List<String>
+        val configIds: List<String>
     ) : ToXContentObject {
         internal companion object {
-            private const val RECIPIENTS_TAG = "recipients"
             private const val DELIVERY_FORMAT_TAG = "deliveryFormat"
             private const val TITLE_TAG = "title"
             private const val TEXT_DESCRIPTION_TAG = "textDescription"
             private const val HTML_DESCRIPTION_TAG = "htmlDescription"
-            private const val CHANNEL_IDS_TAG = "channelIds"
+            private const val CONFIG_IDS_TAG = "configIds"
 
             /**
              * Parse the data from parser and create Delivery object
@@ -403,34 +378,29 @@ internal data class ReportDefinition(
              */
             fun parse(parser: XContentParser): Delivery {
                 var recipients: List<String> = listOf()
-                var deliveryFormat: DeliveryFormat? = null
                 var title: String? = null
                 var textDescription: String? = null
                 var htmlDescription: String? = null
-                var channelIds: List<String> = listOf()
+                var configIds: List<String> = listOf()
                 XContentParserUtils.ensureExpectedToken(XContentParser.Token.START_OBJECT, parser.currentToken(), parser)
                 while (XContentParser.Token.END_OBJECT != parser.nextToken()) {
                     val fieldName = parser.currentName()
                     parser.nextToken()
                     when (fieldName) {
-                        RECIPIENTS_TAG -> recipients = parser.stringList()
-                        DELIVERY_FORMAT_TAG -> deliveryFormat = DeliveryFormat.valueOf(parser.text())
                         TITLE_TAG -> title = parser.text()
                         TEXT_DESCRIPTION_TAG -> textDescription = parser.text()
                         HTML_DESCRIPTION_TAG -> htmlDescription = parser.textOrNull()
-                        CHANNEL_IDS_TAG -> channelIds = parser.stringList()
+                        CONFIG_IDS_TAG -> configIds = parser.stringList()
                         else -> log.info("$LOG_PREFIX: Delivery Unknown field $fieldName")
                     }
                 }
-                deliveryFormat ?: throw IllegalArgumentException("$DELIVERY_FORMAT_TAG field absent")
                 title ?: throw IllegalArgumentException("$TITLE_TAG field absent")
                 textDescription ?: throw IllegalArgumentException("$TEXT_DESCRIPTION_TAG field absent")
-                return Delivery(recipients,
-                    deliveryFormat,
+                return Delivery(
                     title,
                     textDescription,
                     htmlDescription,
-                    channelIds)
+                    configIds)
             }
         }
 
@@ -440,14 +410,12 @@ internal data class ReportDefinition(
         override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
             builder!!
             builder.startObject()
-                .field(RECIPIENTS_TAG, recipients)
-                .field(DELIVERY_FORMAT_TAG, deliveryFormat)
                 .field(TITLE_TAG, title)
                 .field(TEXT_DESCRIPTION_TAG, textDescription)
             if (htmlDescription != null) {
                 builder.field(HTML_DESCRIPTION_TAG, htmlDescription)
             }
-            builder.field(CHANNEL_IDS_TAG, channelIds)
+            builder.field(CONFIG_IDS_TAG, configIds)
             builder.endObject()
             return builder
         }

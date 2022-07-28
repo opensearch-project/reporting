@@ -1,34 +1,12 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import {
   REPORT_TYPE,
-  REPORT_STATE,
-  DELIVERY_TYPE,
-  SECURITY_CONSTANTS,
+  DATA_REPORT_CONFIG,
+  EXTRA_HEADERS,
 } from '../utils/constants';
 
 import {
@@ -41,18 +19,16 @@ import { createSavedSearchReport } from '../utils/savedSearchReportHelper';
 import { ReportSchemaType } from '../../model';
 import { CreateReportResultType } from '../utils/types';
 import { createVisualReport } from '../utils/visual_report/visualReportHelper';
-import { SetCookie, Headers } from 'puppeteer-core';
-import { deliverReport } from './deliverReport';
-import { updateReportState } from './updateReportState';
 import { saveReport } from './saveReport';
 import { SemaphoreInterface } from 'async-mutex';
-import { AccessInfoType } from 'server';
+import { ReportingConfig } from 'server';
+import _ from 'lodash';
 
 export const createReport = async (
   request: OpenSearchDashboardsRequest,
   context: RequestHandlerContext,
   report: ReportSchemaType,
-  accessInfo: AccessInfoType,
+  config: ReportingConfig,
   savedReportId?: string
 ): Promise<CreateReportResultType> => {
   const isScheduledTask = false;
@@ -61,29 +37,27 @@ export const createReport = async (
   //@ts-ignore
   const semaphore: SemaphoreInterface = context.reporting_plugin.semaphore;
   // @ts-ignore
-  const notificationClient: ILegacyScopedClusterClient = context.reporting_plugin.notificationClient.asScoped(
-    request
-  );
-  // @ts-ignore
   const opensearchReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.opensearchReportsClient.asScoped(
     request
   );
   const opensearchClient = context.core.opensearch.legacy.client;
   // @ts-ignore
   const timezone = request.query.timezone;
-  const {
-    basePath,
-    serverInfo: { protocol, port, hostname },
-  } = accessInfo;
+  // @ts-ignore
+  const dateFormat =
+    request.query.dateFormat || DATA_REPORT_CONFIG.excelDateFormat;
+  // @ts-ignore
+  const csvSeparator = request.query.csvSeparator || ',';
+  const protocol = config.get('osd_server', 'protocol');
+  const hostname = config.get('osd_server', 'hostname');
+  const port = config.get('osd_server', 'port');
+  const basePath = config.osdConfig.get('server', 'basePath');
 
   let createReportResult: CreateReportResultType;
   let reportId;
 
   const {
-    report_definition: {
-      report_params: reportParams,
-      delivery: { delivery_type: deliveryType },
-    },
+    report_definition: { report_params: reportParams },
   } = report;
   const { report_source: reportSource } = reportParams;
 
@@ -100,7 +74,10 @@ export const createReport = async (
       createReportResult = await createSavedSearchReport(
         report,
         opensearchClient,
-        isScheduledTask
+        dateFormat,
+        csvSeparator,
+        isScheduledTask,
+        logger
       );
     } else {
       // report source can only be one of [saved search, visualization, dashboard, notebook]
@@ -109,40 +86,15 @@ export const createReport = async (
         ? report.query_url
         : `${basePath}${report.query_url}`;
       const completeQueryUrl = `${protocol}://${hostname}:${port}${relativeUrl}`;
-      // Check if security is enabled. TODO: is there a better way to check?
-      let cookieObject: SetCookie | undefined;
-      if (request.headers.cookie) {
-        const cookies = request.headers.cookie.split(';');
-        cookies.map((item: string) => {
-          const cookie = item.trim().split('=');
-          if (cookie[0] === SECURITY_CONSTANTS.AUTH_COOKIE_NAME) {
-            cookieObject = {
-              name: cookie[0],
-              value: cookie[1],
-              url: completeQueryUrl,
-              path: basePath,
-            };
-          }
-        });
-      }
-      // If header exists assuming that it needs forwarding
-      let additionalHeaders: Headers | undefined;
-      if (request.headers[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER]) {
-        additionalHeaders = {}
-        additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER] = request.headers[SECURITY_CONSTANTS.PROXY_AUTH_USER_HEADER];
-        additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_IP_HEADER] = request.headers[SECURITY_CONSTANTS.PROXY_AUTH_IP_HEADER];
-        if (request.headers[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER]) {
-          additionalHeaders[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER] = request.headers[SECURITY_CONSTANTS.PROXY_AUTH_ROLES_HEADER]
-        }
-      }
+      const extraHeaders = _.pick(request.headers, EXTRA_HEADERS);
+
       const [value, release] = await semaphore.acquire();
       try {
         createReportResult = await createVisualReport(
           reportParams,
           completeQueryUrl,
           logger,
-          cookieObject,
-          additionalHeaders,
+          extraHeaders,
           timezone
         );
       } finally {
@@ -154,17 +106,6 @@ export const createReport = async (
     // if (!savedReportId) {
     //   await updateReportState(reportId, opensearchReportsClient, REPORT_STATE.created);
     // }
-
-    // deliver report
-    if (!savedReportId && deliveryType == DELIVERY_TYPE.channel) {
-      await deliverReport(
-        report,
-        notificationClient,
-        opensearchReportsClient,
-        reportId,
-        logger
-      );
-    }
   } catch (error) {
     // update report instance with "error" state
     // TODO: save error detail and display on UI

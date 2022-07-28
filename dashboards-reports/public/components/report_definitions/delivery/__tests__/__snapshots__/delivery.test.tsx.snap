@@ -3,7 +3,6 @@
 exports[`<ReportDelivery /> panel render create component 1`] = `
 <div
   class="euiPanel euiPanel--paddingLarge euiPageContent"
-  hidden=""
 >
   <div
     class="euiPageHeader euiPageHeader--responsive"
@@ -25,7 +24,7 @@ exports[`<ReportDelivery /> panel render create component 1`] = `
     >
       <input
         class="euiCheckbox__input"
-        id="emailCheckboxDelivery"
+        id="notificationsDeliveryCheckbox"
         type="checkbox"
       />
       <div
@@ -33,14 +32,11 @@ exports[`<ReportDelivery /> panel render create component 1`] = `
       />
       <label
         class="euiCheckbox__label"
-        for="emailCheckboxDelivery"
+        for="notificationsDeliveryCheckbox"
       >
-        Add email recipients
+        Send notification when report is available
       </label>
     </div>
-    <div
-      class="euiSpacer euiSpacer--l"
-    />
   </div>
 </div>
 `;
@@ -48,7 +44,6 @@ exports[`<ReportDelivery /> panel render create component 1`] = `
 exports[`<ReportDelivery /> panel render edit component 1`] = `
 <div
   class="euiPanel euiPanel--paddingLarge euiPageContent"
-  hidden=""
 >
   <div
     class="euiPageHeader euiPageHeader--responsive"
@@ -70,7 +65,7 @@ exports[`<ReportDelivery /> panel render edit component 1`] = `
     >
       <input
         class="euiCheckbox__input"
-        id="emailCheckboxDelivery"
+        id="notificationsDeliveryCheckbox"
         type="checkbox"
       />
       <div
@@ -78,14 +73,11 @@ exports[`<ReportDelivery /> panel render edit component 1`] = `
       />
       <label
         class="euiCheckbox__label"
-        for="emailCheckboxDelivery"
+        for="notificationsDeliveryCheckbox"
       >
-        Add email recipients
+        Send notification when report is available
       </label>
     </div>
-    <div
-      class="euiSpacer euiSpacer--l"
-    />
   </div>
 </div>
 `;

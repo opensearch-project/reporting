@@ -1,31 +1,11 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
+import { i18n } from '@osd/i18n';
 import { parseInContextUrl } from './report_settings_helpers';
 import dateMath from '@elastic/datemath';
 import {
@@ -54,7 +34,9 @@ export function TimeRangeSelect(props) {
 
   const addInvalidTimeRangeToastHandler = () => {
     const errorToast = {
-      title: 'Invalid time range selected',
+      title: i18n.translate('opensearch.reports.timeRange.invalidTimeRange', {
+        defaultMessage: 'Invalid time range selected.',
+      }),
       color: 'danger',
       iconType: 'alert',
       id: 'timeRangeErrorToast',
@@ -203,15 +185,26 @@ export function TimeRangeSelect(props) {
     setIsLoading(false);
   };
 
-
   return (
     <div>
       <div>
         <EuiFormRow
-          label="Time range"
-          helpText="Time range is relative to the report creation date on the report trigger."
+          label={i18n.translate(
+            'opensearch.reports.timeRange.label.timeRange',
+            { defaultMessage: 'Time range' }
+          )}
+          helpText={i18n.translate(
+            'opensearch.reports.timeRange.help.timeRange',
+            {
+              defaultMessage:
+                'Time range is relative to the report creation date on the report trigger.',
+            }
+          )}
           isInvalid={showTimeRangeError}
-          error={'Invalid time range selected.'}
+          error={i18n.translate(
+            'opensearch.reports.timeRange.invalidTimeRange',
+            { defaultMessage: 'Invalid time range selected.' }
+          )}
         >
           <EuiSuperDatePicker
             isDisabled={false}

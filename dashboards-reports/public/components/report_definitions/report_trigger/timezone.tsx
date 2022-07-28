@@ -1,34 +1,14 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import { EuiFormRow, EuiSelect } from '@elastic/eui';
 import React, { useState, useEffect } from 'react';
+import { i18n } from '@osd/i18n';
 import { TIMEZONE_OPTIONS } from './report_trigger_constants';
 
-export function TimezoneSelect(props) {
+export function TimezoneSelect(props: { reportDefinitionRequest: any; httpClientProps: any; edit: any; editDefinitionId: any; }) {
   const {
     reportDefinitionRequest,
     httpClientProps,
@@ -37,7 +17,7 @@ export function TimezoneSelect(props) {
   } = props;
   const [timezone, setTimezone] = useState(TIMEZONE_OPTIONS[0].value);
 
-  const handleTimezone = (e) => {
+  const handleTimezone = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setTimezone(e.target.value);
     if (
       reportDefinitionRequest.trigger.trigger_params.schedule_type ===
@@ -73,7 +53,11 @@ export function TimezoneSelect(props) {
 
   return (
     <div>
-      <EuiFormRow label="Timezone">
+      <EuiFormRow
+        label={i18n.translate('opensearch.reports.reportTrigger.timezone', {
+          defaultMessage: 'Timezone',
+        })}
+      >
         <EuiSelect
           id="setTimezone"
           options={TIMEZONE_OPTIONS}

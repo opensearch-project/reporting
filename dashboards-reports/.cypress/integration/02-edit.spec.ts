@@ -1,27 +1,6 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 describe('Cypress', () => {
@@ -51,9 +30,14 @@ describe('Cypress', () => {
     cy.get('#reportSettingsDescription').type(' update description');
 
     cy.get('#editReportDefinitionButton').click({ force: true });
+
+    cy.wait(12500);
+    
+    // check that re-direct to home page
+    cy.get('#reportDefinitionDetailsLink').should('exist');
   });
 
-  it('Visit edit page, change report source and trigger', () => {
+  it('Visit edit page, change report trigger', () => {
     cy.visit(`${Cypress.env('opensearchDashboards')}/app/reports-dashboards#/`);
     cy.location('pathname', { timeout: 60000 }).should(
       'include',
@@ -71,13 +55,18 @@ describe('Cypress', () => {
     cy.url().should('include', 'edit');
 
     cy.wait(1000);
-    cy.get('#visualizationReportSource').check({ force: true });
+    cy.get('#reportDefinitionTriggerTypes > div:nth-child(2)').click({ force: true });
 
     cy.get('#Schedule').check({ force: true });
     cy.get('#editReportDefinitionButton').click({ force: true });
+
+    cy.wait(12500);
+    
+    // check that re-direct to home page
+    cy.get('#reportDefinitionDetailsLink').should('exist');
   });
 
-  it('Visit edit page, change report source back', () => {
+  it('Visit edit page, change report trigger back', () => {
     cy.visit(`${Cypress.env('opensearchDashboards')}/app/reports-dashboards#/`);
     cy.location('pathname', { timeout: 60000 }).should(
       'include',
@@ -96,8 +85,13 @@ describe('Cypress', () => {
 
     cy.wait(1000);
 
-    cy.get('#dashboardReportSource').check({ force: true });
+    cy.get('#reportDefinitionTriggerTypes > div:nth-child(1)').click({ force: true });
 
     cy.get('#editReportDefinitionButton').click({ force: true });
+
+    cy.wait(12500);
+    
+    // check that re-direct to home page
+    cy.get('#reportDefinitionDetailsLink').should('exist');
   });
 });

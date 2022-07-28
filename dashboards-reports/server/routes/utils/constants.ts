@@ -1,30 +1,10 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import { CountersType } from './types';
+import Showdown from 'showdown';
 
 export enum FORMAT {
   pdf = 'pdf',
@@ -60,11 +40,11 @@ export enum REPORT_TYPE {
   savedSearch = 'Saved search',
   dashboard = 'Dashboard',
   visualization = 'Visualization',
-  notebook = 'Notebook'
+  notebook = 'Notebook',
 }
 
 export enum DATA_REPORT_CONFIG {
-  excelDateFormat = 'MM/DD/YYYY h:mm:ss a',
+  excelDateFormat = 'MM/DD/YYYY h:mm:ss.SSS a',
 }
 
 export enum TRIGGER_TYPE {
@@ -80,7 +60,7 @@ export enum DELIVERY_TYPE {
 export enum SELECTOR {
   dashboard = '#dashboardViewport',
   visualization = '.visEditor__content',
-  notebook = '.euiPageBody'
+  notebook = '.euiPageBody',
 }
 
 // https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-request-from-size.html
@@ -89,14 +69,44 @@ export const DEFAULT_MAX_SIZE = 10000;
 export const DEFAULT_REPORT_HEADER = '<h1>OpenSearch Dashboards Reports</h1>';
 
 export const SECURITY_CONSTANTS = {
-  AUTH_COOKIE_NAME: 'security_authentication',
   TENANT_LOCAL_STORAGE_KEY: 'opendistro::security::tenant::show_popup',
-  PROXY_AUTH_USER_HEADER: 'x-proxy-user',
-  PROXY_AUTH_ROLES_HEADER: 'x-proxy-roles',
-  PROXY_AUTH_IP_HEADER: 'x-forwarded-for',
 };
 
+export const EXTRA_HEADERS = [
+  'cookie',
+  'x-proxy-user',
+  'x-proxy-roles',
+  'x-forwarded-for',
+];
+
+export const converter = new Showdown.Converter({
+  tables: true,
+  simplifiedAutoLink: true,
+  strikethrough: true,
+  tasklists: true,
+  noHeaderId: true,
+});
+
+const BLOCKED_KEYWORD = 'BLOCKED_KEYWORD';
+const ipv4Regex = /(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])/g
+const ipv6Regex = /(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/g;
+const localhostRegex = /localhost:([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])/g;
+const iframeRegex = /iframe/g;
+
+export const replaceBlockedKeywords = (htmlString: string) => {
+  // replace <ipv4>:<port>
+  htmlString = htmlString.replace(ipv4Regex, BLOCKED_KEYWORD);
+  // replace ipv6 addresses
+  htmlString = htmlString.replace(ipv6Regex, BLOCKED_KEYWORD);
+  // replace iframe keyword
+  htmlString = htmlString.replace(iframeRegex, BLOCKED_KEYWORD);
+  // replace localhost:<port>
+  htmlString = htmlString.replace(localhostRegex, BLOCKED_KEYWORD);
+  return htmlString;
+}
+
 export const CHROMIUM_PATH = `${__dirname}/../../../.chromium/headless_shell`;
+  
 
 /**
  * Metric constants

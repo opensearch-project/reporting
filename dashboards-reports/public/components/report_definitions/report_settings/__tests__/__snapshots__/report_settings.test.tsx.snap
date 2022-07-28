@@ -10,7 +10,7 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
     <h2
       class="euiTitle euiTitle--medium"
     >
-      Report Settings
+      Report settings
     </h2>
   </div>
   <hr
@@ -212,14 +212,14 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -256,7 +256,7 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -531,7 +531,7 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
           <legend
             class="euiFormLegend"
           >
-            Header and footer
+            Report header and footer
           </legend>
           <div
             class="euiCheckbox euiCheckboxGroup__item"
@@ -1109,6 +1109,76 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
         </div>
       </div>
     </div>
+    <div
+      class="euiSpacer euiSpacer--l"
+    />
+    <div>
+      <div
+        class="euiFormRow"
+        id="reportDefinitionTriggerTypes-row"
+      >
+        <div
+          class="euiFormRow__labelWrapper"
+        >
+          <label
+            class="euiFormLabel euiFormRow__label"
+            for="reportDefinitionTriggerTypes"
+          >
+            Report trigger
+          </label>
+        </div>
+        <div
+          class="euiFormRow__fieldWrapper"
+        >
+          <div
+            id="reportDefinitionTriggerTypes"
+          >
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                checked=""
+                class="euiRadio__input"
+                id="On demand"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="On demand"
+              >
+                On demand
+              </label>
+            </div>
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                class="euiRadio__input"
+                id="Schedule"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="Schedule"
+              >
+                Schedule
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiSpacer euiSpacer--l"
+      />
+    </div>
   </div>
 </div>
 `;
@@ -1123,7 +1193,7 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
     <h2
       class="euiTitle euiTitle--medium"
     >
-      Report Settings
+      Report settings
     </h2>
   </div>
   <hr
@@ -1325,14 +1395,14 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -1369,7 +1439,7 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -1651,7 +1721,7 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
           <legend
             class="euiFormLegend"
           >
-            Header and footer
+            Report header and footer
           </legend>
           <div
             class="euiCheckbox euiCheckboxGroup__item"
@@ -2229,6 +2299,76 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
         </div>
       </div>
     </div>
+    <div
+      class="euiSpacer euiSpacer--l"
+    />
+    <div>
+      <div
+        class="euiFormRow"
+        id="reportDefinitionTriggerTypes-row"
+      >
+        <div
+          class="euiFormRow__labelWrapper"
+        >
+          <label
+            class="euiFormLabel euiFormRow__label"
+            for="reportDefinitionTriggerTypes"
+          >
+            Report trigger
+          </label>
+        </div>
+        <div
+          class="euiFormRow__fieldWrapper"
+        >
+          <div
+            id="reportDefinitionTriggerTypes"
+          >
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                checked=""
+                class="euiRadio__input"
+                id="On demand"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="On demand"
+              >
+                On demand
+              </label>
+            </div>
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                class="euiRadio__input"
+                id="Schedule"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="Schedule"
+              >
+                Schedule
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiSpacer euiSpacer--l"
+      />
+    </div>
   </div>
 </div>
 `;
@@ -2243,7 +2383,7 @@ exports[`<ReportSettings /> panel render component 1`] = `
     <h2
       class="euiTitle euiTitle--medium"
     >
-      Report Settings
+      Report settings
     </h2>
   </div>
   <hr
@@ -2445,14 +2585,14 @@ exports[`<ReportSettings /> panel render component 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -2489,7 +2629,7 @@ exports[`<ReportSettings /> panel render component 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -2721,7 +2861,7 @@ exports[`<ReportSettings /> panel render component 1`] = `
           <legend
             class="euiFormLegend"
           >
-            Header and footer
+            Report header and footer
           </legend>
           <div
             class="euiCheckbox euiCheckboxGroup__item"
@@ -2764,6 +2904,76 @@ exports[`<ReportSettings /> panel render component 1`] = `
           class="euiSpacer euiSpacer--l"
         />
       </div>
+    </div>
+    <div
+      class="euiSpacer euiSpacer--l"
+    />
+    <div>
+      <div
+        class="euiFormRow"
+        id="reportDefinitionTriggerTypes-row"
+      >
+        <div
+          class="euiFormRow__labelWrapper"
+        >
+          <label
+            class="euiFormLabel euiFormRow__label"
+            for="reportDefinitionTriggerTypes"
+          >
+            Report trigger
+          </label>
+        </div>
+        <div
+          class="euiFormRow__fieldWrapper"
+        >
+          <div
+            id="reportDefinitionTriggerTypes"
+          >
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                checked=""
+                class="euiRadio__input"
+                id="On demand"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="On demand"
+              >
+                On demand
+              </label>
+            </div>
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                class="euiRadio__input"
+                id="Schedule"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="Schedule"
+              >
+                Schedule
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiSpacer euiSpacer--l"
+      />
     </div>
   </div>
 </div>
@@ -2779,7 +2989,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
     <h2
       class="euiTitle euiTitle--medium"
     >
-      Report Settings
+      Report settings
     </h2>
   </div>
   <hr
@@ -2985,14 +3195,14 @@ exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -3029,7 +3239,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -3276,7 +3486,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
           <legend
             class="euiFormLegend"
           >
-            Header and footer
+            Report header and footer
           </legend>
           <div
             class="euiCheckbox euiCheckboxGroup__item"
@@ -3319,6 +3529,76 @@ exports[`<ReportSettings /> panel render edit, dashboard source 1`] = `
           class="euiSpacer euiSpacer--l"
         />
       </div>
+    </div>
+    <div
+      class="euiSpacer euiSpacer--l"
+    />
+    <div>
+      <div
+        class="euiFormRow"
+        id="reportDefinitionTriggerTypes-row"
+      >
+        <div
+          class="euiFormRow__labelWrapper"
+        >
+          <label
+            class="euiFormLabel euiFormRow__label"
+            for="reportDefinitionTriggerTypes"
+          >
+            Report trigger
+          </label>
+        </div>
+        <div
+          class="euiFormRow__fieldWrapper"
+        >
+          <div
+            id="reportDefinitionTriggerTypes"
+          >
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                checked=""
+                class="euiRadio__input"
+                id="On demand"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="On demand"
+              >
+                On demand
+              </label>
+            </div>
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                class="euiRadio__input"
+                id="Schedule"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="Schedule"
+              >
+                Schedule
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiSpacer euiSpacer--l"
+      />
     </div>
   </div>
 </div>
@@ -3334,7 +3614,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
     <h2
       class="euiTitle euiTitle--medium"
     >
-      Report Settings
+      Report settings
     </h2>
   </div>
   <hr
@@ -3540,14 +3820,14 @@ exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -3584,7 +3864,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -3831,7 +4111,7 @@ exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
           <legend
             class="euiFormLegend"
           >
-            Header and footer
+            Report header and footer
           </legend>
           <div
             class="euiCheckbox euiCheckboxGroup__item"
@@ -3874,6 +4154,76 @@ exports[`<ReportSettings /> panel render edit, dashboard source 2`] = `
           class="euiSpacer euiSpacer--l"
         />
       </div>
+    </div>
+    <div
+      class="euiSpacer euiSpacer--l"
+    />
+    <div>
+      <div
+        class="euiFormRow"
+        id="reportDefinitionTriggerTypes-row"
+      >
+        <div
+          class="euiFormRow__labelWrapper"
+        >
+          <label
+            class="euiFormLabel euiFormRow__label"
+            for="reportDefinitionTriggerTypes"
+          >
+            Report trigger
+          </label>
+        </div>
+        <div
+          class="euiFormRow__fieldWrapper"
+        >
+          <div
+            id="reportDefinitionTriggerTypes"
+          >
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                checked=""
+                class="euiRadio__input"
+                id="On demand"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="On demand"
+              >
+                On demand
+              </label>
+            </div>
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                class="euiRadio__input"
+                id="Schedule"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="Schedule"
+              >
+                Schedule
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiSpacer euiSpacer--l"
+      />
     </div>
   </div>
 </div>
@@ -3889,7 +4239,7 @@ exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
     <h2
       class="euiTitle euiTitle--medium"
     >
-      Report Settings
+      Report settings
     </h2>
   </div>
   <hr
@@ -4095,14 +4445,14 @@ exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -4139,7 +4489,7 @@ exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -4386,7 +4736,7 @@ exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
           <legend
             class="euiFormLegend"
           >
-            Header and footer
+            Report header and footer
           </legend>
           <div
             class="euiCheckbox euiCheckboxGroup__item"
@@ -4429,6 +4779,76 @@ exports[`<ReportSettings /> panel render edit, saved search source 1`] = `
           class="euiSpacer euiSpacer--l"
         />
       </div>
+    </div>
+    <div
+      class="euiSpacer euiSpacer--l"
+    />
+    <div>
+      <div
+        class="euiFormRow"
+        id="reportDefinitionTriggerTypes-row"
+      >
+        <div
+          class="euiFormRow__labelWrapper"
+        >
+          <label
+            class="euiFormLabel euiFormRow__label"
+            for="reportDefinitionTriggerTypes"
+          >
+            Report trigger
+          </label>
+        </div>
+        <div
+          class="euiFormRow__fieldWrapper"
+        >
+          <div
+            id="reportDefinitionTriggerTypes"
+          >
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                checked=""
+                class="euiRadio__input"
+                id="On demand"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="On demand"
+              >
+                On demand
+              </label>
+            </div>
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                class="euiRadio__input"
+                id="Schedule"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="Schedule"
+              >
+                Schedule
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiSpacer euiSpacer--l"
+      />
     </div>
   </div>
 </div>
@@ -4444,7 +4864,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
     <h2
       class="euiTitle euiTitle--medium"
     >
-      Report Settings
+      Report settings
     </h2>
   </div>
   <hr
@@ -4650,14 +5070,14 @@ exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -4694,7 +5114,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -4941,7 +5361,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
           <legend
             class="euiFormLegend"
           >
-            Header and footer
+            Report header and footer
           </legend>
           <div
             class="euiCheckbox euiCheckboxGroup__item"
@@ -4984,6 +5404,76 @@ exports[`<ReportSettings /> panel render edit, visualization source 1`] = `
           class="euiSpacer euiSpacer--l"
         />
       </div>
+    </div>
+    <div
+      class="euiSpacer euiSpacer--l"
+    />
+    <div>
+      <div
+        class="euiFormRow"
+        id="reportDefinitionTriggerTypes-row"
+      >
+        <div
+          class="euiFormRow__labelWrapper"
+        >
+          <label
+            class="euiFormLabel euiFormRow__label"
+            for="reportDefinitionTriggerTypes"
+          >
+            Report trigger
+          </label>
+        </div>
+        <div
+          class="euiFormRow__fieldWrapper"
+        >
+          <div
+            id="reportDefinitionTriggerTypes"
+          >
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                checked=""
+                class="euiRadio__input"
+                id="On demand"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="On demand"
+              >
+                On demand
+              </label>
+            </div>
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                class="euiRadio__input"
+                id="Schedule"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="Schedule"
+              >
+                Schedule
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiSpacer euiSpacer--l"
+      />
     </div>
   </div>
 </div>
@@ -4999,7 +5489,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
     <h2
       class="euiTitle euiTitle--medium"
     >
-      Report Settings
+      Report settings
     </h2>
   </div>
   <hr
@@ -5205,14 +5695,14 @@ exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -5249,7 +5739,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -5496,7 +5986,7 @@ exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
           <legend
             class="euiFormLegend"
           >
-            Header and footer
+            Report header and footer
           </legend>
           <div
             class="euiCheckbox euiCheckboxGroup__item"
@@ -5539,6 +6029,76 @@ exports[`<ReportSettings /> panel render edit, visualization source 2`] = `
           class="euiSpacer euiSpacer--l"
         />
       </div>
+    </div>
+    <div
+      class="euiSpacer euiSpacer--l"
+    />
+    <div>
+      <div
+        class="euiFormRow"
+        id="reportDefinitionTriggerTypes-row"
+      >
+        <div
+          class="euiFormRow__labelWrapper"
+        >
+          <label
+            class="euiFormLabel euiFormRow__label"
+            for="reportDefinitionTriggerTypes"
+          >
+            Report trigger
+          </label>
+        </div>
+        <div
+          class="euiFormRow__fieldWrapper"
+        >
+          <div
+            id="reportDefinitionTriggerTypes"
+          >
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                checked=""
+                class="euiRadio__input"
+                id="On demand"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="On demand"
+              >
+                On demand
+              </label>
+            </div>
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                class="euiRadio__input"
+                id="Schedule"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="Schedule"
+              >
+                Schedule
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiSpacer euiSpacer--l"
+      />
     </div>
   </div>
 </div>
@@ -5554,7 +6114,7 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
     <h2
       class="euiTitle euiTitle--medium"
     >
-      Report Settings
+      Report settings
     </h2>
   </div>
   <hr
@@ -5756,14 +6316,14 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -5800,7 +6360,7 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -6075,7 +6635,7 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
           <legend
             class="euiFormLegend"
           >
-            Header and footer
+            Report header and footer
           </legend>
           <div
             class="euiCheckbox euiCheckboxGroup__item"
@@ -6652,6 +7212,76 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
           </div>
         </div>
       </div>
+    </div>
+    <div
+      class="euiSpacer euiSpacer--l"
+    />
+    <div>
+      <div
+        class="euiFormRow"
+        id="reportDefinitionTriggerTypes-row"
+      >
+        <div
+          class="euiFormRow__labelWrapper"
+        >
+          <label
+            class="euiFormLabel euiFormRow__label"
+            for="reportDefinitionTriggerTypes"
+          >
+            Report trigger
+          </label>
+        </div>
+        <div
+          class="euiFormRow__fieldWrapper"
+        >
+          <div
+            id="reportDefinitionTriggerTypes"
+          >
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                checked=""
+                class="euiRadio__input"
+                id="On demand"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="On demand"
+              >
+                On demand
+              </label>
+            </div>
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                class="euiRadio__input"
+                id="Schedule"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="Schedule"
+              >
+                Schedule
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiSpacer euiSpacer--l"
+      />
     </div>
   </div>
 </div>
@@ -6667,7 +7297,7 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
     <h2
       class="euiTitle euiTitle--medium"
     >
-      Report Settings
+      Report settings
     </h2>
   </div>
   <hr
@@ -6869,14 +7499,14 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
     <div>
       <div
         class="euiFormRow"
-        id="random_html_id-row"
+        id="reportSourceDashboardSelect-row"
       >
         <div
           class="euiFormRow__labelWrapper"
         >
           <label
             class="euiFormLabel euiFormRow__label"
-            for="random_html_id"
+            for="reportSourceDashboardSelect"
           >
             Select dashboard
           </label>
@@ -6913,7 +7543,7 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
                     <input
                       aria-controls=""
                       data-test-subj="comboBoxSearchInput"
-                      id="random_html_id"
+                      id="reportSourceDashboardSelect"
                       role="textbox"
                       style="box-sizing: content-box; width: 2px;"
                       value=""
@@ -7188,7 +7818,7 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
           <legend
             class="euiFormLegend"
           >
-            Header and footer
+            Report header and footer
           </legend>
           <div
             class="euiCheckbox euiCheckboxGroup__item"
@@ -7765,6 +8395,76 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
           </div>
         </div>
       </div>
+    </div>
+    <div
+      class="euiSpacer euiSpacer--l"
+    />
+    <div>
+      <div
+        class="euiFormRow"
+        id="reportDefinitionTriggerTypes-row"
+      >
+        <div
+          class="euiFormRow__labelWrapper"
+        >
+          <label
+            class="euiFormLabel euiFormRow__label"
+            for="reportDefinitionTriggerTypes"
+          >
+            Report trigger
+          </label>
+        </div>
+        <div
+          class="euiFormRow__fieldWrapper"
+        >
+          <div
+            id="reportDefinitionTriggerTypes"
+          >
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                checked=""
+                class="euiRadio__input"
+                id="On demand"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="On demand"
+              >
+                On demand
+              </label>
+            </div>
+            <div
+              class="euiRadio euiRadioGroup__item"
+            >
+              <input
+                class="euiRadio__input"
+                id="Schedule"
+                type="radio"
+                value=""
+              />
+              <div
+                class="euiRadio__circle"
+              />
+              <label
+                class="euiRadio__label"
+                for="Schedule"
+              >
+                Schedule
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="euiSpacer euiSpacer--l"
+      />
     </div>
   </div>
 </div>

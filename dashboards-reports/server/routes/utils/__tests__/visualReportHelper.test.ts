@@ -1,45 +1,15 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import 'regenerator-runtime/runtime';
 import { createVisualReport } from '../visual_report/visualReportHelper';
 import { Logger } from '../../../../../../src/core/server';
 import { ReportParamsSchemaType, reportSchema } from '../../../model';
+import { mockLogger } from '../../../../test/__mocks__/loggerMock';
 
-const mockLogger: Logger = {
-  info: jest.fn(),
-  trace: jest.fn(),
-  warn: jest.fn(),
-  debug: jest.fn(),
-  error: jest.fn(),
-  fatal: jest.fn(),
-  log: jest.fn(),
-  get: jest.fn(),
-};
-
+const mockHeader = { mockKey: 'mockValue' };
 const input = {
   query_url: '/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d',
   time_from: 1343576635300,
@@ -59,10 +29,10 @@ const input = {
       },
     },
     delivery: {
-      delivery_type: 'OpenSearch Dashboards user',
-      delivery_params: {
-        opensearch_dashboards_recipients: [],
-      },
+      configIds: [],
+      title: 'title',
+      textDescription: 'text description',
+      htmlDescription: 'html description',
     },
     trigger: {
       trigger_type: 'On demand',
@@ -70,8 +40,7 @@ const input = {
   },
 };
 
-const queryUrl =
-  'https://demo.elastic.co/app/kibana#/dashboard/welcome_dashboard';
+const mockHtmlPath = `file://${__dirname}/demo_dashboard.html`;
 
 describe('test create visual report', () => {
   test('create report with valid input', async () => {
@@ -84,8 +53,9 @@ describe('test create visual report', () => {
     const reportParams = input.report_definition.report_params;
     const { dataUrl, fileName } = await createVisualReport(
       reportParams as ReportParamsSchemaType,
-      queryUrl,
-      mockLogger
+      mockHtmlPath,
+      mockLogger,
+      mockHeader
     );
     expect(fileName).toContain(`${reportParams.report_name}`);
     expect(fileName).toContain('.png');
@@ -99,8 +69,9 @@ describe('test create visual report', () => {
 
     const { dataUrl, fileName } = await createVisualReport(
       reportParams as ReportParamsSchemaType,
-      queryUrl,
-      mockLogger
+      mockHtmlPath,
+      mockLogger,
+      mockHeader
     );
     expect(fileName).toContain(`${reportParams.report_name}`);
     expect(fileName).toContain('.pdf');

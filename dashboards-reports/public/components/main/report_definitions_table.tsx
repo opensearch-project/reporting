@@ -1,27 +1,6 @@
 /*
+ * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
- *
- * The OpenSearch Contributors require contributions made to
- * this file be licensed under the Apache-2.0 license or a
- * compatible open source license.
- *
- * Modifications Copyright OpenSearch Contributors. See
- * GitHub history for details.
- */
-
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
  */
 
 import React, { useState } from 'react';
@@ -33,22 +12,45 @@ import {
   EuiText,
   EuiIcon,
 } from '@elastic/eui';
+import { i18n } from '@osd/i18n';
 import { humanReadableDate } from './main_utils';
 
 const emptyMessageReportDefinitions = (
   <EuiEmptyPrompt
-    title={<h3>No report definitions to display</h3>}
+    title={
+      <h3>
+        {i18n.translate(
+          'opensearch.reports.reportDefinitionsTable.emptyMessageReports.noReportDefinitions',
+          { defaultMessage: 'No report definitions to display' }
+        )}
+      </h3>
+    }
     titleSize="xs"
     body={
       <div>
-        <EuiText>Create a new report definition to get started</EuiText>
         <EuiText>
-          To learn more, see{' '}
+          {i18n.translate(
+            'opensearch.reports.reportDefinitionsTable.emptyMessageReports.createANewDefinition',
+            { defaultMessage: 'Create a new report definition to get started' }
+          )}
+        </EuiText>
+        <EuiText>
+          {i18n.translate(
+            'opensearch.reports.reportDefinitionsTable.emptyMessageReports.toLearnMore',
+            { defaultMessage: 'To learn more, see' }
+          )}{' '}
           <EuiLink
-            href="https://docs-beta.opensearch.org/docs/opensearch-dashboards/reporting/"
+            href="https://opensearch.org/docs/dashboards/reporting/"
             target="_blank"
           >
-            Get started with OpenSearch Dashboards reporting <EuiIcon type="popout" />
+            {i18n.translate(
+              'opensearch.reports.reportDefinitionsTable.emptyMessageReports.getStarted',
+              {
+                defaultMessage:
+                  'Get started with OpenSearch Dashboards reporting',
+              }
+            )}
+            <EuiIcon type="popout" />
           </EuiLink>
         </EuiText>
       </div>
@@ -60,7 +62,10 @@ const emptyMessageReportDefinitions = (
             window.location.assign('reports-dashboards#/create');
           }}
         >
-          Create report definition
+          {i18n.translate(
+            'opensearch.reports.reportDefinitionsTable.emptyMessageReports.createReportDefinition',
+            { defaultMessage: 'Create report definition' }
+          )}
         </EuiButton>
       </div>
     }
@@ -110,7 +115,12 @@ export function ReportDefinitions(props) {
   const reportDefinitionsColumns = [
     {
       field: 'reportName',
-      name: 'Name',
+      name: i18n.translate(
+        'opensearch.reports.reportDefinitionsTable.columns.name',
+        {
+          defaultMessage: 'Name',
+        }
+      ),
       render: (name) => (
         <EuiLink
           onClick={() => navigateToDefinitionDetails(name)}
@@ -122,7 +132,10 @@ export function ReportDefinitions(props) {
     },
     {
       field: 'source',
-      name: 'Source',
+      name: i18n.translate(
+        'opensearch.reports.reportDefinitionsTable.columns.source',
+        { defaultMessage: 'Source' }
+      ),
       render: (value, item) => (
         <EuiLink href={item.baseUrl} target="_blank">
           {value}
@@ -131,19 +144,30 @@ export function ReportDefinitions(props) {
     },
     {
       field: 'type',
-      name: 'Type',
+      name: i18n.translate(
+        'opensearch.reports.reportDefinitionsTable.columns.type',
+        {
+          defaultMessage: 'Type',
+        }
+      ),
       sortable: true,
       truncateText: false,
     },
     {
       field: 'details',
-      name: 'Schedule details',
+      name: i18n.translate(
+        'opensearch.reports.reportDefinitionsTable.columns.scheduleDetails',
+        { defaultMessage: 'Schedule details' }
+      ),
       sortable: false,
       truncateText: true,
     },
     {
       field: 'lastUpdated',
-      name: 'Last Updated',
+      name: i18n.translate(
+        'opensearch.reports.reportDefinitionsTable.columns.lastUpdated',
+        { defaultMessage: 'Last Updated' }
+      ),
       render: (date) => {
         let readable = humanReadableDate(date);
         return <EuiText size="s">{readable}</EuiText>;
@@ -151,7 +175,10 @@ export function ReportDefinitions(props) {
     },
     {
       field: 'status',
-      name: 'Status',
+      name: i18n.translate(
+        'opensearch.reports.reportDefinitionsTable.columns.status',
+        { defaultMessage: 'Status' }
+      ),
       sortable: true,
       truncateText: false,
     },
@@ -160,7 +187,13 @@ export function ReportDefinitions(props) {
   const displayMessage =
     reportDefinitionsTableContent.length === 0
       ? emptyMessageReportDefinitions
-      : '0 report definitions match the search criteria. Search again.';
+      : i18n.translate(
+          'opensearch.reports.reportDefinitionsTable.emptyMessageReports.noDefinitionsFound',
+          {
+            defaultMessage:
+              '0 report definitions match the search criteria. Search again.',
+          }
+        );
 
   return (
     <div>
