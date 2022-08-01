@@ -4,6 +4,10 @@ body {
   padding: 0;
 }
 
+iframe, embed, object {
+  display: none !important;
+}
+
 /*  nice padding + matches Kibana default UI colors you could also set this to inherit if
       the wrapper gets inserted inside a kibana section. I might also remove the manual text color here as well, potentially */
 .reportWrapper {
