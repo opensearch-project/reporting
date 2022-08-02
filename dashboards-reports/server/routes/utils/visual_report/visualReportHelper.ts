@@ -84,6 +84,25 @@ export const createVisualReport = async (
     },
   });
   const page = await browser.newPage();
+
+  await page.setRequestInterception(true);
+  page.on('request', (req) => {
+    // disallow non-localhost redirections
+    if (
+      req.isNavigationRequest() &&
+      req.redirectChain().length > 0 &&
+      !/^(0|0.0.0.0|127.0.0.1|localhost)$/.test(new URL(req.url()).hostname)
+    ) {
+      logger.error(
+        'Reporting does not allow redirections to outside of localhost, aborting. URL received: ' +
+          req.url()
+      );
+      req.abort();
+    } else {
+      req.continue();
+    }
+  });
+
   page.setDefaultNavigationTimeout(0);
   page.setDefaultTimeout(100000); // use 100s timeout instead of default 30s
   // Set extra headers that are needed
