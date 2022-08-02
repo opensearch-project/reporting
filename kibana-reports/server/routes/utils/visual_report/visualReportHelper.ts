@@ -185,6 +185,16 @@ export const createVisualReport = async (
   );
   await page.setContent(templateHtml);
 
+  const numDisallowedTags = await page.evaluate(
+    () =>
+      document.getElementsByTagName('iframe').length +
+      document.getElementsByTagName('embed').length +
+      document.getElementsByTagName('object').length
+  );
+  if (numDisallowedTags > 0) {
+    throw Error('Reporting does not support "iframe", "embed", or "object" tags, aborting');
+  }
+
   // create pdf or png accordingly
   if (reportFormat === FORMAT.pdf) {
     const scrollHeight = await page.evaluate(
