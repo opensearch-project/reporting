@@ -182,9 +182,19 @@ export const createVisualReport = async (
   // wait for dynamic page content to render
   await waitForDynamicContent(page);
 
-  await addReportStyle(page);
   await addReportHeader(page, keywordFilteredHeader);
   await addReportFooter(page, keywordFilteredFooter);
+  await addReportStyle(page);
+
+  const numDisallowedTags = await page.evaluate(
+    () =>
+      document.getElementsByTagName('iframe').length +
+      document.getElementsByTagName('embed').length +
+      document.getElementsByTagName('object').length
+  );
+  if (numDisallowedTags > 0) {
+    throw Error('Reporting does not support "iframe", "embed", or "object" tags, aborting');
+  }
 
   // create pdf or png accordingly
   if (reportFormat === FORMAT.pdf) {
