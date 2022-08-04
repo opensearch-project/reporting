@@ -55,7 +55,9 @@ describe('test create visual report', () => {
       reportParams as ReportParamsSchemaType,
       mockHtmlPath,
       mockLogger,
-      mockHeader
+      mockHeader,
+      undefined,
+      /^(data:image|file:\/\/)/
     );
     expect(fileName).toContain(`${reportParams.report_name}`);
     expect(fileName).toContain('.png');
@@ -71,7 +73,9 @@ describe('test create visual report', () => {
       reportParams as ReportParamsSchemaType,
       mockHtmlPath,
       mockLogger,
-      mockHeader
+      mockHeader,
+      undefined,
+      /^(data:image|file:\/\/)/
     );
     expect(fileName).toContain(`${reportParams.report_name}`);
     expect(fileName).toContain('.pdf');
