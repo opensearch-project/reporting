@@ -93,6 +93,8 @@ const ipv6Regex = /(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:)
 const localhostRegex = /localhost:([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])/g;
 const iframeRegex = /iframe/g;
 
+export const ALLOWED_HOSTS = /^(0|0.0.0.0|127.0.0.1|localhost|(.*\.)?(opensearch.org|aws.a2z.com))$/;
+
 export const replaceBlockedKeywords = (htmlString: string) => {
   // replace <ipv4>:<port>
   htmlString = htmlString.replace(ipv4Regex, BLOCKED_KEYWORD);
