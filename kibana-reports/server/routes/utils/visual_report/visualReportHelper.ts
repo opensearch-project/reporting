@@ -23,6 +23,7 @@ import {
   FORMAT,
   SELECTOR,
   CHROMIUM_PATH,
+  ALLOWED_HOSTS,
 } from '../constants';
 import { getFileName } from '../helpers';
 import { CreateReportResultType } from '../types';
@@ -36,7 +37,8 @@ export const createVisualReport = async (
   queryUrl: string,
   logger: Logger,
   cookie?: SetCookie,
-  timezone?: string
+  timezone?: string,
+  validRequestProtocol = /^(data:image)/
 ): Promise<CreateReportResultType> => {
   const {
     core_params,
@@ -115,17 +117,24 @@ export const createVisualReport = async (
   const page = await browser.newPage();
 
   await page.setRequestInterception(true);
+  let localStorageAvailable = true;
   page.on('request', (req) => {
-    // disallow non-localhost redirections
+    // disallow non-allowlisted connections. urls with valid protocols do not need ALLOWED_HOSTS check
     if (
-      req.isNavigationRequest() &&
-      req.redirectChain().length > 0 &&
-      !/^(0|0.0.0.0|127.0.0.1|localhost)$/.test(new URL(req.url()).hostname)
+      !validRequestProtocol.test(req.url()) &&
+      !ALLOWED_HOSTS.test(new URL(req.url()).hostname)
     ) {
-      logger.error(
-        'Reporting does not allow redirections to outside of localhost, aborting. URL received: ' +
-          req.url()
-      );
+      if (req.isNavigationRequest() && req.redirectChain().length > 0) {
+        logger.error(
+          'Reporting does not allow redirections to outside of localhost, aborting. URL received: ' +
+            req.url()
+        );
+      } else {
+        logger.warn(
+          'Disabled connection to non-allowlist domains: ' + req.url()
+        );
+      }
+      localStorageAvailable = true;
       req.abort();
     } else {
       req.continue();
