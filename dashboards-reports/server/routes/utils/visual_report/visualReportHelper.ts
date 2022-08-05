@@ -99,6 +99,8 @@ export const createVisualReport = async (
       '--no-zygote',
       '--single-process',
       '--font-render-hinting=none',
+      '--js-flags="--jitless --no-opt"',
+      '--disable-features=V8OptimizeJavascript',
     ],
     executablePath: CHROMIUM_PATH,
     env: {
