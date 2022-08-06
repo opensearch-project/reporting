@@ -21,13 +21,6 @@ jobs:
       - name: Checkout Reports Scheduler
         uses: actions/checkout@v2
 
-      - name: RunBackwards Compatibility Tests
-        run: |
-          cd reports-scheduler
-          echo "Running backwards compatibility tests ..."
-          ./gradlew bwcTestSuite
-
-
       - name: Build with Gradle
         run: |
           cd reports-scheduler
@@ -50,4 +43,3 @@ jobs:
         with:
           name: reports-scheduler
           path: reports-scheduler-builds
-
