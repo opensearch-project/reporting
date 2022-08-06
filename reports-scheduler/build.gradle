@@ -326,7 +326,7 @@ String bwcReportsSchedulerURL = "https://ci.opensearch.org/ci/dbc/bundle-build/1
     testClusters {
         "${baseName}$i" {
             testDistribution = "ARCHIVE"
-            versions = ["7.10.2", opensearch_version]
+            versions = ["1.1.0", opensearch_version]
             numberOfNodes = 3
             plugin(provider(new Callable<RegularFile>(){
                 @Override
