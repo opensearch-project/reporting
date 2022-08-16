@@ -50,8 +50,8 @@ class ReportsSchedulerBackwardsCompatibilityIT : PluginRestTestCase() {
             val pluginNames = plugins.map { plugin -> plugin["name"] }.toSet()
             when (CLUSTER_TYPE) {
                 ClusterType.OLD -> {
-                    assertTrue(pluginNames.contains("opendistro-reports-scheduler"))
-                    assertTrue(pluginNames.contains("opendistro-job-scheduler"))
+                    assertTrue(pluginNames.contains("opensearch-reports-scheduler"))
+                    assertTrue(pluginNames.contains("opensearch-job-scheduler"))
                     createBasicReportDefinition()
                 }
                 ClusterType.MIXED -> {
