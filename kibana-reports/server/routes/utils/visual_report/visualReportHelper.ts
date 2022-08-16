@@ -134,6 +134,7 @@ export const createVisualReport = async (
       !ALLOWED_HOSTS.test(new URL(req.url()).hostname)
     ) {
       if (req.isNavigationRequest() && req.redirectChain().length > 0) {
+        localStorageAvailable = false;
         logger.error(
           'Reporting does not allow redirections to outside of localhost, aborting. URL received: ' +
             req.url()
@@ -143,7 +144,6 @@ export const createVisualReport = async (
           'Disabled connection to non-allowlist domains: ' + req.url()
         );
       }
-      localStorageAvailable = true;
       req.abort();
     } else {
       req.continue();
