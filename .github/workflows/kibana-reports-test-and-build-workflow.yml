@@ -18,7 +18,7 @@ jobs:
         with:
           repository: elastic/kibana
           ref: v7.9.1
-          path: dashboards-reports/kibana
+          path: kibana
 
       - name: Setup Node
         uses: actions/setup-node@v1
@@ -27,13 +27,13 @@ jobs:
 
       - name: Move Kibana Reports to Plugins Dir
         run: |
-          mkdir kibana/plugins
-          mv kibana-reports kibana/plugins/${{ env.PLUGIN_NAME }}
+          mkdir -p ../kibana/plugins
+          mv kibana-reports ../kibana/plugins/${{ env.PLUGIN_NAME }}
 
       - name: Add Chromium Binary to Reporting for Testing
         run: |
           sudo apt install -y libnss3-dev fonts-liberation libfontconfig1
-          cd kibana/plugins/${{ env.PLUGIN_NAME }}
+          cd ../kibana/plugins/${{ env.PLUGIN_NAME }}
           wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip
           unzip chromium-linux-x64.zip
           rm chromium-linux-x64.zip
@@ -43,14 +43,14 @@ jobs:
         with:
           timeout_minutes: 30
           max_attempts: 3
-          command: cd kibana/plugins/${{ env.PLUGIN_NAME }}; yarn kbn bootstrap
+          command: cd ../kibana/plugins/${{ env.PLUGIN_NAME }}; yarn kbn bootstrap
 
       - name: Test
         uses: nick-invision/retry@v1
         with:
           timeout_minutes: 30
           max_attempts: 3
-          command: cd kibana/plugins/${{ env.PLUGIN_NAME }}; yarn test --coverage
+          command: cd ../kibana/plugins/${{ env.PLUGIN_NAME }}; yarn test --coverage
 
       - name: Uploads coverage
         uses: codecov/codecov-action@v1
@@ -59,7 +59,7 @@ jobs:
 
       - name: Build Artifact
         run: |
-          cd kibana/plugins/${{ env.PLUGIN_NAME }}
+          cd ../kibana/plugins/${{ env.PLUGIN_NAME }}
           yarn build
 
           cd build
@@ -93,16 +93,16 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: kibana-reports-linux-x64
-          path: kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-x64.zip
+          path: ../kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-x64.zip
 
       - name: Upload Artifact For Linux arm64
         uses: actions/upload-artifact@v1
         with:
           name: kibana-reports-linux-arm64
-          path: kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-arm64.zip
+          path: ../kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-arm64.zip
 
       - name: Upload Artifact For Windows
         uses: actions/upload-artifact@v1
         with:
           name: kibana-reports-windows-x64
-          path: kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-windows-x64.zip
+          path: ../kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-windows-x64.zip

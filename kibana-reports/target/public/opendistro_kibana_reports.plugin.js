@@ -87,9 +87,9 @@
 /******/ ({
 
 /***/ "../../node_modules/css-loader/dist/cjs.js?!../../node_modules/postcss-loader/src/index.js?!../../node_modules/resolve-url-loader/index.js?!../../node_modules/sass-loader/dist/cjs.js?!./public/index.scss?v7dark":
-/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/css-loader/dist/cjs.js??ref--6-oneOf-0-1!/Users/szhongna/Desktop/reporting/kibana/node_modules/postcss-loader/src??ref--6-oneOf-0-2!/Users/szhongna/Desktop/reporting/kibana/node_modules/resolve-url-loader??ref--6-oneOf-0-3!/Users/szhongna/Desktop/reporting/kibana/node_modules/sass-loader/dist/cjs.js??ref--6-oneOf-0-4!./public/index.scss?v7dark ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/css-loader/dist/cjs.js??ref--6-oneOf-0-1!/local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/postcss-loader/src??ref--6-oneOf-0-2!/local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/resolve-url-loader??ref--6-oneOf-0-3!/local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/sass-loader/dist/cjs.js??ref--6-oneOf-0-4!./public/index.scss?v7dark ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -105,9 +105,9 @@ module.exports = exports;
 /***/ }),
 
 /***/ "../../node_modules/css-loader/dist/cjs.js?!../../node_modules/postcss-loader/src/index.js?!../../node_modules/resolve-url-loader/index.js?!../../node_modules/sass-loader/dist/cjs.js?!./public/index.scss?v7light":
-/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/css-loader/dist/cjs.js??ref--6-oneOf-1-1!/Users/szhongna/Desktop/reporting/kibana/node_modules/postcss-loader/src??ref--6-oneOf-1-2!/Users/szhongna/Desktop/reporting/kibana/node_modules/resolve-url-loader??ref--6-oneOf-1-3!/Users/szhongna/Desktop/reporting/kibana/node_modules/sass-loader/dist/cjs.js??ref--6-oneOf-1-4!./public/index.scss?v7light ***!
-  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/css-loader/dist/cjs.js??ref--6-oneOf-1-1!/local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/postcss-loader/src??ref--6-oneOf-1-2!/local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/resolve-url-loader??ref--6-oneOf-1-3!/local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/sass-loader/dist/cjs.js??ref--6-oneOf-1-4!./public/index.scss?v7light ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -123,9 +123,9 @@ module.exports = exports;
 /***/ }),
 
 /***/ "../../node_modules/css-loader/dist/runtime/api.js":
-/*!********************************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/css-loader/dist/runtime/api.js ***!
-  \********************************************************************************************/
+/*!*********************************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/css-loader/dist/runtime/api.js ***!
+  \*********************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -228,9 +228,9 @@ function toComment(sourceMap) {
 /***/ }),
 
 /***/ "../../node_modules/node-libs-browser/node_modules/punycode/punycode.js":
-/*!*****************************************************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/node-libs-browser/node_modules/punycode/punycode.js ***!
-  \*****************************************************************************************************************/
+/*!******************************************************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/node-libs-browser/node_modules/punycode/punycode.js ***!
+  \******************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -759,9 +759,9 @@ function toComment(sourceMap) {
 /***/ }),
 
 /***/ "../../node_modules/querystring-es3/decode.js":
-/*!***************************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/querystring-es3/decode.js ***!
-  \***************************************************************************************/
+/*!****************************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/querystring-es3/decode.js ***!
+  \****************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -855,9 +855,9 @@ var isArray = Array.isArray || function (xs) {
 /***/ }),
 
 /***/ "../../node_modules/querystring-es3/encode.js":
-/*!***************************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/querystring-es3/encode.js ***!
-  \***************************************************************************************/
+/*!****************************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/querystring-es3/encode.js ***!
+  \****************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -952,9 +952,9 @@ var objectKeys = Object.keys || function (obj) {
 /***/ }),
 
 /***/ "../../node_modules/querystring-es3/index.js":
-/*!**************************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/querystring-es3/index.js ***!
-  \**************************************************************************************/
+/*!***************************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/querystring-es3/index.js ***!
+  \***************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -968,9 +968,9 @@ exports.encode = exports.stringify = __webpack_require__(/*! ./encode */ "../../
 /***/ }),
 
 /***/ "../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js":
-/*!*******************************************************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js ***!
-  \*******************************************************************************************************************/
+/*!********************************************************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js ***!
+  \********************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1248,9 +1248,9 @@ module.exports = function (list, options) {
 /***/ }),
 
 /***/ "../../node_modules/url/url.js":
-/*!************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/url/url.js ***!
-  \************************************************************************/
+/*!*************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/url/url.js ***!
+  \*************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1992,9 +1992,9 @@ Url.prototype.parseHost = function() {
 /***/ }),
 
 /***/ "../../node_modules/url/util.js":
-/*!*************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/url/util.js ***!
-  \*************************************************************************/
+/*!**************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/url/util.js ***!
+  \**************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2020,9 +2020,9 @@ module.exports = {
 /***/ }),
 
 /***/ "../../node_modules/uuid/lib/bytesToUuid.js":
-/*!*************************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/uuid/lib/bytesToUuid.js ***!
-  \*************************************************************************************/
+/*!**************************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/uuid/lib/bytesToUuid.js ***!
+  \**************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -2055,9 +2055,9 @@ module.exports = bytesToUuid;
 /***/ }),
 
 /***/ "../../node_modules/uuid/lib/rng-browser.js":
-/*!*************************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/uuid/lib/rng-browser.js ***!
-  \*************************************************************************************/
+/*!**************************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/uuid/lib/rng-browser.js ***!
+  \**************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -2100,9 +2100,9 @@ if (getRandomValues) {
 /***/ }),
 
 /***/ "../../node_modules/uuid/v4.js":
-/*!************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/uuid/v4.js ***!
-  \************************************************************************/
+/*!*************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/uuid/v4.js ***!
+  \*************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2140,9 +2140,9 @@ module.exports = v4;
 /***/ }),
 
 /***/ "../../node_modules/val-loader/dist/cjs.js?key=opendistro_kibana_reports!../../packages/kbn-ui-shared-deps/public_path_module_creator.js":
-/*!*********************************************************************************************************************************************************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/node_modules/val-loader/dist/cjs.js?key=opendistro_kibana_reports!/Users/szhongna/Desktop/reporting/kibana/packages/kbn-ui-shared-deps/public_path_module_creator.js ***!
-  \*********************************************************************************************************************************************************************************************************************/
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/node_modules/val-loader/dist/cjs.js?key=opendistro_kibana_reports!/local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/packages/kbn-ui-shared-deps/public_path_module_creator.js ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2215,9 +2215,9 @@ module.exports = function(module) {
 /***/ }),
 
 /***/ "../../packages/elastic-datemath/target/index.js":
-/*!******************************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/packages/elastic-datemath/target/index.js ***!
-  \******************************************************************************************/
+/*!*******************************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/packages/elastic-datemath/target/index.js ***!
+  \*******************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2469,9 +2469,9 @@ module.exports = exports.default;
 /***/ }),
 
 /***/ "../../packages/kbn-optimizer/target/worker/entry_point_creator.js":
-/*!************************************************************************************************************!*\
-  !*** /Users/szhongna/Desktop/reporting/kibana/packages/kbn-optimizer/target/worker/entry_point_creator.js ***!
-  \************************************************************************************************************/
+/*!*************************************************************************************************************************************************!*\
+  !*** /local/home/lijshu/projects/aos-1.0-1.1-patch/08-04-22-reporting-patch/kibana/packages/kbn-optimizer/target/worker/entry_point_creator.js ***!
+  \*************************************************************************************************************************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -13557,6 +13557,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/utils */ "./public/components/utils/utils.tsx");
 /* harmony import */ var url__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! url */ "../../node_modules/url/url.js");
 /* harmony import */ var url__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(url__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _src_plugins_kibana_utils_public__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../../src/plugins/kibana_utils/public */ "plugin/kibanaUtils/public");
+/* harmony import */ var _src_plugins_kibana_utils_public__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_src_plugins_kibana_utils_public__WEBPACK_IMPORTED_MODULE_8__);
 /*
  * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -13582,19 +13584,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const replaceQueryURL = () => {
-  let url = location.pathname + location.hash;
-  let [, fromDateString, toDateString] = url.match(_utils_utils__WEBPACK_IMPORTED_MODULE_6__["timeRangeMatcher"]);
-  fromDateString = fromDateString.replace(/[']+/g, ''); // convert time range to from date format in case time range is relative
-
-  const fromDateFormat = _elastic_datemath__WEBPACK_IMPORTED_MODULE_1___default.a.parse(fromDateString);
-  toDateString = toDateString.replace(/[']+/g, '');
-  let toDateFormat = _elastic_datemath__WEBPACK_IMPORTED_MODULE_1___default.a.parse(toDateString); // replace to and from dates with absolute date
-
-  url = url.replace(fromDateString, "'" + fromDateFormat.toISOString() + "'");
-  url = url.replace(toDateString + '))', "'" + toDateFormat.toISOString() + "'))");
-  return url;
-};
 
 const generateInContextReport = async (timeRanges, queryUrl, fileFormat, rest = {}) => {
   Object(_context_menu_helpers__WEBPACK_IMPORTED_MODULE_3__["displayLoadingModal"])();
@@ -13705,19 +13694,19 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(function () {
 
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '#generatePDF', function () {
     const timeRanges = Object(_context_menu_helpers__WEBPACK_IMPORTED_MODULE_3__["getTimeFieldsFromUrl"])();
-    const queryUrl = replaceQueryURL();
+    const queryUrl = Object(_context_menu_helpers__WEBPACK_IMPORTED_MODULE_3__["replaceQueryURL"])(location.href);
     generateInContextReport(timeRanges, queryUrl, 'pdf');
   }); // generate PNG onclick
 
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '#generatePNG', function () {
     const timeRanges = Object(_context_menu_helpers__WEBPACK_IMPORTED_MODULE_3__["getTimeFieldsFromUrl"])();
-    const queryUrl = replaceQueryURL();
+    const queryUrl = Object(_context_menu_helpers__WEBPACK_IMPORTED_MODULE_3__["replaceQueryURL"])(location.href);
     generateInContextReport(timeRanges, queryUrl, 'png');
   }); // generate CSV onclick
 
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '#generateCSV', function () {
     const timeRanges = Object(_context_menu_helpers__WEBPACK_IMPORTED_MODULE_3__["getTimeFieldsFromUrl"])();
-    const queryUrl = replaceQueryURL();
+    const queryUrl = Object(_context_menu_helpers__WEBPACK_IMPORTED_MODULE_3__["replaceQueryURL"])(location.href);
     const saved_search_id = getUuidFromUrl()[1];
     generateInContextReport(timeRanges, queryUrl, 'csv', {
       saved_search_id
@@ -13901,7 +13890,7 @@ function addTenantToURL(url, userRequestedTenant) {
 /*!****************************************************************!*\
   !*** ./public/components/context_menu/context_menu_helpers.js ***!
   \****************************************************************/
-/*! exports provided: contextMenuCreateReportDefinition, contextMenuViewReports, getTimeFieldsFromUrl, displayLoadingModal, addSuccessOrFailureToast */
+/*! exports provided: contextMenuCreateReportDefinition, contextMenuViewReports, getTimeFieldsFromUrl, displayLoadingModal, addSuccessOrFailureToast, replaceQueryURL */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13911,12 +13900,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTimeFieldsFromUrl", function() { return getTimeFieldsFromUrl; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "displayLoadingModal", function() { return displayLoadingModal; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addSuccessOrFailureToast", function() { return addSuccessOrFailureToast; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "replaceQueryURL", function() { return replaceQueryURL; });
 /* harmony import */ var _elastic_datemath__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @elastic/datemath */ "../../packages/elastic-datemath/target/index.js");
 /* harmony import */ var _elastic_datemath__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_elastic_datemath__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "moment");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _context_menu_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./context_menu_ui */ "./public/components/context_menu/context_menu_ui.js");
 /* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/utils */ "./public/components/utils/utils.tsx");
+/* harmony import */ var _src_plugins_kibana_utils_public__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../../src/plugins/kibana_utils/public */ "plugin/kibanaUtils/public");
+/* harmony import */ var _src_plugins_kibana_utils_public__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_src_plugins_kibana_utils_public__WEBPACK_IMPORTED_MODULE_4__);
 /*
  * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -13931,6 +13923,7 @@ __webpack_require__.r(__webpack_exports__);
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 
 
 
@@ -13960,7 +13953,7 @@ const contextMenuCreateReportDefinition = baseURI => {
 };
 const contextMenuViewReports = () => window.location.assign('opendistro_kibana_reports#/');
 const getTimeFieldsFromUrl = () => {
-  const url = window.location.href;
+  const url = Object(_src_plugins_kibana_utils_public__WEBPACK_IMPORTED_MODULE_4__["unhashUrl"])(window.location.href);
   let [, fromDateString, toDateString] = url.match(_utils_utils__WEBPACK_IMPORTED_MODULE_3__["timeRangeMatcher"]);
   fromDateString = fromDateString.replace(/[']+/g, ''); // convert time range to from date format in case time range is relative
 
@@ -14021,6 +14014,21 @@ const addSuccessOrFailureToast = (status, reportSource) => {
       console.log('error displaying toast', e);
     }
   }
+};
+const replaceQueryURL = pageUrl => {
+  // we unhash the url in case Kibana advanced UI setting 'state:storeInSessionStorage' is turned on
+  const unhashedUrl = new URL(Object(_src_plugins_kibana_utils_public__WEBPACK_IMPORTED_MODULE_4__["unhashUrl"])(pageUrl));
+  let queryUrl = unhashedUrl.pathname + unhashedUrl.hash;
+  let [, fromDateString, toDateString] = queryUrl.match(_utils_utils__WEBPACK_IMPORTED_MODULE_3__["timeRangeMatcher"]);
+  fromDateString = fromDateString.replace(/[']+/g, ''); // convert time range to from date format in case time range is relative
+
+  const fromDateFormat = _elastic_datemath__WEBPACK_IMPORTED_MODULE_0___default.a.parse(fromDateString);
+  toDateString = toDateString.replace(/[']+/g, '');
+  const toDateFormat = _elastic_datemath__WEBPACK_IMPORTED_MODULE_0___default.a.parse(toDateString); // replace to and from dates with absolute date
+
+  queryUrl = queryUrl.replace(fromDateString, "'" + fromDateFormat.toISOString() + "'");
+  queryUrl = queryUrl.replace(toDateString + '))', "'" + toDateFormat.toISOString() + "'))");
+  return queryUrl;
 };
 
 /***/ }),
@@ -14802,6 +14810,21 @@ module.exports = __kbnSharedDeps__.Jquery;
 /***/ (function(module, exports) {
 
 module.exports = __kbnSharedDeps__.Moment;
+
+/***/ }),
+
+/***/ "plugin/kibanaUtils/public":
+/*!**************************************************!*\
+  !*** @kbn/bundleRef "plugin/kibanaUtils/public" ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+
+      __webpack_require__.r(__webpack_exports__);
+      var ns = __kbnBundles__.get('plugin/kibanaUtils/public');
+      Object.defineProperties(__webpack_exports__, Object.getOwnPropertyDescriptors(ns))
+    
 
 /***/ }),
 
