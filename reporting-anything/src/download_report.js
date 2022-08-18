@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
-import _ from 'lodash';
 import { ArgumentParser } from 'argparse';
 import { exit } from 'process';
 import { downloadVisualReport } from './download_helpers.js';
+import dotenv from "dotenv";
+dotenv.config();
 
 "use strict";
 
@@ -79,11 +79,11 @@ else {
   authType = 'basic';
 }
 
-let username, password;
-if (parsed_args.credentials !== undefined) {
-  const split = parsed_args.credentials.split(':');
-  username = split[0];
-  password = split[1];
+let username = process.env.USERNAME
+let password = process.env.PASSWORD
+if(username == undefined && password == undefined){
+  console.log('Please specify a valid username or password');
+  exit(1);
 }
 
 await downloadVisualReport(parsed_args.url, format, width, height, filename, authType, username, password);
