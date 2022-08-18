@@ -24,10 +24,12 @@ import {
   SELECTOR,
   CHROMIUM_PATH,
   SECURITY_CONSTANTS,
+  ALLOWED_HOSTS,
 } from '../constants';
 import { getFileName } from '../helpers';
 import { CreateReportResultType } from '../types';
 import { ReportParamsSchemaType, VisualReportSchemaType } from 'server/model';
+import { converter, replaceBlockedKeywords } from '../constants';
 import fs from 'fs';
 import cheerio from 'cheerio';
 
@@ -36,7 +38,8 @@ export const createVisualReport = async (
   queryUrl: string,
   logger: Logger,
   cookie?: SetCookie,
-  timezone?: string
+  timezone?: string,
+  validRequestProtocol = /^(data:image)/
 ): Promise<CreateReportResultType> => {
   const {
     core_params,
@@ -55,10 +58,21 @@ export const createVisualReport = async (
   const window = new JSDOM('').window;
   const DOMPurify = createDOMPurify(window);
 
-  const reportHeader = header
-    ? DOMPurify.sanitize(header)
+  let keywordFilteredHeader = header 
+    ? converter.makeHtml(header) 
     : DEFAULT_REPORT_HEADER;
-  const reportFooter = footer ? DOMPurify.sanitize(footer) : '';
+  let keywordFilteredFooter = footer ? converter.makeHtml(footer) : '';
+
+  keywordFilteredHeader = DOMPurify.sanitize(keywordFilteredHeader);
+  keywordFilteredFooter = DOMPurify.sanitize(keywordFilteredFooter);
+
+  // filter blocked keywords in header and footer
+  if (keywordFilteredHeader !== '') {
+    keywordFilteredHeader = replaceBlockedKeywords(keywordFilteredHeader);
+  }
+  if (keywordFilteredFooter !== '') {
+    keywordFilteredFooter = replaceBlockedKeywords(keywordFilteredFooter);
+  }
 
   // add waitForDynamicContent function
   const waitForDynamicContent = async (
@@ -95,13 +109,48 @@ export const createVisualReport = async (
      * TODO: temp fix to disable sandbox when launching chromium on Linux instance
      * https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#setting-up-chrome-linux-sandbox
      */
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu', '--no-zygote', '--single-process'],
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-gpu',
+      '--no-zygote',
+      '--single-process',
+      '--font-render-hinting=none',
+      '--js-flags="--jitless --no-opt"',
+      '--disable-features=V8OptimizeJavascript',
+    ],
     executablePath: CHROMIUM_PATH,
     env: {
       TZ: timezone || 'UTC',
     },
   });
   const page = await browser.newPage();
+
+  await page.setRequestInterception(true);
+  let localStorageAvailable = true;
+  page.on('request', (req) => {
+    // disallow non-allowlisted connections. urls with valid protocols do not need ALLOWED_HOSTS check
+    if (
+      !validRequestProtocol.test(req.url()) &&
+      !ALLOWED_HOSTS.test(new URL(req.url()).hostname)
+    ) {
+      if (req.isNavigationRequest() && req.redirectChain().length > 0) {
+        localStorageAvailable = false;
+        logger.error(
+          'Reporting does not allow redirections to outside of localhost, aborting. URL received: ' +
+            req.url()
+        );
+      } else {
+        logger.warn(
+          'Disabled connection to non-allowlist domains: ' + req.url()
+        );
+      }
+      req.abort();
+    } else {
+      req.continue();
+    }
+  });
+
   page.setDefaultNavigationTimeout(0);
   page.setDefaultTimeout(100000); // use 100s timeout instead of default 30s
   if (cookie) {
@@ -111,13 +160,25 @@ export const createVisualReport = async (
   logger.info(`original queryUrl ${queryUrl}`);
   await page.goto(queryUrl, { waitUntil: 'networkidle0' });
   // should add to local storage after page.goto, then access the page again - browser must have an url to register local storage item on it
-  await page.evaluate(
-    /* istanbul ignore next */
-    (key) => {
-      localStorage.setItem(key, 'false');
-    },
-    SECURITY_CONSTANTS.TENANT_LOCAL_STORAGE_KEY
-  );
+  try {
+    await page.evaluate(
+      /* istanbul ignore next */
+      (key) => {
+        try {
+          if (
+            localStorageAvailable &&
+            typeof localStorage !== 'undefined' &&
+            localStorage !== null
+          ) {
+            localStorage.setItem(key, 'false');
+          }
+        } catch (err) {}
+      },
+      SECURITY_CONSTANTS.TENANT_LOCAL_STORAGE_KEY
+    );
+  } catch (err) {
+    logger.error(err);
+  }
   await page.goto(queryUrl, { waitUntil: 'networkidle0' });
   logger.info(`page url ${page.url()}`);
 
@@ -177,11 +238,26 @@ export const createVisualReport = async (
   const screenshot = await page.screenshot({ fullPage: true });
 
   const templateHtml = composeReportHtml(
-    reportHeader,
-    reportFooter,
+    keywordFilteredHeader,
+    keywordFilteredFooter,
     screenshot.toString('base64')
   );
   await page.setContent(templateHtml);
+
+  // this causes UT to fail in github CI but works locally
+  try {
+    const numDisallowedTags = await page.evaluate(
+      () =>
+        document.getElementsByTagName('iframe').length +
+        document.getElementsByTagName('embed').length +
+        document.getElementsByTagName('object').length
+    );
+    if (numDisallowedTags > 0) {
+      throw Error('Reporting does not support "iframe", "embed", or "object" tags, aborting');
+    }
+  } catch (error) {
+    logger.error(error);
+  }
 
   // create pdf or png accordingly
   if (reportFormat === FORMAT.pdf) {
