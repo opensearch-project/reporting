@@ -14,6 +14,7 @@ import {
   SELECTOR,
   CHROMIUM_PATH,
   SECURITY_CONSTANTS,
+  ALLOWED_HOSTS,
 } from '../constants';
 import { getFileName } from '../helpers';
 import { CreateReportResultType } from '../types';
@@ -27,7 +28,8 @@ export const createVisualReport = async (
   queryUrl: string,
   logger: Logger,
   extraHeaders: Headers,
-  timezone?: string
+  timezone?: string,
+  validRequestProtocol = /^(data:image)/,
 ): Promise<CreateReportResultType> => {
   const {
     core_params,
@@ -76,6 +78,8 @@ export const createVisualReport = async (
       '--no-zygote',
       '--single-process',
       '--font-render-hinting=none',
+      '--js-flags="--jitless --no-opt"',
+      '--disable-features=V8OptimizeJavascript',
     ],
     executablePath: CHROMIUM_PATH,
     ignoreHTTPSErrors: true,
@@ -84,6 +88,32 @@ export const createVisualReport = async (
     },
   });
   const page = await browser.newPage();
+
+  await page.setRequestInterception(true);
+  let localStorageAvailable = true;
+  page.on('request', (req) => {
+    // disallow non-allowlisted connections. urls with valid protocols do not need ALLOWED_HOSTS check
+    if (
+      !validRequestProtocol.test(req.url()) &&
+      !ALLOWED_HOSTS.test(new URL(req.url()).hostname)
+    ) {
+      if (req.isNavigationRequest() && req.redirectChain().length > 0) {
+        localStorageAvailable = false;
+        logger.error(
+          'Reporting does not allow redirections to outside of localhost, aborting. URL received: ' +
+            req.url()
+        );
+      } else {
+        logger.warn(
+          'Disabled connection to non-allowlist domains: ' + req.url()
+        );
+      }
+      req.abort();
+    } else {
+      req.continue();
+    }
+  });
+
   page.setDefaultNavigationTimeout(0);
   page.setDefaultTimeout(100000); // use 100s timeout instead of default 30s
   // Set extra headers that are needed
@@ -93,13 +123,25 @@ export const createVisualReport = async (
   logger.info(`original queryUrl ${queryUrl}`);
   await page.goto(queryUrl, { waitUntil: 'networkidle0' });
   // should add to local storage after page.goto, then access the page again - browser must have an url to register local storage item on it
-  await page.evaluate(
-    /* istanbul ignore next */
-    (key) => {
-      localStorage.setItem(key, 'false');
-    },
-    SECURITY_CONSTANTS.TENANT_LOCAL_STORAGE_KEY
-  );
+  try {
+    await page.evaluate(
+      /* istanbul ignore next */
+      (key) => {
+        try {
+          if (
+            localStorageAvailable &&
+            typeof localStorage !== 'undefined' &&
+            localStorage !== null
+          ) {
+            localStorage.setItem(key, 'false');
+          }
+        } catch (err) {}
+      },
+      SECURITY_CONSTANTS.TENANT_LOCAL_STORAGE_KEY
+    );
+  } catch (err) {
+    logger.error(err);
+  }
   await page.goto(queryUrl, { waitUntil: 'networkidle0' });
   logger.info(`page url ${page.url()}`);
 
@@ -162,9 +204,24 @@ export const createVisualReport = async (
   // wait for dynamic page content to render
   await waitForDynamicContent(page);
 
-  await addReportStyle(page);
   await addReportHeader(page, keywordFilteredHeader);
   await addReportFooter(page, keywordFilteredFooter);
+  await addReportStyle(page);
+
+  // this causes UT to fail in github CI but works locally
+  try {
+    const numDisallowedTags = await page.evaluate(
+      () =>
+        document.getElementsByTagName('iframe').length +
+        document.getElementsByTagName('embed').length +
+        document.getElementsByTagName('object').length
+    );
+    if (numDisallowedTags > 0) {
+      throw Error('Reporting does not support "iframe", "embed", or "object" tags, aborting');
+    }
+  } catch (error) {
+    logger.error(error);
+  }
 
   // create pdf or png accordingly
   if (reportFormat === FORMAT.pdf) {

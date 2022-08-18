@@ -315,18 +315,18 @@ testClusters.integTest {
     setting 'path.repo', repo.absolutePath
 }
 
-// For job-scheduler and reports-scheduler, the latest opendistro releases appear to be 1.13.0.0.
-String bwcVersion = "1.13.0.0"
+// For job-scheduler and reports-scheduler, the latest opensearch releases appear to be 1.1.0.0.
+String bwcVersion = "1.1.0.0"
 String baseName = "reportsSchedulerBwcCluster"
 String bwcFilePath = "src/test/resources/bwc"
-String bwcJobSchedulerURL = "https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-job-scheduler/opendistro-job-scheduler-" + bwcVersion + ".zip"
-String bwcReportsSchedulerURL = "https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins/opendistro-reports-scheduler/opendistro-reports-scheduler-" + bwcVersion + ".zip"
+String bwcJobSchedulerURL = "https://ci.opensearch.org/ci/dbc/bundle-build/1.1.0/20210930/linux/x64/builds/opensearch/plugins/opensearch-job-scheduler-1.1.0.0.zip"
+String bwcReportsSchedulerURL = "https://ci.opensearch.org/ci/dbc/bundle-build/1.1.0/20210930/linux/x64/builds/opensearch/plugins/opensearch-reports-scheduler-1.1.0.0.zip"
 
 2.times {i ->
     testClusters {
         "${baseName}$i" {
             testDistribution = "ARCHIVE"
-            versions = ["7.10.2", opensearch_version]
+            versions = ["1.1.0", opensearch_version]
             numberOfNodes = 3
             plugin(provider(new Callable<RegularFile>(){
                 @Override
@@ -338,7 +338,7 @@ String bwcReportsSchedulerURL = "https://d3g5vo6xdbdb9a.cloudfront.net/downloads
                             if (!dir.exists()) {
                                 dir.mkdirs()
                             }
-                            File file = new File(dir, "opendistro-job-scheduler-" + bwcVersion + ".zip")
+                            File file = new File(dir, "opensearch-job-scheduler-" + bwcVersion + ".zip")
                             if (!file.exists()) {
                                 new URL(bwcJobSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
                             }
@@ -357,7 +357,7 @@ String bwcReportsSchedulerURL = "https://d3g5vo6xdbdb9a.cloudfront.net/downloads
                             if (!dir.exists()) {
                                 dir.mkdirs()
                             }
-                            File file = new File(dir, "opendistro-reports-scheduler-" + bwcVersion + ".zip")
+                            File file = new File(dir, "opensearch-reports-scheduler-" + bwcVersion + ".zip")
                             if (!file.exists()) {
                                 new URL(bwcReportsSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
                             }
@@ -389,7 +389,7 @@ task prepareBwcTests {
                                 if (!dir.exists()) {
                                     dir.mkdirs()
                                 }
-                                File file = new File(dir, "opendistro-reports-scheduler-" + project.version + ".zip")
+                                File file = new File(dir, "opensearch-reports-scheduler-" + project.version + ".zip")
                                 if (!file.exists()) {
                                     new URL(jobSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
                                 }
