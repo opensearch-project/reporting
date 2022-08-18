@@ -31,7 +31,7 @@ import {
   REPORT_TYPE,
   TRIGGER_TYPE,
 } from '../../routes/utils/constants';
-import { validateReport, validateReportDefinition } from '../validationHelper';
+import { isValidRelativeUrl, validateReport, validateReportDefinition } from '../validationHelper';
 
 const SAMPLE_SAVED_OBJECT_ID = '3ba638e0-b894-11e8-a6d9-e546fe2bba5f';
 const createReportDefinitionInput: ReportDefinitionSchemaType = {
@@ -137,7 +137,37 @@ describe('test input validation', () => {
       `saved object with id dashboard:${SAMPLE_SAVED_OBJECT_ID} does not exist`
     );
   });
+
+  test('validation against query_url', async () => {
+    const urls: [string, boolean][] = [
+      ['/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g=', true],
+      [
+        '/_plugin/kibana/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g=',
+        true,
+      ],
+      [
+        '/_dashboards/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d?_g=',
+        true,
+      ],
+      [
+        '/_dashboards/app/dashboards#/edit/7adfa750-4c81-11e8-b3d7-01146121b73d?_g=',
+        true,
+      ],
+      [
+        '/app/notebooks-dashboards?view=output_only&security_tenant=private#/M4dlPIIB0-fJ8Bh1nLc7?security_tenant=private',
+        true,
+      ],
+      [
+        '/_dashboards/app/visualize&security_tenant=/.%2e/.%2e/.%2e/.%2e/_dashboards?#/view/id',
+        false,
+      ],
+    ];
+    expect(urls.map((url) => isValidRelativeUrl(url[0]))).toEqual(
+      urls.map((url) => url[1])
+    );
+  });
 });
+
 // TODO: merge this with other mock clients used in testing, to create some mock helpers file
 const mockOpenSearchClient = (mockSavedObjectIds: string[]) => {
   const client = {
