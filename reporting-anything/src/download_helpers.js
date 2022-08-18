@@ -2,11 +2,24 @@
  * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-
+import hbs from "nodemailer-express-handlebars";
+import AWS from "aws-sdk";
+AWS.config.update({region: 'REGION'});
+AWS.config = new AWS.Config();
+const ses = new AWS.SES({region: "us-west-2"});
 import puppeteer from 'puppeteer-core';
 import fs from 'fs';
 import { JSDOM } from 'jsdom';
 import { CHROMIUM_PATH, FORMAT, REPORT_TYPE, SELECTOR } from './constants.js';
+import nodemailer from "nodemailer";
+import {exit} from "process";
+const BASIC_AUTH = 'basic';
+const COGNITO_AUTH = 'cognito';
+const SAML_AUTH = 'SAML';
+const DASHBOARDS = 'dashboards';
+const VISUALIZE = "Visualize";
+const DISCOVER = "discover";
+const NOTEBOOKS = "notebooks"
 
 
 export async function downloadVisualReport(url, format, width, height, filename, authType, username, password) {
@@ -45,13 +58,13 @@ export async function downloadVisualReport(url, format, width, height, filename,
 
     // auth 
     if (username !== undefined && password !== undefined) {
-      if(authType === 'basic'){
+      if(authType === BASIC_AUTH){
         await basicAuthentication(page, overridePage, url, username, password);
       }
-      else if(authType === 'SAML'){
+      else if(authType === SAML_AUTH){
         await samlAuthentication(page, overridePage, url, username, password);
       }
-      else if (authType === 'cognito'){
+      else if (authType === COGNITO_AUTH){
         await cognitoAuthentication(page, overridePage, url, username, password);
       }
     }
@@ -116,33 +129,35 @@ export async function downloadVisualReport(url, format, width, height, filename,
 
       await waitForDynamicContent(page);
 
-      let buffer;
-      // create pdf or png accordingly
-      if (format === FORMAT.PDF) {
+      let bufferPDF, bufferPNG;
+
         const scrollHeight = await page.evaluate(
-          /* istanbul ignore next */
           () => document.documentElement.scrollHeight
         );
     
-        buffer = await page.pdf({
+        bufferPDF = await page.pdf({
           margin: undefined,
           width: 1680,
           height: scrollHeight + 'px',
           printBackground: true,
           pageRanges: '1',
         });
-      } else if (format === FORMAT.PNG) {
-        buffer = await page.screenshot({
+
+        bufferPNG = await page.screenshot({
           fullPage: true,
         });
-      }
+
     
-      const fileName = `${filename}.${format}`;
+      const fileNamePDF = `${filename}.pdf`;
+      const fileNamePNG = `${filename}.png`;
       const curTime = new Date();
       const timeCreated = curTime.valueOf();
       await browser.close();
-      const data = { timeCreated, dataUrl: buffer.toString('base64'), fileName };
-      await readStreamToFile(data.dataUrl, fileName);
+      const dataPDF = { timeCreated, dataUrl: bufferPDF.toString('base64'), fileNamePDF };
+      const dataPNG = { timeCreated, dataUrl: bufferPNG.toString('base64'), fileNamePNG };
+      await readStreamToFile(dataPDF.dataUrl, fileNamePDF);
+      await readStreamToFile(dataPNG.dataUrl, fileNamePNG);
+      await sendEmail(fileNamePDF, fileNamePNG, username);
   } catch (e) {
     console.log('error is', e);
     process.exit(1);
@@ -177,16 +192,16 @@ const waitForDynamicContent = async (
 };
 
 const getReportSourceFromURL = (url) => {
-  if (url.includes('dashboards')) {
+  if (url.includes(DASHBOARDS)) {
     return 'Dashboard';
   }
-  else if (url.includes('visualize')) {
+  else if (url.includes(VISUALIZE)) {
     return 'Visualization';
   }
-  else if (url.includes('discover')) {
+  else if (url.includes(DISCOVER)) {
     return 'Saved search';
   }
-  else if (url.includes('notebooks')) {
+  else if (url.includes(NOTEBOOKS)) {
     return 'Notebook';
   }
   return 'Other';
@@ -198,6 +213,51 @@ const getUrl = async (url) =>{
   return urlRef;
 };
 
+const sendEmail = async (fileNamePDF, fileNamePNG, username) => {
+  let mailOptions = {
+    from: username,
+    subject: 'This is an email containing your dashboard report',
+    to: username,
+    attachments: [
+      {
+        filename: fileNamePDF,
+        path: fileNamePDF,
+        contentType: 'application/pdf'
+      },
+      {
+        filename: 'report.png',
+        path: fileNamePNG,
+        cid: 'report'
+      }],
+    //specify the template here
+    template : 'index'
+  };
+
+  console.log('Creating SES transporter');
+  let transporter = nodemailer.createTransport({
+    SES: ses
+  });
+  transporter.use("compile",hbs({
+    viewEngine:{
+      partialsDir:"./views/",
+      defaultLayout:""
+    },
+    viewPath:"./views/",
+    extName:".hbs"
+  }));
+
+  // send email
+  await transporter.sendMail(mailOptions, function (err, info) {
+    if (err) {
+      console.log(err);
+      console.log('Error sending email');
+
+    } else {
+      console.log('Email sent successfully');
+    }
+  });
+}
+
 const basicAuthentication = async (page, overridePage, url, username, password) => {
   await page.goto(url, { waitUntil: 'networkidle0' });
   console.log('basic authenticating');
@@ -206,7 +266,13 @@ const basicAuthentication = async (page, overridePage, url, username, password) 
   await page.type('[data-test-subj="password"]', password);
   await page.click('button[type=submit]');
   await page.waitForTimeout(30000);
-  await page.click('label[for=global]');
+  try{
+    await page.click('label[for=global]');
+  }
+  catch(err){
+    console.log('Invalid username or password');
+    exit(1)
+  }
   await page.click('button[data-test-subj="confirm"]');
   await page.waitForTimeout(25000);
   await overridePage.goto(url,{ waitUntil: 'networkidle0' });
@@ -226,7 +292,13 @@ const samlAuthentication = async (page, overridePage, url, username, password) =
   await page.type('[name="credentials.passcode"]', password);
   await page.click('[value="Sign in"]')
   await page.waitForTimeout(30000);
-  await page.click('label[for=global]');
+  try{
+    await page.click('label[for=global]');
+  }
+  catch(err){
+    console.log('Invalid username or password');
+    exit(1)
+  }
   await page.click('button[data-test-subj="confirm"]');
   await page.waitForTimeout(25000);
   await page.click(`a[href='${refUrl}']`);
@@ -240,7 +312,13 @@ const cognitoAuthentication = async (page, overridePage, url, username, password
   await page.type( ' [name="password"]', password);
   await page.click( '[name="signInSubmitButton"]');
   await page.waitForTimeout(30000);
-  await page.click('label[for=global]');
+  try{
+    await page.click('label[for=global]');
+  }
+  catch(err){
+    console.log('Invalid username or password');
+    exit(1)
+  }
   await page.click('button[data-test-subj="confirm"]');
   await page.waitForTimeout(25000);
   await overridePage.goto(url,{ waitUntil: 'networkidle0' });
@@ -261,7 +339,3 @@ export const readStreamToFile = async (
   })
 };
 
-export const getFileFormatPrefix = (fileFormat) => {
-  const fileFormatPrefix = 'data:' + fileFormat + ';base64,';
-  return fileFormatPrefix;
-};
