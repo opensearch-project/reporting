@@ -229,12 +229,12 @@ export function ReportDetails(props: { match?: any; setBreadcrumbs?: any; httpCl
       reportHeader:
         reportParams.core_params.hasOwnProperty('header') &&
         reportParams.core_params.header != ''
-          ? converter.makeMarkdown(reportParams.core_params.header)
+          ? reportParams.core_params.header
           : `\u2014`,
       reportFooter:
         reportParams.core_params.hasOwnProperty('footer') &&
         reportParams.core_params.footer != ''
-          ? converter.makeMarkdown(reportParams.core_params.footer)
+          ? reportParams.core_params.footer
           : `\u2014`,
       triggerType: triggerType,
       scheduleType: triggerParams ? triggerParams.schedule_type : `\u2014`,
