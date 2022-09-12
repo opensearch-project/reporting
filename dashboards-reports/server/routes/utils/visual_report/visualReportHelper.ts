@@ -82,6 +82,7 @@ export const createVisualReport = async (
     env: {
       TZ: timezone || 'UTC',
     },
+    pipe: true,
   });
   const page = await browser.newPage();
   page.setDefaultNavigationTimeout(0);
