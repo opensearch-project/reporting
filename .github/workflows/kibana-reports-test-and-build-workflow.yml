@@ -36,6 +36,10 @@ jobs:
           unzip chromium-linux-x64.zip
           rm chromium-linux-x64.zip
 
+      - name: Remove x-pack puppeteer-core dependency
+        run: |
+          sed -i '/"puppeteer-core": "/d' ../kibana/x-pack/package.json
+
       - name: Kibana Plugin Bootstrap
         uses: nick-invision/retry@v1
         with:
