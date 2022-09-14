@@ -25,6 +25,14 @@ jobs:
         with:
           node-version: "10.23.1"
 
+      # bootstrap first to workaround errors caused by removing puppeteer-core from x-pack
+      - name: Kibana Plugin Bootstrap
+        uses: nick-invision/retry@v1
+        with:
+          timeout_minutes: 30
+          max_attempts: 3
+          command: cd ../kibana; yarn kbn bootstrap
+
       - name: Move Kibana Reports to Plugins Dir
         run: mv kibana-reports ../kibana/plugins/${{ env.PLUGIN_NAME }}
 
@@ -35,6 +43,11 @@ jobs:
           wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip
           unzip chromium-linux-x64.zip
           rm chromium-linux-x64.zip
+
+      # reporting uses newer version of puppeteer-core than x-pack, removing it to avoid conflicts
+      - name: Remove x-pack puppeteer-core dependency
+        run: |
+          sed -i '/"puppeteer-core": "/d' ../kibana/x-pack/package.json
 
       - name: Kibana Plugin Bootstrap
         uses: nick-invision/retry@v1
