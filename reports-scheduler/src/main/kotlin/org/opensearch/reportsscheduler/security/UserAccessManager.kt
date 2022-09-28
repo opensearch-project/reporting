@@ -9,6 +9,7 @@ import org.opensearch.commons.authuser.User
 import org.opensearch.reportsscheduler.metrics.Metrics
 import org.opensearch.reportsscheduler.settings.PluginSettings
 import org.opensearch.OpenSearchStatusException
+import org.opensearch.reportsscheduler.model.ReportActionType
 import org.opensearch.rest.RestStatus
 
 /**
@@ -18,8 +19,12 @@ internal object UserAccessManager {
     private const val USER_TAG = "User:"
     private const val ROLE_TAG = "Role:"
     private const val BACKEND_ROLE_TAG = "BERole:"
+    private const val ALL_ACCESS_ROLE = "all_access"
     private const val PRIVATE_TENANT = "__user__"
     const val DEFAULT_TENANT = ""
+    private const val WRITE_ACCESS = "WRITE"
+    private const val NO_ACCESS = "NONE"
+    private const val DEFAULT_TENANT_ACCESS = NO_ACCESS
 
     /**
      * Validate User if eligible to do operation
@@ -111,13 +116,28 @@ internal object UserAccessManager {
     /**
      * validate if user has access based on given access list
      */
-    fun doesUserHasAccess(user: User?, tenant: String, access: List<String>): Boolean {
+    fun doesUserHasAccess(user: User?, tenant: String, access: List<String>, actionType: ReportActionType): Boolean {
         if (user == null) { // Security is disabled
             return true
         }
         if (getUserTenant(user) != tenant) {
             return false
         }
+
+        if ((actionType == ReportActionType.UPDATE || actionType == ReportActionType.DELETE) &&
+            getUserTenantAccess(user) != WRITE_ACCESS
+        ) {
+            if (!isAdminUser(user)) {
+                return false
+            }
+        }
+
+        if ((actionType == ReportActionType.READ) && getUserTenantAccess(user) == NO_ACCESS) {
+            if (!isAdminUser(user)) {
+                return false
+            }
+        }
+
         return if (PluginSettings.isRbacEnabled()) {
             user.backendRoles.map { "$BACKEND_ROLE_TAG$it" }.any { it in access }
         } else {
@@ -125,7 +145,34 @@ internal object UserAccessManager {
         }
     }
 
+    /**
+     * validate if user has access to create
+     */
+    fun doesUserHasAccessToCreate(user: User?): Boolean {
+        if (user == null) { // Security is disabled
+            return true
+        }
+        if (isAdminUser(user)) {
+            return true
+        }
+        if (getUserTenantAccess(user) != WRITE_ACCESS) {
+            return false
+        }
+        return true
+    }
+
+    private fun getUserTenantAccess(user: User?): String {
+        return when (val requestedTenantAccess = user?.requestedTenantAccess) {
+            null -> DEFAULT_TENANT_ACCESS
+            else -> requestedTenantAccess
+        }
+    }
+
     private fun isUserPrivateTenant(user: User?): Boolean {
         return getUserTenant(user) == PRIVATE_TENANT
+    }
+
+    private fun isAdminUser(user: User): Boolean {
+        return user.roles.contains(ALL_ACCESS_ROLE)
     }
 }
