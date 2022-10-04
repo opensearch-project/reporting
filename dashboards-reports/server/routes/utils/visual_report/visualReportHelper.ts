@@ -74,7 +74,6 @@ export const createVisualReport = async (
       '--disable-setuid-sandbox',
       '--disable-gpu',
       '--no-zygote',
-      '--single-process',
       '--font-render-hinting=none',
     ],
     executablePath: CHROMIUM_PATH,
@@ -136,7 +135,7 @@ export const createVisualReport = async (
   );
 
   // force wait for any resize to load after the above DOM modification
-  await page.waitFor(1000);
+  await new Promise(resolve => setTimeout(resolve, 1000));
   // crop content
   switch (reportSource) {
     case REPORT_TYPE.dashboard:
@@ -271,6 +270,6 @@ const waitForDynamicContent = async (
     }
 
     previousLength = currentLength;
-    await page.waitFor(interval);
+    await new Promise(resolve => setTimeout(resolve, interval));
   }
 };
