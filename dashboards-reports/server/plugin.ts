@@ -65,7 +65,7 @@ export class ReportsDashboardsPlugin
 
     const timeoutError = new Error('Server busy');
     timeoutError.statusCode = 503;
-    this.semaphore = withTimeout(new Semaphore(1), 180000, timeoutError);
+    this.semaphore = withTimeout(new Semaphore(1), 300000, timeoutError);
   }
 
   public setup(core: CoreSetup) {
