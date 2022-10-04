@@ -115,7 +115,7 @@ export const createVisualReport = async (
   });
 
   page.setDefaultNavigationTimeout(0);
-  page.setDefaultTimeout(180000); // use 180s timeout instead of default 30s
+  page.setDefaultTimeout(300000); // use 300s timeout instead of default 30s
   // Set extra headers that are needed
   if (!_.isEmpty(extraHeaders)) {
     await page.setExtraHTTPHeaders(extraHeaders);
