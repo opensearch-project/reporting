@@ -76,7 +76,6 @@ export const createVisualReport = async (
       '--disable-setuid-sandbox',
       '--disable-gpu',
       '--no-zygote',
-      '--single-process',
       '--font-render-hinting=none',
       '--js-flags="--jitless --no-opt"',
       '--disable-features=V8OptimizeJavascript',
@@ -86,6 +85,7 @@ export const createVisualReport = async (
     env: {
       TZ: timezone || 'UTC',
     },
+    pipe: true,
   });
   const page = await browser.newPage();
 
@@ -115,7 +115,7 @@ export const createVisualReport = async (
   });
 
   page.setDefaultNavigationTimeout(0);
-  page.setDefaultTimeout(100000); // use 100s timeout instead of default 30s
+  page.setDefaultTimeout(300000); // use 300s timeout instead of default 30s
   // Set extra headers that are needed
   if (!_.isEmpty(extraHeaders)) {
     await page.setExtraHTTPHeaders(extraHeaders);
@@ -177,7 +177,7 @@ export const createVisualReport = async (
   );
 
   // force wait for any resize to load after the above DOM modification
-  await page.waitFor(1000);
+  await new Promise(resolve => setTimeout(resolve, 1000));
   // crop content
   switch (reportSource) {
     case REPORT_TYPE.dashboard:
@@ -327,6 +327,6 @@ const waitForDynamicContent = async (
     }
 
     previousLength = currentLength;
-    await page.waitFor(interval);
+    await new Promise(resolve => setTimeout(resolve, interval));
   }
 };
