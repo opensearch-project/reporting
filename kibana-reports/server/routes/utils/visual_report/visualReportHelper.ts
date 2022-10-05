@@ -152,7 +152,7 @@ export const createVisualReport = async (
   });
 
   page.setDefaultNavigationTimeout(0);
-  page.setDefaultTimeout(100000); // use 100s timeout instead of default 30s
+  page.setDefaultTimeout(300000); // use 300s timeout instead of default 30s
   if (cookie) {
     logger.info('domain enables security, use session cookie to access');
     await page.setCookie(cookie);
@@ -185,6 +185,19 @@ export const createVisualReport = async (
   await page.setViewport({
     width: windowWidth,
     height: windowHeight,
+  });
+
+  // TODO: Add alternate solution which loads page only once.
+  // get height of the page
+  const scrollHeight = await page.evaluate(
+    () => document.documentElement.scrollHeight
+  );
+  await page.goto(queryUrl, { waitUntil: 'networkidle0' });
+
+  // resize the page to take full page screenshot
+  await page.setViewport({
+    width: windowWidth,
+    height: scrollHeight,
   });
 
   let buffer: Buffer;
