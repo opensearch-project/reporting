@@ -316,17 +316,20 @@ testClusters.integTest {
 }
 
 // For job-scheduler and reports-scheduler, the latest opensearch releases appear to be 1.1.0.0.
-String bwcVersion = "1.1.0.0"
+String bwcOpenSearchVersion = "2.3.0"
+String bwcPluginVersion = bwcOpenSearchVersion + ".0"
 String baseName = "reportsSchedulerBwcCluster"
 String bwcFilePath = "src/test/resources/bwc"
-String bwcJobSchedulerURL = "https://ci.opensearch.org/ci/dbc/bundle-build/1.1.0/20210930/linux/x64/builds/opensearch/plugins/opensearch-job-scheduler-1.1.0.0.zip"
-String bwcReportsSchedulerURL = "https://ci.opensearch.org/ci/dbc/bundle-build/1.1.0/20210930/linux/x64/builds/opensearch/plugins/opensearch-reports-scheduler-1.1.0.0.zip"
+String bwcFileName = "opensearch-job-scheduler-" + bwcPluginVersion + ".zip"
+String bwcReportsFileName = "opensearch-reports-scheduler-" + bwcPluginVersion + ".zip"
+String bwcJobSchedulerURL = "https://ci.opensearch.org/ci/dbc/distribution-build-opensearch/" + bwcOpenSearchVersion + "/latest/linux/x64/tar/builds/opensearch/plugins/" + bwcFileName
+String bwcReportsSchedulerURL = "https://ci.opensearch.org/ci/dbc/distribution-build-opensearch/" + bwcOpenSearchVersion + "/latest/linux/x64/tar/builds/opensearch/plugins/" + bwcReportsFileName
 
 2.times {i ->
     testClusters {
         "${baseName}$i" {
             testDistribution = "ARCHIVE"
-            versions = ["1.1.0", opensearch_version]
+            versions = [bwcOpenSearchVersion, opensearch_version]
             numberOfNodes = 3
             plugin(provider(new Callable<RegularFile>(){
                 @Override
@@ -334,15 +337,15 @@ String bwcReportsSchedulerURL = "https://ci.opensearch.org/ci/dbc/bundle-build/1
                     return new RegularFile() {
                         @Override
                         File getAsFile() {
-                            File dir = new File(bwcFilePath + "/job-scheduler/" + bwcVersion)
+                            File dir = new File(bwcFilePath + "/job-scheduler/" + bwcPluginVersion)
                             if (!dir.exists()) {
                                 dir.mkdirs()
                             }
-                            File file = new File(dir, "opensearch-job-scheduler-" + bwcVersion + ".zip")
+                            File file = new File(dir, bwcFileName)
                             if (!file.exists()) {
                                 new URL(bwcJobSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
                             }
-                            return fileTree(bwcFilePath + "/job-scheduler/" + bwcVersion).getSingleFile()
+                            return file
                         }
                     }
                 }
@@ -353,15 +356,15 @@ String bwcReportsSchedulerURL = "https://ci.opensearch.org/ci/dbc/bundle-build/1
                     return new RegularFile() {
                         @Override
                         File getAsFile() {
-                            File dir = new File(bwcFilePath + "/reports-scheduler/" + bwcVersion)
+                            File dir = new File(bwcFilePath + "/reports-scheduler/" + bwcPluginVersion)
                             if (!dir.exists()) {
                                 dir.mkdirs()
                             }
-                            File file = new File(dir, "opensearch-reports-scheduler-" + bwcVersion + ".zip")
+                            File file = new File(dir, "opensearch-reports-scheduler-" + bwcPluginVersion + ".zip")
                             if (!file.exists()) {
                                 new URL(bwcReportsSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
                             }
-                            return fileTree(bwcFilePath + "/reports-scheduler/" + bwcVersion).getSingleFile()
+                            return fileTree(bwcFilePath + "/reports-scheduler/" + bwcPluginVersion).getSingleFile()
                         }
                     }
                 }
@@ -413,7 +416,7 @@ task prepareBwcTests {
         }
         systemProperty 'tests.rest.bwcsuite', 'old_cluster'
         systemProperty 'tests.rest.bwcsuite_round', 'old'
-        systemProperty 'tests.plugin_bwc_version', bwcVersion
+        systemProperty 'tests.plugin_bwc_version', bwcPluginVersion
         nonInputProperties.systemProperty('tests.rest.cluster', "${-> testClusters."${baseName}$i".allHttpSocketURI.join(",")}")
         nonInputProperties.systemProperty('tests.clustername', "${-> testClusters."${baseName}$i".getName()}")
     }
@@ -433,7 +436,7 @@ task "${baseName}#mixedClusterTask"(type: StandaloneRestIntegTestTask) {
     }
     systemProperty 'tests.rest.bwcsuite', 'mixed_cluster'
     systemProperty 'tests.rest.bwcsuite_round', 'first'
-    systemProperty 'tests.plugin_bwc_version', bwcVersion
+    systemProperty 'tests.plugin_bwc_version', bwcPluginVersion
     nonInputProperties.systemProperty('tests.rest.cluster', "${-> testClusters."${baseName}0".allHttpSocketURI.join(",")}")
     nonInputProperties.systemProperty('tests.clustername', "${-> testClusters."${baseName}0".getName()}")
 }
@@ -452,7 +455,7 @@ task "${baseName}#twoThirdsUpgradedClusterTask"(type: StandaloneRestIntegTestTas
     }
     systemProperty 'tests.rest.bwcsuite', 'mixed_cluster'
     systemProperty 'tests.rest.bwcsuite_round', 'second'
-    systemProperty 'tests.plugin_bwc_version', bwcVersion
+    systemProperty 'tests.plugin_bwc_version', bwcPluginVersion
     nonInputProperties.systemProperty('tests.rest.cluster', "${-> testClusters."${baseName}0".allHttpSocketURI.join(",")}")
     nonInputProperties.systemProperty('tests.clustername', "${-> testClusters."${baseName}0".getName()}")
 }
@@ -472,7 +475,7 @@ task "${baseName}#rollingUpgradeClusterTask"(type: StandaloneRestIntegTestTask) 
     mustRunAfter "${baseName}#mixedClusterTask"
     systemProperty 'tests.rest.bwcsuite', 'mixed_cluster'
     systemProperty 'tests.rest.bwcsuite_round', 'third'
-    systemProperty 'tests.plugin_bwc_version', bwcVersion
+    systemProperty 'tests.plugin_bwc_version', bwcPluginVersion
     nonInputProperties.systemProperty('tests.rest.cluster', "${-> testClusters."${baseName}0".allHttpSocketURI.join(",")}")
     nonInputProperties.systemProperty('tests.clustername', "${-> testClusters."${baseName}0".getName()}")
 }
@@ -489,7 +492,7 @@ task "${baseName}#fullRestartClusterTask"(type: StandaloneRestIntegTestTask) {
         includeTestsMatching "org.opensearch.integTest.bwc.*IT"
     }
     systemProperty 'tests.rest.bwcsuite', 'upgraded_cluster'
-    systemProperty 'tests.plugin_bwc_version', bwcVersion
+    systemProperty 'tests.plugin_bwc_version', bwcPluginVersion
     nonInputProperties.systemProperty('tests.rest.cluster', "${-> testClusters."${baseName}1".allHttpSocketURI.join(",")}")
     nonInputProperties.systemProperty('tests.clustername', "${-> testClusters."${baseName}1".getName()}")
 }
