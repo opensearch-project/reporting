@@ -1,6 +1,6 @@
 {
   "name": "reports-dashboards",
-  "version": "2.3.0.0",
+  "version": "2.4.0.0",
   "description": "OpenSearch Dashboards Reports Plugin",
   "license": "Apache-2.0",
   "main": "index.ts",
