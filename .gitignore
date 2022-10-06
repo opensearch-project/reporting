@@ -19,3 +19,5 @@ yarn-error.log
 
 # Kibana
 .empty
+
+reports-scheduler/src/test/resources/
