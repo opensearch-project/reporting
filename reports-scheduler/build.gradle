@@ -360,11 +360,11 @@ String bwcReportsSchedulerURL = "https://ci.opensearch.org/ci/dbc/distribution-b
                             if (!dir.exists()) {
                                 dir.mkdirs()
                             }
-                            File file = new File(dir, "opensearch-reports-scheduler-" + bwcPluginVersion + ".zip")
+                            File file = new File(dir, bwcReportsFileName)
                             if (!file.exists()) {
                                 new URL(bwcReportsSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
                             }
-                            return fileTree(bwcFilePath + "/reports-scheduler/" + bwcPluginVersion).getSingleFile()
+                            return file
                         }
                     }
                 }
