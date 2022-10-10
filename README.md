@@ -87,9 +87,9 @@ OpenSearch Dashboards Reports allows ‘Report Owner’ (engineers, including bu
 [nolabel-badge]: https://img.shields.io/github/issues-search/opensearch-project/dashboards-reports?color=yellow&label=no%20label%20issues&query=is%3Aopen%20is%3Aissue%20no%3Alabel
 [nolabel-link]: https://github.com/opensearch-project/dashboards-reports/issues?q=is%3Aopen+is%3Aissue+no%3Alabel+
 
-## Documentation
+## Documentation & Forum
 
-Please see our technical [documentation](https://opensearch.org/docs/dashboards/reporting/) to learn more about its features.
+Please see our technical [documentation](https://opensearch.org/docs/dashboards/reporting/) to learn more about its features. For additional help with the plugin, including questions about opening an issue, try the OpenSearch [Forum](https://forum.opensearch.org/c/opensearch-dashboards/reports/51).
 
 ## Contributing
 
