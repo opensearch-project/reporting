@@ -37,7 +37,6 @@ export async function downloadVisualReport(url, format, width, height, filename,
         '--disable-setuid-sandbox',
         '--disable-gpu',
         '--no-zygote',
-        '--single-process',
         '--font-render-hinting=none',
         '--enable-features=NetworkService',
         '--ignore-certificate-errors',
@@ -52,12 +51,13 @@ export async function downloadVisualReport(url, format, width, height, filename,
     const page = await browser.newPage();
     const overridePage = await browser.newPage();
     page.setDefaultNavigationTimeout(0);
-    page.setDefaultTimeout(100000);
+    page.setDefaultTimeout(300000);
     overridePage.setDefaultNavigationTimeout(0);
-    overridePage.setDefaultTimeout(100000);
+    overridePage.setDefaultTimeout(300000);
 
     // auth 
     if (username !== undefined && password !== undefined) {
+      console.log("authType: " + authType);
       if(authType === BASIC_AUTH){
         await basicAuthentication(page, overridePage, url, username, password);
       }
@@ -79,6 +79,7 @@ export async function downloadVisualReport(url, format, width, height, filename,
     });
 
     const reportSource = getReportSourceFromURL(url);
+    console.log("reportSource: "+ reportSource);
     // if its an OpenSearch report, remove extra elements
     if (reportSource !== 'Other') {
       await page.evaluate(
@@ -106,7 +107,7 @@ export async function downloadVisualReport(url, format, width, height, filename,
     }
 
       // force wait for any resize to load after the above DOM modification
-      await page.waitFor(1000);
+      await new Promise(resolve => setTimeout(resolve, 10000));
       switch (reportSource) {
         case 'Dashboard':
           await page.waitForSelector(SELECTOR.DASHBOARD, {
@@ -187,7 +188,7 @@ const waitForDynamicContent = async (
     }
 
     previousLength = currentLength;
-    await page.waitFor(interval);
+    await new Promise(resolve => setTimeout(resolve, interval));
   }
 };
 
@@ -245,7 +246,7 @@ const sendEmail = async (fileNamePDF, fileNamePNG, username) => {
     viewPath:"./views/",
     extName:".hbs"
   }));
-
+  
   // send email
   await transporter.sendMail(mailOptions, function (err, info) {
     if (err) {
@@ -261,7 +262,7 @@ const sendEmail = async (fileNamePDF, fileNamePNG, username) => {
 const basicAuthentication = async (page, overridePage, url, username, password) => {
   await page.goto(url, { waitUntil: 'networkidle0' });
   console.log('basic authenticating');
-  await page.waitFor(10000);
+  await new Promise(resolve => setTimeout(resolve, 10000));
   await page.type('input[data-test-subj="user-name"]', username);
   await page.type('[data-test-subj="password"]', password);
   await page.click('button[type=submit]');
@@ -283,7 +284,7 @@ const basicAuthentication = async (page, overridePage, url, username, password) 
 const samlAuthentication = async (page, overridePage, url, username, password) => {
   await page.goto(url, { waitUntil: 'networkidle0' });
   console.log('SAML authenticating');
-  await page.waitFor(10000);
+  await new Promise(resolve => setTimeout(resolve, 10000));
   let refUrl;
   await getUrl(url).then((value) => {
     refUrl = value;
@@ -307,7 +308,7 @@ const samlAuthentication = async (page, overridePage, url, username, password) =
 const cognitoAuthentication = async (page, overridePage, url, username, password) => {
   await page.goto(url, { waitUntil: 'networkidle0' });
   console. log('cognito authenticating');
-  await page.waitFor(10000);
+  await new Promise(resolve => setTimeout(resolve, 10000));
   await page.type(  '[name="username" ]', username);
   await page.type( ' [name="password"]', password);
   await page.click( '[name="signInSubmitButton"]');
