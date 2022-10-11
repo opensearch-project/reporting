@@ -76,7 +76,7 @@ jobs:
           mkdir -p ./{linux-x64,linux-arm64}/opensearch-dashboards/${{ env.PLUGIN_NAME }}
           cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-x64/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-x64.zip
           cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-arm64/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-arm64.zip
-          
+
           cd linux-x64
           wget https://github.com/opensearch-project/dashboards-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip
           unzip chromium-linux-x64.zip -d ./opensearch-dashboards/${{ env.PLUGIN_NAME }}
@@ -137,8 +137,6 @@ jobs:
 
       - name: Add Chromium Binary to Reporting for Testing
         run: |
-          sudo apt update
-          sudo apt install -y libnss3-dev fonts-liberation libfontconfig1
           cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
           wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip 
           unzip chromium-windows-x64.zip
@@ -210,8 +208,6 @@ jobs:
 
       - name: Add Chromium Binary to Reporting for Testing
         run: |
-          sudo apt update
-          sudo apt install -y libnss3-dev fonts-liberation libfontconfig1
           cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
           wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-macos-x64.zip 
           unzip chromium-macos-x64.zip
