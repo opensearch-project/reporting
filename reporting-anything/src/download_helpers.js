@@ -128,35 +128,35 @@ export async function downloadVisualReport(url, format, width, height, filename,
 
       await waitForDynamicContent(page);
 
-      let bufferPDF, bufferPNG;
-
+      let buffer;
+      // create pdf or png accordingly
+      if(format === FORMAT.PDF) {
         const scrollHeight = await page.evaluate(
           () => document.documentElement.scrollHeight
         );
     
-        bufferPDF = await page.pdf({
+        buffer = await page.pdf({
           margin: undefined,
           width: 1680,
           height: scrollHeight + 'px',
           printBackground: true,
           pageRanges: '1',
         });
-
-        bufferPNG = await page.screenshot({
+      } else if (format === FORMAT.PNG) {
+        buffer = await page.screenshot({
           fullPage: true,
         });
-
+      } else  {
+        console.log('Invalid report format');
+      }
     
-      const fileNamePDF = `${filename}.pdf`;
-      const fileNamePNG = `${filename}.png`;
+      const fileName = `${filename}.${format}`;
       const curTime = new Date();
       const timeCreated = curTime.valueOf();
       await browser.close();
-      const dataPDF = { timeCreated, dataUrl: bufferPDF.toString('base64'), fileNamePDF };
-      const dataPNG = { timeCreated, dataUrl: bufferPNG.toString('base64'), fileNamePNG };
-      await readStreamToFile(dataPDF.dataUrl, fileNamePDF);
-      await readStreamToFile(dataPNG.dataUrl, fileNamePNG);
-      await sendEmail(fileNamePDF, fileNamePNG, username);
+      const data = { timeCreated, dataUrl: buffer.toString('base64'), fileName };
+      await readStreamToFile(data.dataUrl, fileName);
+      //await sendEmail(fileName, username);
   } catch (e) {
     console.log('error is', e);
     process.exit(1);
