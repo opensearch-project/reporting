@@ -75,13 +75,10 @@ let authType;
 if (parsed_args.auth !== undefined) {
   authType = parsed_args.auth;
 }
-else {
-  authType = 'basic';
-}
 
 let username = process.env.USERNAME
 let password = process.env.PASSWORD
-if(username == undefined && password == undefined){
+if(authType == 'basic' && username == undefined && password == undefined){
   console.log('Please specify a valid username or password');
   exit(1);
 }
