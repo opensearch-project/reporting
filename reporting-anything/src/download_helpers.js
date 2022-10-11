@@ -57,7 +57,6 @@ export async function downloadVisualReport(url, format, width, height, filename,
 
     // auth 
     if (username !== undefined && password !== undefined) {
-      console.log("authType: " + authType);
       if(authType === BASIC_AUTH){
         await basicAuthentication(page, overridePage, url, username, password);
       }
@@ -79,7 +78,6 @@ export async function downloadVisualReport(url, format, width, height, filename,
     });
 
     const reportSource = getReportSourceFromURL(url);
-    console.log("reportSource: "+ reportSource);
     // if its an OpenSearch report, remove extra elements
     if (reportSource !== 'Other') {
       await page.evaluate(
@@ -107,7 +105,7 @@ export async function downloadVisualReport(url, format, width, height, filename,
     }
 
       // force wait for any resize to load after the above DOM modification
-      await new Promise(resolve => setTimeout(resolve, 10000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       switch (reportSource) {
         case 'Dashboard':
           await page.waitForSelector(SELECTOR.DASHBOARD, {
