@@ -139,8 +139,8 @@ jobs:
         run: |
           cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
           (new-object System.Net.WebClient).DownloadFile('https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip ','chromium-windows-x64.zip')
-          unzip chromium-linux-x64.zip
-          rm chromium-linux-x64.zip
+          unzip chromium-windows-x64.zip
+          rm chromium-windows-x64.zip
 
       - name: OpenSearch Dashboards Plugin Bootstrap
         uses: nick-invision/retry@v1
