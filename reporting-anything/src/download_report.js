@@ -57,7 +57,7 @@ else {
   width = Number(parsed_args.width)
 }
 if (parsed_args.height === undefined) {
-  height = 2560;
+  height = 600;
 }
 else {
   height = Number(parsed_args.height)
