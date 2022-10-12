@@ -79,6 +79,7 @@ publishing {
             pom {
                 name = 'opensearch-reports-scheduler'
                 description = 'Scheduler for Dashboards Reports Plugin'
+                groupId = "org.opensearch.plugin"
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'
