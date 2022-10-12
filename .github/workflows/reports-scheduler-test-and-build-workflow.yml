@@ -78,7 +78,7 @@ jobs:
       - name: Build with Gradle
         run: |
           cd reports-scheduler
-          ./gradlew.bat build
+          ./gradlew.bat build -x integTest -x jacocoTestReport
 
       - name: Create Artifact Path
         run: |
@@ -119,7 +119,7 @@ jobs:
       - name: Build with Gradle
         run: |
           cd reports-scheduler
-          ./gradlew build
+          ./gradlew build -x integTest -x jacocoTestReport
 
       - name: Create Artifact Path
         run: |
