@@ -12,7 +12,7 @@ buildscript {
         opensearch_group = "org.opensearch"
 
         isSnapshot = "true" == System.getProperty("build.snapshot", "true")
-        opensearch_version = System.getProperty("opensearch.version", "2.1.0-SNAPSHOT")
+        opensearch_version = System.getProperty("opensearch.version", "3.0.0-SNAPSHOT")
         buildVersionQualifier = System.getProperty("build.version_qualifier", "")
         // 2.0.0-rc1-SNAPSHOT -> 2.0.0.0-rc1-SNAPSHOT
         version_tokens = opensearch_version.tokenize('-')
@@ -317,17 +317,17 @@ testClusters.integTest {
 }
 
 // For job-scheduler and reports-scheduler, the latest opensearch releases appear to be 1.1.0.0.
-String bwcVersion = "1.1.0.0"
+String bwcVersion = "2.4.0.0"
 String baseName = "reportsSchedulerBwcCluster"
 String bwcFilePath = "src/test/resources/bwc"
-String bwcJobSchedulerURL = "https://ci.opensearch.org/ci/dbc/bundle-build/1.1.0/20210930/linux/x64/builds/opensearch/plugins/opensearch-job-scheduler-1.1.0.0.zip"
-String bwcReportsSchedulerURL = "https://ci.opensearch.org/ci/dbc/bundle-build/1.1.0/20210930/linux/x64/builds/opensearch/plugins/opensearch-reports-scheduler-1.1.0.0.zip"
+String bwcJobSchedulerURL = "https://ci.opensearch.org/ci/dbc/distribution-build-opensearch/2.4.0/latest/linux/x64/tar/builds/opensearch/plugins/opensearch-job-scheduler-2.4.0.0.zip"
+String bwcReportsSchedulerURL = "https://ci.opensearch.org/ci/dbc/distribution-build-opensearch/2.4.0/latest/linux/x64/tar/builds/opensearch/plugins/opensearch-reports-scheduler-2.4.0.0.zip"
 
 2.times {i ->
     testClusters {
         "${baseName}$i" {
             testDistribution = "ARCHIVE"
-            versions = ["1.1.0", opensearch_version]
+            versions = ["2.4.0", opensearch_version]
             numberOfNodes = 3
             plugin(provider(new Callable<RegularFile>(){
                 @Override
