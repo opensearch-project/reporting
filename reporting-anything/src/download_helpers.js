@@ -22,7 +22,7 @@ const DISCOVER = "discover";
 const NOTEBOOKS = "notebooks"
 
 
-export async function downloadVisualReport(url, format, width, height, filename, authType, username, password) {
+export async function downloadVisualReport(url, format, width, height, filename, authType, username, password, sender, recipient) {
   const window = new JSDOM('').window;
 
   try {
@@ -56,7 +56,7 @@ export async function downloadVisualReport(url, format, width, height, filename,
     overridePage.setDefaultTimeout(300000);
 
     // auth 
-    if (username !== undefined && password !== undefined) {
+    if (authType !== undefined && username !== undefined && password !== undefined) {
       if(authType === BASIC_AUTH){
         await basicAuthentication(page, overridePage, url, username, password);
       }
@@ -156,7 +156,12 @@ export async function downloadVisualReport(url, format, width, height, filename,
       await browser.close();
       const data = { timeCreated, dataUrl: buffer.toString('base64'), fileName };
       await readStreamToFile(data.dataUrl, fileName);
-      //await sendEmail(fileName, username);
+
+      if(sender !== undefined && recipient !== undefined) {
+        await sendEmail(fileName, sender, recipient, format);
+      } else {
+        console.log('Skipped sending email');
+      }
   } catch (e) {
     console.log('error is', e);
     process.exit(1);
@@ -212,25 +217,9 @@ const getUrl = async (url) =>{
   return urlRef;
 };
 
-const sendEmail = async (fileNamePDF, fileNamePNG, username) => {
-  let mailOptions = {
-    from: username,
-    subject: 'This is an email containing your dashboard report',
-    to: username,
-    attachments: [
-      {
-        filename: fileNamePDF,
-        path: fileNamePDF,
-        contentType: 'application/pdf'
-      },
-      {
-        filename: 'report.png',
-        path: fileNamePNG,
-        cid: 'report'
-      }],
-    //specify the template here
-    template : 'index'
-  };
+const sendEmail = async (fileName, sender, recipient, format) => {
+
+  let mailOptions = getmailOptions(format, sender, recipient, fileName);
 
   console.log('Creating SES transporter');
   let transporter = nodemailer.createTransport({
@@ -338,3 +327,42 @@ export const readStreamToFile = async (
   })
 };
 
+function getmailOptions(format, sender, recipient, fileName, mailOptions = {}) {
+  if(format === FORMAT.PNG) {
+    console.log('format is PNG for email options');
+    mailOptions = {
+      from: sender,
+      subject: 'This is an email containing your dashboard report',
+      to: recipient,
+      attachments: [
+        {
+          filename: fileName,
+          path: fileName,
+          contentType: 'application/pdf'
+        },
+        {
+          filename: fileName,
+          path: fileName,
+          cid: 'report'
+        }],
+      //specify the template here
+      template : 'index'
+    };
+  } else {
+    console.log('format is PDF for email options');
+    mailOptions = {
+      from: sender,
+      subject: 'This is an email containing your dashboard report',
+      to: recipient,
+      attachments: [
+        {
+          filename: fileName,
+          path: fileName,
+          contentType: 'application/pdf'
+        }],
+      //specify the template here
+      template : 'index'
+    };
+  }
+  return mailOptions;
+}

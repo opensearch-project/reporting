@@ -24,6 +24,8 @@ parser.add_argument('-t', '--height', {help: 'Window height of the report'});
 parser.add_argument('-n', '--filename', {help: 'File name of the report'});
 parser.add_argument('-a', '--auth', {help: 'authentication type of the report; options are bas'});
 parser.add_argument('-c', '--credentials', {help: 'login credentials in the format of username:password'});
+parser.add_argument('-s', '--sender', {help: 'email address of sender'});
+parser.add_argument('-r', '--recipient', {help: 'email address of recipient'});
 
 const parsed_args = parser.parse_args();
 
@@ -78,9 +80,9 @@ if (parsed_args.auth !== undefined) {
 
 let username = process.env.USERNAME
 let password = process.env.PASSWORD
-if(authType == 'basic' && username == undefined && password == undefined){
+if(authType != undefined && username == undefined && password == undefined){
   console.log('Please specify a valid username or password');
   exit(1);
 }
 
-await downloadVisualReport(parsed_args.url, format, width, height, filename, authType, username, password);
+await downloadVisualReport(parsed_args.url, format, width, height, filename, authType, username, password, parsed_args.sender, parsed_args.recipient);
