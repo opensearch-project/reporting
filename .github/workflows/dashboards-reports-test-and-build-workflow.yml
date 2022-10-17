@@ -138,9 +138,9 @@ jobs:
       - name: Add Chromium Binary to Reporting for Testing
         run: |
           cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
-          curl.exe -LO https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip
-          Expand-Archive -Path 'chromium-windows-x64.zip'
-          rd chromium-windows-x64.zip
+          curl.exe -LO https://github.com/Hibbiki/chromium-win64/archive/refs/tags/v106.0.5249.119-r1036826.zip
+          Expand-Archive -Path 'chromium-win64-106.0.5249.119-r1036826.zip'
+          rd chromium-win64-106.0.5249.119-r1036826.zip
 
       - name: OpenSearch Dashboards Plugin Bootstrap
         uses: nick-invision/retry@v1
