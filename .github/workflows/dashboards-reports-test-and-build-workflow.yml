@@ -169,8 +169,11 @@ jobs:
           mv ./${{ env.PLUGIN_NAME }}-*.zip ./windows-x64/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-windows-x64.zip
 
           cd windows-x64
-          wget https://github.com/opensearch-project/dashboards-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip
-          unzip chromium-windows-x64.zip -d ./opensearch-dashboards/${{ env.PLUGIN_NAME }}
+          curl.exe -LO https://github.com/rupal-bq/dashboards-reports/releases/download/chromium-bundle/chromium-windows.zip
+          Expand-Archive -Path 'chromium-windows.zip'
+          rd chromium-windows.zip
+          Move-Item -Path "./chromium-windows/.chromium" -Destination "./opensearch-dashboards/${{ env.PLUGIN_NAME }}"
+          rd chromium-windows
           zip -ur ./${{ env.ARTIFACT_NAME }}-*.zip ./opensearch-dashboards
           mv ./${{ env.ARTIFACT_NAME }}-*.zip ..
           cd ..
