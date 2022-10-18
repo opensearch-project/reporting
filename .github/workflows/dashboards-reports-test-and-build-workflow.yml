@@ -142,6 +142,8 @@ jobs:
           curl.exe -LO https://github.com/rupal-bq/dashboards-reports/releases/download/chromium-bundle/chromium-windows.zip
           Expand-Archive -Path 'chromium-windows.zip'
           rd chromium-windows.zip
+          Move-Item -Path "./chromium-windows/.chromium" -Destination "./.chromium"
+          rd chromium-windows
 
       - name: OpenSearch Dashboards Plugin Bootstrap
         uses: nick-invision/retry@v1
