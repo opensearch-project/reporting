@@ -174,7 +174,7 @@ jobs:
           rd chromium-windows.zip
           Move-Item -Path "./chromium-windows/.chromium" -Destination "./opensearch-dashboards/${{ env.PLUGIN_NAME }}"
           rd chromium-windows
-          Compress-Archive -Path ""./${{ env.ARTIFACT_NAME }}-*.zip" -Destination ""./opensearch-dashboards"
+          Compress-Archive -Path "./${{ env.ARTIFACT_NAME }}-*.zip" -Destination ""./opensearch-dashboards"
           mv ./${{ env.ARTIFACT_NAME }}-*.zip ..
           cd ..
 
