@@ -8,6 +8,7 @@ env:
   OPENSEARCH_VERSION: 'main'
   OPENSEARCH_PLUGIN_VERSION: 2.1.0.0
 
+
 jobs:
   linux-build:
     runs-on: ubuntu-latest
