@@ -141,7 +141,9 @@ jobs:
           cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
           curl.exe -LO https://github.com/opensearch-project/dashboards-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip
           Expand-Archive -Path 'chromium-windows-x64.zip'
+          Move-Item -Path "./chromium-windows-x64/.chromium" -Destination "./.chromium"
           rd chromium-windows-x64.zip
+          rd chromium-windows-x64
 
       - name: OpenSearch Dashboards Plugin Bootstrap
         uses: nick-invision/retry@v1
@@ -169,8 +171,9 @@ jobs:
           cd windows-x64
           curl.exe -LO https://github.com/opensearch-project/dashboards-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip
           Expand-Archive -Path 'chromium-windows-x64.zip'
+          Move-Item -Path "./chromium-windows-x64/.chromium" -Destination "./opensearch-dashboards/${{ env.PLUGIN_NAME }}"
           rd chromium-windows-x64.zip
-          Move-Item -Path ".chromium" -Destination "./opensearch-dashboards/${{ env.PLUGIN_NAME }}"
+          rd chromium-windows-x64
           Compress-Archive -Path "./${{ env.ARTIFACT_NAME }}-*.zip" -Destination "./opensearch-dashboards"
           mv ./${{ env.ARTIFACT_NAME }}-*.zip ..
           cd ..
