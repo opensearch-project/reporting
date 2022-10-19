@@ -139,11 +139,9 @@ jobs:
       - name: Add Chromium Binary to Reporting for Testing
         run: |
           cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
-          curl.exe -LO https://github.com/rupal-bq/dashboards-reports/releases/download/chromium-bundle/chromium-windows.zip
-          Expand-Archive -Path 'chromium-windows.zip'
-          rd chromium-windows.zip
-          Move-Item -Path "./chromium-windows/.chromium" -Destination "./.chromium"
-          rd chromium-windows
+          curl.exe -LO https://github.com/opensearch-project/dashboards-reports/releases/tag/chromium-1.12.0.0/chromium-windows-x64.zip
+          Expand-Archive -Path 'chromium-windows-x64.zip'
+          rd chromium-windows-x64.zip
 
       - name: OpenSearch Dashboards Plugin Bootstrap
         uses: nick-invision/retry@v1
@@ -169,7 +167,7 @@ jobs:
           mv ./${{ env.PLUGIN_NAME }}-*.zip ./windows-x64/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-windows-x64.zip
 
           cd windows-x64
-          curl.exe -LO https://github.com/rupal-bq/dashboards-reports/releases/download/chromium-bundle/chromium-windows.zip
+          curl.exe -LO https://github.com/opensearch-project/dashboards-reports/releases/tag/chromium-1.12.0.0
           Expand-Archive -Path 'chromium-windows.zip'
           rd chromium-windows.zip
           Move-Item -Path "./chromium-windows/.chromium" -Destination "./opensearch-dashboards/${{ env.PLUGIN_NAME }}"
