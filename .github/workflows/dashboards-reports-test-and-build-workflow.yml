@@ -6,7 +6,7 @@ env:
   PLUGIN_NAME: reportsDashboards
   ARTIFACT_NAME: reports-dashboards
   OPENSEARCH_VERSION: 'main'
-  OPENSEARCH_PLUGIN_VERSION: 2.1.0.0
+  OPENSEARCH_PLUGIN_VERSION: 3.0.0.0
 
 
 jobs:
