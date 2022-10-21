@@ -225,6 +225,7 @@ const sendEmail = async (fileName, sender, recipient, format) => {
   let transporter = nodemailer.createTransport({
     SES: ses
   });
+  
   transporter.use("compile",hbs({
     viewEngine:{
       partialsDir:"./views/",
@@ -329,17 +330,11 @@ export const readStreamToFile = async (
 
 function getmailOptions(format, sender, recipient, fileName, mailOptions = {}) {
   if(format === FORMAT.PNG) {
-    console.log('format is PNG for email options');
     mailOptions = {
       from: sender,
       subject: 'This is an email containing your dashboard report',
       to: recipient,
       attachments: [
-        {
-          filename: fileName,
-          path: fileName,
-          contentType: 'application/pdf'
-        },
         {
           filename: fileName,
           path: fileName,
@@ -349,7 +344,6 @@ function getmailOptions(format, sender, recipient, fileName, mailOptions = {}) {
       template : 'index'
     };
   } else {
-    console.log('format is PDF for email options');
     mailOptions = {
       from: sender,
       subject: 'This is an email containing your dashboard report',
