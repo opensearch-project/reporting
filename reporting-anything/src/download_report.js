@@ -43,15 +43,16 @@ if (parsed_args.format !== undefined &&
 
 let format;
 
-// default format is PDF
+// Set default format to PDF if not specified.
 if (parsed_args.format === undefined) {
   format = 'pdf';
 } else {
   format = parsed_args.format;
 }
 
+
+// Set default width and height if not specified.
 let width, height;
-// set default width and height if not specified
 if (parsed_args.width === undefined) {
   width = 1680;
 }
@@ -65,6 +66,7 @@ else {
   height = Number(parsed_args.height)
 }
 
+// Set default filename is not specified.
 let filename;
 if (parsed_args.filename !== undefined) {
   filename = parsed_args.filename;
@@ -78,9 +80,20 @@ if (parsed_args.auth !== undefined) {
   authType = parsed_args.auth;
 }
 
+// Get credentials from .env file.
 let username = process.env.USERNAME
 let password = process.env.PASSWORD
-if(authType != undefined && username == undefined && password == undefined){
+
+// If credentials are not set in .env file, get credentials from command line arguments.
+if(username === undefined || username.length <=0 && parsed_args.credentials !== undefined) {
+  username = parsed_args.credentials.split(":")[0];
+}
+if(password === undefined || password.length <=0 && parsed_args.credentials !== undefined) {
+  password = parsed_args.credentials.split(":")[1];
+}
+
+// If auth type is not none & credentials are missing, exit with error.
+if(authType != undefined && authType != 'none' && username == undefined && password == undefined){
   console.log('Please specify a valid username or password');
   exit(1);
 }

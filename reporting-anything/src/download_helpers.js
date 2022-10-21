@@ -16,6 +16,7 @@ import {exit} from "process";
 const BASIC_AUTH = 'basic';
 const COGNITO_AUTH = 'cognito';
 const SAML_AUTH = 'SAML';
+const NONE = 'none';
 const DASHBOARDS = 'dashboards';
 const VISUALIZE = "Visualize";
 const DISCOVER = "discover";
@@ -41,7 +42,7 @@ export async function downloadVisualReport(url, format, width, height, filename,
         '--enable-features=NetworkService',
         '--ignore-certificate-errors',
       ],
-      executablePath: CHROMIUM_PATH,
+      executablePath: process.env.CHROMIUM_PATH || CHROMIUM_PATH,
       ignoreHTTPSErrors: true,
       env: {
         TZ: 'UTC', // leave as UTC for now
@@ -56,7 +57,7 @@ export async function downloadVisualReport(url, format, width, height, filename,
     overridePage.setDefaultTimeout(300000);
 
     // auth 
-    if (authType !== undefined && username !== undefined && password !== undefined) {
+    if (authType !== undefined && authType !== NONE && username !== undefined && password !== undefined) {
       if(authType === BASIC_AUTH){
         await basicAuthentication(page, overridePage, url, username, password);
       }
