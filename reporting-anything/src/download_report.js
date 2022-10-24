@@ -6,7 +6,7 @@
 
 import { ArgumentParser } from 'argparse';
 import { exit } from 'process';
-import { downloadVisualReport } from './download_helpers.js';
+import { downloadVisualReport } from './report_helpers.js';
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -46,10 +46,10 @@ let username = process.env.USERNAME
 let password = process.env.PASSWORD
 
 // If credentials are not set in .env file, get credentials from command line arguments.
-if(username === undefined || username.length <=0 && parsed_args.credentials !== undefined) {
+if((username === undefined || username.length <=0) && parsed_args.credentials !== undefined) {
   username = parsed_args.credentials.split(":")[0];
 }
-if(password === undefined || password.length <=0 && parsed_args.credentials !== undefined) {
+if((password === undefined || password.length <=0) && parsed_args.credentials !== undefined) {
   password = parsed_args.credentials.split(":")[1];
 }
 
