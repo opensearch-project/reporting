@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { sendEmail } from './email_helpers.js';
-import puppeteer from 'puppeteer-core';
+import puppeteer from 'puppeteer';
 import fs from 'fs';
 import { JSDOM } from 'jsdom';
-import { CHROMIUM_PATH, FORMAT, REPORT_TYPE, SELECTOR } from './constants.js';
+import { FORMAT, REPORT_TYPE, SELECTOR } from './constants.js';
 import {exit} from "process";
 const BASIC_AUTH = 'basic';
 const COGNITO_AUTH = 'cognito';
@@ -16,7 +16,6 @@ const DASHBOARDS = 'dashboards';
 const VISUALIZE = "Visualize";
 const DISCOVER = "discover";
 const NOTEBOOKS = "notebooks"
-
 
 export async function downloadVisualReport(url, format, width, height, filename, authType, username, password, sender, recipient) {
   const window = new JSDOM('').window;
@@ -37,7 +36,7 @@ export async function downloadVisualReport(url, format, width, height, filename,
         '--enable-features=NetworkService',
         '--ignore-certificate-errors',
       ],
-      executablePath: process.env.CHROMIUM_PATH || CHROMIUM_PATH,
+      executablePath: process.env.CHROMIUM_PATH,
       ignoreHTTPSErrors: true,
       env: {
         TZ: 'UTC', // leave as UTC for now

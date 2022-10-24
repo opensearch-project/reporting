@@ -13,7 +13,7 @@
     "lodash": "^4.17.21",
     "nodemailer": "^6.8.0",
     "nodemailer-express-handlebars": "^5.0.0",
-    "puppeteer-core": "^13.7.0"
+    "puppeteer": "^19.1.1"
   },
   "bin": {
     "reporting-anything": "src/download_report.js"

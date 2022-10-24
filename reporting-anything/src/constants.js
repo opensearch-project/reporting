@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-export const CHROMIUM_PATH = '../.chromium/headless_shell';
-
 export const REPORT_TYPE = {
   DASHBOARD: 'Dashboard',
   VISUALIZATION: 'Visualization',

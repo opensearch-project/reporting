@@ -92,7 +92,7 @@ else {
 
 // Set default filename is not specified.
 let filename = process.env.FILENAME;
-if (filename === undefined || filename.length <=0 && parsed_args.filename !== undefined) {
+if ((filename === undefined || filename.length <=0) && parsed_args.filename !== undefined) {
   filename = parsed_args.filename;
 }
 else {
