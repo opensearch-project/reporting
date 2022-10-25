@@ -25,7 +25,7 @@ format | pdf | file formart of the report
 width | 1680 | page width in pixels
 height | 600 | page height in pixels
 filename | reporting_anything | file name of the report
-auth | none | authentication type
+auth | No auth | authentication type
 credentials | - | login credentials in the format of username:password
 from | - | the email address of the sender
 to | - | the recipient of the email
@@ -53,6 +53,7 @@ Sample command for downloading a dashboard report with basic authentication in p
 ```
 reporting-anything --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d --format png --auth basic --credentials admin:admin
 ```
+Report will be downloaded in the current directory.
 
 ### Sending an Email with report attachment using Amazon SES
 
@@ -73,5 +74,20 @@ Prerequisites:
 }
 ```
 
+Sample command to send email with report as an attachment:
+```
+reporting-anything --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d --from <sender_email_id> --to <recipient_email_id>
+```
+This example uses default values for all other options.
+
+Alternatively, you can set *FROM*, *TO* in .env file and use following command. 
+```
+reporting-anything --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d
+```
+
+To modify the body of your email, you can simply edit *index.hbs* file.
 
 
+## Troubleshooting
+
+- To resolve **MessageRejected: Email address is not verified**, [check](https://aws.amazon.com/premiumsupport/knowledge-center/ses-554-400-message-rejected-error/) this arcticle.
