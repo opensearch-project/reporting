@@ -13,6 +13,7 @@
     "lodash": "^4.17.21",
     "nodemailer": "^6.8.0",
     "nodemailer-express-handlebars": "^5.0.0",
+    "progress": "^2.0.3",
     "puppeteer": "^19.1.1"
   },
   "bin": {

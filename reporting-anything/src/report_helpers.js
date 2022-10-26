@@ -8,6 +8,7 @@ import fs from 'fs';
 import { JSDOM } from 'jsdom';
 import { FORMAT, REPORT_TYPE, SELECTOR } from './constants.js';
 import {exit} from "process";
+import ProgressBar from 'progress';
 const BASIC_AUTH = 'basic';
 const COGNITO_AUTH = 'cognito';
 const SAML_AUTH = 'SAML';
@@ -19,6 +20,12 @@ const NOTEBOOKS = "notebooks"
 
 export async function downloadVisualReport(url, format, width, height, filename, authType, username, password, sender, recipient) {
   const window = new JSDOM('').window;
+  const bar = new ProgressBar('Downloading [:bar] :percent :elapsed ', {
+      complete: '=', 
+      incomplete: ' ',
+      width: 50,
+      total: 7
+  });
 
   try {
     const browser = await puppeteer.launch({
@@ -43,6 +50,8 @@ export async function downloadVisualReport(url, format, width, height, filename,
       },
     });
 
+    bar.tick();
+    bar.interrupt('Connecting to a URL...');
     const page = await browser.newPage();
     const overridePage = await browser.newPage();
     page.setDefaultNavigationTimeout(0);
@@ -61,12 +70,14 @@ export async function downloadVisualReport(url, format, width, height, filename,
       else if (authType === COGNITO_AUTH){
         await cognitoAuthentication(page, overridePage, url, username, password);
       }
+      bar.interrupt('Credentials verified');
     }
     // no auth
     else {
       await page.goto(url, { waitUntil: 'networkidle0' });
     }
-
+    bar.tick();
+    bar.interrupt('Downloading report...')
     await page.setViewport({
       width: width,
       height: height,
@@ -98,7 +109,7 @@ export async function downloadVisualReport(url, format, width, height, filename,
         REPORT_TYPE
       );      
     }
-
+    bar.tick();
       // force wait for any resize to load after the above DOM modification
       await new Promise(resolve => setTimeout(resolve, 1000));
       switch (reportSource) {
@@ -120,9 +131,8 @@ export async function downloadVisualReport(url, format, width, height, filename,
         default:
           break;
       }
-
+      bar.tick();
       await waitForDynamicContent(page);
-
       let buffer;
       // create pdf or png accordingly
       if(format === FORMAT.PDF) {
@@ -137,26 +147,27 @@ export async function downloadVisualReport(url, format, width, height, filename,
           printBackground: true,
           pageRanges: '1',
         });
-      } else if (format === FORMAT.PNG) {
+      } else {
         buffer = await page.screenshot({
           fullPage: true,
         });
-      } else  {
-        console.log('Invalid report format');
-      }
-    
+      } 
+      bar.tick();
       const fileName = `${filename}.${format}`;
       const curTime = new Date();
       const timeCreated = curTime.valueOf();
       await browser.close();
       const data = { timeCreated, dataUrl: buffer.toString('base64'), fileName };
       await readStreamToFile(data.dataUrl, fileName);
-
+      bar.tick();
+      bar.interrupt('Report Downloaded');
       if(sender !== undefined && recipient !== undefined) {
+        bar.interrupt('Sending email...');
         await sendEmail(fileName, sender, recipient, format);
       } else {
-        console.log('Skipped sending email');
+        bar.interrupt('Skipped sending email');
       }
+      bar.tick();
   } catch (e) {
     console.log('error is', e);
     process.exit(1);
@@ -214,12 +225,11 @@ const getUrl = async (url) =>{
 
 const basicAuthentication = async (page, overridePage, url, username, password) => {
   await page.goto(url, { waitUntil: 'networkidle0' });
-  console.log('basic authenticating');
   await new Promise(resolve => setTimeout(resolve, 10000));
   await page.type('input[data-test-subj="user-name"]', username);
   await page.type('[data-test-subj="password"]', password);
   await page.click('button[type=submit]');
-  await page.waitForTimeout(30000);
+  await page.waitForTimeout(10000);
   try{
     await page.click('label[for=global]');
   }
@@ -236,7 +246,6 @@ const basicAuthentication = async (page, overridePage, url, username, password) 
 
 const samlAuthentication = async (page, overridePage, url, username, password) => {
   await page.goto(url, { waitUntil: 'networkidle0' });
-  console.log('SAML authenticating');
   await new Promise(resolve => setTimeout(resolve, 10000));
   let refUrl;
   await getUrl(url).then((value) => {
@@ -260,7 +269,6 @@ const samlAuthentication = async (page, overridePage, url, username, password) =
 
 const cognitoAuthentication = async (page, overridePage, url, username, password) => {
   await page.goto(url, { waitUntil: 'networkidle0' });
-  console. log('cognito authenticating');
   await new Promise(resolve => setTimeout(resolve, 10000));
   await page.type(  '[name="username" ]', username);
   await page.type( ' [name="password"]', password);
@@ -289,6 +297,6 @@ export const readStreamToFile = async (
 ) => {
   let base64Image = stream.split(';base64,').pop();
   fs.writeFile(fileName, base64Image, {encoding: 'base64'}, function (err) {
-    console.log('Downloaded report');
+    //console.log('Downloaded report');
   })
 };

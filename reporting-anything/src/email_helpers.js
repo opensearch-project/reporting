@@ -14,7 +14,6 @@ export async function sendEmail(fileName, sender, recipient, format) {
 
     let mailOptions = getmailOptions(format, sender, recipient, fileName);
   
-    console.log('Creating SES transporter');
     let transporter = nodemailer.createTransport({
       SES: ses
     });
@@ -31,9 +30,7 @@ export async function sendEmail(fileName, sender, recipient, format) {
     // send email
     await transporter.sendMail(mailOptions, function (err, info) {
       if (err) {
-        console.log(err);
         console.log('Error sending email');
-  
       } else {
         console.log('Email sent successfully');
       }
