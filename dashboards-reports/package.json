@@ -24,7 +24,7 @@
     "enzyme-adapter-react-16": "^1.15.5",
     "jest-fetch-mock": "^3.0.3",
     "jquery": "^3.5.0",
-    "jsdom": "13.1.0",
+    "jsdom": "16.5.0",
     "json-2-csv": "^3.7.6",
     "puppeteer-core": "^13.7.0",
     "react-addons-test-utils": "^15.6.2",
@@ -72,6 +72,7 @@
     "css-what": "^5.0.1",
     "ansi-regex": "5.0.1",
     "json-schema": "0.4.0",
-    "ws": "^7.4.6"
+    "ws": "^7.4.6",
+    "terser": "^4.8.1"
   }
 }
