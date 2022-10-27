@@ -73,6 +73,8 @@
     "ansi-regex": "5.0.1",
     "json-schema": "0.4.0",
     "ws": "^7.4.6",
-    "terser": "^4.8.1"
+    "minimatch": "^3.0.5",
+    "terser": "^4.8.1",
+    "moment": "^2.29.4"
   }
 }
