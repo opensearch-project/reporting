@@ -40,7 +40,6 @@ buildscript {
         classpath "${opensearch_group}.gradle:build-tools:${opensearch_version}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
         classpath "org.jetbrains.kotlin:kotlin-allopen:${kotlin_version}"
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.12.0"
         classpath "org.jacoco:org.jacoco.agent:0.8.5"
     }
 }
@@ -57,7 +56,6 @@ apply plugin: 'idea'
 apply plugin: 'opensearch.opensearchplugin'
 apply plugin: 'opensearch.pluginzip'
 apply plugin: 'opensearch.testclusters'
-apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: 'org.jetbrains.kotlin.jvm'
 apply plugin: 'org.jetbrains.kotlin.plugin.allopen'
 
@@ -105,11 +103,6 @@ configurations {
     ktlint
     testCompile
     testRuntime
-}
-
-detekt {
-    config = files("detekt.yml")
-    buildUponDefaultConfig = true
 }
 
 configurations.testCompile {
