@@ -5,8 +5,8 @@
 
 package org.opensearch.reportsscheduler.util
 
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 internal class HelpersTests {
     private val sampleOrigin = "https://localhost:5601/base/path"
