@@ -5,10 +5,6 @@
 
 package org.opensearch.reportsscheduler.model
 
-import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
-import org.opensearch.reportsscheduler.metrics.Metrics
-import org.opensearch.reportsscheduler.model.RestTag.REPORT_DEFINITION_ID_FIELD
-import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.common.io.stream.StreamInput
 import org.opensearch.common.io.stream.StreamOutput
 import org.opensearch.common.xcontent.ToXContent
@@ -16,6 +12,10 @@ import org.opensearch.common.xcontent.XContentBuilder
 import org.opensearch.common.xcontent.XContentParser
 import org.opensearch.common.xcontent.XContentParser.Token
 import org.opensearch.common.xcontent.XContentParserUtils
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
+import org.opensearch.reportsscheduler.metrics.Metrics
+import org.opensearch.reportsscheduler.model.RestTag.REPORT_DEFINITION_ID_FIELD
+import org.opensearch.reportsscheduler.util.logger
 import java.io.IOException
 
 /**

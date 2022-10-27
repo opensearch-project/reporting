@@ -4,6 +4,7 @@
  */
 package org.opensearch.reportsscheduler.resthandler
 
+import org.opensearch.client.node.NodeClient
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.action.InContextReportCreateAction
@@ -14,11 +15,10 @@ import org.opensearch.reportsscheduler.model.InContextReportCreateRequest
 import org.opensearch.reportsscheduler.model.OnDemandReportCreateRequest
 import org.opensearch.reportsscheduler.model.RestTag.REPORT_DEFINITION_ID_FIELD
 import org.opensearch.reportsscheduler.util.contentParserNextToken
-import org.opensearch.client.node.NodeClient
 import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
 import org.opensearch.rest.BytesRestResponse
-import org.opensearch.rest.RestHandler.Route
 import org.opensearch.rest.RestHandler.ReplacedRoute
+import org.opensearch.rest.RestHandler.Route
 import org.opensearch.rest.RestRequest
 import org.opensearch.rest.RestRequest.Method.POST
 import org.opensearch.rest.RestRequest.Method.PUT
@@ -97,16 +97,20 @@ internal class OnDemandReportRestHandler : PluginBaseHandler() {
             PUT -> RestChannelConsumer {
                 Metrics.REPORT_FROM_DEFINITION_TOTAL.counter.increment()
                 Metrics.REPORT_FROM_DEFINITION_INTERVAL_COUNT.counter.increment()
-                client.execute(InContextReportCreateAction.ACTION_TYPE,
+                client.execute(
+                    InContextReportCreateAction.ACTION_TYPE,
                     InContextReportCreateRequest(request.contentParserNextToken()),
-                    RestResponseToXContentListener(it))
+                    RestResponseToXContentListener(it)
+                )
             }
             POST -> RestChannelConsumer {
                 Metrics.REPORT_FROM_DEFINITION_ID_TOTAL.counter.increment()
                 Metrics.REPORT_FROM_DEFINITION_ID_INTERVAL_COUNT.counter.increment()
-                client.execute(OnDemandReportCreateAction.ACTION_TYPE,
+                client.execute(
+                    OnDemandReportCreateAction.ACTION_TYPE,
                     OnDemandReportCreateRequest.parse(request.contentParserNextToken(), request.param(REPORT_DEFINITION_ID_FIELD)),
-                    RestResponseToXContentListener(it))
+                    RestResponseToXContentListener(it)
+                )
             }
             else -> RestChannelConsumer {
                 it.sendResponse(BytesRestResponse(RestStatus.METHOD_NOT_ALLOWED, "${request.method()} is not allowed"))

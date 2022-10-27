@@ -5,10 +5,10 @@
 
 package org.opensearch.reportsscheduler.security
 
+import org.opensearch.OpenSearchStatusException
 import org.opensearch.commons.authuser.User
 import org.opensearch.reportsscheduler.metrics.Metrics
 import org.opensearch.reportsscheduler.settings.PluginSettings
-import org.opensearch.OpenSearchStatusException
 import org.opensearch.rest.RestStatus
 
 /**
