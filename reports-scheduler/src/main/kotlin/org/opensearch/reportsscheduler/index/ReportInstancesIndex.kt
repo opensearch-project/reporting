@@ -128,9 +128,11 @@ internal object ReportInstancesIndex {
             log.warn("$LOG_PREFIX:getReportInstance - $id not found; response:$response")
             null
         } else {
-            val parser = XContentType.JSON.xContent().createParser(NamedXContentRegistry.EMPTY,
+            val parser = XContentType.JSON.xContent().createParser(
+                NamedXContentRegistry.EMPTY,
                 LoggingDeprecationHandler.INSTANCE,
-                response.sourceAsString)
+                response.sourceAsString
+            )
             parser.nextToken()
             ReportInstance.parse(parser, id)
         }
@@ -167,8 +169,10 @@ internal object ReportInstancesIndex {
         val actionFuture = client.search(searchRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         val result = ReportInstanceSearchResults(from.toLong(), response)
-        log.info("$LOG_PREFIX:getAllReportInstances from:$from, maxItems:$maxItems," +
-            " retCount:${result.objectList.size}, totalCount:${result.totalHits}")
+        log.info(
+            "$LOG_PREFIX:getAllReportInstances from:$from, maxItems:$maxItems," +
+                " retCount:${result.objectList.size}, totalCount:${result.totalHits}"
+        )
         return result
     }
 

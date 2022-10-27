@@ -4,15 +4,15 @@
  */
 package org.opensearch.reportsscheduler.resthandler
 
+import org.opensearch.client.node.NodeClient
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.metrics.Metrics
-import org.opensearch.client.node.NodeClient
 import org.opensearch.rest.BaseRestHandler
 import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
 import org.opensearch.rest.BytesRestResponse
-import org.opensearch.rest.RestHandler.Route
 import org.opensearch.rest.RestHandler.ReplacedRoute
+import org.opensearch.rest.RestHandler.Route
 import org.opensearch.rest.RestRequest
 import org.opensearch.rest.RestRequest.Method.GET
 import org.opensearch.rest.RestStatus

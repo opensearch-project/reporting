@@ -5,14 +5,14 @@
 
 package org.opensearch.reportsscheduler.action
 
-import org.opensearch.commons.authuser.User
-import org.opensearch.reportsscheduler.model.GetReportInstanceRequest
-import org.opensearch.reportsscheduler.model.GetReportInstanceResponse
 import org.opensearch.action.ActionType
 import org.opensearch.action.support.ActionFilters
 import org.opensearch.client.Client
 import org.opensearch.common.inject.Inject
 import org.opensearch.common.xcontent.NamedXContentRegistry
+import org.opensearch.commons.authuser.User
+import org.opensearch.reportsscheduler.model.GetReportInstanceRequest
+import org.opensearch.reportsscheduler.model.GetReportInstanceResponse
 import org.opensearch.transport.TransportService
 
 /**
@@ -23,11 +23,13 @@ internal class GetReportInstanceAction @Inject constructor(
     client: Client,
     actionFilters: ActionFilters,
     val xContentRegistry: NamedXContentRegistry
-) : PluginBaseAction<GetReportInstanceRequest, GetReportInstanceResponse>(NAME,
+) : PluginBaseAction<GetReportInstanceRequest, GetReportInstanceResponse>(
+    NAME,
     transportService,
     client,
     actionFilters,
-    ::GetReportInstanceRequest) {
+    ::GetReportInstanceRequest
+) {
     companion object {
         private const val NAME = "cluster:admin/opendistro/reports/instance/get"
         internal val ACTION_TYPE = ActionType(NAME, ::GetReportInstanceResponse)
