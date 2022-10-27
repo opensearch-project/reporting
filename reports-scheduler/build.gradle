@@ -107,6 +107,7 @@ configurations {
     testRuntime
 }
 
+// TODO: enable detekt when snakeyaml vulnerability is fixed
 /*detekt {
     config = files("detekt.yml")
     buildUponDefaultConfig = true
