@@ -40,7 +40,6 @@ buildscript {
         classpath "${opensearch_group}.gradle:build-tools:${opensearch_version}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
         classpath "org.jetbrains.kotlin:kotlin-allopen:${kotlin_version}"
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.12.0"
         classpath "org.jacoco:org.jacoco.agent:0.8.5"
     }
 }
@@ -57,7 +56,6 @@ apply plugin: 'idea'
 apply plugin: 'opensearch.opensearchplugin'
 apply plugin: 'opensearch.pluginzip'
 apply plugin: 'opensearch.testclusters'
-apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: 'org.jetbrains.kotlin.jvm'
 apply plugin: 'org.jetbrains.kotlin.plugin.allopen'
 
@@ -105,11 +103,6 @@ configurations {
     ktlint
     testCompile
     testRuntime
-}
-
-detekt {
-    config = files("detekt.yml")
-    buildUponDefaultConfig = true
 }
 
 configurations.testCompile {
@@ -164,7 +157,7 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
     implementation "org.json:json:20180813"
     implementation group: 'com.github.wnameless', name: 'json-flattener', version: '0.1.0'
-    implementation 'org.jsoup:jsoup:1.14.3'
+    implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation "org.jetbrains.kotlin:kotlin-test:${kotlin_version}"
 
@@ -179,7 +172,7 @@ dependencies {
     testCompile "org.mockito:mockito-core:3.12.4"
     testCompile 'com.google.code.gson:gson:2.8.9'
 
-    ktlint "com.pinterest:ktlint:0.33.0"
+    ktlint "com.pinterest:ktlint:0.45.1"
 }
 
 javadoc.enabled = false // turn off javadoc as it barfs on Kotlin code

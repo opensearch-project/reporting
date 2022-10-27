@@ -5,14 +5,14 @@
 
 package org.opensearch.reportsscheduler.action
 
-import org.opensearch.commons.authuser.User
-import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusRequest
-import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusResponse
 import org.opensearch.action.ActionType
 import org.opensearch.action.support.ActionFilters
 import org.opensearch.client.Client
 import org.opensearch.common.inject.Inject
 import org.opensearch.common.xcontent.NamedXContentRegistry
+import org.opensearch.commons.authuser.User
+import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusRequest
+import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusResponse
 import org.opensearch.transport.TransportService
 
 /**
@@ -23,11 +23,13 @@ internal class UpdateReportInstanceStatusAction @Inject constructor(
     client: Client,
     actionFilters: ActionFilters,
     val xContentRegistry: NamedXContentRegistry
-) : PluginBaseAction<UpdateReportInstanceStatusRequest, UpdateReportInstanceStatusResponse>(NAME,
+) : PluginBaseAction<UpdateReportInstanceStatusRequest, UpdateReportInstanceStatusResponse>(
+    NAME,
     transportService,
     client,
     actionFilters,
-    ::UpdateReportInstanceStatusRequest) {
+    ::UpdateReportInstanceStatusRequest
+) {
     companion object {
         private const val NAME = "cluster:admin/opendistro/reports/instance/update_status"
         internal val ACTION_TYPE = ActionType(NAME, ::UpdateReportInstanceStatusResponse)

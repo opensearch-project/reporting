@@ -25,9 +25,11 @@ class ReportsSchedulerPluginIT : OpenSearchIntegTestCase() {
         val pluginInfos = nodesInfoResponse.nodes[0].getInfo(PluginsAndModules::class.java).pluginInfos
         assertTrue(
             pluginInfos.stream()
-                .anyMatch { pluginInfo: PluginInfo -> pluginInfo.name == "opensearch-job-scheduler" })
+                .anyMatch { pluginInfo: PluginInfo -> pluginInfo.name == "opensearch-job-scheduler" }
+        )
         assertTrue(
             pluginInfos.stream()
-                .anyMatch { pluginInfo: PluginInfo -> pluginInfo.name == "opensearch-reports-scheduler" })
+                .anyMatch { pluginInfo: PluginInfo -> pluginInfo.name == "opensearch-reports-scheduler" }
+        )
     }
 }
