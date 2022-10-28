@@ -156,7 +156,8 @@ internal object PluginSettings {
      * @return list of settings defined in this plugin
      */
     fun getAllSettings(): List<Setting<*>> {
-        return listOf(OPERATION_TIMEOUT_MS,
+        return listOf(
+            OPERATION_TIMEOUT_MS,
             DEFAULT_ITEMS_QUERY_COUNT
         )
     }

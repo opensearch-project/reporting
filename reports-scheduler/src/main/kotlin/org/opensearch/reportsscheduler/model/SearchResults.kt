@@ -5,9 +5,6 @@
 
 package org.opensearch.reportsscheduler.model
 
-import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
-import org.opensearch.reportsscheduler.model.RestTag.REST_OUTPUT_PARAMS
-import org.opensearch.reportsscheduler.util.logger
 import org.apache.lucene.search.TotalHits
 import org.apache.lucene.search.TotalHits.Relation
 import org.apache.lucene.search.TotalHits.Relation.EQUAL_TO
@@ -21,6 +18,9 @@ import org.opensearch.common.xcontent.XContentBuilder
 import org.opensearch.common.xcontent.XContentParser
 import org.opensearch.common.xcontent.XContentParserUtils
 import org.opensearch.common.xcontent.XContentType
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
+import org.opensearch.reportsscheduler.model.RestTag.REST_OUTPUT_PARAMS
+import org.opensearch.reportsscheduler.util.logger
 
 internal abstract class SearchResults<ItemClass : ToXContentObject> : ToXContentObject {
     val startIndex: Long
@@ -68,9 +68,11 @@ internal abstract class SearchResults<ItemClass : ToXContentObject> : ToXContent
     constructor(from: Long, response: SearchResponse, objectListFieldName: String) {
         val mutableList: MutableList<ItemClass> = mutableListOf()
         response.hits.forEach {
-            val parser = XContentType.JSON.xContent().createParser(NamedXContentRegistry.EMPTY,
+            val parser = XContentType.JSON.xContent().createParser(
+                NamedXContentRegistry.EMPTY,
                 LoggingDeprecationHandler.INSTANCE,
-                it.sourceAsString)
+                it.sourceAsString
+            )
             parser.nextToken()
             mutableList.add(parseItem(parser, it.id))
         }
