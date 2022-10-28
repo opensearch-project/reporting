@@ -25,7 +25,8 @@ internal object SecurityAccess {
         return try {
             AccessController.doPrivileged(operation)
         } catch (e: PrivilegedActionException) {
-            throw (e.cause as Exception?)!!
+            var exception = e
+            throw (exception.cause as Exception?)!!
         }
     }
 }

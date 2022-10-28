@@ -370,7 +370,6 @@ internal data class ReportDefinition(
         val configIds: List<String>
     ) : ToXContentObject {
         internal companion object {
-            private const val DELIVERY_FORMAT_TAG = "deliveryFormat"
             private const val TITLE_TAG = "title"
             private const val TEXT_DESCRIPTION_TAG = "textDescription"
             private const val HTML_DESCRIPTION_TAG = "htmlDescription"
@@ -382,7 +381,6 @@ internal data class ReportDefinition(
              * @return created Delivery object
              */
             fun parse(parser: XContentParser): Delivery {
-                var recipients: List<String> = listOf()
                 var title: String? = null
                 var textDescription: String? = null
                 var htmlDescription: String? = null
