@@ -18,7 +18,8 @@ fun constructReportDefinitionRequest(
             "trigger":{
                 "triggerType":"OnDemand"
             },
-        """.trimIndent(),
+        """
+        .trimIndent(),
     name: String = "report_definition",
     delivery: String = ""
 ): String {
@@ -44,7 +45,8 @@ fun constructReportDefinitionRequest(
                     }
                 }
             }
-            """.trimIndent()
+            """
+        .trimIndent()
 }
 
 fun jsonify(text: String): JsonObject {

@@ -5,6 +5,12 @@
 
 package org.opensearch.reportsscheduler.model
 
+import org.opensearch.common.xcontent.ToXContent
+import org.opensearch.common.xcontent.ToXContent.EMPTY_PARAMS
+import org.opensearch.common.xcontent.XContentBuilder
+import org.opensearch.common.xcontent.XContentFactory
+import org.opensearch.common.xcontent.XContentParser
+import org.opensearch.common.xcontent.XContentParserUtils
 import org.opensearch.jobscheduler.spi.ScheduledJobParameter
 import org.opensearch.jobscheduler.spi.schedule.Schedule
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
@@ -18,12 +24,6 @@ import org.opensearch.reportsscheduler.model.RestTag.UPDATED_TIME_FIELD
 import org.opensearch.reportsscheduler.security.UserAccessManager.DEFAULT_TENANT
 import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.reportsscheduler.util.stringList
-import org.opensearch.common.xcontent.ToXContent
-import org.opensearch.common.xcontent.ToXContent.EMPTY_PARAMS
-import org.opensearch.common.xcontent.XContentBuilder
-import org.opensearch.common.xcontent.XContentFactory
-import org.opensearch.common.xcontent.XContentParser
-import org.opensearch.common.xcontent.XContentParserUtils
 import java.time.Instant
 
 /**
@@ -88,12 +88,14 @@ internal data class ReportDefinitionDetails(
             createdTime ?: throw IllegalArgumentException("$CREATED_TIME_FIELD field absent")
             tenant = tenant ?: DEFAULT_TENANT
             reportDefinition ?: throw IllegalArgumentException("$REPORT_DEFINITION_FIELD field absent")
-            return ReportDefinitionDetails(id,
+            return ReportDefinitionDetails(
+                id,
                 updatedTime,
                 createdTime,
                 tenant,
                 access,
-                reportDefinition)
+                reportDefinition
+            )
         }
     }
 
@@ -154,8 +156,10 @@ internal data class ReportDefinitionDetails(
 
     override fun isEnabled(): Boolean {
         val trigger = reportDefinition.trigger
-        return (reportDefinition.isEnabled &&
-            (reportDefinition.trigger.schedule != null) &&
-            (trigger.triggerType == TriggerType.IntervalSchedule || trigger.triggerType == TriggerType.CronSchedule))
+        return (
+            reportDefinition.isEnabled &&
+                (reportDefinition.trigger.schedule != null) &&
+                (trigger.triggerType == TriggerType.IntervalSchedule || trigger.triggerType == TriggerType.CronSchedule)
+            )
     }
 }

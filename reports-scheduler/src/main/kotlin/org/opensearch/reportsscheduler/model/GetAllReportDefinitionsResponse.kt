@@ -5,13 +5,13 @@
 
 package org.opensearch.reportsscheduler.model
 
-import org.opensearch.reportsscheduler.util.createJsonParser
 import org.opensearch.common.io.stream.StreamInput
 import org.opensearch.common.io.stream.StreamOutput
 import org.opensearch.common.xcontent.ToXContent
 import org.opensearch.common.xcontent.XContentBuilder
 import org.opensearch.common.xcontent.XContentFactory
 import org.opensearch.common.xcontent.XContentParser
+import org.opensearch.reportsscheduler.util.createJsonParser
 import java.io.IOException
 
 /**
