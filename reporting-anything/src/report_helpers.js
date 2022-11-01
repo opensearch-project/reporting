@@ -18,13 +18,13 @@ const VISUALIZE = "Visualize";
 const DISCOVER = "discover";
 const NOTEBOOKS = "notebooks"
 
-export async function downloadVisualReport(url, format, width, height, filename, authType, username, password, sender, recipient) {
+export async function downloadVisualReport(url, format, width, height, filename, authType, username, password, sender, recipient, transport) {
   const window = new JSDOM('').window;
   const bar = new ProgressBar('Downloading [:bar] :percent :elapsed ', {
       complete: '=', 
       incomplete: ' ',
       width: 50,
-      total: 7
+      total: 8
   });
 
   try {
@@ -77,7 +77,7 @@ export async function downloadVisualReport(url, format, width, height, filename,
       await page.goto(url, { waitUntil: 'networkidle0' });
     }
     bar.tick();
-    bar.interrupt('Downloading report...')
+    bar.interrupt('Loading page...')
     await page.setViewport({
       width: width,
       height: height,
@@ -134,6 +134,9 @@ export async function downloadVisualReport(url, format, width, height, filename,
       bar.tick();
       await waitForDynamicContent(page);
       let buffer;
+      
+      bar.interrupt('Downloading report...')
+      bar.tick();
       // create pdf or png accordingly
       if(format === FORMAT.PDF) {
         const scrollHeight = await page.evaluate(
@@ -161,10 +164,15 @@ export async function downloadVisualReport(url, format, width, height, filename,
       await readStreamToFile(data.dataUrl, fileName);
       bar.tick();
       bar.interrupt('Report Downloaded');
-      if(sender !== undefined && recipient !== undefined) {
+      if(transport !== undefined && sender !== undefined && recipient !== undefined) {
         bar.interrupt('Sending email...');
-        await sendEmail(fileName, sender, recipient, format);
+        await sendEmail(fileName, sender, recipient, format, transport);
       } else {
+        if(transport === undefined) {
+          bar.interrupt('Transport value is missing');
+        } else if(sender === undefined || recipient ===undefined) {
+          bar.interrupt('Sender/Recipient value is missing');
+        }
         bar.interrupt('Skipped sending email');
       }
       bar.tick();

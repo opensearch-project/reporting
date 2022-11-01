@@ -18,18 +18,18 @@ Reporting CLI is a quick out-of-box options to be able to download reports witho
 
 Reporting Anything supports following configurable options.
 
-Option | Default Value | Description
---- | --- | --- |
-url | - | url of the report
-format | pdf | file formart of the report
-width | 1680 | page width in pixels
-height | 600 | page height in pixels
-filename | reporting_anything | file name of the report
-auth | No auth | authentication type
-credentials | - | login credentials in the format of username:password
-from | - | the email address of the sender
-to | - | the recipient of the email
-
+Option | Default Value | Valid Options | Description
+-- | --- | --- | --- |
+url | - | - | url of the report
+format | pdf | PDF, PNG | file formart of the report
+width | 1680 | - | page width in pixels
+height | 600 | - | page height in pixels
+filename | reporting_anything | - | file name of the report
+auth | No auth | BASIC, SAML, COGNITO, NONE | authentication type
+credentials | - | - | login credentials in the format of username:password for connecting to url
+from | - | - | the email address of the sender
+to | - | - | the recipient of the email
+transport | - | SES, SMTP | transport for sending the email
 
 ### Environment Variable File
 
@@ -45,7 +45,7 @@ Reporting Anything
 - Each line should have format NAME=VALUE
 - Lines starting with # are considered as comments.
 - There is no special handling of quotation marks.
-- Currently supported variables are *CHROMIUM_PATH*, *USERNAME*, *PASSWORD*, *FROM*, *TO* and *FILENAME*.
+- Currently supported variables are *CHROMIUM_PATH*, *USERNAME*, *PASSWORD*,  *FILENAME*, *FROM*, *TO*, *TRANSPORT*, *SMTP_HOST*, *SMTP_PORT*, *SMTP_SECURE*, *SMTP_USER*, *SMTP_PASSWORD*.
 
 ### Example
 
@@ -76,17 +76,35 @@ Prerequisites:
 
 Sample command to send email with report as an attachment:
 ```
-reporting-anything --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d --from <sender_email_id> --to <recipient_email_id>
+reporting-anything --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d --transport SES --from <sender_email_id> --to <recipient_email_id>
 ```
 This example uses default values for all other options.
 
-Alternatively, you can set *FROM*, *TO* in .env file and use following command. 
+Alternatively, you can set *FROM*, *TO*, *TRANSPORT* in .env file and use following command. 
 ```
 reporting-anything --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d
 ```
 
 To modify the body of your email, you can simply edit *index.hbs* file.
 
+
+### Sending an Email with report attachment using SMTP
+
+For sending email using SMTP transport, following options need to be set in .env file.
+
+Option | Description | Example
+-- | --- | ---
+SMTP_HOST | the hostname of the SMTP server | email-smtp.us-west-2.amazonaws.com, smtp.gmail.com
+SMTP_PORT | the port for connection | 587, 465
+SMTP_USER | SMTP username
+SMTP_PASSWORD | SMTP password
+SMTP_SECURE | if true the connection will use TLS when connecting to server. 
+
+Once above options are set in .env file, you can send the email using below sample command.
+```
+reporting-anything --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d --transport SMTP --from <sender_email_id> --to <recipient_email_id>
+```
+To modify the body of your email, you can simply edit *index.hbs* file.
 
 ## Troubleshooting
 
