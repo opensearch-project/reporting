@@ -4,9 +4,8 @@
   "main": "download_report.js",
   "type": "module",
   "dependencies": {
-    "argparse": "^2.0.1",
     "aws-sdk": "^2.1237.0",
-    "commander": "^9.2.0",
+    "commander": "^9.4.0",
     "dompurify": "^2.1.1",
     "dotenv": "^16.0.3",
     "jsdom": "^19.0.0",

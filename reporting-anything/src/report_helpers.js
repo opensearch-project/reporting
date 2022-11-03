@@ -2,12 +2,12 @@
  * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { sendEmail } from './email_helpers.js';
+
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 import { JSDOM } from 'jsdom';
 import { FORMAT, REPORT_TYPE, SELECTOR } from './constants.js';
-import {exit} from "process";
+import { exit } from "process";
 import ProgressBar from 'progress';
 const BASIC_AUTH = 'basic';
 const COGNITO_AUTH = 'cognito';
@@ -164,17 +164,6 @@ export async function downloadVisualReport(url, format, width, height, filename,
       await readStreamToFile(data.dataUrl, fileName);
       bar.tick();
       bar.interrupt('Report Downloaded');
-      if(transport !== undefined && sender !== undefined && recipient !== undefined) {
-        bar.interrupt('Sending email...');
-        await sendEmail(fileName, sender, recipient, format, transport);
-      } else {
-        if(transport === undefined) {
-          bar.interrupt('Transport value is missing');
-        } else if(sender === undefined || recipient ===undefined) {
-          bar.interrupt('Sender/Recipient value is missing');
-        }
-        bar.interrupt('Skipped sending email');
-      }
       bar.tick();
   } catch (e) {
     console.log('error is', e);
