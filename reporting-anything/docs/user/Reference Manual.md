@@ -30,6 +30,16 @@ credentials | - | - | login credentials in the format of username:password for c
 from | - | - | the email address of the sender
 to | - | - | the recipient of the email
 transport | - | SES, SMTP | transport for sending the email
+smtphost | - | - | the hostname of the SMTP server
+smtpport | - | - | the port for connection
+smtpusername | - | - | SMTP username
+smtppassword | - | - | SMTP password
+smtpsecure | - | - | if true the connection will use TLS when connecting to server.
+
+You can also find this information using help command.
+```
+reporting anything --help
+```
 
 ### Environment Variable File
 
@@ -47,9 +57,11 @@ Reporting Anything
 - There is no special handling of quotation marks.
 - Currently supported variables are *CHROMIUM_PATH*, *USERNAME*, *PASSWORD*,  *FILENAME*, *FROM*, *TO*, *TRANSPORT*, *SMTP_HOST*, *SMTP_PORT*, *SMTP_SECURE*, *SMTP_USER*, *SMTP_PASSWORD*.
 
+NOTE: Values from the environment file has higher priority than command line argument. For example, if you add filename as *test* in *.env* file and also add `--filename report` command option, the downloded report's name will be *test*.
+
 ### Example
 
-Sample command for downloading a dashboard report with basic authentication in png format is
+Sample command for downloading a dashboard report with basic authentication in png format
 ```
 reporting-anything --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d --format png --auth basic --credentials admin:admin
 ```
@@ -80,7 +92,7 @@ reporting-anything --url https://localhost:5601/app/dashboards#/view/7adfa750-4c
 ```
 This example uses default values for all other options.
 
-Alternatively, you can set *FROM*, *TO*, *TRANSPORT* in .env file and use following command. 
+You can also set *FROM*, *TO*, *TRANSPORT* in .env file and use following command. 
 ```
 reporting-anything --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d
 ```
@@ -90,20 +102,15 @@ To modify the body of your email, you can simply edit *index.hbs* file.
 
 ### Sending an Email with report attachment using SMTP
 
-For sending email using SMTP transport, following options need to be set in .env file.
-
-Option | Description | Example
--- | --- | ---
-SMTP_HOST | the hostname of the SMTP server | email-smtp.us-west-2.amazonaws.com, smtp.gmail.com
-SMTP_PORT | the port for connection | 587, 465
-SMTP_USER | SMTP username
-SMTP_PASSWORD | SMTP password
-SMTP_SECURE | if true the connection will use TLS when connecting to server. 
+For sending email using SMTP transport, the options **SMTP_HOST**, **SMTP_PORT**, **SMTP_USER**, **SMTP_PASSWORD**, **SMTP_SECURE** need to be set in .env file.
 
 Once above options are set in .env file, you can send the email using below sample command.
 ```
 reporting-anything --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d --transport SMTP --from <sender_email_id> --to <recipient_email_id>
 ```
+
+You can choose to set options using *.env* file or the command line argument values in any combination. Make sure to specify all required values to avoid getting errors.
+
 To modify the body of your email, you can simply edit *index.hbs* file.
 
 ## Troubleshooting
