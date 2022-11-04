@@ -5,22 +5,25 @@
 
 import nodemailer from "nodemailer";
 import hbs from "nodemailer-express-handlebars";
+import ora from 'ora';
 import { FORMAT } from './constants.js';
 import AWS from "aws-sdk";
 AWS.config.update({region: 'REGION'});
 AWS.config = new AWS.Config();
 const ses = new AWS.SES({region: "us-west-2"});
+const spinner = ora();
+const emailSpinner = ora();
 
 export async function sendEmail(filename, format, sender, recipient, transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword) {
   if(transport !== undefined && sender !== undefined && recipient !== undefined) {
-    console.log('Sending email...'); 
+    emailSpinner.start('Sending email...'); 
   } else {
     if(transport === undefined) {
-      console.log('Transport value is missing');
+      emailSpinner.warn('Transport value is missing');
     } else if(sender === undefined || recipient === undefined) {
-      console.log('Sender/Recipient value is missing');
+      emailSpinner.warn('Sender/Recipient value is missing');
     }
-    console.log('Skipped sending email');
+    emailSpinner.fail('Skipped sending email');
     return;
   }
 
@@ -40,9 +43,9 @@ export async function sendEmail(filename, format, sender, recipient, transport, 
   // send email
   await transporter.sendMail(mailOptions, function (err, info) {
       if (err) {
-        console.log('Error sending email' + err);
+        emailSpinner.fail('Error sending email' + err);
       } else {
-        console.log('Email sent successfully');
+        emailSpinner.succeed('Email sent successfully');
       }
     });
   }

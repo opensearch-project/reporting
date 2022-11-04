@@ -8,7 +8,7 @@ import fs from 'fs';
 import { JSDOM } from 'jsdom';
 import { FORMAT, REPORT_TYPE, SELECTOR } from './constants.js';
 import { exit } from "process";
-import ProgressBar from 'progress';
+import ora from 'ora';
 const BASIC_AUTH = 'basic';
 const COGNITO_AUTH = 'cognito';
 const SAML_AUTH = 'SAML';
@@ -18,15 +18,12 @@ const VISUALIZE = "Visualize";
 const DISCOVER = "discover";
 const NOTEBOOKS = "notebooks"
 
+const spinner = ora();
+const reportSpinner = ora();
+
 export async function downloadVisualReport(url, format, width, height, filename, authType, username, password) {
   const window = new JSDOM('').window;
-  const bar = new ProgressBar('Downloading [:bar] :percent :elapsed ', {
-      complete: '=', 
-      incomplete: ' ',
-      width: 50,
-      total: 8
-  }); 
-
+  reportSpinner.start('Downloading report');
   try {
     const browser = await puppeteer.launch({
       headless: true,
@@ -50,8 +47,6 @@ export async function downloadVisualReport(url, format, width, height, filename,
       },
     });
 
-    bar.tick();
-    bar.interrupt('Connecting to a URL...');
     const page = await browser.newPage();
     const overridePage = await browser.newPage();
     page.setDefaultNavigationTimeout(0);
@@ -70,14 +65,13 @@ export async function downloadVisualReport(url, format, width, height, filename,
       else if (authType === COGNITO_AUTH){
         await cognitoAuthentication(page, overridePage, url, username, password);
       }
-      bar.interrupt('Credentials verified');
+      spinner.info('Credentials are verified');
     }
     // no auth
     else {
       await page.goto(url, { waitUntil: 'networkidle0' });
     }
-    bar.tick();
-    bar.interrupt('Loading page...')
+
     await page.setViewport({
       width: width,
       height: height,
@@ -109,7 +103,7 @@ export async function downloadVisualReport(url, format, width, height, filename,
         REPORT_TYPE
       );      
     }
-    bar.tick();
+    
       // force wait for any resize to load after the above DOM modification
       await new Promise(resolve => setTimeout(resolve, 1000));
       switch (reportSource) {
@@ -131,12 +125,10 @@ export async function downloadVisualReport(url, format, width, height, filename,
         default:
           break;
       }
-      bar.tick();
       await waitForDynamicContent(page);
       let buffer;
-      
-      bar.interrupt('Downloading report...')
-      bar.tick();
+      spinner.info('The page is loaded')
+
       // create pdf or png accordingly
       if(format === FORMAT.PDF) {
         const scrollHeight = await page.evaluate(
@@ -155,18 +147,15 @@ export async function downloadVisualReport(url, format, width, height, filename,
           fullPage: true,
         });
       } 
-      bar.tick();
       const fileName = `${filename}.${format}`;
       const curTime = new Date();
       const timeCreated = curTime.valueOf();
       await browser.close();
       const data = { timeCreated, dataUrl: buffer.toString('base64'), fileName };
       await readStreamToFile(data.dataUrl, fileName);
-      bar.tick();
-      bar.interrupt('Report Downloaded');
-      bar.tick();
+      reportSpinner.succeed('The report is downloaded');
   } catch (e) {
-    console.log('error is', e);
+    reportSpinner.fail('Downloading report failed. ', e);
     process.exit(1);
   }
 }
@@ -231,7 +220,7 @@ const basicAuthentication = async (page, overridePage, url, username, password) 
     await page.click('label[for=global]');
   }
   catch(err){
-    console.log('Invalid username or password');
+    reportSpinner.fail('Invalid username or password');
     exit(1)
   }
   await page.click('button[data-test-subj="confirm"]');
@@ -256,7 +245,7 @@ const samlAuthentication = async (page, overridePage, url, username, password) =
     await page.click('label[for=global]');
   }
   catch(err){
-    console.log('Invalid username or password');
+    reportSpinner.fail('Invalid username or password');
     exit(1)
   }
   await page.click('button[data-test-subj="confirm"]');
@@ -275,7 +264,7 @@ const cognitoAuthentication = async (page, overridePage, url, username, password
     await page.click('label[for=global]');
   }
   catch(err){
-    console.log('Invalid username or password');
+    reportSpinner.fail('Invalid username or password');
     exit(1)
   }
   await page.click('button[data-test-subj="confirm"]');
@@ -287,13 +276,12 @@ const cognitoAuthentication = async (page, overridePage, url, username, password
   await page.goto(url,{ waitUntil: 'networkidle0' });
 }
 
-
 export const readStreamToFile = async (
   stream,
   fileName
 ) => {
   let base64Image = stream.split(';base64,').pop();
   fs.writeFile(fileName, base64Image, {encoding: 'base64'}, function (err) {
-    //console.log('Downloaded report');
+    // console.log('Downloaded report');
   })
 };

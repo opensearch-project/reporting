@@ -6,8 +6,11 @@
 
 import { program, Option} from 'commander';
 import { exit } from 'process';
+import ora from 'ora';
 import dotenv from "dotenv";
 dotenv.config();
+
+const spinner = ora();
 
 export var downloadOptions = {
     url: null,
@@ -32,6 +35,8 @@ export var emailOptions = {
 }
 
 export async function getCommandArguments() {
+    spinner.start('Fetching the arguments values');
+
     program
         .name('reporting-anything')
         .description('Reporting CLI to download and email reports');
@@ -75,6 +80,7 @@ export async function getCommandArguments() {
     const options = program.opts();
     getDownloadOptions(options);
     getEmailOptions(options);
+    spinner.succeed('Fetched argument values')
 }
 
 function getDownloadOptions(options) {
@@ -93,7 +99,7 @@ function getDownloadOptions(options) {
     // If auth type is not none & credentials are missing, exit with error.
     downloadOptions.auth = options.auth;
     if(downloadOptions.auth != undefined && downloadOptions.auth != 'none' && downloadOptions.username == undefined && downloadOptions.password == undefined){
-    console.log('Please specify a valid username or password');
+    spinner.fail('Please specify a valid username or password');
     exit(1);
     }
 
@@ -101,7 +107,7 @@ function getDownloadOptions(options) {
     downloadOptions.format = options.format;
     if (downloadOptions.format.toUpperCase() !== 'PDF' && 
         downloadOptions.format.toUpperCase() !== 'PNG') {
-    console.log('Please specify a valid file format: one of PDF or PNG');
+    spinner.fail('Please specify a valid file format: one of PDF or PNG');
     exit(1);
     }
 

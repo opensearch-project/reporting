@@ -23,17 +23,16 @@ await downloadVisualReport(
     downloadOptions.password
     );
 
-if(emailOptions.transport !== null)    
-    await sendEmail(
-        downloadOptions.filename, 
-        downloadOptions.format, 
-        emailOptions.sender, 
-        emailOptions.recipient, 
-        emailOptions.transport, 
-        emailOptions.smtphost, 
-        emailOptions.smtpport, 
-        emailOptions.smtpsecure, 
-        emailOptions.smtpusername, 
-        emailOptions.smtppassword
-        );
 
+await sendEmail(
+    downloadOptions.filename, 
+    downloadOptions.format, 
+    emailOptions.sender, 
+    emailOptions.recipient, 
+    emailOptions.transport, 
+    emailOptions.smtphost, 
+    emailOptions.smtpport, 
+    emailOptions.smtpsecure, 
+    emailOptions.smtpusername, 
+    emailOptions.smtppassword
+        );
