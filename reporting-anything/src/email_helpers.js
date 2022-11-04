@@ -2,6 +2,7 @@
  * Copyright OpenSearch Contributors
  * SPDX-License-Identifier: Apache-2.0
  */
+
 import nodemailer from "nodemailer";
 import hbs from "nodemailer-express-handlebars";
 import { FORMAT } from './constants.js';
@@ -10,7 +11,7 @@ AWS.config.update({region: 'REGION'});
 AWS.config = new AWS.Config();
 const ses = new AWS.SES({region: "us-west-2"});
 
-export async function sendEmail(fileName, sender, recipient, format, transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword) {
+export async function sendEmail(filename, format, sender, recipient, transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword) {
   if(transport !== undefined && sender !== undefined && recipient !== undefined) {
     console.log('Sending email...'); 
   } else {
@@ -23,7 +24,7 @@ export async function sendEmail(fileName, sender, recipient, format, transport, 
     return;
   }
 
-  let mailOptions = getmailOptions(format, sender, recipient, fileName);
+  let mailOptions = getmailOptions(format, sender, recipient, `${filename}.${format}`);
 
   let transporter = getTransporter(transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword);
     
@@ -46,19 +47,19 @@ export async function sendEmail(fileName, sender, recipient, format, transport, 
     });
   }
   
-const getTransporter = (transport, smtp_host, smtp_port, smtp_secure, smtp_username, smtp_password, transporter) => {
+const getTransporter = (transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword, transporter) => {
   if(transport === 'SES') {
     transporter = nodemailer.createTransport({
       SES: ses
     });
   } else if (transport === 'SMTP') {
     transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || smtp_host,
-      port: process.env.SMTP_PORT || smtp_port,
-      secure: process.env.SMTP_SECURE || smtp_secure,
+      host: smtphost,
+      port: smtpport,
+      secure: smtpsecure,
       auth: {
-        user: process.env.SMTP_USER || smtp_username, 
-        pass: process.env.SMTP_PASSWORD || smtp_password,
+        user: smtpusername, 
+        pass: smtppassword,
       }
     });
   }

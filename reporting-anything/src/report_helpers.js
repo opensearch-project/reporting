@@ -18,14 +18,14 @@ const VISUALIZE = "Visualize";
 const DISCOVER = "discover";
 const NOTEBOOKS = "notebooks"
 
-export async function downloadVisualReport(url, format, width, height, filename, authType, username, password, sender, recipient, transport) {
+export async function downloadVisualReport(url, format, width, height, filename, authType, username, password) {
   const window = new JSDOM('').window;
   const bar = new ProgressBar('Downloading [:bar] :percent :elapsed ', {
       complete: '=', 
       incomplete: ' ',
       width: 50,
       total: 8
-  });
+  }); 
 
   try {
     const browser = await puppeteer.launch({
