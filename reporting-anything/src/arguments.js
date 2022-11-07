@@ -12,28 +12,6 @@ dotenv.config();
 
 const spinner = ora();
 
-export var downloadOptions = {
-    url: null,
-    auth: null,
-    username: null,
-    password: null,
-    format: null,
-    width: null,
-    height: null,
-    filename: null,
-  }
-
-export var emailOptions = {
-    transport: null,
-    sender: null,
-    recipient: null,
-    smtphost: null,
-    smtpport: null,
-    smtpsecure: null,
-    smtpusername: null,
-    smtppassword: null
-}
-
 export async function getCommandArguments() {
     spinner.start('Fetching the arguments values');
 
@@ -42,7 +20,8 @@ export async function getCommandArguments() {
         .description('Reporting CLI to download and email reports');
 
     program
-        .requiredOption('-u, --url <url>', 'url of report')
+        .addOption(new Option('-u, --url <url>', 'url of report')
+            .env('URL'))
         .addOption(new Option('-a, --auth <type>', 'authentication type of the report')
             .default('none')
             .choices(['basic', 'cognito', 'SAML']))
@@ -59,7 +38,7 @@ export async function getCommandArguments() {
             .default('reporting_anything')
             .env('FILENAME'))
         .addOption(new Option('-t, --transport <method>', 'transport for sending the email')
-            .choices(['SES', 'SMTP'])
+            .choices(['ses', 'smtp'])
             .env('TRANSPORT'))
         .addOption(new Option('-s, --from <sender>', 'email address of the sender')
             .env('FROM'))
@@ -78,62 +57,89 @@ export async function getCommandArguments() {
 
     program.parse(process.argv);
     const options = program.opts();
-    getDownloadOptions(options);
-    getEmailOptions(options);
-    spinner.succeed('Fetched argument values')
+    return getOptions(options);
 }
 
-function getDownloadOptions(options) {
+function getOptions(options) {
+    var commandOptions = {
+        url: null,
+        auth: null,
+        username: null,
+        password: null,
+        format: null,
+        width: null,
+        height: null,
+        filename: null,
+        transport: null,
+        sender: null,
+        recipient: null,
+        smtphost: null,
+        smtpport: null,
+        smtpsecure: null,
+        smtpusername: null,
+        smtppassword: null
+      }
+
+    // Set url.
+    commandOptions.url = process.env.URL || options.url;
+    if (commandOptions.url === undefined || commandOptions.url.length <=0) {
+        spinner.fail('Please specify URL');
+        exit(1);
+    }
+    // Remove double quotes if present.
+    if (commandOptions.url.length >= 2 && commandOptions.url.charAt(0) == '"' && commandOptions.url.charAt(commandOptions.url.length - 1) == '"')
+    {
+        commandOptions.url = commandOptions.url.substring(1, commandOptions.url.length - 1)
+    }
+
     // Get credentials from .env file.
-    downloadOptions.username = process.env.USERNAME;
-    downloadOptions.password = process.env.PASSWORD;
+    commandOptions.username = process.env.USERNAME;
+    commandOptions.password = process.env.PASSWORD;
 
     // If credentials are not set in .env file, get credentials from command line arguments.
-    if((downloadOptions.username === undefined || downloadOptions.username.length <=0) && options.credentials !== undefined) {
-        downloadOptions.username = options.credentials.split(":")[0];
+    if((commandOptions.username === undefined || commandOptions.username.length <=0) && options.credentials !== undefined) {
+        commandOptions.username = options.credentials.split(":")[0];
     }
-    if((downloadOptions.password === undefined || downloadOptions.password.length <=0) && options.credentials !== undefined) {
-        downloadOptions.password = options.credentials.split(":")[1];
+    if((commandOptions.password === undefined || commandOptions.password.length <=0) && options.credentials !== undefined) {
+        commandOptions.password = options.credentials.split(":")[1];
     }
 
     // If auth type is not none & credentials are missing, exit with error.
-    downloadOptions.auth = options.auth;
-    if(downloadOptions.auth != undefined && downloadOptions.auth != 'none' && downloadOptions.username == undefined && downloadOptions.password == undefined){
+    commandOptions.auth = options.auth;
+    if(commandOptions.auth != undefined && commandOptions.auth != 'none' && commandOptions.username == undefined && commandOptions.password == undefined){
     spinner.fail('Please specify a valid username or password');
     exit(1);
     }
 
-    // Validate report format.
-    downloadOptions.format = options.format;
-    if (downloadOptions.format.toUpperCase() !== 'PDF' && 
-        downloadOptions.format.toUpperCase() !== 'PNG') {
+    // Set report format.
+    commandOptions.format = options.format;
+    if (commandOptions.format.toUpperCase() !== 'PDF' && 
+    commandOptions.format.toUpperCase() !== 'PNG') {
     spinner.fail('Please specify a valid file format: one of PDF or PNG');
     exit(1);
     }
 
     // Set default filename is not specified.
-    downloadOptions.filename = process.env.FILENAME || options.filename;
-
-    // Set url.
-    downloadOptions.url = options.url;
+    commandOptions.filename = process.env.FILENAME || options.filename;
 
     // Set width and height of the window
-    downloadOptions.width = Number(options.width);
-    downloadOptions.height = Number(options.height);
-}
+    commandOptions.width = Number(options.width);
+    commandOptions.height = Number(options.height);
 
-function getEmailOptions(options) {
     // Set transport for the email.
-    emailOptions.transport = process.env.TRANSPORT || options.transport;
+    commandOptions.transport = process.env.TRANSPORT || options.transport;
             
     // Set email addresse if specified.
-    emailOptions.sender = process.env.FROM || options.from;
-    emailOptions.recipient = process.env.TO || options.to;
+    commandOptions.sender = process.env.FROM || options.from;
+    commandOptions.recipient = process.env.TO || options.to;
 
     // Set SMTP options.
-    emailOptions.smtphost = process.env.SMTP_HOST || options.smtphost;
-    emailOptions.smtpport = process.env.SMTP_PORT || options.smtpport;
-    emailOptions.smtpsecure = process.env.SMTP_SECURE || options.smtpsecure;
-    emailOptions.smtpusername = process.env.SMTP_USERNAME || options.smtpusername;
-    emailOptions.smtppassword = process.env.SMTP_PASSWORD || options.smtppassword;
+    commandOptions.smtphost = process.env.SMTP_HOST || options.smtphost;
+    commandOptions.smtpport = process.env.SMTP_PORT || options.smtpport;
+    commandOptions.smtpsecure = process.env.SMTP_SECURE || options.smtpsecure;
+    commandOptions.smtpusername = process.env.SMTP_USERNAME || options.smtpusername;
+    commandOptions.smtppassword = process.env.SMTP_PASSWORD || options.smtppassword;
+
+    spinner.succeed('Fetched argument values')
+    return commandOptions;
 }

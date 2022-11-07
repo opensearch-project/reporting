@@ -3,6 +3,15 @@
   "description": "Download reports from anywhere",
   "main": "download_report.js",
   "type": "module",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "html"
+    ]
+  },
   "dependencies": {
     "aws-sdk": "^2.1237.0",
     "commander": "^9.4.0",
@@ -12,8 +21,9 @@
     "lodash": "^4.17.21",
     "nodemailer": "^6.8.0",
     "nodemailer-express-handlebars": "^5.0.0",
+    "ora": "^6.1.2",
     "puppeteer": "^19.1.1",
-    "ora": "^6.1.2"
+    "jest": "^29.2.2"
   },
   "bin": {
     "reporting-anything": "src/download_report.js"

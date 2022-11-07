@@ -54,6 +54,8 @@ export async function downloadVisualReport(url, format, width, height, filename,
     overridePage.setDefaultNavigationTimeout(0);
     overridePage.setDefaultTimeout(300000);
 
+    spinner.info('Connecting to url '+ url);
+
     // auth 
     if (authType !== undefined && authType !== NONE && username !== undefined && password !== undefined) {
       if(authType === BASIC_AUTH){
