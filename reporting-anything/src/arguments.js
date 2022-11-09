@@ -27,6 +27,8 @@ export async function getCommandArguments() {
             .choices(['basic', 'cognito', 'SAML']))
         .addOption(new Option('-c, --credentials <username:password>', 'login credentials')
             .env('USERNAME and PASSWORD'))
+        .addOption(new Option('--tenant <tenant>', 'Tenants in OpenSearch dashboards')
+            .default('global'))
         .addOption(new Option('-f, --format <type>', 'file format of the report')
             .default('pdf')
             .choices(['pdf', 'png']))
@@ -66,6 +68,7 @@ function getOptions(options) {
         auth: null,
         username: null,
         password: null,
+        tenant: null,
         format: null,
         width: null,
         height: null,
@@ -95,6 +98,9 @@ function getOptions(options) {
     // Get credentials from .env file.
     commandOptions.username = process.env.USERNAME;
     commandOptions.password = process.env.PASSWORD;
+
+    // Set tenant
+    commandOptions.tenant = options.tenant;
 
     // If credentials are not set in .env file, get credentials from command line arguments.
     if((commandOptions.username === undefined || commandOptions.username.length <=0) && options.credentials !== undefined) {

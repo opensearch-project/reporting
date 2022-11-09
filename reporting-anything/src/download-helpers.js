@@ -21,7 +21,7 @@ const NOTEBOOKS = "notebooks"
 const spinner = ora();
 const reportSpinner = ora();
 
-export async function downloadVisualReport(url, format, width, height, filename, authType, username, password) {
+export async function downloadVisualReport(url, format, width, height, filename, authType, username, password, tenant) {
   const window = new JSDOM('').window;
   reportSpinner.start('Downloading report');
   try {
@@ -59,13 +59,13 @@ export async function downloadVisualReport(url, format, width, height, filename,
     // auth 
     if (authType !== undefined && authType !== NONE && username !== undefined && password !== undefined) {
       if(authType === BASIC_AUTH){
-        await basicAuthentication(page, overridePage, url, username, password);
+        await basicAuthentication(page, overridePage, url, username, password, tenant);
       }
       else if(authType === SAML_AUTH){
-        await samlAuthentication(page, overridePage, url, username, password);
+        await samlAuthentication(page, overridePage, url, username, password, tenant);
       }
       else if (authType === COGNITO_AUTH){
-        await cognitoAuthentication(page, overridePage, url, username, password);
+        await cognitoAuthentication(page, overridePage, url, username, password, tenant);
       }
       spinner.info('Credentials are verified');
     }
@@ -211,7 +211,7 @@ const getUrl = async (url) =>{
   return urlRef;
 };
 
-const basicAuthentication = async (page, overridePage, url, username, password) => {
+const basicAuthentication = async (page, overridePage, url, username, password, tenant) => {
   await page.goto(url, { waitUntil: 'networkidle0' });
   await new Promise(resolve => setTimeout(resolve, 10000));
   await page.type('input[data-test-subj="user-name"]', username);
@@ -219,16 +219,29 @@ const basicAuthentication = async (page, overridePage, url, username, password) 
   await page.click('button[type=submit]');
   await page.waitForTimeout(10000);
   try{
-    await page.click('label[for=global]');
+    if(tenant === 'global' || tenant === 'private') {
+      await page.click('label[for='+tenant+']');
+    } else {
+      await page.type('input[data-test-subj="comboBoxSearchInput"]', tenant);
+      await page.click('label[for="custom"]');
+    }
   }
   catch(err){
     reportSpinner.fail('Invalid username or password');
-    exit(1)
+    exit(1);
   }
   await page.click('button[data-test-subj="confirm"]');
+
   await page.waitForTimeout(25000);
   await overridePage.goto(url,{ waitUntil: 'networkidle0' });
   await overridePage.waitForTimeout(5000);
+
+  // Check if tenant was selected successfully.
+  if ((await overridePage.$('button[data-test-subj="confirm"]')) !== null) {
+    reportSpinner.fail('Invalid tenant');
+    exit(1);
+  } 
+
   await page.goto(url,{ waitUntil: 'networkidle0' });
 };
 
@@ -248,7 +261,7 @@ const samlAuthentication = async (page, overridePage, url, username, password) =
   }
   catch(err){
     reportSpinner.fail('Invalid username or password');
-    exit(1)
+    exit(1);
   }
   await page.click('button[data-test-subj="confirm"]');
   await page.waitForTimeout(25000);
@@ -267,7 +280,7 @@ const cognitoAuthentication = async (page, overridePage, url, username, password
   }
   catch(err){
     reportSpinner.fail('Invalid username or password');
-    exit(1)
+    exit(1);
   }
   await page.click('button[data-test-subj="confirm"]');
   await page.waitForTimeout(25000);

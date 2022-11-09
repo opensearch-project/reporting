@@ -20,7 +20,8 @@ await downloadVisualReport(
     options.filename, 
     options.auth, 
     options.username, 
-    options.password
+    options.password,
+    options.tenant
     );
 
 await sendEmail(
