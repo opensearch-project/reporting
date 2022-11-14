@@ -51,11 +51,11 @@ export async function sendEmail(filename, format, sender, recipient, transport, 
   }
   
 const getTransporter = (transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword, transporter) => {
-  if(transport === 'SES') {
+  if(transport === 'ses') {
     transporter = nodemailer.createTransport({
       SES: ses
     });
-  } else if (transport === 'SMTP') {
+  } else if (transport === 'smtp') {
     transporter = nodemailer.createTransport({
       host: smtphost,
       port: smtpport,

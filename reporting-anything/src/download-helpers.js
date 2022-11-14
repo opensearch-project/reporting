@@ -19,11 +19,10 @@ const DISCOVER = "discover";
 const NOTEBOOKS = "notebooks"
 
 const spinner = ora();
-const reportSpinner = ora();
 
 export async function downloadVisualReport(url, format, width, height, filename, authType, username, password, tenant) {
   const window = new JSDOM('').window;
-  reportSpinner.start('Downloading report');
+  spinner.start('Connecting to url '+ url);
   try {
     const browser = await puppeteer.launch({
       headless: true,
@@ -54,8 +53,6 @@ export async function downloadVisualReport(url, format, width, height, filename,
     overridePage.setDefaultNavigationTimeout(0);
     overridePage.setDefaultTimeout(300000);
 
-    spinner.info('Connecting to url '+ url);
-
     // auth 
     if (authType !== undefined && authType !== NONE && username !== undefined && password !== undefined) {
       if(authType === BASIC_AUTH){
@@ -73,7 +70,8 @@ export async function downloadVisualReport(url, format, width, height, filename,
     else {
       await page.goto(url, { waitUntil: 'networkidle0' });
     }
-
+    spinner.info('Connected to url '+url);
+    spinner.start('Loading page');
     await page.setViewport({
       width: width,
       height: height,
@@ -129,7 +127,7 @@ export async function downloadVisualReport(url, format, width, height, filename,
       }
       await waitForDynamicContent(page);
       let buffer;
-      spinner.info('The page is loaded')
+      spinner.text =`Downloading Report...`;
 
       // create pdf or png accordingly
       if(format === FORMAT.PDF) {
@@ -155,9 +153,9 @@ export async function downloadVisualReport(url, format, width, height, filename,
       await browser.close();
       const data = { timeCreated, dataUrl: buffer.toString('base64'), fileName };
       await readStreamToFile(data.dataUrl, fileName);
-      reportSpinner.succeed('The report is downloaded');
+      spinner.succeed('The report is downloaded');
   } catch (e) {
-    reportSpinner.fail('Downloading report failed. ', e);
+    spinner.fail('Downloading report failed. ', e);
     process.exit(1);
   }
 }
