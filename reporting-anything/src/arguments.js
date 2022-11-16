@@ -13,7 +13,6 @@ dotenv.config();
 const spinner = ora();
 
 export async function getCommandArguments() {
-    spinner.start('Fetching the arguments values');
 
     program
         .name('reporting-anything')
@@ -37,7 +36,7 @@ export async function getCommandArguments() {
         .addOption(new Option('-l, --height <size>', 'window height of the report')
             .default('600'))
         .addOption(new Option('-n, --filename <name>', 'file name of the report')
-            .default('reporting_anything')
+            .default('reporting')
             .env('FILENAME'))
         .addOption(new Option('-t, --transport <method>', 'transport for sending the email')
             .choices(['ses', 'smtp'])
@@ -59,6 +58,7 @@ export async function getCommandArguments() {
 
     program.parse(process.argv);
     const options = program.opts();
+    spinner.start('Fetching the arguments values');
     return getOptions(options);
 }
 
