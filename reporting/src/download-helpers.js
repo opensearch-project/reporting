@@ -59,7 +59,7 @@ export async function downloadVisualReport(url, format, width, height, filename,
         await basicAuthentication(page, overridePage, url, username, password, tenant);
       }
       else if(authType === SAML_AUTH){
-        await samlAuthentication(page, overridePage, url, username, password, tenant);
+        await samlAuthentication(page, url, username, password, tenant);
       }
       else if (authType === COGNITO_AUTH){
         await cognitoAuthentication(page, overridePage, url, username, password, tenant);
@@ -225,7 +225,7 @@ const basicAuthentication = async (page, overridePage, url, username, password, 
     }
   }
   catch(err){
-    reportSpinner.fail('Invalid username or password');
+    spinner.fail('Invalid username or password');
     exit(1);
   }
   await page.click('button[data-test-subj="confirm"]');
@@ -236,14 +236,14 @@ const basicAuthentication = async (page, overridePage, url, username, password, 
 
   // Check if tenant was selected successfully.
   if ((await overridePage.$('button[data-test-subj="confirm"]')) !== null) {
-    reportSpinner.fail('Invalid tenant');
+    spinner.fail('Invalid tenant');
     exit(1);
   } 
 
   await page.goto(url,{ waitUntil: 'networkidle0' });
 };
 
-const samlAuthentication = async (page, overridePage, url, username, password) => {
+const samlAuthentication = async (page, url, username, password, tenant) => {
   await page.goto(url, { waitUntil: 'networkidle0' });
   await new Promise(resolve => setTimeout(resolve, 10000));
   let refUrl;
@@ -255,10 +255,15 @@ const samlAuthentication = async (page, overridePage, url, username, password) =
   await page.click('[value="Sign in"]')
   await page.waitForTimeout(30000);
   try{
-    await page.click('label[for=global]');
+    if(tenant === 'global' || tenant === 'private') {
+      await page.click('label[for='+tenant+']');
+    } else {
+      await page.type('input[data-test-subj="comboBoxSearchInput"]', tenant);
+      await page.click('label[for="custom"]');
+    }
   }
   catch(err){
-    reportSpinner.fail('Invalid username or password');
+    spinner.fail('Invalid username or password');
     exit(1);
   }
   await page.click('button[data-test-subj="confirm"]');
@@ -266,25 +271,28 @@ const samlAuthentication = async (page, overridePage, url, username, password) =
   await page.click(`a[href='${refUrl}']`);
 }
 
-const cognitoAuthentication = async (page, overridePage, url, username, password) => {
+const cognitoAuthentication = async (page, overridePage, url, username, password, tenant) => {
   await page.goto(url, { waitUntil: 'networkidle0' });
   await new Promise(resolve => setTimeout(resolve, 10000));
-  await page.type(  '[name="username" ]', username);
-  await page.type( ' [name="password"]', password);
-  await page.click( '[name="signInSubmitButton"]');
+  await page.type('[name="username" ]', username);
+  await page.type('[name="password"]', password);
+  await page.click('[name="signInSubmitButton"]');
   await page.waitForTimeout(30000);
   try{
-    await page.click('label[for=global]');
+    if(tenant === 'global' || tenant === 'private') {
+      await page.click('label[for='+tenant+']');
+    } else {
+      await page.type('input[data-test-subj="comboBoxSearchInput"]', tenant);
+      await page.click('label[for="custom"]');
+    }
   }
   catch(err){
-    reportSpinner.fail('Invalid username or password');
+    spinner.fail('Invalid username or password');
     exit(1);
   }
   await page.click('button[data-test-subj="confirm"]');
   await page.waitForTimeout(25000);
   await overridePage.goto(url,{ waitUntil: 'networkidle0' });
-  await overridePage.click('label[for=global]');
-  await overridePage.click('button[data-test-subj="confirm"]');
   await overridePage.waitForTimeout(5000);
   await page.goto(url,{ waitUntil: 'networkidle0' });
 }

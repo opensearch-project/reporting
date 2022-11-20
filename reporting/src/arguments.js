@@ -98,7 +98,7 @@ function getOptions(options) {
     // Get credentials from .env file.
     commandOptions.username = process.env.USERNAME;
     commandOptions.password = process.env.PASSWORD;
-
+    
     // Set tenant
     commandOptions.tenant = options.tenant;
 
