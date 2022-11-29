@@ -25,8 +25,9 @@ buildscript {
         }
 
         common_utils_version = System.getProperty("common_utils.version", opensearch_build)
-        job_scheduler_version = System.getProperty("job_scheduler.version", opensearch_build)        
+        job_scheduler_version = System.getProperty("job_scheduler.version", opensearch_build)
         kotlin_version = System.getProperty("kotlin.version", "1.6.0")
+        jackson_version = "2.14.1"
     }
 
     repositories {
@@ -164,7 +165,11 @@ dependencies {
     compileOnly "${group}:opensearch-job-scheduler-spi:${job_scheduler_version}"
     implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
     implementation "org.json:json:20180813"
-    implementation group: 'com.github.wnameless', name: 'json-flattener', version: '0.1.0'
+    implementation group: 'com.github.wnameless.json', name: 'json-flattener', version: '0.15.1'
+    // json-base, jackson-databind, jackson-annotations are transitive dependencies by json-flattener
+    implementation group: 'com.github.wnameless.json', name: 'json-base', version: '2.2.1'
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation "org.jetbrains.kotlin:kotlin-test:${kotlin_version}"
@@ -174,11 +179,12 @@ dependencies {
             'org.junit.jupiter:junit-jupiter-api:5.6.2'
     )
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
-    testCompile "org.opensearch.test:framework:${opensearch_version}"
-    testCompile "org.jetbrains.kotlin:kotlin-test:${kotlin_version}"
+    testImplementation "org.opensearch.test:framework:${opensearch_version}"
+    testImplementation "org.jetbrains.kotlin:kotlin-test:${kotlin_version}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
-    testCompile "org.mockito:mockito-core:3.12.4"
-    testCompile 'com.google.code.gson:gson:2.8.9'
+    testImplementation "org.mockito:mockito-core:4.7.0"
+    testImplementation "org.mockito:mockito-junit-jupiter:4.7.0"
+    testImplementation 'com.google.code.gson:gson:2.8.9'
 
     ktlint "com.pinterest:ktlint:0.45.1"
 }

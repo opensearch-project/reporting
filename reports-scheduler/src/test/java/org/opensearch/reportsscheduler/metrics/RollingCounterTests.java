@@ -4,10 +4,11 @@
  */
 
 package org.opensearch.reportsscheduler.metrics;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Clock;
 
@@ -16,8 +17,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class RollingCounterTest {
+@ExtendWith(MockitoExtension.class)
+public class RollingCounterTests {
 
     @Mock
     Clock clock;
@@ -25,7 +26,7 @@ public class RollingCounterTest {
     @Test
     public void increment() {
         RollingCounter counter = new RollingCounter(3, 1, clock);
-        for (int i=0; i<5; ++i) {
+        for (int i = 0; i < 5; ++i) {
             counter.increment();
         }
 
@@ -67,7 +68,7 @@ public class RollingCounterTest {
     public void trim() {
         RollingCounter counter = new RollingCounter(2, 1, clock);
 
-        for (int i=1; i<6; ++i) {
+        for (int i = 1; i < 6; ++i) {
             counter.increment();
             assertThat(counter.size(), equalTo(i));
             when(clock.millis()).thenReturn(i * 1000L); // i seconds passed

@@ -5,17 +5,17 @@
 
 package org.opensearch.reportsscheduler.metrics;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class BasicCounterTest {
+public class BasicCounterTests {
 
     @Test
     public void increment() {
         BasicCounter counter = new BasicCounter();
-        for (int i=0; i<5; ++i) {
+        for (int i = 0; i < 5; ++i) {
             counter.increment();
         }
 
