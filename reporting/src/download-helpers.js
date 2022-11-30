@@ -5,17 +5,9 @@
 
 import puppeteer from 'puppeteer';
 import fs from 'fs';
-import { FORMAT, REPORT_TYPE, SELECTOR } from './constants.js';
+import { FORMAT, REPORT_TYPE, SELECTOR, AUTH, URL_SOURCE } from './constants.js';
 import { exit } from "process";
 import ora from 'ora';
-const BASIC_AUTH = 'basic';
-const COGNITO_AUTH = 'cognito';
-const SAML_AUTH = 'SAML';
-const NONE = 'none';
-const DASHBOARDS = 'dashboards#';
-const VISUALIZE = "Visualize";
-const DISCOVER = "discover#";
-const NOTEBOOKS = "notebooks"
 
 const spinner = ora();
 
@@ -48,14 +40,14 @@ export async function downloadReport(url, format, width, height, filename, authT
     overridePage.setDefaultTimeout(300000);
 
     // auth 
-    if (authType !== undefined && authType !== NONE && username !== undefined && password !== undefined) {
-      if (authType === BASIC_AUTH) {
+    if (authType !== undefined && authType !== AUTH.NONE && username !== undefined && password !== undefined) {
+      if (authType === AUTH.BASIC_AUTH) {
         await basicAuthentication(page, overridePage, url, username, password, tenant);
       }
-      else if (authType === SAML_AUTH) {
+      else if (authType === AUTH.SAML_AUTH) {
         await samlAuthentication(page, url, username, password, tenant);
       }
-      else if (authType === COGNITO_AUTH) {
+      else if (authType === AUTH.COGNITO_AUTH) {
         await cognitoAuthentication(page, overridePage, url, username, password, tenant);
       }
       spinner.info('Credentials are verified');
@@ -99,27 +91,28 @@ export async function downloadReport(url, format, width, height, filename, authT
         REPORT_TYPE
       );
     }
+
     // force wait for any resize to load after the above DOM modification.
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     switch (reportSource) {
-      case 'Dashboard':
+      case REPORT_TYPE.DASHBOARD:
         await page.waitForSelector(SELECTOR.DASHBOARD, {
           visible: true,
         });
         break;
-      case 'Visualization':
+      case REPORT_TYPE.VISUALIZATION:
         await page.waitForSelector(SELECTOR.VISUALIZATION, {
           visible: true,
         });
         break;
-      case 'Notebook':
+      case REPORT_TYPE.NOTEBOOK:
         await page.waitForSelector(SELECTOR.NOTEBOOK, {
           visible: true,
         });
         break;
-      case 'Saved search':
-        await page.waitForSelector('button[id="downloadReport"]', {
+      case REPORT_TYPE.DISCOVER:
+        await page.waitForSelector(SELECTOR.DISCOVER, {
           visible: true,
         });
         break;
@@ -136,7 +129,7 @@ export async function downloadReport(url, format, width, height, filename, authT
       const scrollHeight = await page.evaluate(
         () => document.documentElement.scrollHeight
       );
-
+      
       buffer = await page.pdf({
         margin: undefined,
         width: 1680,
@@ -152,6 +145,7 @@ export async function downloadReport(url, format, width, height, filename, authT
       await page.click('button[id="downloadReport"]');
       await new Promise(resolve => setTimeout(resolve, 1000));
       const is_enabled = await page.evaluate(() => document.querySelector('#generateCSV[disabled]') == null);
+      
       // Check if generateCSV button is enabled.
       if (is_enabled) {
         let catcher = page.waitForResponse(r => r.request().url().includes('/_dashboards/api/reporting/generateReport'));
@@ -165,16 +159,15 @@ export async function downloadReport(url, format, width, height, filename, authT
       }
     }
 
+    await browser.close();
+
     const fileName = `${filename}.${format}`;
     const curTime = new Date();
     const timeCreated = curTime.valueOf();
-    await browser.close();
-
     const data = { timeCreated, dataUrl: buffer.toString('base64'), fileName };
+    
     await readStreamToFile(data.dataUrl, fileName, format);
-
     spinner.succeed('The report is downloaded');
-
   } catch (e) {
     spinner.fail('Downloading report failed. ' + e);
     process.exit(1);
@@ -209,19 +202,19 @@ const waitForDynamicContent = async (
 };
 
 const getReportSourceFromURL = (url) => {
-  if (url.includes(DASHBOARDS)) {
-    return 'Dashboard';
+  if (url.includes(URL_SOURCE.DASHBOARDS)) {
+    return REPORT_TYPE.DASHBOARD;
   }
-  else if (url.includes(VISUALIZE)) {
-    return 'Visualization';
+  else if (url.includes(URL_SOURCE.VISUALIZE)) {
+    return REPORT_TYPE.VISUALIZATION;
   }
-  else if (url.includes(DISCOVER)) {
-    return 'Saved search';
+  else if (url.includes(URL_SOURCE.DISCOVER)) {
+    return REPORT_TYPE.DISCOVER;
   }
-  else if (url.includes(NOTEBOOKS)) {
-    return 'Notebook';
+  else if (url.includes(URL_SOURCE.NOTEBOOKS)) {
+    return REPORT_TYPE.NOTEBOOK;
   }
-  return 'Other';
+  return REPORT_TYPE.OTHER;
 }
 
 const getUrl = async (url) => {

@@ -12,7 +12,7 @@ import AWS from "aws-sdk";
 const ses = new AWS.SES();
 const spinner = ora();
 
-export async function sendEmail(filename, format, sender, recipient, transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword) {
+export async function sendEmail(filename, format, sender, recipient, transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword, subject) {
   if (transport !== undefined && sender !== undefined && recipient !== undefined) {
     spinner.start('Sending email...');
   } else {
@@ -25,7 +25,7 @@ export async function sendEmail(filename, format, sender, recipient, transport, 
     return;
   }
 
-  let mailOptions = getmailOptions(format, sender, recipient, `${filename}.${format}`);
+  let mailOptions = getmailOptions(format, sender, recipient, `${filename}.${format}`, subject);
 
   let transporter = getTransporter(transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword);
 
@@ -67,11 +67,11 @@ const getTransporter = (transport, smtphost, smtpport, smtpsecure, smtpusername,
   return transporter;
 }
 
-const getmailOptions = (format, sender, recipient, fileName, mailOptions = {}) => {
+const getmailOptions = (format, sender, recipient, fileName, emailSubject, mailOptions = {}) => {
   if (format === FORMAT.PNG) {
     mailOptions = {
       from: sender,
-      subject: 'This is an email containing your dashboard report',
+      subject: emailSubject,
       to: recipient,
       attachments: [
         {
@@ -84,7 +84,7 @@ const getmailOptions = (format, sender, recipient, fileName, mailOptions = {}) =
   } else {
     mailOptions = {
       from: sender,
-      subject: 'This is an email containing your dashboard report',
+      subject: emailSubject,
       to: recipient,
       attachments: [
         {

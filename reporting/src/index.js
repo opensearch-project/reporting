@@ -21,7 +21,7 @@ await downloadReport(
     options.auth,
     options.username,
     options.password,
-    options.tenant
+    options.tenant,
 );
 
 await sendEmail(
@@ -34,5 +34,6 @@ await sendEmail(
     options.smtpport,
     options.smtpsecure,
     options.smtpusername,
-    options.smtppassword
+    options.smtppassword,
+    options.subject,
 );

@@ -23,7 +23,7 @@ export async function getCommandArguments() {
             .env('URL'))
         .addOption(new Option('-a, --auth <type>', 'authentication type of the report')
             .default('none')
-            .choices(['basic', 'cognito', 'SAML']))
+            .choices(['basic', 'cognito', 'saml']))
         .addOption(new Option('-c, --credentials <username:password>', 'login credentials')
             .env('USERNAME and PASSWORD'))
         .addOption(new Option('-t, --tenant <tenant>', 'Tenants in OpenSearch dashboards')
@@ -55,6 +55,9 @@ export async function getCommandArguments() {
             .env('SMTP_USERNAME'))
         .addOption(new Option('--smtppassword <password>', 'SMTP password')
             .env('SMTP_PASSWORD'))
+        .addOption(new Option('--subject <subject>', 'Email Subject')
+            .default('This is an email containing your dashboard report')
+            .env('SUBJECT'))
 
     program.parse(process.argv);
     const options = program.opts();
@@ -80,7 +83,8 @@ function getOptions(options) {
         smtpport: null,
         smtpsecure: null,
         smtpusername: null,
-        smtppassword: null
+        smtppassword: null,
+        subject: null,
     }
 
     // Set url.
@@ -146,6 +150,9 @@ function getOptions(options) {
     commandOptions.smtpsecure = process.env.SMTP_SECURE || options.smtpsecure;
     commandOptions.smtpusername = process.env.SMTP_USERNAME || options.smtpusername;
     commandOptions.smtppassword = process.env.SMTP_PASSWORD || options.smtppassword;
+
+    // Set email subject.
+    commandOptions.subject = process.env.SUBJECT || options.subject;
 
     spinner.succeed('Fetched argument values')
     return commandOptions;

@@ -1,7 +1,7 @@
 {
   "name": "reporting",
   "description": "Download reports from anywhere",
-  "main": "download_report.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "jest --coverage"
