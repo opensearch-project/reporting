@@ -5,7 +5,6 @@
 
 import puppeteer from 'puppeteer';
 import fs from 'fs';
-import { JSDOM } from 'jsdom';
 import { FORMAT, REPORT_TYPE, SELECTOR } from './constants.js';
 import { exit } from "process";
 import ora from 'ora';
@@ -13,23 +12,18 @@ const BASIC_AUTH = 'basic';
 const COGNITO_AUTH = 'cognito';
 const SAML_AUTH = 'SAML';
 const NONE = 'none';
-const DASHBOARDS = 'dashboards';
+const DASHBOARDS = 'dashboards#';
 const VISUALIZE = "Visualize";
-const DISCOVER = "discover";
+const DISCOVER = "discover#";
 const NOTEBOOKS = "notebooks"
 
 const spinner = ora();
 
-export async function downloadVisualReport(url, format, width, height, filename, authType, username, password, tenant) {
-  const window = new JSDOM('').window;
-  spinner.start('Connecting to url '+ url);
+export async function downloadReport(url, format, width, height, filename, authType, username, password, tenant) {
+  spinner.start('Connecting to url ' + url);
   try {
     const browser = await puppeteer.launch({
       headless: true,
-      /**
-       * TODO: temp fix to disable sandbox when launching chromium on Linux instance
-       * https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#setting-up-chrome-linux-sandbox
-       */
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
@@ -42,7 +36,7 @@ export async function downloadVisualReport(url, format, width, height, filename,
       executablePath: process.env.CHROMIUM_PATH,
       ignoreHTTPSErrors: true,
       env: {
-        TZ: 'UTC', // leave as UTC for now
+        TZ: 'UTC',
       },
     });
 
@@ -55,13 +49,13 @@ export async function downloadVisualReport(url, format, width, height, filename,
 
     // auth 
     if (authType !== undefined && authType !== NONE && username !== undefined && password !== undefined) {
-      if(authType === BASIC_AUTH){
+      if (authType === BASIC_AUTH) {
         await basicAuthentication(page, overridePage, url, username, password, tenant);
       }
-      else if(authType === SAML_AUTH){
+      else if (authType === SAML_AUTH) {
         await samlAuthentication(page, url, username, password, tenant);
       }
-      else if (authType === COGNITO_AUTH){
+      else if (authType === COGNITO_AUTH) {
         await cognitoAuthentication(page, overridePage, url, username, password, tenant);
       }
       spinner.info('Credentials are verified');
@@ -70,7 +64,8 @@ export async function downloadVisualReport(url, format, width, height, filename,
     else {
       await page.goto(url, { waitUntil: 'networkidle0' });
     }
-    spinner.info('Connected to url '+url);
+
+    spinner.info('Connected to url ' + url);
     spinner.start('Loading page');
     await page.setViewport({
       width: width,
@@ -78,19 +73,20 @@ export async function downloadVisualReport(url, format, width, height, filename,
     });
 
     const reportSource = getReportSourceFromURL(url);
-    // if its an OpenSearch report, remove extra elements
-    if (reportSource !== 'Other') {
+
+    // if its an OpenSearch report, remove extra elements.
+    if (reportSource !== 'Other' && reportSource !== 'Saved search') {
       await page.evaluate(
         (reportSource, REPORT_TYPE) => {
-          // remove buttons
+          // remove buttons.
           document
             .querySelectorAll("[class^='euiButton']")
             .forEach((e) => e.remove());
-          // remove top navBar
+          // remove top navBar.
           document
             .querySelectorAll("[class^='euiHeader']")
             .forEach((e) => e.remove());
-          // remove visualization editor
+          // remove visualization editor.
           if (reportSource === REPORT_TYPE.VISUALIZATION) {
             document
               .querySelector('[data-test-subj="splitPanelResizer"]')
@@ -101,61 +97,86 @@ export async function downloadVisualReport(url, format, width, height, filename,
         },
         reportSource,
         REPORT_TYPE
-      );      
+      );
     }
-    
-      // force wait for any resize to load after the above DOM modification
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      switch (reportSource) {
-        case 'Dashboard':
-          await page.waitForSelector(SELECTOR.DASHBOARD, {
-            visible: true,
-          });
-          break;
-        case 'Visualization':
-          await page.waitForSelector(SELECTOR.VISUALIZATION, {
-            visible: true,
-          });
-          break;
-        case 'Notebook':
-          await page.waitForSelector(SELECTOR.NOTEBOOK, {
-            visible: true,
-          });
-          break;
-        default:
-          break;
-      }
-      await waitForDynamicContent(page);
-      let buffer;
-      spinner.text =`Downloading Report...`;
+    // force wait for any resize to load after the above DOM modification.
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // create pdf or png accordingly
-      if(format === FORMAT.PDF) {
-        const scrollHeight = await page.evaluate(
-          () => document.documentElement.scrollHeight
-        );
-    
-        buffer = await page.pdf({
-          margin: undefined,
-          width: 1680,
-          height: scrollHeight + 'px',
-          printBackground: true,
-          pageRanges: '1',
+    switch (reportSource) {
+      case 'Dashboard':
+        await page.waitForSelector(SELECTOR.DASHBOARD, {
+          visible: true,
         });
+        break;
+      case 'Visualization':
+        await page.waitForSelector(SELECTOR.VISUALIZATION, {
+          visible: true,
+        });
+        break;
+      case 'Notebook':
+        await page.waitForSelector(SELECTOR.NOTEBOOK, {
+          visible: true,
+        });
+        break;
+      case 'Saved search':
+        await page.waitForSelector('button[id="downloadReport"]', {
+          visible: true,
+        });
+        break;
+      default:
+        break;
+    }
+
+    await waitForDynamicContent(page);
+    let buffer;
+    spinner.text = `Downloading Report...`;
+
+    // create pdf, png or csv accordingly
+    if (format === FORMAT.PDF) {
+      const scrollHeight = await page.evaluate(
+        () => document.documentElement.scrollHeight
+      );
+
+      buffer = await page.pdf({
+        margin: undefined,
+        width: 1680,
+        height: scrollHeight + 'px',
+        printBackground: true,
+        pageRanges: '1',
+      });
+    } else if (format === FORMAT.PNG) {
+      buffer = await page.screenshot({
+        fullPage: true,
+      });
+    } else if (format === FORMAT.CSV) {
+      await page.click('button[id="downloadReport"]');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const is_enabled = await page.evaluate(() => document.querySelector('#generateCSV[disabled]') == null);
+      // Check if generateCSV button is enabled.
+      if (is_enabled) {
+        let catcher = page.waitForResponse(r => r.request().url().includes('/_dashboards/api/reporting/generateReport'));
+        page.click('button[id="generateCSV"]');
+        let response = await catcher;
+        let payload = await response.json();
+        buffer = payload.data;
       } else {
-        buffer = await page.screenshot({
-          fullPage: true,
-        });
-      } 
-      const fileName = `${filename}.${format}`;
-      const curTime = new Date();
-      const timeCreated = curTime.valueOf();
-      await browser.close();
-      const data = { timeCreated, dataUrl: buffer.toString('base64'), fileName };
-      await readStreamToFile(data.dataUrl, fileName);
-      spinner.succeed('The report is downloaded');
+        spinner.fail('Please save search and retry');
+        process.exit(1);
+      }
+    }
+
+    const fileName = `${filename}.${format}`;
+    const curTime = new Date();
+    const timeCreated = curTime.valueOf();
+    await browser.close();
+
+    const data = { timeCreated, dataUrl: buffer.toString('base64'), fileName };
+    await readStreamToFile(data.dataUrl, fileName, format);
+
+    spinner.succeed('The report is downloaded');
+
   } catch (e) {
-    spinner.fail('Downloading report failed. ', e);
+    spinner.fail('Downloading report failed. ' + e);
     process.exit(1);
   }
 }
@@ -203,9 +224,9 @@ const getReportSourceFromURL = (url) => {
   return 'Other';
 }
 
-const getUrl = async (url) =>{
+const getUrl = async (url) => {
   let urlExt = url.split("#");
-  let urlRef = "#"+urlExt[1];
+  let urlRef = "#" + urlExt[1];
   return urlRef;
 };
 
@@ -216,31 +237,29 @@ const basicAuthentication = async (page, overridePage, url, username, password, 
   await page.type('[data-test-subj="password"]', password);
   await page.click('button[type=submit]');
   await page.waitForTimeout(10000);
-  try{
-    if(tenant === 'global' || tenant === 'private') {
-      await page.click('label[for='+tenant+']');
+  try {
+    if (tenant === 'global' || tenant === 'private') {
+      await page.click('label[for=' + tenant + ']');
     } else {
       await page.type('input[data-test-subj="comboBoxSearchInput"]', tenant);
       await page.click('label[for="custom"]');
     }
   }
-  catch(err){
+  catch (err) {
     spinner.fail('Invalid username or password');
     exit(1);
   }
   await page.click('button[data-test-subj="confirm"]');
 
   await page.waitForTimeout(25000);
-  await overridePage.goto(url,{ waitUntil: 'networkidle0' });
+  await overridePage.goto(url, { waitUntil: 'networkidle0' });
   await overridePage.waitForTimeout(5000);
 
   // Check if tenant was selected successfully.
   if ((await overridePage.$('button[data-test-subj="confirm"]')) !== null) {
     spinner.fail('Invalid tenant');
     exit(1);
-  } 
-
-  await page.goto(url,{ waitUntil: 'networkidle0' });
+  }
 };
 
 const samlAuthentication = async (page, url, username, password, tenant) => {
@@ -254,15 +273,15 @@ const samlAuthentication = async (page, url, username, password, tenant) => {
   await page.type('[name="credentials.passcode"]', password);
   await page.click('[value="Sign in"]')
   await page.waitForTimeout(30000);
-  try{
-    if(tenant === 'global' || tenant === 'private') {
-      await page.click('label[for='+tenant+']');
+  try {
+    if (tenant === 'global' || tenant === 'private') {
+      await page.click('label[for=' + tenant + ']');
     } else {
       await page.type('input[data-test-subj="comboBoxSearchInput"]', tenant);
       await page.click('label[for="custom"]');
     }
   }
-  catch(err){
+  catch (err) {
     spinner.fail('Invalid username or password');
     exit(1);
   }
@@ -274,35 +293,49 @@ const samlAuthentication = async (page, url, username, password, tenant) => {
 const cognitoAuthentication = async (page, overridePage, url, username, password, tenant) => {
   await page.goto(url, { waitUntil: 'networkidle0' });
   await new Promise(resolve => setTimeout(resolve, 10000));
-  await page.type('[name="username" ]', username);
+  await page.type('[name="username"]', username);
   await page.type('[name="password"]', password);
   await page.click('[name="signInSubmitButton"]');
   await page.waitForTimeout(30000);
-  try{
-    if(tenant === 'global' || tenant === 'private') {
-      await page.click('label[for='+tenant+']');
+  try {
+    if (tenant === 'global' || tenant === 'private') {
+      await page.click('label[for=' + tenant + ']');
     } else {
       await page.type('input[data-test-subj="comboBoxSearchInput"]', tenant);
       await page.click('label[for="custom"]');
     }
   }
-  catch(err){
+  catch (err) {
     spinner.fail('Invalid username or password');
     exit(1);
   }
   await page.click('button[data-test-subj="confirm"]');
   await page.waitForTimeout(25000);
-  await overridePage.goto(url,{ waitUntil: 'networkidle0' });
+  await overridePage.goto(url, { waitUntil: 'networkidle0' });
   await overridePage.waitForTimeout(5000);
-  await page.goto(url,{ waitUntil: 'networkidle0' });
+
+  // Check if tenant was selected successfully.
+  if ((await overridePage.$('button[data-test-subj="confirm"]')) !== null) {
+    spinner.fail('Invalid tenant');
+    exit(1);
+  }
+  await page.goto(url, { waitUntil: 'networkidle0' });
 }
 
 export const readStreamToFile = async (
   stream,
-  fileName
+  fileName,
+  format
 ) => {
-  let base64Image = stream.split(';base64,').pop();
-  fs.writeFile(fileName, base64Image, {encoding: 'base64'}, function (err) {
-    // console.log('Downloaded report');
-  })
+  if (format === FORMAT.PDF || format === FORMAT.PNG) {
+    let base64Image = stream.split(';base64,').pop();
+    fs.writeFile(fileName, base64Image, { encoding: 'base64' }, function (err) {
+      if (err) throw err;
+    })
+  } else {
+    fs.writeFile(fileName, stream, function (err) {
+      if (err) throw err;
+    })
+  }
+
 };

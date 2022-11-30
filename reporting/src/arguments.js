@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { program, Option} from 'commander';
+import { program, Option } from 'commander';
 import { exit } from 'process';
 import ora from 'ora';
 import dotenv from "dotenv";
@@ -26,11 +26,11 @@ export async function getCommandArguments() {
             .choices(['basic', 'cognito', 'SAML']))
         .addOption(new Option('-c, --credentials <username:password>', 'login credentials')
             .env('USERNAME and PASSWORD'))
-        .addOption(new Option('--tenant <tenant>', 'Tenants in OpenSearch dashboards')
+        .addOption(new Option('-t, --tenant <tenant>', 'Tenants in OpenSearch dashboards')
             .default('global'))
         .addOption(new Option('-f, --format <type>', 'file format of the report')
             .default('pdf')
-            .choices(['pdf', 'png']))
+            .choices(['pdf', 'png', 'csv']))
         .addOption(new Option('-w, --width <psize>', 'window width of the report')
             .default('1680'))
         .addOption(new Option('-l, --height <size>', 'window height of the report')
@@ -38,7 +38,7 @@ export async function getCommandArguments() {
         .addOption(new Option('-n, --filename <name>', 'file name of the report')
             .default('reporting')
             .env('FILENAME'))
-        .addOption(new Option('-t, --transport <method>', 'transport for sending the email')
+        .addOption(new Option('-e, --transport <method>', 'transport for sending the email')
             .choices(['ses', 'smtp'])
             .env('TRANSPORT'))
         .addOption(new Option('-s, --from <sender>', 'email address of the sender')
@@ -81,48 +81,49 @@ function getOptions(options) {
         smtpsecure: null,
         smtpusername: null,
         smtppassword: null
-      }
+    }
 
     // Set url.
     commandOptions.url = process.env.URL || options.url;
-    if (commandOptions.url === undefined || commandOptions.url.length <=0) {
+    if (commandOptions.url === undefined || commandOptions.url.length <= 0) {
         spinner.fail('Please specify URL');
         exit(1);
     }
+
     // Remove double quotes if present.
-    if (commandOptions.url.length >= 2 && commandOptions.url.charAt(0) == '"' && commandOptions.url.charAt(commandOptions.url.length - 1) == '"')
-    {
+    if (commandOptions.url.length >= 2 && commandOptions.url.charAt(0) == '"' && commandOptions.url.charAt(commandOptions.url.length - 1) == '"') {
         commandOptions.url = commandOptions.url.substring(1, commandOptions.url.length - 1)
     }
 
     // Get credentials from .env file.
     commandOptions.username = process.env.USERNAME;
     commandOptions.password = process.env.PASSWORD;
-    
+
     // Set tenant
     commandOptions.tenant = options.tenant;
 
     // If credentials are not set in .env file, get credentials from command line arguments.
-    if((commandOptions.username === undefined || commandOptions.username.length <=0) && options.credentials !== undefined) {
+    if ((commandOptions.username === undefined || commandOptions.username.length <= 0) && options.credentials !== undefined) {
         commandOptions.username = options.credentials.split(":")[0];
     }
-    if((commandOptions.password === undefined || commandOptions.password.length <=0) && options.credentials !== undefined) {
+    if ((commandOptions.password === undefined || commandOptions.password.length <= 0) && options.credentials !== undefined) {
         commandOptions.password = options.credentials.split(":")[1];
     }
 
     // If auth type is not none & credentials are missing, exit with error.
     commandOptions.auth = options.auth;
-    if(commandOptions.auth != undefined && commandOptions.auth != 'none' && commandOptions.username == undefined && commandOptions.password == undefined){
-    spinner.fail('Please specify a valid username or password');
-    exit(1);
+    if (commandOptions.auth != undefined && commandOptions.auth != 'none' && commandOptions.username == undefined && commandOptions.password == undefined) {
+        spinner.fail('Please specify a valid username or password');
+        exit(1);
     }
 
     // Set report format.
     commandOptions.format = options.format;
-    if (commandOptions.format.toUpperCase() !== 'PDF' && 
-    commandOptions.format.toUpperCase() !== 'PNG') {
-    spinner.fail('Please specify a valid file format: one of PDF or PNG');
-    exit(1);
+    if (commandOptions.format.toUpperCase() !== 'PDF' &&
+        commandOptions.format.toUpperCase() !== 'PNG' &&
+        commandOptions.format.toUpperCase() !== 'CSV') {
+        spinner.fail('Please specify a valid file format: one of PDF, PNG or CSV');
+        exit(1);
     }
 
     // Set default filename is not specified.
@@ -134,7 +135,7 @@ function getOptions(options) {
 
     // Set transport for the email.
     commandOptions.transport = process.env.TRANSPORT || options.transport;
-            
+
     // Set email addresse if specified.
     commandOptions.sender = process.env.FROM || options.from;
     commandOptions.recipient = process.env.TO || options.to;

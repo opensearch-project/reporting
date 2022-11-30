@@ -13,9 +13,11 @@ export const SELECTOR = {
   DASHBOARD: '#dashboardViewport',
   VISUALIZATION: '.visEditor__content',
   NOTEBOOK: '.euiPageBody',
+  DISCOVER: '.dscWrapper__content'
 }
 
 export const FORMAT = {
   PDF: 'pdf',
-  PNG: 'png'
+  PNG: 'png',
+  CSV: 'csv'
 }

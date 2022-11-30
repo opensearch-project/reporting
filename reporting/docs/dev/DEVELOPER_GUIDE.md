@@ -7,7 +7,7 @@
 1. Checkout this package from version control
     ```
     git clone git@github.com:rupal-bq/dashboards-reports.git
-    cd dashboard-reports
+    cd dashboards-reports
     git checkout reporting-anything
     ```
 2. Run `yarn` inside `dashboard-reports/reporting/src`
@@ -21,7 +21,7 @@
     ```
 4. Alternatively, you can use npm install to run this command from any directory.
     ```
-    cd `dashboard-reports/reporting/
+    cd `dashboards-reports/reporting/
     npm install -g .
     ```
     Once the installation is complete, you can use

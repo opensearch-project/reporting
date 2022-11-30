@@ -7,51 +7,49 @@ import nodemailer from "nodemailer";
 import hbs from "nodemailer-express-handlebars";
 import ora from 'ora';
 import { FORMAT } from './constants.js';
+process.env.AWS_SDK_LOAD_CONFIG = true;
 import AWS from "aws-sdk";
-AWS.config.update({region: 'REGION'});
-AWS.config = new AWS.Config();
-const ses = new AWS.SES({region: "us-west-2"});
+const ses = new AWS.SES();
 const spinner = ora();
-const emailSpinner = ora();
 
 export async function sendEmail(filename, format, sender, recipient, transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword) {
-  if(transport !== undefined && sender !== undefined && recipient !== undefined) {
-    emailSpinner.start('Sending email...'); 
+  if (transport !== undefined && sender !== undefined && recipient !== undefined) {
+    spinner.start('Sending email...');
   } else {
-    if(transport === undefined) {
-      emailSpinner.warn('Transport value is missing');
-    } else if(sender === undefined || recipient === undefined) {
-      emailSpinner.warn('Sender/Recipient value is missing');
+    if (transport === undefined) {
+      spinner.warn('Transport value is missing');
+    } else if (sender === undefined || recipient === undefined) {
+      spinner.warn('Sender/Recipient value is missing');
     }
-    emailSpinner.fail('Skipped sending email');
+    spinner.fail('Skipped sending email');
     return;
   }
 
   let mailOptions = getmailOptions(format, sender, recipient, `${filename}.${format}`);
 
   let transporter = getTransporter(transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword);
-    
-  transporter.use("compile",hbs({
-    viewEngine:{
-      partialsDir:"./views/",
-      defaultLayout:""
+
+  transporter.use("compile", hbs({
+    viewEngine: {
+      partialsDir: "./views/",
+      defaultLayout: ""
     },
-      viewPath:"./views/",
-      extName:".hbs"
+    viewPath: "./views/",
+    extName: ".hbs"
   }));
-    
+
   // send email
   await transporter.sendMail(mailOptions, function (err, info) {
-      if (err) {
-        emailSpinner.fail('Error sending email' + err);
-      } else {
-        emailSpinner.succeed('Email sent successfully');
-      }
-    });
-  }
-  
+    if (err) {
+      spinner.fail('Error sending email' + err);
+    } else {
+      spinner.succeed('Email sent successfully');
+    }
+  });
+}
+
 const getTransporter = (transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword, transporter) => {
-  if(transport === 'ses') {
+  if (transport === 'ses') {
     transporter = nodemailer.createTransport({
       SES: ses
     });
@@ -61,7 +59,7 @@ const getTransporter = (transport, smtphost, smtpport, smtpsecure, smtpusername,
       port: smtpport,
       secure: smtpsecure,
       auth: {
-        user: smtpusername, 
+        user: smtpusername,
         pass: smtppassword,
       }
     });
@@ -70,32 +68,32 @@ const getTransporter = (transport, smtphost, smtpport, smtpsecure, smtpusername,
 }
 
 const getmailOptions = (format, sender, recipient, fileName, mailOptions = {}) => {
-    if(format === FORMAT.PNG) {
-      mailOptions = {
-        from: sender,
-        subject: 'This is an email containing your dashboard report',
-        to: recipient,
-        attachments: [
-          {
-            filename: fileName,
-            path: fileName,
-            cid: 'report'
-          }],
-        template : 'index'
-      };
-    } else {
-      mailOptions = {
-        from: sender,
-        subject: 'This is an email containing your dashboard report',
-        to: recipient,
-        attachments: [
-          {
-            filename: fileName,
-            path: fileName,
-            contentType: 'application/pdf'
-          }],
-        template : 'index'
-      };
-    }
-    return mailOptions;
+  if (format === FORMAT.PNG) {
+    mailOptions = {
+      from: sender,
+      subject: 'This is an email containing your dashboard report',
+      to: recipient,
+      attachments: [
+        {
+          filename: fileName,
+          path: fileName,
+          cid: 'report'
+        }],
+      template: 'index'
+    };
+  } else {
+    mailOptions = {
+      from: sender,
+      subject: 'This is an email containing your dashboard report',
+      to: recipient,
+      attachments: [
+        {
+          filename: fileName,
+          path: fileName,
+          contentType: 'application/pdf'
+        }],
+      template: 'index'
+    };
   }
+  return mailOptions;
+}
