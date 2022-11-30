@@ -49,7 +49,7 @@ export const createReport = async (
   // @ts-ignore
   const csvSeparator = request.query.csvSeparator || ',';
   // @ts-ignore
-  const allowLeadingWildcards = request.query.allowLeadingWildcards;
+  const allowLeadingWildcards = !!request.query.allowLeadingWildcards;
 
   const protocol = config.get('osd_server', 'protocol');
   const hostname = config.get('osd_server', 'hostname');
