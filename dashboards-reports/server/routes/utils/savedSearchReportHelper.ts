@@ -147,6 +147,7 @@ async function generateReportData(
   if (total === 0) {
     return '';
   }
+  
   const reqBody = buildRequestBody(report, allowLeadingWildcards, 0);
   logger.info(
     `[Reporting csv module] DSL request body: ${JSON.stringify(reqBody)}`

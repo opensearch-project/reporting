@@ -55,7 +55,7 @@ export const buildRequestBody = (report: any, allowLeadingWildcards: boolean, is
   const searchSourceJSON = report._source.searchSourceJSON;
   const savedObjectQuery: Query = JSON.parse(searchSourceJSON).query;
   const savedObjectFilter: Filter = JSON.parse(searchSourceJSON).filter;
-  const config: OpenSearchQueryConfig = {
+  const savedObjectConfig: OpenSearchQueryConfig = {
     allowLeadingWildcards: allowLeadingWildcards,
     queryStringOptions: {},
     ignoreFilterIfFieldNotInIndex: false,
@@ -64,7 +64,7 @@ export const buildRequestBody = (report: any, allowLeadingWildcards: boolean, is
     undefined,
     savedObjectQuery,
     savedObjectFilter,
-    config
+    savedObjectConfig,
   );
   // Add time range
   if (report._source.timeFieldName && report._source.timeFieldName.length > 0) {
