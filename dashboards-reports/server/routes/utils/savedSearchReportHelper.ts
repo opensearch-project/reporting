@@ -30,6 +30,7 @@ export async function createSavedSearchReport(
   client: ILegacyClusterClient | ILegacyScopedClusterClient,
   dateFormat: string,
   csvSeparator: string,
+  allowLeadingWildcards: boolean,
   isScheduledTask: boolean = true,
   logger: Logger
 ): Promise<CreateReportResultType> {
@@ -43,6 +44,7 @@ export async function createSavedSearchReport(
     params.core_params,
     dateFormat,
     csvSeparator,
+    allowLeadingWildcards,
     isScheduledTask,
     logger
   );
@@ -130,6 +132,7 @@ async function generateReportData(
   params: any,
   dateFormat: string,
   csvSeparator: string,
+  allowLeadingWildcards: boolean,
   isScheduledTask: boolean,
   logger: Logger
 ) {
@@ -145,7 +148,7 @@ async function generateReportData(
     return '';
   }
 
-  const reqBody = buildRequestBody(report, 0);
+  const reqBody = buildRequestBody(report, allowLeadingWildcards, 0);
   logger.info(
     `[Reporting csv module] DSL request body: ${JSON.stringify(reqBody)}`
   );
@@ -182,7 +185,7 @@ async function generateReportData(
 
   // Build the OpenSearch Count query to count the size of result
   async function getOpenSearchDataSize() {
-    const countReq = buildRequestBody(report, 1);
+    const countReq = buildRequestBody(report, allowLeadingWildcards, 1);
     return await callCluster(
       client,
       'count',

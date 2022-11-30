@@ -64,6 +64,7 @@ describe('test create saved search report', () => {
       client,
       mockDateFormat,
       ',',
+      true,
       undefined,
       mockLogger
     );
@@ -76,6 +77,7 @@ describe('test create saved search report', () => {
       mockOpenSearchClient([]),
       mockDateFormat,
       ',',
+      true,
       undefined,
       mockLogger
     );
@@ -87,6 +89,7 @@ describe('test create saved search report', () => {
       mockOpenSearchClient([]),
       mockDateFormat,
       ',',
+      true,
       undefined,
       mockLogger
     );
@@ -101,6 +104,7 @@ describe('test create saved search report', () => {
       client,
       mockDateFormat,
       ',',
+      true,
       undefined,
       mockLogger
     );
@@ -121,6 +125,7 @@ describe('test create saved search report', () => {
       client,
       mockDateFormat,
       ',',
+      true,
       undefined,
       mockLogger
     );
@@ -155,6 +160,7 @@ describe('test create saved search report', () => {
       client,
       mockDateFormat,
       ',',
+      true,
       undefined,
       mockLogger
     );
@@ -192,6 +198,7 @@ describe('test create saved search report', () => {
       client,
       mockDateFormat,
       ',',
+      true,
       undefined,
       mockLogger
     );
@@ -221,6 +228,7 @@ describe('test create saved search report', () => {
       client,
       mockDateFormat,
       ',',
+      true,
       undefined,
       mockLogger
     );
@@ -254,6 +262,7 @@ describe('test create saved search report', () => {
       client,
       mockDateFormat,
       ',',
+      true,
       undefined,
       mockLogger
     );
@@ -281,6 +290,7 @@ describe('test create saved search report', () => {
       client,
       mockDateFormat,
       ',',
+      true,
       undefined,
       mockLogger
     );
@@ -305,6 +315,7 @@ describe('test create saved search report', () => {
       client,
       mockDateFormat,
       '|',
+      true,
       undefined,
       mockLogger
     );
@@ -338,6 +349,7 @@ describe('test create saved search report', () => {
       client,
       mockDateFormat,
       ',',
+      true,
       undefined,
       mockLogger
     );
@@ -363,6 +375,7 @@ describe('test create saved search report', () => {
       client,
       mockDateFormat,
       ',',
+      true,
       undefined,
       mockLogger
     );
@@ -394,6 +407,7 @@ describe('test create saved search report', () => {
       client,
       mockDateFormat,
       ',',
+      true,
       undefined,
       mockLogger
     );
@@ -421,6 +435,7 @@ test('create report for data set contains null field value', async () => {
     client,
     mockDateFormat,
     ',',
+    true,
     undefined,
     mockLogger
   );
@@ -452,6 +467,7 @@ test('create report for data set with metadata fields', async () => {
     client,
     mockDateFormat,
     ',',
+    true,
     undefined,
     mockLogger
   );
@@ -506,6 +522,7 @@ test('create report with empty/one/multiple(list) date values', async () => {
     client,
     mockDateFormat,
     ',',
+    true,
     undefined,
     mockLogger
   );

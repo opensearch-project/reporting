@@ -22,10 +22,12 @@ export const uiSettingsService = {
         : rawTimeZone;
     const dateFormat = this.get('dateFormat');
     const csvSeparator = this.get('csv:separator');
+    const allowLeadingWildcards = this.get('query:allowLeadingWildcards');
     return {
       timezone,
       dateFormat,
       csvSeparator,
+      allowLeadingWildcards,
     };
   },
 };

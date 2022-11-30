@@ -48,6 +48,9 @@ export const createReport = async (
     request.query.dateFormat || DATA_REPORT_CONFIG.excelDateFormat;
   // @ts-ignore
   const csvSeparator = request.query.csvSeparator || ',';
+  // @ts-ignore
+  const allowLeadingWildcards = !!request.query.allowLeadingWildcards;
+
   const protocol = config.get('osd_server', 'protocol');
   const hostname = config.get('osd_server', 'hostname');
   const port = config.get('osd_server', 'port');
@@ -76,6 +79,7 @@ export const createReport = async (
         opensearchClient,
         dateFormat,
         csvSeparator,
+        allowLeadingWildcards,
         isScheduledTask,
         logger
       );
