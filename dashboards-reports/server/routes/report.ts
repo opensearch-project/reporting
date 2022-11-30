@@ -67,7 +67,7 @@ export default function (router: IRouter, config: ReportingConfig) {
 
       try {
         const reportData = await createReport(request, context, report, config);
-        
+
         // if not deliver to user himself , no need to send actual file data to client
         const delivery = report.report_definition.delivery;
         addToMetric('report', 'create', 'count', report);
