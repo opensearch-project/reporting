@@ -59,7 +59,7 @@ internal object ReportInstancesIndex {
     /**
      * Create index using the mapping and settings defined in resource
      */
-    @Suppress("TooGenericExceptionCaught")
+    @Suppress("TooGenericExceptionCaught", "InstanceOfCheckForException")
     private fun createIndex() {
         if (!isIndexExists()) {
             val classLoader = ReportInstancesIndex::class.java.classLoader
@@ -74,7 +74,7 @@ internal object ReportInstancesIndex {
                 if (response.isAcknowledged) {
                     log.info("$LOG_PREFIX:Index $REPORT_INSTANCES_INDEX_NAME creation Acknowledged")
                 } else {
-                    throw IllegalStateException("$LOG_PREFIX:Index $REPORT_INSTANCES_INDEX_NAME creation not Acknowledged")
+                    error("$LOG_PREFIX:Index $REPORT_INSTANCES_INDEX_NAME creation not Acknowledged")
                 }
             } catch (exception: Exception) {
                 if (exception !is ResourceAlreadyExistsException && exception.cause !is ResourceAlreadyExistsException) {
@@ -128,9 +128,11 @@ internal object ReportInstancesIndex {
             log.warn("$LOG_PREFIX:getReportInstance - $id not found; response:$response")
             null
         } else {
-            val parser = XContentType.JSON.xContent().createParser(NamedXContentRegistry.EMPTY,
+            val parser = XContentType.JSON.xContent().createParser(
+                NamedXContentRegistry.EMPTY,
                 LoggingDeprecationHandler.INSTANCE,
-                response.sourceAsString)
+                response.sourceAsString
+            )
             parser.nextToken()
             ReportInstance.parse(parser, id)
         }
@@ -167,8 +169,10 @@ internal object ReportInstancesIndex {
         val actionFuture = client.search(searchRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         val result = ReportInstanceSearchResults(from.toLong(), response)
-        log.info("$LOG_PREFIX:getAllReportInstances from:$from, maxItems:$maxItems," +
-            " retCount:${result.objectList.size}, totalCount:${result.totalHits}")
+        log.info(
+            "$LOG_PREFIX:getAllReportInstances from:$from, maxItems:$maxItems," +
+                " retCount:${result.objectList.size}, totalCount:${result.totalHits}"
+        )
         return result
     }
 

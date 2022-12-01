@@ -5,8 +5,8 @@
 
 package org.opensearch.reportsscheduler.resthandler
 
-import org.opensearch.reportsscheduler.metrics.Metrics
 import org.opensearch.client.node.NodeClient
+import org.opensearch.reportsscheduler.metrics.Metrics
 import org.opensearch.rest.BaseRestHandler
 import org.opensearch.rest.RestRequest
 

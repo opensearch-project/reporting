@@ -5,17 +5,17 @@
 
 package org.opensearch.reportsscheduler.model
 
-import org.opensearch.jobscheduler.spi.schedule.Schedule
-import org.opensearch.jobscheduler.spi.schedule.ScheduleParser
-import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
-import org.opensearch.reportsscheduler.util.logger
-import org.opensearch.reportsscheduler.util.stringList
 import org.opensearch.common.xcontent.ToXContent
 import org.opensearch.common.xcontent.ToXContentObject
 import org.opensearch.common.xcontent.XContentBuilder
 import org.opensearch.common.xcontent.XContentFactory
 import org.opensearch.common.xcontent.XContentParser
 import org.opensearch.common.xcontent.XContentParserUtils
+import org.opensearch.jobscheduler.spi.schedule.Schedule
+import org.opensearch.jobscheduler.spi.schedule.ScheduleParser
+import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
+import org.opensearch.reportsscheduler.util.logger
+import org.opensearch.reportsscheduler.util.stringList
 import java.time.Duration
 
 /**
@@ -120,12 +120,14 @@ internal data class ReportDefinition(
             source ?: throw IllegalArgumentException("$SOURCE_TAG field absent")
             format ?: throw IllegalArgumentException("$FORMAT_TAG field absent")
             trigger ?: throw IllegalArgumentException("$TRIGGER_TAG field absent")
-            return ReportDefinition(name,
+            return ReportDefinition(
+                name,
                 isEnabled,
                 source,
                 format,
                 trigger,
-                delivery)
+                delivery
+            )
         }
     }
 
@@ -204,7 +206,8 @@ internal data class ReportDefinition(
                 type ?: throw IllegalArgumentException("$TYPE_TAG field absent")
                 origin ?: throw IllegalArgumentException("$ORIGIN_TAG field absent")
                 id ?: throw IllegalArgumentException("$ID_TAG field absent")
-                return Source(description,
+                return Source(
+                    description,
                     type,
                     origin,
                     id
@@ -274,11 +277,13 @@ internal data class ReportDefinition(
                 durationSeconds
                     ?: throw IllegalArgumentException("$DURATION_TAG field absent")
                 fileFormat ?: throw IllegalArgumentException("$FILE_FORMAT_TAG field absent")
-                return Format(durationSeconds,
+                return Format(
+                    durationSeconds,
                     fileFormat,
                     limit,
                     header,
-                    footer)
+                    footer
+                )
             }
         }
 
@@ -365,7 +370,6 @@ internal data class ReportDefinition(
         val configIds: List<String>
     ) : ToXContentObject {
         internal companion object {
-            private const val DELIVERY_FORMAT_TAG = "deliveryFormat"
             private const val TITLE_TAG = "title"
             private const val TEXT_DESCRIPTION_TAG = "textDescription"
             private const val HTML_DESCRIPTION_TAG = "htmlDescription"
@@ -377,7 +381,6 @@ internal data class ReportDefinition(
              * @return created Delivery object
              */
             fun parse(parser: XContentParser): Delivery {
-                var recipients: List<String> = listOf()
                 var title: String? = null
                 var textDescription: String? = null
                 var htmlDescription: String? = null
@@ -400,7 +403,8 @@ internal data class ReportDefinition(
                     title,
                     textDescription,
                     htmlDescription,
-                    configIds)
+                    configIds
+                )
             }
         }
 

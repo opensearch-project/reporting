@@ -5,14 +5,14 @@
 
 package org.opensearch.reportsscheduler.action
 
-import org.opensearch.commons.authuser.User
-import org.opensearch.reportsscheduler.model.InContextReportCreateRequest
-import org.opensearch.reportsscheduler.model.InContextReportCreateResponse
 import org.opensearch.action.ActionType
 import org.opensearch.action.support.ActionFilters
 import org.opensearch.client.Client
 import org.opensearch.common.inject.Inject
 import org.opensearch.common.xcontent.NamedXContentRegistry
+import org.opensearch.commons.authuser.User
+import org.opensearch.reportsscheduler.model.InContextReportCreateRequest
+import org.opensearch.reportsscheduler.model.InContextReportCreateResponse
 import org.opensearch.transport.TransportService
 
 /**
@@ -23,11 +23,13 @@ internal class InContextReportCreateAction @Inject constructor(
     client: Client,
     actionFilters: ActionFilters,
     val xContentRegistry: NamedXContentRegistry
-) : PluginBaseAction<InContextReportCreateRequest, InContextReportCreateResponse>(NAME,
+) : PluginBaseAction<InContextReportCreateRequest, InContextReportCreateResponse>(
+    NAME,
     transportService,
     client,
     actionFilters,
-    ::InContextReportCreateRequest) {
+    ::InContextReportCreateRequest
+) {
     companion object {
         private const val NAME = "cluster:admin/opendistro/reports/menu/download"
         internal val ACTION_TYPE = ActionType(NAME, ::InContextReportCreateResponse)
