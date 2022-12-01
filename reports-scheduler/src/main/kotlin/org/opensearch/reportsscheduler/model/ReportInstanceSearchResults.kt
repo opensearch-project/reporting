@@ -5,10 +5,10 @@
 
 package org.opensearch.reportsscheduler.model
 
-import org.opensearch.reportsscheduler.model.RestTag.REPORT_INSTANCE_LIST_FIELD
 import org.apache.lucene.search.TotalHits
 import org.opensearch.action.search.SearchResponse
 import org.opensearch.common.xcontent.XContentParser
+import org.opensearch.reportsscheduler.model.RestTag.REPORT_INSTANCE_LIST_FIELD
 
 /**
  * ReportInstances search results

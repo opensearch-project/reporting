@@ -5,6 +5,12 @@
 
 package org.opensearch.reportsscheduler.model
 
+import org.opensearch.common.xcontent.ToXContent
+import org.opensearch.common.xcontent.ToXContentObject
+import org.opensearch.common.xcontent.XContentBuilder
+import org.opensearch.common.xcontent.XContentFactory
+import org.opensearch.common.xcontent.XContentParser
+import org.opensearch.common.xcontent.XContentParserUtils
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
 import org.opensearch.reportsscheduler.model.RestTag.ACCESS_LIST_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.BEGIN_TIME_FIELD
@@ -21,12 +27,6 @@ import org.opensearch.reportsscheduler.model.RestTag.UPDATED_TIME_FIELD
 import org.opensearch.reportsscheduler.security.UserAccessManager.DEFAULT_TENANT
 import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.reportsscheduler.util.stringList
-import org.opensearch.common.xcontent.ToXContent
-import org.opensearch.common.xcontent.ToXContentObject
-import org.opensearch.common.xcontent.XContentBuilder
-import org.opensearch.common.xcontent.XContentFactory
-import org.opensearch.common.xcontent.XContentParser
-import org.opensearch.common.xcontent.XContentParserUtils
 import java.time.Instant
 
 /**
@@ -114,7 +114,8 @@ internal data class ReportInstance(
             endTime ?: throw IllegalArgumentException("$END_TIME_FIELD field absent")
             tenant = tenant ?: DEFAULT_TENANT
             status ?: throw IllegalArgumentException("$STATUS_FIELD field absent")
-            return ReportInstance(id,
+            return ReportInstance(
+                id,
                 updatedTime,
                 createdTime,
                 beginTime,
@@ -124,7 +125,8 @@ internal data class ReportInstance(
                 reportDefinitionDetails,
                 status,
                 statusText,
-                inContextDownloadUrlPath)
+                inContextDownloadUrlPath
+            )
         }
     }
 
