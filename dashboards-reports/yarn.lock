@@ -1940,19 +1940,12 @@ cron-validator@^1.1.1:
   resolved "https://registry.yarnpkg.com/cron-validator/-/cron-validator-1.1.1.tgz#0a27bb75508c7bc03c8b840d2d9f170eeacb5615"
   integrity sha512-vfZb05w/wezuwPZBDvdIBmJp2BvuJExHeyKRa5oBqD2ZDXR61hb3QgPc/3ZhBEQJlAy8Jlnn5XC/JCT3IDqxwg==
 
-cross-fetch@3.1.5:
+cross-fetch@^3.0.4:
   version "3.1.5"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.5.tgz#e1389f44d9e7ba767907f7af8454787952ab534f"
   integrity sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==
   dependencies:
     node-fetch "2.6.7"
-
-cross-fetch@^3.0.4:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.0.6.tgz#3a4040bc8941e653e0e9cf17f29ebcd177d3365c"
-  integrity sha512-KBPUbqgFjzWlVcURG+Svp9TlhA5uliYtiNx/0r8nv0pdypeQCRJ9IaSIc3q/x3q8t3F75cHuwxVql1HFGHCNJQ==
-  dependencies:
-    node-fetch "2.6.1"
 
 cross-spawn@^6.0.0:
   version "6.0.5"
