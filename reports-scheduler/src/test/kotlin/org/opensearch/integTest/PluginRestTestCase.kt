@@ -100,6 +100,7 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
     }
 
     @Throws(IOException::class)
+    @Suppress("TooGenericExceptionThrown")
     protected open fun configureHttpsClient(builder: RestClientBuilder, settings: Settings) {
         val headers = ThreadContext.buildDefaultHeaders(settings)
         val defaultHeaders = arrayOfNulls<Header>(headers.size)
@@ -121,7 +122,7 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
                         SSLContextBuilder.create()
                             .loadTrustMaterial(null) { _: Array<X509Certificate?>?, _: String? -> true }
                             .build())
-            } catch (@Suppress("TooGenericExceptionThrown") e: Exception) {
+            } catch (e: Exception) {
                 throw RuntimeException(e)
             }
         }

@@ -59,7 +59,7 @@ internal object ReportDefinitionsIndex {
     /**
      * Create index using the mapping and settings defined in resource
      */
-    @Suppress("TooGenericExceptionCaught")
+    @Suppress("TooGenericExceptionCaught", "InstanceOfCheckForException")
     private fun createIndex() {
         if (!isIndexExists()) {
             val classLoader = ReportDefinitionsIndex::class.java.classLoader
@@ -77,10 +77,8 @@ internal object ReportDefinitionsIndex {
                     Metrics.REPORT_DEFINITION_CREATE_SYSTEM_ERROR.counter.increment()
                     error("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation not Acknowledged")
                 }
-            } catch (exception: ResourceAlreadyExistsException) {
-                log.warn("message: ${exception.message}")
             } catch (exception: Exception) {
-                if (exception !is ResourceAlreadyExistsException) {
+                if (exception !is ResourceAlreadyExistsException && exception.cause !is ResourceAlreadyExistsException) {
                     Metrics.REPORT_DEFINITION_CREATE_SYSTEM_ERROR.counter.increment()
                     throw exception
                 }
