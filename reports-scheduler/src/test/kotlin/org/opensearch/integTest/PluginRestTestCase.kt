@@ -121,7 +121,8 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
                     .setSSLContext(
                         SSLContextBuilder.create()
                             .loadTrustMaterial(null) { _: Array<X509Certificate?>?, _: String? -> true }
-                            .build())
+                            .build()
+                    )
             } catch (e: Exception) {
                 throw RuntimeException(e)
             }
