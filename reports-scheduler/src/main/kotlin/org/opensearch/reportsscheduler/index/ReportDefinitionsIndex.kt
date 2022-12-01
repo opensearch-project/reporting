@@ -75,10 +75,12 @@ internal object ReportDefinitionsIndex {
                     log.info("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation Acknowledged")
                 } else {
                     Metrics.REPORT_DEFINITION_CREATE_SYSTEM_ERROR.counter.increment()
-                    throw IllegalStateException("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation not Acknowledged")
+                    error("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation not Acknowledged")
                 }
+            } catch (exception: ResourceAlreadyExistsException) {
+                log.warn("message: ${exception.message}")
             } catch (exception: Exception) {
-                if (exception !is ResourceAlreadyExistsException && exception.cause !is ResourceAlreadyExistsException) {
+                if (exception !is ResourceAlreadyExistsException) {
                     Metrics.REPORT_DEFINITION_CREATE_SYSTEM_ERROR.counter.increment()
                     throw exception
                 }

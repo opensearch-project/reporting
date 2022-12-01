@@ -121,7 +121,7 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
                         SSLContextBuilder.create()
                             .loadTrustMaterial(null) { _: Array<X509Certificate?>?, _: String? -> true }
                             .build())
-            } catch (e: Exception) {
+            } catch (@Suppress("TooGenericExceptionThrown") e: Exception) {
                 throw RuntimeException(e)
             }
         }
