@@ -99,7 +99,7 @@ internal object PluginSettings {
             try {
                 settings = Settings.builder().loadFromPath(defaultSettingYmlFile).build()
             } catch (exception: IOException) {
-                log.warn("$LOG_PREFIX:Failed to load ${defaultSettingYmlFile.toAbsolutePath()}")
+                log.warn("$LOG_PREFIX:Failed to load ${defaultSettingYmlFile.toAbsolutePath()} message:${exception.message}")
             }
         }
         // Initialize the settings values to default values
@@ -156,7 +156,8 @@ internal object PluginSettings {
      * @return list of settings defined in this plugin
      */
     fun getAllSettings(): List<Setting<*>> {
-        return listOf(OPERATION_TIMEOUT_MS,
+        return listOf(
+            OPERATION_TIMEOUT_MS,
             DEFAULT_ITEMS_QUERY_COUNT
         )
     }

@@ -4,6 +4,7 @@
  */
 package org.opensearch.reportsscheduler.resthandler
 
+import org.opensearch.client.node.NodeClient
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.action.GetAllReportDefinitionsAction
@@ -13,12 +14,10 @@ import org.opensearch.reportsscheduler.model.GetAllReportDefinitionsRequest
 import org.opensearch.reportsscheduler.model.RestTag.FROM_INDEX_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.MAX_ITEMS_FIELD
 import org.opensearch.reportsscheduler.settings.PluginSettings
-
-import org.opensearch.client.node.NodeClient
 import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
 import org.opensearch.rest.BytesRestResponse
-import org.opensearch.rest.RestHandler.Route
 import org.opensearch.rest.RestHandler.ReplacedRoute
+import org.opensearch.rest.RestHandler.Route
 import org.opensearch.rest.RestRequest
 import org.opensearch.rest.RestRequest.Method.GET
 import org.opensearch.rest.RestStatus
@@ -78,9 +77,11 @@ internal class ReportDefinitionListRestHandler : PluginBaseHandler() {
             GET -> RestChannelConsumer {
                 Metrics.REPORT_DEFINITION_LIST_TOTAL.counter.increment()
                 Metrics.REPORT_DEFINITION_LIST_INTERVAL_COUNT.counter.increment()
-                client.execute(GetAllReportDefinitionsAction.ACTION_TYPE,
+                client.execute(
+                    GetAllReportDefinitionsAction.ACTION_TYPE,
                     GetAllReportDefinitionsRequest(from, maxItems),
-                    RestResponseToXContentListener(it))
+                    RestResponseToXContentListener(it)
+                )
             }
             else -> RestChannelConsumer {
                 it.sendResponse(BytesRestResponse(RestStatus.METHOD_NOT_ALLOWED, "${request.method()} is not allowed"))
