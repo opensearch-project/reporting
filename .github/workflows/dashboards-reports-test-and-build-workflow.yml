@@ -21,7 +21,7 @@ jobs:
         with:
           repository: opensearch-project/Opensearch-Dashboards
           ref: ${{ env.OPENSEARCH_VERSION }}
-          path: OpenSearch-Dashboards
+          path: dashboards-reports/OpenSearch-Dashboards
 
       - name: Setup Node
         uses: actions/setup-node@v1
@@ -29,7 +29,7 @@ jobs:
           node-version: "10.24.1"
 
       - name: Move Dashboards Reports to Plugins Dir
-        run: mv dashboards-reports ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
+        run: mv dashboards-reports OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
 
       - name: Add Chromium Binary to Reporting for Testing
         run: |
@@ -45,25 +45,25 @@ jobs:
         with:
           timeout_minutes: 30
           max_attempts: 3
-          command: cd ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}; yarn osd bootstrap
+          command: cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}; yarn osd bootstrap
 
       - name: Test
         uses: nick-invision/retry@v1
         with:
           timeout_minutes: 30
           max_attempts: 3
-          command: cd ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}; yarn test --coverage
+          command: cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}; yarn test --coverage
 
       - name: Upload coverage
         uses: codecov/codecov-action@v1
         with:
           flags: dashboards-reports
-          directory: ../OpenSearch-Dashboards/plugins/
+          directory: OpenSearch-Dashboards/plugins/
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Build Artifact
         run: |
-          cd ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
+          cd OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
           yarn build
 
           cd build
@@ -89,13 +89,13 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: dashboards-reports-linux-x64
-          path: ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-x64.zip
+          path: OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-x64.zip
 
       - name: Upload Artifact For Linux arm64
         uses: actions/upload-artifact@v1
         with:
           name: dashboards-reports-linux-arm64
-          path: ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-arm64.zip
+          path: OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-arm64.zip
 
   windows-build:
     runs-on: windows-latest
