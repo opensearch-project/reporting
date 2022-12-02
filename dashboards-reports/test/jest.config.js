@@ -3,7 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-process.env.TZ = 'America/Los_Angeles';
+//@ts-check
+
+process.env.TZ = 'UTC';
 
 module.exports = {
   rootDir: '../',

@@ -402,7 +402,7 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
                               data-test-subj="superDatePickerstartDatePopoverButton"
                               title="2020-10-26T20:52:56.382Z"
                             >
-                              Oct 26, 2020 @ 13:52:56.382
+                              Oct 26, 2020 @ 20:52:56.382
                             </button>
                           </div>
                         </div>
@@ -426,7 +426,7 @@ exports[`<ReportSettings /> panel dashboard create from in-context 1`] = `
                               data-test-subj="superDatePickerendDatePopoverButton"
                               title="2020-10-27T20:52:56.384Z"
                             >
-                              Oct 27, 2020 @ 13:52:56.384
+                              Oct 27, 2020 @ 20:52:56.384
                             </button>
                           </div>
                         </div>
@@ -1585,7 +1585,7 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
                               data-test-subj="superDatePickerstartDatePopoverButton"
                               title="2020-10-26T20:52:56.382Z"
                             >
-                              Oct 26, 2020 @ 13:52:56.382
+                              Oct 26, 2020 @ 20:52:56.382
                             </button>
                           </div>
                         </div>
@@ -1609,7 +1609,7 @@ exports[`<ReportSettings /> panel display errors on create 1`] = `
                               data-test-subj="superDatePickerendDatePopoverButton"
                               title="2020-10-27T20:52:56.384Z"
                             >
-                              Oct 27, 2020 @ 13:52:56.384
+                              Oct 27, 2020 @ 20:52:56.384
                             </button>
                           </div>
                         </div>
@@ -6506,7 +6506,7 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
                               data-test-subj="superDatePickerstartDatePopoverButton"
                               title="2020-10-26T20:52:56.382Z"
                             >
-                              Oct 26, 2020 @ 13:52:56.382
+                              Oct 26, 2020 @ 20:52:56.382
                             </button>
                           </div>
                         </div>
@@ -6530,7 +6530,7 @@ exports[`<ReportSettings /> panel saved search create from in-context 1`] = `
                               data-test-subj="superDatePickerendDatePopoverButton"
                               title="2020-10-27T20:52:56.384Z"
                             >
-                              Oct 27, 2020 @ 13:52:56.384
+                              Oct 27, 2020 @ 20:52:56.384
                             </button>
                           </div>
                         </div>
@@ -7689,7 +7689,7 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
                               data-test-subj="superDatePickerstartDatePopoverButton"
                               title="2020-10-26T20:52:56.382Z"
                             >
-                              Oct 26, 2020 @ 13:52:56.382
+                              Oct 26, 2020 @ 20:52:56.382
                             </button>
                           </div>
                         </div>
@@ -7713,7 +7713,7 @@ exports[`<ReportSettings /> panel visualization create from in-context 1`] = `
                               data-test-subj="superDatePickerendDatePopoverButton"
                               title="2020-10-27T20:52:56.384Z"
                             >
-                              Oct 27, 2020 @ 13:52:56.384
+                              Oct 27, 2020 @ 20:52:56.384
                             </button>
                           </div>
                         </div>

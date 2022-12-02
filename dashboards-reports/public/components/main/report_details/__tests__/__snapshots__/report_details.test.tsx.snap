@@ -172,7 +172,7 @@ exports[`<ReportDetails /> panel render 5 hours recurring component 1`] = `
             <dd
               class="euiDescriptionList__description"
             >
-              Invalid Date -&gt; 10/23/2020, 1:53:35 PM
+              Invalid Date -&gt; 10/23/2020, 8:53:35 PM
             </dd>
           </dl>
         </div>
@@ -562,7 +562,7 @@ exports[`<ReportDetails /> panel render on-demand component 1`] = `
             <dd
               class="euiDescriptionList__description"
             >
-              Invalid Date -&gt; 10/23/2020, 1:53:35 PM
+              Invalid Date -&gt; 10/23/2020, 8:53:35 PM
             </dd>
           </dl>
         </div>
