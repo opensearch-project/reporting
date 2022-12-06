@@ -16,7 +16,9 @@ export async function sendEmail(filename, format, sender, recipient, transport, 
   if (transport !== undefined && sender !== undefined && recipient !== undefined) {
     spinner.start('Sending email...');
   } else {
-    if (transport === undefined) {
+    if(transport === undefined && sender === undefined && recipient === undefined) {
+      return;
+    } else if (transport === undefined) {
       spinner.warn('Transport value is missing');
     } else if (sender === undefined || recipient === undefined) {
       spinner.warn('Sender/Recipient value is missing');

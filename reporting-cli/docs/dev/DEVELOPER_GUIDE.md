@@ -2,7 +2,7 @@
 
 
 
-### SOP for installing and running reporting-anything
+### SOP for installing and running reporting-cli
 
 1. Checkout this package from version control
     ```
