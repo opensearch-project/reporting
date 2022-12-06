@@ -124,7 +124,7 @@ jobs:
       - name: Get node version
         id: versions_step
         run:
-          echo "::set-output name=node_version::$(node -p "(require('./OpenSearch-Dashboards/package.json').engines.node).match(/[.0-9]+/)[0]")"
+          echo "::set-output name=node_version::$(node -p "(require('../OpenSearch-Dashboards/package.json').engines.node).match(/[.0-9]+/)[0]")"
 
       - name: Setup Node
         uses: actions/setup-node@v1
@@ -200,7 +200,7 @@ jobs:
       - name: Get node version
         id: versions_step
         run:
-          echo "::set-output name=node_version::$(node -p "(require('./OpenSearch-Dashboards/package.json').engines.node).match(/[.0-9]+/)[0]")"
+          echo "::set-output name=node_version::$(node -p "(require('../OpenSearch-Dashboards/package.json').engines.node).match(/[.0-9]+/)[0]")"
 
       - name: Setup Node
         uses: actions/setup-node@v1
