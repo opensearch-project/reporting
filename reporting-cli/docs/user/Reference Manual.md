@@ -1,6 +1,6 @@
 ## Reporting CLI
 
-Reporting CLI is a quick out-of-box options to be able to download reports without requiring the use of Dashboards and the Dashboards plugin. 
+Reporting CLI is a quick out-of-box options to be able to download reports without requiring the use of Dashboards.
 
 ### Features
 
@@ -12,29 +12,31 @@ Reporting CLI is a quick out-of-box options to be able to download reports witho
 - Reporting CLI supports downloading reports in below file formats.
     - PDF
     - PNG
+    - CSV
 - Reporting CLI can be used to send email with report as an attachment.   
 
 ### Command-line Options
 
 Reporting CLI supports following configurable options.
 
-Option | Default Value | Valid Options | Description
--- | --- | --- | --- |
-url | - | - | url of the report
-format | pdf | PDF, PNG | file formart of the report
-width | 1680 | - | page width in pixels
-height | 600 | - | page height in pixels
-filename | reporting | - | file name of the report
-auth | No auth | BASIC, SAML, COGNITO, NONE | authentication type
-credentials | - | - | login credentials in the format of username:password for connecting to url
-from | - | - | the email address of the sender
-to | - | - | the recipient of the email
-transport | - | SES, SMTP | transport for sending the email
-smtphost | - | - | the hostname of the SMTP server
-smtpport | - | - | the port for connection
-smtpusername | - | - | SMTP username
-smtppassword | - | - | SMTP password
-smtpsecure | - | - | if true the connection will use TLS when connecting to server.
+Option | Default Value | Valid Options |  Environment Variable | Description
+-- | --- | --- | --- | --- |
+url | - | - | URL | url of the report
+format | pdf | pdf, png, csv | - | file formart of the report
+width | 1680 | - | - | page width in pixels
+height | 600 | - | - | page height in pixels
+filename | reporting | - | FILENAME | file name of the report
+auth | none | basic, saml, cognito, none | - | authentication type
+credentials | - | - | USERNAME and PASSWORD | login credentials in the format of username:password for connecting to url
+from | - | - | FROM | the email address of the sender
+to | - | - | TO | the recipient of the email
+transport | - | ses, smtp | TRANSPORT | transport for sending the email
+smtphost | - | - | SMTP_HOST | the hostname of the SMTP server
+smtpport | - | - | SMTP_PORT | the port for connection
+smtpusername | - | - | SMTP_USERNAME | SMTP username
+smtppassword | - | - | SMTP_PASSWORD | SMTP password
+smtpsecure | - | - | SMTP_SECURE | if true the connection will use TLS when connecting to server.
+subject | 'This is an email containing your dashboard report' | - | SUBJECT |Subject for the email
 
 You can also find this information using help command.
 ```
@@ -55,7 +57,6 @@ Reporting
 - Each line should have format NAME=VALUE
 - Lines starting with # are considered as comments.
 - There is no special handling of quotation marks.
-- Currently supported variables are *CHROMIUM_PATH*, *USERNAME*, *PASSWORD*,  *FILENAME*, *FROM*, *TO*, *TRANSPORT*, *SMTP_HOST*, *SMTP_PORT*, *SMTP_SECURE*, *SMTP_USER*, *SMTP_PASSWORD*.
 
 NOTE: Values from the environment file has higher priority than command line argument. For example, if you add filename as *test* in *.env* file and also add `--filename report` command option, the downloded report's name will be *test*.
 
@@ -112,6 +113,18 @@ reporting --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b
 You can choose to set options using *.env* file or the command line argument values in any combination. Make sure to specify all required values to avoid getting errors.
 
 To modify the body of your email, you can simply edit *index.hbs* file.
+
+## Limitations
+- If a URL contains `!`, history expansion needs to be disable temporarity. 
+
+  bash: `set +H`
+
+  zsh: `setopt nobanghist`
+
+
+  Alternate option would be adding URL value in envirnoment variable as URL="<url-with-!>" 
+
+- All command option currently accept only lower-case letters.
 
 ## Troubleshooting
 

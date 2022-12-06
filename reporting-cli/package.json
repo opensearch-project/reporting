@@ -13,10 +13,9 @@
     "nodemailer": "^6.8.0",
     "nodemailer-express-handlebars": "^5.0.0",
     "ora": "^6.1.2",
-    "puppeteer": "^19.1.1",
-    "jest": "^29.2.2"
+    "puppeteer": "^19.1.1"
   },
   "bin": {
-    "reporting": "src/index.js"
+    "reporting": "./src/index.js"
   }
 }
