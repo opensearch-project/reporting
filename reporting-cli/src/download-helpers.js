@@ -143,12 +143,14 @@ export async function downloadReport(url, format, width, height, filename, authT
       });
     } else if (format === FORMAT.CSV) {
       await page.click('button[id="downloadReport"]');
+
       await new Promise(resolve => setTimeout(resolve, 1000));
+
       const is_enabled = await page.evaluate(() => document.querySelector('#generateCSV[disabled]') == null);
       
       // Check if generateCSV button is enabled.
       if (is_enabled) {
-        let catcher = page.waitForResponse(r => r.request().url().includes('/_dashboards/api/reporting/generateReport'));
+        let catcher = page.waitForResponse(r => r.request().url().includes('/api/reporting/generateReport'));
         page.click('button[id="generateCSV"]');
         let response = await catcher;
         let payload = await response.json();
