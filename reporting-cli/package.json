@@ -3,6 +3,9 @@
   "description": "Download reports from anywhere",
   "main": "index.js",
   "type": "module",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "aws-sdk": "^2.1237.0",
     "commander": "^9.4.0",
@@ -17,5 +20,8 @@
   },
   "bin": {
     "reporting": "./src/index.js"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1"
   }
 }
