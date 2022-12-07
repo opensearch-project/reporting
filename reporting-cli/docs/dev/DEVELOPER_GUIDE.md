@@ -6,7 +6,7 @@
 
 1. Checkout this package from version control
     ```
-    git clone git@github.com:opensearch-project/dashboards-reports.git
+    git clone git@github.com:opensearch-project/dashboards-reporting.git
     cd dashboards-reports
     git checkout main
     ```
