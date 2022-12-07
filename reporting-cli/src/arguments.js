@@ -88,7 +88,7 @@ function getOptions(options) {
     }
 
     // Set url.
-    commandOptions.url = process.env.URL || options.url;
+    commandOptions.url = options.url || process.env.URL ;
     if (commandOptions.url === undefined || commandOptions.url.length <= 0) {
         spinner.fail('Please specify URL');
         exit(1);
@@ -99,27 +99,31 @@ function getOptions(options) {
         commandOptions.url = commandOptions.url.substring(1, commandOptions.url.length - 1)
     }
 
-    // Get credentials from .env file.
-    commandOptions.username = process.env.USERNAME;
-    commandOptions.password = process.env.PASSWORD;
-
-    // Set tenant
-    commandOptions.tenant = options.tenant;
-
-    // If credentials are not set in .env file, get credentials from command line arguments.
-    if ((commandOptions.username === undefined || commandOptions.username.length <= 0) && options.credentials !== undefined) {
+    // Get credentials from command line arguments.
+    if (options.credentials !== undefined) {
         commandOptions.username = options.credentials.split(":")[0];
-    }
-    if ((commandOptions.password === undefined || commandOptions.password.length <= 0) && options.credentials !== undefined) {
         commandOptions.password = options.credentials.split(":")[1];
+    }
+    
+    // Get credentials from .env file
+    if(commandOptions.username === null || commandOptions.username.length <= 0) {
+        commandOptions.username = process.env.USERNAME;
+    }
+    if(commandOptions.password === null || commandOptions.password.length <= 0) {
+        commandOptions.password = process.env.PASSWORD;
     }
 
     // If auth type is not none & credentials are missing, exit with error.
     commandOptions.auth = options.auth;
-    if (commandOptions.auth != undefined && commandOptions.auth != 'none' && commandOptions.username == undefined && commandOptions.password == undefined) {
+    if ((commandOptions.auth !== undefined && commandOptions.auth !== 'none') && 
+        (commandOptions.username == undefined || commandOptions.username.length <= 0)||
+        (commandOptions.password == undefined || commandOptions.password.length <= 0)) {
         spinner.fail('Please specify a valid username or password');
         exit(1);
     }
+
+    // Set tenant
+    commandOptions.tenant = options.tenant;
 
     // Set report format.
     commandOptions.format = options.format;
@@ -131,28 +135,28 @@ function getOptions(options) {
     }
 
     // Set default filename is not specified.
-    commandOptions.filename = process.env.FILENAME || options.filename;
+    commandOptions.filename = options.filename || process.env.FILENAME;
 
     // Set width and height of the window
     commandOptions.width = Number(options.width);
     commandOptions.height = Number(options.height);
 
     // Set transport for the email.
-    commandOptions.transport = process.env.TRANSPORT || options.transport;
+    commandOptions.transport = options.transport || process.env.TRANSPORT;
 
     // Set email addresse if specified.
-    commandOptions.sender = process.env.FROM || options.from;
-    commandOptions.recipient = process.env.TO || options.to;
+    commandOptions.sender = options.from || process.env.FROM;
+    commandOptions.recipient = options.to || process.env.TO ;
 
     // Set SMTP options.
-    commandOptions.smtphost = process.env.SMTP_HOST || options.smtphost;
-    commandOptions.smtpport = process.env.SMTP_PORT || options.smtpport;
-    commandOptions.smtpsecure = process.env.SMTP_SECURE || options.smtpsecure;
-    commandOptions.smtpusername = process.env.SMTP_USERNAME || options.smtpusername;
-    commandOptions.smtppassword = process.env.SMTP_PASSWORD || options.smtppassword;
+    commandOptions.smtphost = options.smtphost || process.env.SMTP_HOST;
+    commandOptions.smtpport = options.smtpport || process.env.SMTP_PORT;
+    commandOptions.smtpsecure = options.smtpsecure || process.env.SMTP_SECURE;
+    commandOptions.smtpusername = options.smtpusername || process.env.SMTP_USERNAME;
+    commandOptions.smtppassword = options.smtppassword || process.env.SMTP_PASSWORD;
 
     // Set email subject.
-    commandOptions.subject = process.env.SUBJECT || options.subject;
+    commandOptions.subject = options.subject || process.env.SUBJECT;
 
     spinner.succeed('Fetched argument values')
     return commandOptions;

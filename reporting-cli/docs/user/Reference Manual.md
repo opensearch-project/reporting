@@ -37,6 +37,7 @@ smtpusername | - | - | SMTP_USERNAME | SMTP username
 smtppassword | - | - | SMTP_PASSWORD | SMTP password
 smtpsecure | - | - | SMTP_SECURE | if true the connection will use TLS when connecting to server.
 subject | 'This is an email containing your dashboard report' | - | SUBJECT |Subject for the email
+| - | - | - | CHROMIUM_PATH | path to chromium directory
 
 You can also find this information using help command.
 ```
@@ -58,7 +59,7 @@ Reporting
 - Lines starting with # are considered as comments.
 - There is no special handling of quotation marks.
 
-NOTE: Values from the environment file has higher priority than command line argument. For example, if you add filename as *test* in *.env* file and also add `--filename report` command option, the downloded report's name will be *test*.
+NOTE: Values from the command line argument has higher priority than environment file. For example, if you add filename as *test* in *.env* file and also add `--filename report` command option, the downloded report's name will be *report*.
 
 ### Example
 
@@ -89,7 +90,7 @@ Prerequisites:
 
 Sample command to send email with report as an attachment:
 ```
-reporting --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d --transport SES --from <sender_email_id> --to <recipient_email_id>
+reporting --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d --transport ses --from <sender_email_id> --to <recipient_email_id>
 ```
 This example uses default values for all other options.
 
@@ -107,7 +108,7 @@ For sending email using SMTP transport, the options **SMTP_HOST**, **SMTP_PORT**
 
 Once above options are set in .env file, you can send the email using below sample command.
 ```
-reporting --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d --transport SMTP --from <sender_email_id> --to <recipient_email_id>
+reporting --url https://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d --transport smtp --from <sender_email_id> --to <recipient_email_id>
 ```
 
 You can choose to set options using *.env* file or the command line argument values in any combination. Make sure to specify all required values to avoid getting errors.
@@ -115,6 +116,10 @@ You can choose to set options using *.env* file or the command line argument val
 To modify the body of your email, you can simply edit *index.hbs* file.
 
 ## Limitations
+- Supported platforms are Windows x86, Windows x64, Mac Intel, Mac ARM, Linux x86, Linux x64.
+  
+  For any other platform, users can take advantage of *CHROMIUM_PATH* environment variable to use custom chromium.
+
 - If a URL contains `!`, history expansion needs to be disable temporarity. 
 
   bash: `set +H`
