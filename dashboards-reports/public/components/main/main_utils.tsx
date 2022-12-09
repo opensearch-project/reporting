@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import 'babel-polyfill';
 import { i18n } from '@osd/i18n';
-import { HttpFetchOptions, HttpSetup } from '../../../../../src/core/public';
+import 'babel-polyfill';
+import { HttpSetup } from '../../../../../src/core/public';
 import { uiSettingsService } from '../utils/settings_service';
+import { GENERATE_REPORT_PARAM } from '../visual_report/constants';
 
 export const getAvailableNotificationsChannels = (configList: any) => {
   let availableChannels = [];
@@ -14,16 +15,16 @@ export const getAvailableNotificationsChannels = (configList: any) => {
     let channelEntry = {};
     channelEntry = {
       label: configList[i].config.name,
-      id: configList[i].config_id
-    }
+      id: configList[i].config_id,
+    };
     availableChannels.push(channelEntry);
   }
   return availableChannels;
-}
+};
 
 type fileFormatsOptions = {
-  [key: string]: string
-}
+  [key: string]: string;
+};
 
 export const fileFormatsUpper: fileFormatsOptions = {
   csv: 'CSV',
@@ -164,12 +165,25 @@ export const generateReportFromDefinitionId = async (
     })
     .then(async (response: any) => {
       // for emailing a report, this API response doesn't have response body
-      if (response) {
-        const fileFormat = extractFileFormat(response['filename']);
-        const fileName = response['filename'];
+      if (!response) return;
+      console.log('❗response:', response);
+      const fileFormat = extractFileFormat(response['filename']);
+      const fileName = response['filename'];
+      if (fileFormat === 'csv') {
         await readStreamToFile(await response['data'], fileFormat, fileName);
+        status = true;
+        return;
       }
-      status = true;
+
+      // generate reports in browser is memory intensive, do it in a new process by removing referrer
+      const a = document.createElement('a');
+      a.href =
+        location.href.replace(/\/app\/.+/, '') +
+        `${response.queryUrl}&${GENERATE_REPORT_PARAM}=${response.reportId}`;
+      console.log('❗a.href:', a.href);
+      a.target = '_blank';
+      a.rel = 'noreferrer';
+      a.click();
     })
     .catch((error) => {
       console.log('error on generating report:', error);
@@ -196,12 +210,26 @@ export const generateReportById = async (
       query: uiSettingsService.getSearchParams(),
     })
     .then(async (response) => {
+      console.log('❗response:', response);
       //TODO: duplicate code, extract to be a function that can reuse. e.g. handleResponse(response)
       const fileFormat = extractFileFormat(response['filename']);
+      console.log('❗fileFormat:', fileFormat);
       const fileName = response['filename'];
-      await readStreamToFile(await response['data'], fileFormat, fileName);
-      handleSuccessToast();
-      return response;
+      if (fileFormat === 'csv') {
+        await readStreamToFile(await response['data'], fileFormat, fileName);
+        handleSuccessToast();
+        return response;
+      }
+
+      // generate reports in browser is memory intensive, do it in a new process by removing referrer
+      const a = document.createElement('a');
+      a.href =
+        location.href.replace(/\/app\/.+/, '') +
+        `${response.queryUrl}&${GENERATE_REPORT_PARAM}=${reportId}`;
+      console.log('❗a.href:', a.href);
+      a.target = '_blank';
+      a.rel = 'noreferrer';
+      a.click();
     })
     .catch((error) => {
       console.log('error on generating report by id:', error);

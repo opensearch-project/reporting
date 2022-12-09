@@ -4,24 +4,31 @@
  */
 
 /* eslint-disable no-restricted-globals */
-import $ from 'jquery';
+//@ts-check
 import { i18n } from '@osd/i18n';
+import $ from 'jquery';
+import { parse } from 'url';
 import { readStreamToFile } from '../main/main_utils';
+import { uiSettingsService } from '../utils/settings_service';
 import {
-  contextMenuCreateReportDefinition,
-  getTimeFieldsFromUrl,
-  displayLoadingModal,
+    GENERATE_REPORT_FILE_NAME,
+  GENERATE_REPORT_PARAM,
+  GENERATE_REPORT_PARAM_REGEX,
+} from '../visual_report/constants';
+import { generateReport } from '../visual_report/generate_report';
+import {
   addSuccessOrFailureToast,
+  contextMenuCreateReportDefinition,
   contextMenuViewReports,
+  displayLoadingModal,
+  getTimeFieldsFromUrl,
   replaceQueryURL,
 } from './context_menu_helpers';
 import {
+  getMenuItem,
   popoverMenu,
   popoverMenuDiscover,
-  getMenuItem,
 } from './context_menu_ui';
-import { parse } from 'url';
-import { uiSettingsService } from '../utils/settings_service';
 
 const generateInContextReport = async (
   timeRanges,
@@ -102,23 +109,26 @@ const generateInContextReport = async (
       credentials: 'include',
     }
   )
-    .then((response) => {
-      if (response.status === 200) {
+    .then(async (response) => ([response.status, await response.json()]))
+    .then(async ([status, data]) => {
+      if (status === 200 && (fileFormat === 'pdf' || fileFormat === 'png')) {
+        await generateReport(data.reportId);
+      }
+      if (status === 200) {
         $('#reportGenerationProgressModal').remove();
         addSuccessOrFailureToast('success');
       } else {
-        if (response.status === 403) {
+        if (status === 403) {
           addSuccessOrFailureToast('permissionsFailure');
-        } else if (response.status === 503) {
+        } else if (status === 503) {
           addSuccessOrFailureToast('timeoutFailure', reportSource);
         } else {
           addSuccessOrFailureToast('failure');
         }
       }
-      return response.json();
-    })
-    .then(async (data) => {
-      await readStreamToFile(data.data, fileFormat, data.filename);
+      if (data.data) {
+        await readStreamToFile(data.data, fileFormat, data.filename);
+      }
     });
 };
 
@@ -213,8 +223,32 @@ $(function () {
     });
   });
 
+  checkURLParams();
   locationHashChanged();
 });
+
+/* generate a report if flagged in URL params */
+const checkURLParams = async () => {
+  const [hash, query] = location.href.split('#')[1].split('?');
+  const params = new URLSearchParams(query);
+  console.log('❗params:', params);
+  const id = params.get(GENERATE_REPORT_PARAM);
+  if (!id) return;
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  displayLoadingModal();
+  const success = await generateReport(id, 30000);
+  if (success) {
+    window.history.replaceState(
+      {},
+      '',
+      `#${hash}?${query.replace(GENERATE_REPORT_PARAM_REGEX, '')}`
+    );
+    $('#reportGenerationProgressModal').remove();
+    addSuccessOrFailureToast('success');
+  } else {
+    addSuccessOrFailureToast('failure');
+  }
+};
 
 const isDiscoverNavMenu = (navMenu) => {
   return (

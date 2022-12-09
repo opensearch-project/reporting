@@ -246,7 +246,7 @@ export const popoverMenuDiscover = (savedObjectAvailable) => {
 
 export const permissionsMissingOnGeneration = () => {
   return `
-  <div class="euiToast euiToast--danger" id="permissionsMissingErrorToast">
+  <div class="euiToast euiToast--danger" id="permissionsMissingErrorToast" data-html2canvas-ignore>
   <p class="euiScreenReaderOnly">${i18n.translate(
     'opensearch.reports.menu.newNotificationAppears',
     { defaultMessage: 'A new notification appears' }
@@ -277,7 +277,7 @@ export const permissionsMissingOnGeneration = () => {
 
 export const reportGenerationSuccess = () => {
   return `
-  <div class="euiToast euiToast--success" id="reportSuccessToast">
+  <div class="euiToast euiToast--success" id="reportSuccessToast" data-html2canvas-ignore>
     <p class="euiScreenReaderOnly">A new notification appears</p>
     <div class="euiToastHeader euiToastHeader--withBody"
     aria-label="Notification" data-test-subj="euiToastHeader">
@@ -319,7 +319,7 @@ export const reportGenerationFailure = (
   })
 ) => {
   return `
-  <div class="euiToast euiToast--danger" id="reportFailureToast">
+  <div class="euiToast euiToast--danger" id="reportFailureToast" data-html2canvas-ignore>
     <p class="euiScreenReaderOnly">A new notification appears</p>
     <div class="euiToastHeader euiToastHeader--withBody"
     aria-label="Notification" data-test-subj="euiToastHeader">
@@ -346,7 +346,7 @@ export const reportGenerationFailure = (
 
 export const reportGenerationInProgressModal = () => {
   return `
-  <div class="euiOverlayMask" id="reportGenerationProgressModal">
+  <div class="euiOverlayMask" id="reportGenerationProgressModal" data-html2canvas-ignore>
   <div data-focus-guard="true" tabindex="0" style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"></div>
   <div data-focus-guard="true" tabindex="1" style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"></div>
   <div data-focus-lock-disabled="false">

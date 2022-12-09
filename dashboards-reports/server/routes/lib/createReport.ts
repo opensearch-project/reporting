@@ -16,13 +16,14 @@ import {
   RequestHandlerContext,
 } from '../../../../../src/core/server';
 import { createSavedSearchReport } from '../utils/savedSearchReportHelper';
-import { ReportSchemaType } from '../../model';
+import { ReportSchemaType, VisualReportSchemaType } from '../../model';
 import { CreateReportResultType } from '../utils/types';
 import { createVisualReport } from '../utils/visual_report/visualReportHelper';
 import { saveReport } from './saveReport';
 import { SemaphoreInterface } from 'async-mutex';
 import { ReportingConfig } from 'server';
 import _ from 'lodash';
+import { getFileName } from '../utils/helpers';
 
 export const createReport = async (
   request: OpenSearchDashboardsRequest,
@@ -94,13 +95,31 @@ export const createReport = async (
 
       const [value, release] = await semaphore.acquire();
       try {
-        createReportResult = await createVisualReport(
+        const {
+          core_params,
+          report_name: reportName,
+          report_source: reportSource,
+        } = reportParams;
+        const coreParams = core_params as VisualReportSchemaType;
+        const {
+          header,
+          footer,
+          window_height: windowHeight,
+          window_width: windowWidth,
+          report_format: reportFormat,
+        } = coreParams;
+        const curTime = new Date();
+        const timeCreated = curTime.valueOf();
+        const fileName = `${getFileName(reportName, curTime)}.${reportFormat}`;
+
+        return { timeCreated, dataUrl: '', fileName, reportId, queryUrl: relativeUrl };
+        /* createReportResult = await createVisualReport(
           reportParams,
           completeQueryUrl,
           logger,
           extraHeaders,
           timezone
-        );
+        ); */
       } finally {
         release();
       }
