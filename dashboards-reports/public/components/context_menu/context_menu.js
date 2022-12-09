@@ -114,8 +114,8 @@ const generateInContextReport = async (
       if (status === 200 && (fileFormat === 'pdf' || fileFormat === 'png')) {
         await generateReport(data.reportId);
       }
+      $('#reportGenerationProgressModal').remove();
       if (status === 200) {
-        $('#reportGenerationProgressModal').remove();
         addSuccessOrFailureToast('success');
       } else {
         if (status === 403) {

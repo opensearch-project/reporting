@@ -184,6 +184,7 @@ export const generateReportFromDefinitionId = async (
       a.target = '_blank';
       a.rel = 'noreferrer';
       a.click();
+      status = true;
     })
     .catch((error) => {
       console.log('error on generating report:', error);
