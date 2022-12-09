@@ -88,7 +88,7 @@ function getOptions(options) {
     }
 
     // Set url.
-    commandOptions.url = options.url || process.env.URL ;
+    commandOptions.url = options.url || process.env.URL;
     if (commandOptions.url === undefined || commandOptions.url.length <= 0) {
         spinner.fail('Please specify URL');
         exit(1);
@@ -104,19 +104,19 @@ function getOptions(options) {
         commandOptions.username = options.credentials.split(":")[0];
         commandOptions.password = options.credentials.split(":")[1];
     }
-    
+
     // Get credentials from .env file
-    if(commandOptions.username === null || commandOptions.username.length <= 0) {
+    if (commandOptions.username === null || commandOptions.username.length <= 0) {
         commandOptions.username = process.env.USERNAME;
     }
-    if(commandOptions.password === null || commandOptions.password.length <= 0) {
+    if (commandOptions.password === null || commandOptions.password.length <= 0) {
         commandOptions.password = process.env.PASSWORD;
     }
 
     // If auth type is not none & credentials are missing, exit with error.
     commandOptions.auth = options.auth;
-    if ((commandOptions.auth !== undefined && commandOptions.auth !== 'none') && 
-        (commandOptions.username == undefined || commandOptions.username.length <= 0)||
+    if ((commandOptions.auth !== undefined && commandOptions.auth !== 'none') &&
+        (commandOptions.username == undefined || commandOptions.username.length <= 0) ||
         (commandOptions.password == undefined || commandOptions.password.length <= 0)) {
         spinner.fail('Please specify a valid username or password');
         exit(1);
@@ -146,7 +146,7 @@ function getOptions(options) {
 
     // Set email addresse if specified.
     commandOptions.sender = options.from || process.env.FROM;
-    commandOptions.recipient = options.to || process.env.TO ;
+    commandOptions.recipient = options.to || process.env.TO;
 
     // Set SMTP options.
     commandOptions.smtphost = options.smtphost || process.env.SMTP_HOST;
