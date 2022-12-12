@@ -139,6 +139,13 @@ If you are using a Ubuntu/Debian system, install the following packages:
 
 The installation command for both systems can be found [here](./dashboards-reports/rendering-engine/headless-chrome/README.md).
 
+### Download Error: 
+
+If you see Error: net::ERR_ADDRESS_INVALID in the logs while downlaoding report, enable plugin config and add the following configurations that can be set in opensearch_dashboards.yml
+```
+opensearch_reporting.osd_server.hostname: '127.0.0.1'
+```
+
 ## Code of Conduct
 
 This project has adopted the [Amazon Open Source Code of Conduct](CODE_OF_CONDUCT.md). For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq), or contact [opensource-codeofconduct@amazon.com](mailto:opensource-codeofconduct@amazon.com) with any additional questions or comments.
