@@ -141,7 +141,7 @@ The installation command for both systems can be found [here](./dashboards-repor
 
 ### Download Error: 
 
-If you see Error: net::ERR_ADDRESS_INVALID in the logs while downlaoding report, enable plugin config and add the following configurations that can be set in opensearch_dashboards.yml
+If you see Error: net::ERR_ADDRESS_INVALID in the logs while downlaoding report, add the following configurations in opensearch_dashboards.yml
 ```
 opensearch_reporting.osd_server.hostname: '127.0.0.1'
 ```
