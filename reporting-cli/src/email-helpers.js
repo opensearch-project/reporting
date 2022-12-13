@@ -7,17 +7,25 @@ import nodemailer from "nodemailer";
 import hbs from "nodemailer-express-handlebars";
 import ora from 'ora';
 import { FORMAT } from './constants.js';
-process.env.AWS_SDK_LOAD_CONFIG = true;
 import AWS from "aws-sdk";
-const ses = new AWS.SES();
 const spinner = ora();
+let ses;
+
+try {
+  process.env.AWS_SDK_LOAD_CONFIG = true;
+  ses = new AWS.SES();
+} catch (err) {
+  // Do not set AWS_SDK_LOAD_CONFIG if aws config file is missing.
+}
 
 export async function sendEmail(filename, format, sender, recipient, transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword, subject) {
-  if (transport !== undefined && sender !== undefined && recipient !== undefined) {
+  if (ses !== undefined && transport !== undefined && sender !== undefined && recipient !== undefined) {
     spinner.start('Sending email...');
   } else {
-    if(transport === undefined && sender === undefined && recipient === undefined) {
+    if (transport === undefined && sender === undefined && recipient === undefined) {
       return;
+    } else if (ses === undefined) {
+      spinner.warn('aws config not found');
     } else if (transport === undefined) {
       spinner.warn('Transport value is missing');
     } else if (sender === undefined || recipient === undefined) {

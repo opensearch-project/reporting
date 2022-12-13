@@ -129,7 +129,7 @@ export async function downloadReport(url, format, width, height, filename, authT
       const scrollHeight = await page.evaluate(
         () => document.documentElement.scrollHeight
       );
-      
+
       buffer = await page.pdf({
         margin: undefined,
         width: 1680,
@@ -143,11 +143,9 @@ export async function downloadReport(url, format, width, height, filename, authT
       });
     } else if (format === FORMAT.CSV) {
       await page.click('button[id="downloadReport"]');
-
       await new Promise(resolve => setTimeout(resolve, 1000));
-
       const is_enabled = await page.evaluate(() => document.querySelector('#generateCSV[disabled]') == null);
-      
+
       // Check if generateCSV button is enabled.
       if (is_enabled) {
         let catcher = page.waitForResponse(r => r.request().url().includes('/api/reporting/generateReport'));
@@ -167,7 +165,7 @@ export async function downloadReport(url, format, width, height, filename, authT
     const curTime = new Date();
     const timeCreated = curTime.valueOf();
     const data = { timeCreated, dataUrl: buffer.toString('base64'), fileName };
-    
+
     await readStreamToFile(data.dataUrl, fileName, format);
     spinner.succeed('The report is downloaded');
   } catch (e) {
@@ -236,16 +234,18 @@ const basicAuthentication = async (page, overridePage, url, username, password, 
     if (tenant === 'global' || tenant === 'private') {
       await page.click('label[for=' + tenant + ']');
     } else {
-      await page.type('input[data-test-subj="comboBoxSearchInput"]', tenant);
       await page.click('label[for="custom"]');
+      await page.click('button[data-test-subj="comboBoxToggleListButton"]');
+      await page.type('input[data-test-subj="comboBoxSearchInput"]', tenant);
     }
   }
   catch (err) {
     spinner.fail('Invalid username or password');
     exit(1);
   }
-  await page.click('button[data-test-subj="confirm"]');
 
+  await page.waitForTimeout(2000);
+  await page.click('button[data-test-subj="confirm"]');
   await page.waitForTimeout(25000);
   await overridePage.goto(url, { waitUntil: 'networkidle0' });
   await overridePage.waitForTimeout(5000);
@@ -255,6 +255,7 @@ const basicAuthentication = async (page, overridePage, url, username, password, 
     spinner.fail('Invalid tenant');
     exit(1);
   }
+  await page.goto(url, { waitUntil: 'networkidle0' });
 };
 
 const samlAuthentication = async (page, url, username, password, tenant) => {
@@ -272,14 +273,16 @@ const samlAuthentication = async (page, url, username, password, tenant) => {
     if (tenant === 'global' || tenant === 'private') {
       await page.click('label[for=' + tenant + ']');
     } else {
-      await page.type('input[data-test-subj="comboBoxSearchInput"]', tenant);
       await page.click('label[for="custom"]');
+      await page.click('button[data-test-subj="comboBoxToggleListButton"]');
+      await page.type('input[data-test-subj="comboBoxSearchInput"]', tenant);
     }
   }
   catch (err) {
     spinner.fail('Invalid username or password');
     exit(1);
   }
+  await page.waitForTimeout(2000);
   await page.click('button[data-test-subj="confirm"]');
   await page.waitForTimeout(25000);
   await page.click(`a[href='${refUrl}']`);
@@ -296,14 +299,16 @@ const cognitoAuthentication = async (page, overridePage, url, username, password
     if (tenant === 'global' || tenant === 'private') {
       await page.click('label[for=' + tenant + ']');
     } else {
-      await page.type('input[data-test-subj="comboBoxSearchInput"]', tenant);
       await page.click('label[for="custom"]');
+      await page.click('button[data-test-subj="comboBoxToggleListButton"]');
+      await page.type('input[data-test-subj="comboBoxSearchInput"]', tenant);
     }
   }
   catch (err) {
     spinner.fail('Invalid username or password');
     exit(1);
   }
+  await page.waitForTimeout(2000);
   await page.click('button[data-test-subj="confirm"]');
   await page.waitForTimeout(25000);
   await overridePage.goto(url, { waitUntil: 'networkidle0' });
