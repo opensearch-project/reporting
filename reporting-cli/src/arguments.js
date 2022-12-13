@@ -116,8 +116,8 @@ function getOptions(options) {
     // If auth type is not none & credentials are missing, exit with error.
     commandOptions.auth = options.auth;
     if ((commandOptions.auth !== undefined && commandOptions.auth !== 'none') &&
-        (commandOptions.username == undefined || commandOptions.username.length <= 0) ||
-        (commandOptions.password == undefined || commandOptions.password.length <= 0)) {
+        ((commandOptions.username == undefined || commandOptions.username.length <= 0) ||
+        (commandOptions.password == undefined || commandOptions.password.length <= 0))) {
         spinner.fail('Please specify a valid username or password');
         exit(1);
     }
