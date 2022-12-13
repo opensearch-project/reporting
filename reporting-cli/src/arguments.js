@@ -117,7 +117,7 @@ function getOptions(options) {
     commandOptions.auth = options.auth;
     if ((commandOptions.auth !== undefined && commandOptions.auth !== 'none') &&
         ((commandOptions.username == undefined || commandOptions.username.length <= 0) ||
-        (commandOptions.password == undefined || commandOptions.password.length <= 0))) {
+            (commandOptions.password == undefined || commandOptions.password.length <= 0))) {
         spinner.fail('Please specify a valid username or password');
         exit(1);
     }
