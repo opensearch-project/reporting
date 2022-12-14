@@ -377,7 +377,7 @@ export const reportGenerationInProgressModal = () => {
                    'opensearch.reports.menu.progress.youCanClose',
                    {
                      defaultMessage:
-                       'Please do not close this dialog while report is being generated.',
+                       'Please keep this dialog open while report is being generated.',
                    }
                  )}</div>
                  <div class="euiSpacer euiSpacer--l"></div>

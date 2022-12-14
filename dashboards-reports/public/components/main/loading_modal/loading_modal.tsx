@@ -59,7 +59,7 @@ export function GenerateReportLoadingModal(props: { setShowLoading: any }) {
             <EuiText>
               {i18n.translate('opensearch.reports.loading.youCanClose', {
                 defaultMessage:
-                  'Please do not close this dialog while report is being generated.',
+                  'Please keep this dialog open while report is being generated.',
               })}
             </EuiText>
             <EuiSpacer />

@@ -12,7 +12,7 @@ export const GENERATE_REPORT_PARAM_REGEX = new RegExp(
   ''
 );
 
-export enum REPORT_TYPE {
+export enum VISUAL_REPORT_TYPE {
   dashboard = 'Dashboard',
   visualization = 'Visualization',
   notebook = 'Notebook',

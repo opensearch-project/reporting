@@ -12,8 +12,8 @@ import { reportingStyle } from './assets/report_styles';
 import {
   converter,
   DEFAULT_REPORT_HEADER,
-  REPORT_TYPE,
   SELECTOR,
+  VISUAL_REPORT_TYPE,
 } from './constants';
 
 const waitForSelector = (selector: string, timeout = 30000) => {
@@ -51,13 +51,16 @@ const timeout = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-const removeNonReportElements = (doc: Document, reportSource: REPORT_TYPE) => {
+const removeNonReportElements = (
+  doc: Document,
+  reportSource: VISUAL_REPORT_TYPE
+) => {
   // remove buttons
   doc.querySelectorAll("[class^='euiButton']").forEach((e) => e.remove());
   // remove top navBar
   doc.querySelectorAll("[class^='euiHeader']").forEach((e) => e.remove());
   // remove visualization editor
-  if (reportSource === REPORT_TYPE.visualization) {
+  if (reportSource === VISUAL_REPORT_TYPE.visualization) {
     doc.querySelector('[data-test-subj="splitPanelResizer"]')?.remove();
     doc.querySelector('.visEditor__collapsibleSidebar')?.remove();
   }
@@ -118,7 +121,7 @@ export const generateReport = async (id: string, forceDelay = 15000) => {
   const format =
     report.report_definition.report_params.core_params.report_format;
   const reportSource = report.report_definition.report_params
-    .report_source as REPORT_TYPE;
+    .report_source as unknown as VISUAL_REPORT_TYPE;
   const headerInput = report.report_definition.report_params.core_params.header;
   const footerInput = report.report_definition.report_params.core_params.footer;
   const header = headerInput
@@ -131,18 +134,18 @@ export const generateReport = async (id: string, forceDelay = 15000) => {
 
   await timeout(1000);
   switch (reportSource) {
-    case REPORT_TYPE.dashboard:
+    case VISUAL_REPORT_TYPE.dashboard:
       await waitForSelector(SELECTOR.dashboard);
       break;
-    case REPORT_TYPE.visualization:
+    case VISUAL_REPORT_TYPE.visualization:
       await waitForSelector(SELECTOR.visualization);
       break;
-    case REPORT_TYPE.notebook:
+    case VISUAL_REPORT_TYPE.notebook:
       await waitForSelector(SELECTOR.notebook);
       break;
     default:
       throw Error(
-        `report source can only be one of [Dashboard, Visualization]`
+        `report source can only be one of [Dashboard, Visualization, Notebook]`
       );
   }
   await timeout(forceDelay);
@@ -153,6 +156,7 @@ export const generateReport = async (id: string, forceDelay = 15000) => {
     header,
     footer
   );
+  // Safari support pending on https://github.com/niklasvh/html2canvas/pull/2911
   return html2canvas(document.body, {
     windowWidth: width,
     windowHeight: height,
@@ -169,18 +173,20 @@ export const generateReport = async (id: string, forceDelay = 15000) => {
     },
   }).then(function (canvas) {
     // TODO remove this and 'removeContainer: false' when https://github.com/niklasvh/html2canvas/pull/2949 is merged
-    document.querySelectorAll<HTMLIFrameElement>('.html2canvas-container').forEach((e) => {
-      const iframe = e.contentWindow;
-      if (e) {
-        e.src = 'about:blank';
-        if (iframe) {
-          iframe.document.write('');
-          iframe.document.clear();
-          iframe.close();
+    document
+      .querySelectorAll<HTMLIFrameElement>('.html2canvas-container')
+      .forEach((e) => {
+        const iframe = e.contentWindow;
+        if (e) {
+          e.src = 'about:blank';
+          if (iframe) {
+            iframe.document.write('');
+            iframe.document.clear();
+            iframe.close();
+          }
+          e.remove();
         }
-        e.remove();
-      }
-    });
+      });
 
     if (format === 'png') {
       const link = document.createElement('a');
