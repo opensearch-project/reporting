@@ -92,13 +92,11 @@ const computeHeight = (height: number, header: string, footer: string) => {
 };
 
 export const generateReport = async (id: string, forceDelay = 15000) => {
-  console.log('❗id:', id);
   const http = uiSettingsService.getHttpClient();
 
   const report = await http.get<ReportSchemaType>(
     '../api/reporting/reports/' + id
   );
-  console.log('❗report:', report);
   const format =
     report.report_definition.report_params.core_params.report_format;
   const reportSource = report.report_definition.report_params

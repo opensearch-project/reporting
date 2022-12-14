@@ -209,10 +209,8 @@ export const generateReportById = async (
       query: uiSettingsService.getSearchParams(),
     })
     .then(async (response) => {
-      console.log('❗response:', response);
       //TODO: duplicate code, extract to be a function that can reuse. e.g. handleResponse(response)
       const fileFormat = extractFileFormat(response['filename']);
-      console.log('❗fileFormat:', fileFormat);
       const fileName = response['filename'];
       if (fileFormat === 'csv') {
         await readStreamToFile(await response['data'], fileFormat, fileName);
@@ -225,7 +223,6 @@ export const generateReportById = async (
       a.href =
         window.location.origin +
         `${response.queryUrl}&${GENERATE_REPORT_PARAM}=${reportId}`;
-      console.log('❗a.href:', a.href);
       a.target = '_blank';
       a.rel = 'noreferrer';
       a.click();

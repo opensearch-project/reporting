@@ -231,7 +231,6 @@ $(function () {
 const checkURLParams = async () => {
   const [hash, query] = location.href.split('#')[1].split('?');
   const params = new URLSearchParams(query);
-  console.log('❗params:', params);
   const id = params.get(GENERATE_REPORT_PARAM);
   if (!id) return;
   await new Promise((resolve) => setTimeout(resolve, 1000));
