@@ -377,7 +377,7 @@ export const reportGenerationInProgressModal = () => {
                    'opensearch.reports.menu.progress.youCanClose',
                    {
                      defaultMessage:
-                       'You can close this dialog while we continue in the background.',
+                       'Please do not close this dialog while report is being generated.',
                    }
                  )}</div>
                  <div class="euiSpacer euiSpacer--l"></div>
@@ -385,9 +385,6 @@ export const reportGenerationInProgressModal = () => {
                     <div class="euiFlexItem euiFlexItem--flexGrowZero"><span class="euiLoadingSpinner euiLoadingSpinner--xLarge" style="min-width: 75px; min-height: 75px;"></span></div>
                  </div>
                  <div class="euiSpacer euiSpacer--l"></div>
-                 <div class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsFlexEnd euiFlexGroup--justifyContentFlexEnd euiFlexGroup--directionRow euiFlexGroup--responsive">
-                    <div class="euiFlexItem euiFlexItem--flexGrowZero"><button class="euiButton euiButton--primary" type="button" id="closeReportGenerationModalButton"><span class="euiButton__content"><span class="euiButton__text">Close</span></span></button></div>
-                 </div>
               </div>
            </div>
         </div>
