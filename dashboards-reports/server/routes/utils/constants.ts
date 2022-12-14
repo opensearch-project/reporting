@@ -91,8 +91,6 @@ export const replaceBlockedKeywords = (htmlString: string) => {
   return htmlString;
 }
 
-export const CHROMIUM_PATH = `${__dirname}/../../../.chromium/headless_shell`;
-  
 
 /**
  * Metric constants
