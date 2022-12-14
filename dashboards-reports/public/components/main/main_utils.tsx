@@ -166,7 +166,6 @@ export const generateReportFromDefinitionId = async (
     .then(async (response: any) => {
       // for emailing a report, this API response doesn't have response body
       if (!response) return;
-      console.log('❗response:', response);
       const fileFormat = extractFileFormat(response['filename']);
       const fileName = response['filename'];
       if (fileFormat === 'csv') {
@@ -178,9 +177,8 @@ export const generateReportFromDefinitionId = async (
       // generate reports in browser is memory intensive, do it in a new process by removing referrer
       const a = document.createElement('a');
       a.href =
-        location.href.replace(/\/app\/.+/, '') +
+        window.location.origin +
         `${response.queryUrl}&${GENERATE_REPORT_PARAM}=${response.reportId}`;
-      console.log('❗a.href:', a.href);
       a.target = '_blank';
       a.rel = 'noreferrer';
       a.click();
@@ -225,7 +223,7 @@ export const generateReportById = async (
       // generate reports in browser is memory intensive, do it in a new process by removing referrer
       const a = document.createElement('a');
       a.href =
-        location.href.replace(/\/app\/.+/, '') +
+        window.location.origin +
         `${response.queryUrl}&${GENERATE_REPORT_PARAM}=${reportId}`;
       console.log('❗a.href:', a.href);
       a.target = '_blank';
