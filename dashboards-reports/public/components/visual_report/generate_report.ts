@@ -9,24 +9,42 @@ import { v1 as uuidv1 } from 'uuid';
 import { ReportSchemaType } from '../../../server/model';
 import { uiSettingsService } from '../utils/settings_service';
 import { reportingStyle } from './assets/report_styles';
-import { converter, DEFAULT_REPORT_HEADER, REPORT_TYPE } from './constants';
+import {
+  converter,
+  DEFAULT_REPORT_HEADER,
+  REPORT_TYPE,
+  SELECTOR,
+} from './constants';
 
-const waitForSelector = (selector: string) => {
-  return new Promise((resolve) => {
-    if (document.querySelector(selector)) {
-      return resolve(document.querySelector(selector));
-    }
-    const observer = new MutationObserver((mutations) => {
+const waitForSelector = (selector: string, timeout = 30000) => {
+  return Promise.race([
+    new Promise((resolve) => {
       if (document.querySelector(selector)) {
-        resolve(document.querySelector(selector));
-        observer.disconnect();
+        return resolve(document.querySelector(selector));
       }
-    });
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-  });
+      const observer = new MutationObserver((mutations) => {
+        if (document.querySelector(selector)) {
+          resolve(document.querySelector(selector));
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+    }),
+    new Promise((resolve, reject) =>
+      setTimeout(
+        () =>
+          reject(
+            'Timed out waiting for selector ' +
+              selector +
+              ' while generating report.'
+          ),
+        timeout
+      )
+    ),
+  ]);
 };
 
 const timeout = (ms: number) => {
@@ -111,10 +129,23 @@ export const generateReport = async (id: string, forceDelay = 15000) => {
     report.report_definition.report_params.report_name +
     `_${new Date().toISOString()}_${uuidv1()}.${format}`;
 
-  await timeout(4000);
-  // TODO should fail if reached max timeout or not on right page
-  // await waitForSelector('#dashboardViewport');
-  // await timeout(forceDelay);
+  await timeout(1000);
+  switch (reportSource) {
+    case REPORT_TYPE.dashboard:
+      await waitForSelector(SELECTOR.dashboard);
+      break;
+    case REPORT_TYPE.visualization:
+      await waitForSelector(SELECTOR.visualization);
+      break;
+    case REPORT_TYPE.notebook:
+      await waitForSelector(SELECTOR.notebook);
+      break;
+    default:
+      throw Error(
+        `report source can only be one of [Dashboard, Visualization]`
+      );
+  }
+  await timeout(forceDelay);
 
   const width = document.documentElement.scrollWidth;
   const height = computeHeight(
@@ -138,13 +169,15 @@ export const generateReport = async (id: string, forceDelay = 15000) => {
     },
   }).then(function (canvas) {
     // TODO remove this and 'removeContainer: false' when https://github.com/niklasvh/html2canvas/pull/2949 is merged
-    document.querySelectorAll('.html2canvas-container').forEach((e: any) => {
+    document.querySelectorAll<HTMLIFrameElement>('.html2canvas-container').forEach((e) => {
       const iframe = e.contentWindow;
       if (e) {
         e.src = 'about:blank';
-        iframe.document.write('');
-        iframe.document.clear();
-        iframe.close();
+        if (iframe) {
+          iframe.document.write('');
+          iframe.document.clear();
+          iframe.close();
+        }
         e.remove();
       }
     });

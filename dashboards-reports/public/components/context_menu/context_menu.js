@@ -11,7 +11,6 @@ import { parse } from 'url';
 import { readStreamToFile } from '../main/main_utils';
 import { uiSettingsService } from '../utils/settings_service';
 import {
-    GENERATE_REPORT_FILE_NAME,
   GENERATE_REPORT_PARAM,
   GENERATE_REPORT_PARAM_REGEX,
 } from '../visual_report/constants';
@@ -109,15 +108,9 @@ const generateInContextReport = async (
       credentials: 'include',
     }
   )
-    .then(async (response) => ([response.status, await response.json()]))
+    .then(async (response) => [response.status, await response.json()])
     .then(async ([status, data]) => {
-      if (status === 200 && (fileFormat === 'pdf' || fileFormat === 'png')) {
-        await generateReport(data.reportId);
-      }
-      $('#reportGenerationProgressModal').remove();
-      if (status === 200) {
-        addSuccessOrFailureToast('success');
-      } else {
+      if (status !== 200) {
         if (status === 403) {
           addSuccessOrFailureToast('permissionsFailure');
         } else if (status === 503) {
@@ -125,10 +118,18 @@ const generateInContextReport = async (
         } else {
           addSuccessOrFailureToast('failure');
         }
-      }
-      if (data.data) {
+      } else if (fileFormat === 'pdf' || fileFormat === 'png') {
+        try {
+          await generateReport(data.reportId);
+          addSuccessOrFailureToast('success');
+        } catch (error) {
+          console.error(error);
+          addSuccessOrFailureToast('failure');
+        }
+      } else if (data.data) {
         await readStreamToFile(data.data, fileFormat, data.filename);
       }
+      $('#reportGenerationProgressModal').remove();
     });
 };
 
@@ -235,17 +236,19 @@ const checkURLParams = async () => {
   if (!id) return;
   await new Promise((resolve) => setTimeout(resolve, 1000));
   displayLoadingModal();
-  const success = await generateReport(id, 30000);
-  if (success) {
+  try {
+    await generateReport(id, 30000);
     window.history.replaceState(
       {},
       '',
       `#${hash}?${query.replace(GENERATE_REPORT_PARAM_REGEX, '')}`
     );
-    $('#reportGenerationProgressModal').remove();
     addSuccessOrFailureToast('success');
-  } else {
+  } catch (error) {
+    console.error(error);
     addSuccessOrFailureToast('failure');
+  } finally {
+    $('#reportGenerationProgressModal').remove();
   }
 };
 
