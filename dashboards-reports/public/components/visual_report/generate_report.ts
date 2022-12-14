@@ -83,10 +83,10 @@ const computeHeight = (height: number, header: string, footer: string) => {
   const headerLines = header.split('\n').length;
   const footerLines = footer.split('\n').length;
   if (headerLines) {
-    computedHeight += 100 + 40 * headerLines;
+    computedHeight += 24 * headerLines;
   }
   if (footerLines) {
-    computedHeight += 100 + 40 * footerLines;
+    computedHeight += 50 + 24 * footerLines;
   }
   return computedHeight;
 };
