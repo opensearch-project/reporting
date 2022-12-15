@@ -27,7 +27,6 @@ buildscript {
         common_utils_version = System.getProperty("common_utils.version", opensearch_build)
         job_scheduler_version = System.getProperty("job_scheduler.version", opensearch_build)
         kotlin_version = System.getProperty("kotlin.version", "1.6.0")
-        jackson_version = "2.14.1"
     }
 
     repositories {
@@ -166,10 +165,8 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
     implementation "org.json:json:20180813"
     implementation group: 'com.github.wnameless.json', name: 'json-flattener', version: '0.15.1'
-    // json-base, jackson-databind, jackson-annotations are transitive dependencies by json-flattener
+    // json-base is transitive dependencies by json-flattener
     implementation group: 'com.github.wnameless.json', name: 'json-base', version: '2.2.1'
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
-    implementation "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation "org.jetbrains.kotlin:kotlin-test:${kotlin_version}"
