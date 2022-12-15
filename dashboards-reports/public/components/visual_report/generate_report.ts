@@ -156,7 +156,6 @@ export const generateReport = async (id: string, forceDelay = 15000) => {
     header,
     footer
   );
-  // Safari support pending on https://github.com/niklasvh/html2canvas/pull/2911
   return html2canvas(document.body, {
     windowWidth: width,
     windowHeight: height,
