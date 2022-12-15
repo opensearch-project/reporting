@@ -322,7 +322,7 @@ const cognitoAuthentication = async (page, overridePage, url, username, password
   await page.goto(url, { waitUntil: 'networkidle0' });
 }
 
-export const readStreamToFile = async (
+const readStreamToFile = async (
   stream,
   fileName,
   format
