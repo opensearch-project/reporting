@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import createDOMPurify from 'dompurify';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { v1 as uuidv1 } from 'uuid';
@@ -114,6 +115,7 @@ const computeHeight = (height: number, header: string, footer: string) => {
 
 export const generateReport = async (id: string, forceDelay = 15000) => {
   const http = uiSettingsService.getHttpClient();
+  const DOMPurify = createDOMPurify(window);
 
   const report = await http.get<ReportSchemaType>(
     '../api/reporting/reports/' + id
@@ -125,9 +127,11 @@ export const generateReport = async (id: string, forceDelay = 15000) => {
   const headerInput = report.report_definition.report_params.core_params.header;
   const footerInput = report.report_definition.report_params.core_params.footer;
   const header = headerInput
-    ? converter.makeHtml(headerInput)
+    ? DOMPurify.sanitize(converter.makeHtml(headerInput))
     : DEFAULT_REPORT_HEADER;
-  const footer = footerInput ? converter.makeHtml(footerInput) : '';
+  const footer = footerInput
+    ? DOMPurify.sanitize(converter.makeHtml(footerInput))
+    : '';
   const fileName =
     report.report_definition.report_params.report_name +
     `_${new Date().toISOString()}_${uuidv1()}.${format}`;
