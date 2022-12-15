@@ -1,6 +1,8 @@
 ## Developer Guide
 
+### Prerequisites
 
+The node version "^12.20.0 || >=14" is required.
 
 ### SOP for installing and running reporting-cli
 
