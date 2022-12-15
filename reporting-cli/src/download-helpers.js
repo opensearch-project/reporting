@@ -28,7 +28,7 @@ export async function downloadReport(url, format, width, height, filename, authT
       executablePath: process.env.CHROMIUM_PATH,
       ignoreHTTPSErrors: true,
       env: {
-        TZ: process.env.UTC || 'UTC',
+        TZ: process.env.TZ || 'UTC',
       },
     });
 
