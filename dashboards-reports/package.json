@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@elastic/eslint-import-resolver-kibana": "link:../../packages/osd-eslint-import-resolver-opensearch-dashboards",
-    "@types/dompurify": "^2.4.0",
+    "@types/dompurify": "^2.3.3",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jsdom": "^16.2.3",
     "@types/puppeteer-core": "^5.4.0",
