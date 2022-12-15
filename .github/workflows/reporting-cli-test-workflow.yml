@@ -2,11 +2,6 @@ name: integration tests workflow
 
 on: [pull_request, push]
 
-env:
-  OPENSEARCH_DASHBOARDS_VERSION: '2.4.0'
-  OPENSEARCH_VERSION: '2.4.0-SNAPSHOT'
-  ALERTING_PLUGIN_BRANCH: '2.4'
-
 jobs:
   run-tests:
     name: Run integration tests with security
@@ -34,7 +29,10 @@ jobs:
       - name: Download and run Opensearch and Dashboard
         run: |
           wget https://opensearch.org/samples/docker-compose.yml
-          docker-compose up
+          docker-compose up --detach
+      
+      - name: Check Docker containers
+        run: docker ps -a
 
       - name: Wait for cluster to start
         uses: nick-fields/retry@v2
@@ -47,9 +45,9 @@ jobs:
         run: |
           cd ./reporting-cli/
           npm test
+          cd ..
       
       - name: Clean up container
         if: always()
         run: |
           docker-compose down
-          
