@@ -1,0 +1,55 @@
+name: integration tests workflow
+
+on: [pull_request, push]
+
+env:
+  OPENSEARCH_DASHBOARDS_VERSION: '2.4.0'
+  OPENSEARCH_VERSION: '2.4.0-SNAPSHOT'
+  ALERTING_PLUGIN_BRANCH: '2.4'
+
+jobs:
+  run-tests:
+    name: Run integration tests with security
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        java: [11]
+        node-version: [14.x]
+        opensearch-version: [ latest ]
+    
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Reporting CLI
+        uses: actions/checkout@v2
+
+      - name: Configure sysctl limits
+        run: |
+          sudo swapoff -a
+          sudo sysctl -w vm.swappiness=1
+          sudo sysctl -w fs.file-max=262144
+          sudo sysctl -w vm.max_map_count=262144
+
+      - name: Download and run Opensearch and Dashboard
+        run: |
+          wget https://opensearch.org/samples/docker-compose.yml
+          docker-compose up
+
+      - name: Wait for cluster to start
+        uses: nick-fields/retry@v2
+        with:
+          timeout_seconds: 1
+          max_attempts: 30
+          command: curl -q localhost:9200
+
+      - name: Run integration tests
+        run: |
+          cd ./reporting-cli/
+          npm test
+      
+      - name: Clean up container
+        if: always()
+        run: |
+          docker-compose down
+          
