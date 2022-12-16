@@ -34,6 +34,10 @@ jobs:
       - name: Check Docker containers
         run: docker ps -a
 
+      - name: Add sample data
+        run: |
+          curl -XPOST -u 'admin:admin' 'http://localhost:5601/api/sample_data/flights' -H 'osd-xsrf:true'
+          
       - name: Run integration tests
         run: |
           cd ./reporting-cli/
