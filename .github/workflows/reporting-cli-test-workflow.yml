@@ -34,12 +34,17 @@ jobs:
       - name: Check Docker containers
         run: docker ps -a
 
+      - name: Sleep for 30 seconds
+        run: sleep 150s
+        shell: bash
+
       - name: Wait for cluster to start
         uses: nick-fields/retry@v2
         with:
           timeout_seconds: 1
           max_attempts: 30
           command: curl https://localhost:9200 -ku 'admin:admin'
+          retry_wait_seconds: 30
 
       - name: Add sample data
         run: |
