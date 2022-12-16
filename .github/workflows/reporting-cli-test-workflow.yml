@@ -34,7 +34,7 @@ jobs:
       - name: Check Docker containers
         run: docker ps -a
 
-       - name: Wait for cluster to start
+      - name: Wait for cluster to start
         uses: nick-fields/retry@v2
         with:
           timeout_seconds: 1
