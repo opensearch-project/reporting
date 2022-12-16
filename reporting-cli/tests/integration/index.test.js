@@ -34,7 +34,6 @@ describe('download report options', () => {
     expect(result.stderr).toContain('error: option \'-f, --format <type>\' argument \'txt\' is invalid. Allowed choices are pdf, png, csv.');
   });
 
-
   test('download pdf report', async () => {
     let result = await cli(['-u', 'https://aws.com', '-n', 'testdownloadpdf'], '.');
     expect(result.code).toBe(0);
@@ -53,7 +52,7 @@ describe('download report options', () => {
     fs.unlinkSync(expectedFile);
   }, 30000);
 
-  test('basic auth with default tenant', async () => {
+  test('dashboard report with basic auth and default tenant', async () => {
     let result = await cli(['-u', 'http://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d', '-a', 'basic', '-c', 'admin:admin',
       '-n', 'basicauthdashboard'], '.');
     expect(result.code).toBe(0);
@@ -74,7 +73,7 @@ describe('download report options', () => {
   }, 100000);
 
 
-  test('global tenant', async () => {
+  test('dashboard report with global tenant', async () => {
     let result = await cli(['-u', 'http://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d', '-a', 'basic', '-c', 'admin:admin',
       '-n', 'globaltenantdashboard', '-t', 'global'], '.');
     expect(result.code).toBe(0);
@@ -84,7 +83,7 @@ describe('download report options', () => {
     fs.unlinkSync(expectedFile);
   }, 100000);
 
-  test('private tenant', async () => {
+  test('dashboard report with private tenant', async () => {
     let result = await cli(['-u', 'http://localhost:5601/app/dashboards#/view/722b74f0-b882-11e8-a6d9-e546fe2bba5f', '-a', 'basic', '-c', 'admin:admin',
       '-n', 'privatetenantdashboard', '-t', 'private'], '.');
     expect(result.code).toBe(0);
@@ -94,7 +93,7 @@ describe('download report options', () => {
     fs.unlinkSync(expectedFile);
   }, 100000);
 
-  test('custom tenant', async () => {
+  test('dashboard report with custom tenant', async () => {
     let result = await cli(['-u', 'http://localhost:5601/app/dashboards#/view/edf84fe0-e1a0-11e7-b6d5-4dc382ef7f5b', '-a', 'basic', '-c', 'admin:admin',
       '-n', 'customtenantdashboard', '-t', 'testcustomtenant'], '.');
     expect(result.code).toBe(0);

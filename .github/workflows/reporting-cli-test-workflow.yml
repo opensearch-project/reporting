@@ -34,6 +34,13 @@ jobs:
       - name: Check Docker containers
         run: docker ps -a
 
+       - name: Wait for cluster to start
+        uses: nick-fields/retry@v2
+        with:
+          timeout_seconds: 1
+          max_attempts: 30
+          command: curl https://localhost:9200 -ku 'admin:admin'
+
       - name: Add sample data
         run: |
           curl -XPOST -u 'admin:admin' 'http://localhost:5601/api/sample_data/flights' -H 'osd-xsrf:true'
