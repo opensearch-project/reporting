@@ -1,6 +1,8 @@
 ## Developer Guide
 
+### Prerequisites
 
+The node version "^12.20.0 || >=14" is required.
 
 ### SOP for installing and running reporting-cli
 
@@ -10,7 +12,7 @@
     cd dashboards-reporting
     git checkout main
     ```
-2. Run `npm install` inside `reporting-cli/src`
+2. Run `yarn` inside `reporting-cli/src`
 3. You can run the below commands inside `reporting-cli/src`
     ```
     node index.js --url <url>

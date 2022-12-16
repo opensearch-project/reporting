@@ -28,7 +28,7 @@ export async function downloadReport(url, format, width, height, filename, authT
       executablePath: process.env.CHROMIUM_PATH,
       ignoreHTTPSErrors: true,
       env: {
-        TZ: process.env.UTC || 'UTC',
+        TZ: process.env.TZ || 'UTC',
       },
     });
 
@@ -322,7 +322,7 @@ const cognitoAuthentication = async (page, overridePage, url, username, password
   await page.goto(url, { waitUntil: 'networkidle0' });
 }
 
-export const readStreamToFile = async (
+const readStreamToFile = async (
   stream,
   fileName,
   format
