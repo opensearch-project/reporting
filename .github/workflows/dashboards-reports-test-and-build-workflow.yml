@@ -38,15 +38,6 @@ jobs:
       - name: Move Dashboards Reports to Plugins Dir
         run: mv dashboards-reports ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
 
-      - name: Add Chromium Binary to Reporting for Testing
-        run: |
-          sudo apt update
-          sudo apt install -y libnss3-dev fonts-liberation libfontconfig1
-          cd ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
-          wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip 
-          unzip chromium-linux-x64.zip
-          rm chromium-linux-x64.zip
-
       - name: OpenSearch Dashboards Plugin Bootstrap
         uses: nick-invision/retry@v1
         with:
@@ -72,37 +63,13 @@ jobs:
         run: |
           cd ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
           yarn build
-
-          cd build
-          mkdir -p ./{linux-x64,linux-arm64}/opensearch-dashboards/${{ env.PLUGIN_NAME }}
-          cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-x64/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-x64.zip
-          cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-arm64/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-arm64.zip
-
-          cd linux-x64
-          wget https://github.com/opensearch-project/dashboards-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip
-          unzip chromium-linux-x64.zip -d ./opensearch-dashboards/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.ARTIFACT_NAME }}-*.zip ./opensearch-dashboards
-          mv ./${{ env.ARTIFACT_NAME }}-*.zip ..
-          cd ..
-
-          cd linux-arm64
-          wget https://github.com/opensearch-project/dashboards-reports/releases/download/chromium-1.12.0.0/chromium-linux-arm64.zip
-          unzip chromium-linux-arm64.zip -d ./opensearch-dashboards/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.ARTIFACT_NAME }}-*.zip ./opensearch-dashboards
-          mv ./${{ env.ARTIFACT_NAME }}-*.zip ..
-          cd ..
+          mv ./build/*.zip ./build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}.zip
 
       - name: Upload Artifact For Linux x64
         uses: actions/upload-artifact@v1
         with:
           name: dashboards-reports-linux-x64
-          path: ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-x64.zip
-
-      - name: Upload Artifact For Linux arm64
-        uses: actions/upload-artifact@v1
-        with:
-          name: dashboards-reports-linux-arm64
-          path: ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-linux-arm64.zip
+          path: ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}.zip
 
   windows-build:
     runs-on: windows-latest
@@ -136,15 +103,6 @@ jobs:
       - name: Move Dashboards Reports to Plugins Dir
         run: mv dashboards-reports ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
 
-      - name: Add Chromium Binary to Reporting for Testing
-        run: |
-          cd ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
-          curl.exe -LO https://github.com/opensearch-project/dashboards-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip
-          Expand-Archive -Path 'chromium-windows-x64.zip'
-          Move-Item -Path "./chromium-windows-x64/.chromium" -Destination "./.chromium"
-          rd chromium-windows-x64.zip
-          rd chromium-windows-x64
-
       - name: OpenSearch Dashboards Plugin Bootstrap
         uses: nick-invision/retry@v1
         with:
@@ -163,26 +121,13 @@ jobs:
         run: |
           cd ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
           yarn build
-
-          cd build
-          mkdir -p ./windows-x64/opensearch-dashboards/${{ env.PLUGIN_NAME }}
-          mv ./${{ env.PLUGIN_NAME }}-*.zip ./windows-x64/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-windows-x64.zip
-
-          cd windows-x64
-          curl.exe -LO https://github.com/opensearch-project/dashboards-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip
-          Expand-Archive -Path 'chromium-windows-x64.zip'
-          Move-Item -Path "./chromium-windows-x64/.chromium" -Destination "./opensearch-dashboards/${{ env.PLUGIN_NAME }}"
-          rd chromium-windows-x64.zip
-          rd chromium-windows-x64
-          Compress-Archive -Path "./${{ env.ARTIFACT_NAME }}-*.zip" -Destination "./opensearch-dashboards"
-          mv ./${{ env.ARTIFACT_NAME }}-*.zip ..
-          cd ..
+          mv ./build/*.zip ./build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}.zip
 
       - name: Upload Artifact For Windows
         uses: actions/upload-artifact@v1
         with:
           name: dashboards-reports-windows-x64
-          path: ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-windows-x64.zip
+          path: ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}.zip
 
   macos-build:
     runs-on: macos-latest
@@ -212,13 +157,6 @@ jobs:
       - name: Move Dashboards Reports to Plugins Dir
         run: mv dashboards-reports ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
 
-      - name: Add Chromium Binary to Reporting for Testing
-        run: |
-          cd ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
-          wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-macos-x64.zip 
-          unzip chromium-macos-x64.zip
-          rm chromium-macos-x64.zip
-
       - name: OpenSearch Dashboards Plugin Bootstrap
         uses: nick-invision/retry@v1
         with:
@@ -237,20 +175,10 @@ jobs:
         run: |
           cd ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}
           yarn build
-
-          cd build
-          mkdir -p ./macos-x64/opensearch-dashboards/${{ env.PLUGIN_NAME }}
-          mv ./${{ env.PLUGIN_NAME }}-*.zip ./macos-x64/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-macos-x64.zip
-
-          cd macos-x64
-          wget https://github.com/opensearch-project/dashboards-reports/releases/download/chromium-1.12.0.0/chromium-macos-x64.zip
-          unzip chromium-macos-x64.zip -d ./opensearch-dashboards/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.ARTIFACT_NAME }}-*.zip ./opensearch-dashboards
-          mv ./${{ env.ARTIFACT_NAME }}-*.zip ..
-          cd ..
+          mv ./build/*.zip ./build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}.zip
 
       - name: Upload Artifact For MacOS x64
         uses: actions/upload-artifact@v1
         with:
           name: dashboards-reports-macosx-x64
-          path: ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}-macos-x64.zip
+          path: ../OpenSearch-Dashboards/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}.zip
