@@ -5,6 +5,7 @@
     "yarn.lock",
     "kibana.json",
     "common/**/*",
+    "scripts/**/*",
     "public/**/*",
     "server/**/*"
   ]
