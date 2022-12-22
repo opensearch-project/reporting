@@ -36,11 +36,6 @@ jobs:
       - name: Move Kibana Reports to Plugins Dir
         run: mv kibana-reports ../kibana/plugins/${{ env.PLUGIN_NAME }}
 
-      # reporting uses newer version of puppeteer-core than x-pack, removing it to avoid conflicts
-      - name: Remove x-pack puppeteer-core dependency
-        run: |
-          sed -i '/"puppeteer-core": "/d' ../kibana/x-pack/package.json
-
       - name: Kibana Plugin Bootstrap
         uses: nick-invision/retry@v1
         with:
