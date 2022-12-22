@@ -80,7 +80,7 @@ export function GenerateReportLoadingModal(props: { setShowLoading: any }) {
             <EuiText>
               {i18n.translate('opensearch.reports.loading.youCanClose', {
                 defaultMessage:
-                  'You can close this dialog while we continue in the background.',
+                  'Please keep this dialog open while report is being generated.',
               })}
             </EuiText>
             <EuiSpacer />
@@ -93,15 +93,6 @@ export function GenerateReportLoadingModal(props: { setShowLoading: any }) {
               </EuiFlexItem>
             </EuiFlexGroup>
             <EuiSpacer size="l" />
-            <EuiFlexGroup alignItems="flexEnd" justifyContent="flexEnd">
-              <EuiFlexItem grow={false}>
-                <EuiButton onClick={closeModal}>
-                  {i18n.translate('opensearch.reports.loading.close', {
-                    defaultMessage: 'Close',
-                  })}
-                </EuiButton>
-              </EuiFlexItem>
-            </EuiFlexGroup>
           </EuiModalBody>
         </EuiModal>
       </EuiOverlayMask>

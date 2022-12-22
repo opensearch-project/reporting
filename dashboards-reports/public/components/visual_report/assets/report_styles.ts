@@ -1,3 +1,9 @@
+/*
+ * Copyright OpenSearch Contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+export const reportingStyle = `
 html,
 body {
   margin: 0;
@@ -213,3 +219,4 @@ iframe, embed, object {
   padding: 6px 13px;
   border: 1px solid #c8ccd0;
 }
+`;
