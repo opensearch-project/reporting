@@ -32,8 +32,6 @@ import {
   Logger,
   ILegacyClusterClient,
 } from '../../../src/core/server';
-import { setIntervalAsync } from 'set-interval-async/dynamic';
-import { Semaphore, SemaphoreInterface, withTimeout } from 'async-mutex';
 import opensearchReportsPlugin from './backend/opensearch-reports-plugin';
 import {
   ReportsDashboardsPluginSetup,
@@ -58,14 +56,14 @@ export class ReportsDashboardsPlugin
   implements
     Plugin<ReportsDashboardsPluginSetup, ReportsDashboardsPluginStart> {
   private readonly logger: Logger;
-  private readonly semaphore: SemaphoreInterface;
+  private readonly initializerContext: PluginInitializerContext<
+    ReportingConfigType
+  >;
+  private reportingConfig?: ReportingConfig;
 
-  constructor(initializerContext: PluginInitializerContext) {
-    this.logger = initializerContext.logger.get();
-
-    const timeoutError = new Error('Server busy');
-    timeoutError.statusCode = 503;
-    this.semaphore = withTimeout(new Semaphore(1), 300000, timeoutError);
+  constructor(context: PluginInitializerContext<ReportingConfigType>) {
+    this.logger = context.logger.get();
+    this.initializerContext = context;
   }
 
   public setup(core: CoreSetup) {
@@ -89,7 +87,6 @@ export class ReportsDashboardsPlugin
       (context, request) => {
         return {
           logger: this.logger,
-          semaphore: this.semaphore,
           opensearchReportsClient,
         };
       }
