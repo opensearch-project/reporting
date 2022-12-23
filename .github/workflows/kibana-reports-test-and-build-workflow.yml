@@ -25,14 +25,6 @@ jobs:
         with:
           node-version: "10.23.1"
 
-      # bootstrap first to workaround errors caused by removing puppeteer-core from x-pack
-      - name: Kibana Plugin Bootstrap
-        uses: nick-invision/retry@v1
-        with:
-          timeout_minutes: 30
-          max_attempts: 3
-          command: cd ../kibana; yarn kbn bootstrap
-
       - name: Move Kibana Reports to Plugins Dir
         run: mv kibana-reports ../kibana/plugins/${{ env.PLUGIN_NAME }}
 
@@ -61,7 +53,7 @@ jobs:
         run: |
           cd ../kibana/plugins/${{ env.PLUGIN_NAME }}
           yarn build
-          mv ./build/*.zip ./build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}.zip
+          mv ./build/*.zip ./build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}.zip
 
       - name: Upload Artifact For Linux x64
         uses: actions/upload-artifact@v1
