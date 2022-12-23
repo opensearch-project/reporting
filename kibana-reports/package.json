@@ -44,6 +44,7 @@
     "react-toast-notifications": "^2.4.0",
     "set-interval-async": "1.0.33",
     "showdown": "^1.9.1",
+    "svg-pathdata": "5.0.5",
     "ws": "^7.2.3"
   },
   "devDependencies": {
