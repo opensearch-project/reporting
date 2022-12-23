@@ -149,6 +149,8 @@ export default function (router: IRouter) {
           body: {
             data: reportData.dataUrl,
             filename: reportData.fileName,
+            reportId: reportData.reportId,
+            queryUrl: reportData.queryUrl,
           },
         });
       } catch (error) {
@@ -214,6 +216,8 @@ export default function (router: IRouter) {
           body: {
             data: reportData.dataUrl,
             filename: reportData.fileName,
+            reportId: reportData.reportId,
+            queryUrl: reportData.queryUrl,
           },
         });
       } catch (error) {
