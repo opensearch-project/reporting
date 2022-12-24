@@ -167,7 +167,9 @@ export const generateReportFromDefinitionId = async (
 
       // generate reports in browser is memory intensive, do it in a new process by removing referrer
       const a = document.createElement('a');
-      a.href = `${response.queryUrl}&${GENERATE_REPORT_PARAM}=${reportId}`;
+      a.href =
+        window.location.origin +
+        `${response.queryUrl}&${GENERATE_REPORT_PARAM}=${response.reportId}`;
       a.target = '_blank';
       a.rel = 'noreferrer';
       a.click();
@@ -206,10 +208,12 @@ export const generateReportById = async (
         handleSuccessToast();
         return response;
       }
-      
+
       // generate reports in browser is memory intensive, do it in a new process by removing referrer
       const a = document.createElement('a');
-      a.href = `${response.queryUrl}&${GENERATE_REPORT_PARAM}=${reportId}`;
+      a.href =
+        window.location.origin +
+        `${response.queryUrl}&${GENERATE_REPORT_PARAM}=${reportId}`;
       a.target = '_blank';
       a.rel = 'noreferrer';
       a.click();

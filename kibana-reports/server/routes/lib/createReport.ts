@@ -120,7 +120,7 @@ export const createReport = async (
       const timeCreated = curTime.valueOf();
       const fileName = `${getFileName(reportName, curTime)}.${reportFormat}`;
 
-      return { timeCreated, dataUrl: '', fileName, reportId, queryUrl: completeQueryUrl };
+      return { timeCreated, dataUrl: '', fileName, reportId, queryUrl: report.query_url };
     }
     // update report state to "created"
     // TODO: temporarily remove the following
