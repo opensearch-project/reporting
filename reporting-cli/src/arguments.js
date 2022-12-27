@@ -27,7 +27,7 @@ export async function getCommandArguments() {
         .addOption(new Option('-c, --credentials <username:password>', 'login credentials')
             .env('USERNAME and PASSWORD'))
         .addOption(new Option('-t, --tenant <tenant>', 'Tenants in OpenSearch dashboards')
-            .default('global'))
+            .default('private'))
         .addOption(new Option('-f, --format <type>', 'file format of the report')
             .default('pdf')
             .choices(['pdf', 'png', 'csv']))

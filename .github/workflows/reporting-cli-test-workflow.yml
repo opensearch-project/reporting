@@ -34,8 +34,8 @@ jobs:
       - name: Check Docker containers
         run: docker ps -a
 
-      - name: Sleep for 30 seconds
-        run: sleep 150s
+      - name: Sleep for 200s seconds
+        run: sleep 200s
         shell: bash
 
       - name: Wait for cluster to start
@@ -48,13 +48,15 @@ jobs:
 
       - name: Add sample data
         run: |
-          curl -XPOST -u 'admin:admin' 'http://localhost:5601/api/sample_data/flights' -H 'osd-xsrf:true'
-          
+          curl -XPOST -u 'admin:admin' 'http://localhost:5601/api/sample_data/ecommerce' -H 'osd-xsrf:true'
+          curl -XPOST -u 'admin:admin' 'http://localhost:5601/api/sample_data/logs' -H 'osd-xsrf:true'  -H 'securitytenant: global'
+          curl -XPOST -u 'admin:admin' 'http://localhost:5601/api/sample_data/flights' -H 'osd-xsrf:true'  -H 'securitytenant: admin_tenant'
+
       - name: Run integration tests
         run: |
           cd ./reporting-cli/
-          npm install
-          npm test
+          yarn
+          yarn test
           cd ..
       
       - name: Clean up container

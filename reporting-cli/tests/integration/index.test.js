@@ -53,7 +53,7 @@ describe('download report options', () => {
   }, 30000);
 
   test('dashboard report with basic auth and default tenant', async () => {
-    let result = await cli(['-u', 'http://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d', '-a', 'basic', '-c', 'admin:admin',
+    let result = await cli(['-u', 'http://localhost:5601/app/dashboards#/view/722b74f0-b882-11e8-a6d9-e546fe2bba5f', '-a', 'basic', '-c', 'admin:admin',
       '-n', 'basicauthdashboard'], '.');
     expect(result.code).toBe(0);
     const expectedFile = './basicauthdashboard.pdf';
@@ -63,21 +63,10 @@ describe('download report options', () => {
   }, 100000);
 
   test('download csv report', async () => {
-    let result = await cli(['-u', 'http://localhost:5601/app/discover#/view/571aaf70-4c88-11e8-b3d7-01146121b73d', '-a', 'basic', '-c', 'admin:admin',
+    let result = await cli(['-u', 'http://localhost:5601/app/discover#/view/3ba638e0-b894-11e8-a6d9-e546fe2bba5f', '-a', 'basic', '-c', 'admin:admin',
       '-n', 'testdownloadcsv', '-f', 'csv'], '.');
     expect(result.code).toBe(0);
     const expectedFile = './testdownloadcsv.csv';
-    const stats = fs.statSync(expectedFile);
-    expect(stats.size >= 0).toBeTruthy();
-    fs.unlinkSync(expectedFile);
-  }, 100000);
-
-
-  test('dashboard report with global tenant', async () => {
-    let result = await cli(['-u', 'http://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d', '-a', 'basic', '-c', 'admin:admin',
-      '-n', 'globaltenantdashboard', '-t', 'global'], '.');
-    expect(result.code).toBe(0);
-    const expectedFile = './globaltenantdashboard.pdf';
     const stats = fs.statSync(expectedFile);
     expect(stats.size >= 0).toBeTruthy();
     fs.unlinkSync(expectedFile);
@@ -94,8 +83,8 @@ describe('download report options', () => {
   }, 100000);
 
   test('dashboard report with custom tenant', async () => {
-    let result = await cli(['-u', 'http://localhost:5601/app/dashboards#/view/edf84fe0-e1a0-11e7-b6d5-4dc382ef7f5b', '-a', 'basic', '-c', 'admin:admin',
-      '-n', 'customtenantdashboard', '-t', 'testcustomtenant'], '.');
+    let result = await cli(['-u', 'http://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d', '-a', 'basic', '-c', 'admin:admin',
+      '-n', 'customtenantdashboard', '-t', 'admin_tenant'], '.');
     expect(result.code).toBe(0);
     const expectedFile = './customtenantdashboard.pdf';
     const stats = fs.statSync(expectedFile);
@@ -103,9 +92,20 @@ describe('download report options', () => {
     fs.unlinkSync(expectedFile);
   }, 100000);
 
+
+  test('dashboard report with global tenant', async () => {
+    let result = await cli(['-u', 'http://localhost:5601/app/dashboards#/view/edf84fe0-e1a0-11e7-b6d5-4dc382ef7f5b', '-a', 'basic', '-c', 'admin:admin',
+      '-n', 'globaltenantdashboard', '-t', 'global'], '.');
+    expect(result.code).toBe(0);
+    const expectedFile = './globaltenantdashboard.pdf';
+    const stats = fs.statSync(expectedFile);
+    expect(stats.size >= 0).toBeTruthy();
+    fs.unlinkSync(expectedFile);
+  }, 100000);
+  
   test('download csv report from custom tenant', async () => {
-    let result = await cli(['-u', 'http://localhost:5601/app/discover#/view/9e8a6810-7bf8-11ed-9232-251172581503', '-a', 'basic', '-c', 'admin:admin',
-      '-n', 'testcsvoncustomtenant', '-f', 'csv', '-t', 'testcustomtenant'], '.');
+    let result = await cli(['-u', 'http://localhost:5601/app/discover#/view/571aaf70-4c88-11e8-b3d7-01146121b73d', '-a', 'basic', '-c', 'admin:admin',
+      '-n', 'testcsvoncustomtenant','-t', 'admin_tenant', '-f', 'csv'], '.');
     expect(result.code).toBe(0);
     const expectedFile = './testcsvoncustomtenant.csv';
     const stats = fs.statSync(expectedFile);
