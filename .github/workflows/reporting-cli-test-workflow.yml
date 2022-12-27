@@ -56,7 +56,7 @@ jobs:
         run: |
           cd ./reporting-cli/
           yarn
-          yarn test
+          yarn test --maxWorkers=1
           cd ..
       
       - name: Clean up container
