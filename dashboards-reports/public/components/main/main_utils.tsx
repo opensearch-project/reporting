@@ -181,7 +181,7 @@ export const generateReportFromDefinitionId = async (
         `${response.queryUrl}&${GENERATE_REPORT_PARAM}=${response.reportId}`;
       a.target = '_blank';
       a.rel = 'noreferrer';
-      a.click();
+      a.dispatchEvent(new MouseEvent(`click`, {bubbles: true, cancelable: true, view: window}));
       status = true;
     })
     .catch((error) => {
@@ -225,7 +225,7 @@ export const generateReportById = async (
         `${response.queryUrl}&${GENERATE_REPORT_PARAM}=${reportId}`;
       a.target = '_blank';
       a.rel = 'noreferrer';
-      a.click();
+      a.dispatchEvent(new MouseEvent(`click`, {bubbles: true, cancelable: true, view: window}));
     })
     .catch((error) => {
       console.log('error on generating report by id:', error);
