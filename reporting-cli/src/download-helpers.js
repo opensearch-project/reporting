@@ -245,10 +245,9 @@ const basicAuthentication = async (page, overridePage, url, username, password, 
 
   await page.waitForTimeout(2000);
   await page.click('button[data-test-subj="confirm"]');
-  await page.waitForTimeout(25000);
+  await page.waitForTimeout(30000);
   await overridePage.goto(url, { waitUntil: 'networkidle0' });
   await overridePage.waitForTimeout(5000);
-
   // Check if tenant was selected successfully.
   if ((await overridePage.$('button[data-test-subj="confirm"]')) !== null) {
     spinner.fail('Invalid tenant');

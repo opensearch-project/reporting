@@ -6,8 +6,7 @@
 const path = require('path');
 const exec = require('child_process').exec;
 const fs = require('fs');
-jest.useRealTimers();;
-jest.retryTimes(2);
+jest.useRealTimers();
 
 describe('download report options', () => {
 
