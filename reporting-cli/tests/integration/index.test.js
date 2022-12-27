@@ -60,7 +60,7 @@ describe('download report options', () => {
     const stats = fs.statSync(expectedFile);
     expect(stats.size >= 0).toBeTruthy();
     fs.unlinkSync(expectedFile);
-  }, 100000);
+  }, 150000);
 
   test('download csv report', async () => {
     let result = await cli(['-u', 'http://localhost:5601/app/discover#/view/3ba638e0-b894-11e8-a6d9-e546fe2bba5f', '-a', 'basic', '-c', 'admin:admin',
@@ -70,7 +70,7 @@ describe('download report options', () => {
     const stats = fs.statSync(expectedFile);
     expect(stats.size >= 0).toBeTruthy();
     fs.unlinkSync(expectedFile);
-  }, 100000);
+  }, 150000);
 
   test('dashboard report with private tenant', async () => {
     let result = await cli(['-u', 'http://localhost:5601/app/dashboards#/view/722b74f0-b882-11e8-a6d9-e546fe2bba5f', '-a', 'basic', '-c', 'admin:admin',
@@ -80,7 +80,7 @@ describe('download report options', () => {
     const stats = fs.statSync(expectedFile);
     expect(stats.size >= 0).toBeTruthy();
     fs.unlinkSync(expectedFile);
-  }, 100000);
+  }, 150000);
 
   test('dashboard report with custom tenant', async () => {
     let result = await cli(['-u', 'http://localhost:5601/app/dashboards#/view/7adfa750-4c81-11e8-b3d7-01146121b73d', '-a', 'basic', '-c', 'admin:admin',
@@ -90,7 +90,7 @@ describe('download report options', () => {
     const stats = fs.statSync(expectedFile);
     expect(stats.size >= 0).toBeTruthy();
     fs.unlinkSync(expectedFile);
-  }, 100000);
+  }, 150000);
 
 
   test('dashboard report with global tenant', async () => {
@@ -101,7 +101,7 @@ describe('download report options', () => {
     const stats = fs.statSync(expectedFile);
     expect(stats.size >= 0).toBeTruthy();
     fs.unlinkSync(expectedFile);
-  }, 100000);
+  }, 150000);
   
   test('download csv report from custom tenant', async () => {
     let result = await cli(['-u', 'http://localhost:5601/app/discover#/view/571aaf70-4c88-11e8-b3d7-01146121b73d', '-a', 'basic', '-c', 'admin:admin',
@@ -111,7 +111,7 @@ describe('download report options', () => {
     const stats = fs.statSync(expectedFile);
     expect(stats.size >= 0).toBeTruthy();
     fs.unlinkSync(expectedFile);
-  }, 100000);
+  }, 150000);
 });
 
 function cli(args, cwd) {
