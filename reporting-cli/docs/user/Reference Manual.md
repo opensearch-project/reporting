@@ -27,6 +27,7 @@ width | 1680 | - | - | page width in pixels
 height | 600 | - | - | page height in pixels
 filename | reporting | - | FILENAME | file name of the report
 auth | none | basic, saml, cognito, none | - | authentication type
+tenant | private | - | - | tenant in OpenSearch dashboards
 credentials | - | - | USERNAME and PASSWORD | login credentials in the format of username:password for connecting to url
 from | - | - | FROM | the email address of the sender
 to | - | - | TO | the recipient of the email
