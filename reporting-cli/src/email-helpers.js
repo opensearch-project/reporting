@@ -19,15 +19,15 @@ try {
 }
 
 export async function sendEmail(filename, format, sender, recipient, transport, smtphost, smtpport, smtpsecure, smtpusername, smtppassword, subject) {
-  if (ses !== undefined && transport !== undefined && sender !== undefined && recipient !== undefined) {
+  if (transport !== undefined && (transport === 'smtp' || ses !== undefined) && sender !== undefined && recipient !== undefined) {
     spinner.start('Sending email...');
   } else {
     if (transport === undefined && sender === undefined && recipient === undefined) {
       return;
-    } else if (ses === undefined) {
-      spinner.warn('aws config not found');
     } else if (transport === undefined) {
       spinner.warn('Transport value is missing');
+    } else if (transport === 'ses' && ses === undefined) {
+      spinner.warn('aws config not found');
     } else if (sender === undefined || recipient === undefined) {
       spinner.warn('Sender/Recipient value is missing');
     }

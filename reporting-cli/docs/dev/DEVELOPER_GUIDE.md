@@ -35,4 +35,21 @@ The node version "^12.20.0 || >=14" is required.
     ```
     npm uninstall -g reporting
     ```
-    
+
+### Running Tests
+
+For runninng tests locally, setup opensearch and add sample data for tests execution.
+
+Setup on linux:
+```
+sudo swapoff -a
+sudo sysctl -w vm.swappiness=1
+sudo sysctl -w fs.file-max=262144
+sudo sysctl -w vm.max_map_count=262144
+wget https://opensearch.org/samples/docker-compose.yml
+docker-compose up --detach
+curl -XPOST -u 'admin:admin' 'http://localhost:5601/api/sample_data/ecommerce' -H 'osd-xsrf:true'
+curl -XPOST -u 'admin:admin' 'http://localhost:5601/api/sample_data/logs' -H 'osd-xsrf:true'  -H 'securitytenant: global'
+curl -XPOST -u 'admin:admin' 'http://localhost:5601/api/sample_data/flights' -H 'osd-xsrf:true'  -H 'securitytenant: admin_tenant'
+```
+Run `yarn test` inside `reporting-cli`.

@@ -1,10 +1,10 @@
-name: integration tests workflow
+name: Reporting CLI tests workflow
 
 on: [pull_request, push]
 
 jobs:
   run-tests:
-    name: Run integration tests with security
+    name: Run reporting cli tests 
 
     strategy:
       matrix:
