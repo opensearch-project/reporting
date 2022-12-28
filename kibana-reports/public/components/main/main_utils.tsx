@@ -15,7 +15,6 @@
 
 import 'babel-polyfill';
 import { HttpFetchOptions, HttpSetup } from '../../../../../src/core/public';
-import { HttpSetup } from '../../../../../src/core/public';
 import { GENERATE_REPORT_PARAM } from '../visual_report/constants';
 
 export const fileFormatsUpper = {
