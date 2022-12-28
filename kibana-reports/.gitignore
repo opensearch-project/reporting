@@ -9,4 +9,4 @@ yarn-error.log
 .history/
 .eslintcache
 package-lock.json
-.chromium/
+/target/
