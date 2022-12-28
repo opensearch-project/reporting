@@ -12,7 +12,7 @@ buildscript {
         opensearch_group = "org.opensearch"
 
         isSnapshot = "true" == System.getProperty("build.snapshot", "true")
-        opensearch_version = System.getProperty("opensearch.version", "2.1.0-SNAPSHOT")
+        opensearch_version = System.getProperty("opensearch.version", "3.0.0-SNAPSHOT")
         buildVersionQualifier = System.getProperty("build.version_qualifier", "")
         // 2.0.0-rc1-SNAPSHOT -> 2.0.0.0-rc1-SNAPSHOT
         version_tokens = opensearch_version.tokenize('-')
@@ -40,7 +40,7 @@ buildscript {
         classpath "${opensearch_group}.gradle:build-tools:${opensearch_version}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
         classpath "org.jetbrains.kotlin:kotlin-allopen:${kotlin_version}"
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.12.0"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.21.0"
         classpath "org.jacoco:org.jacoco.agent:0.8.5"
     }
 }
@@ -79,6 +79,7 @@ publishing {
             pom {
                 name = 'opensearch-reports-scheduler'
                 description = 'Scheduler for Dashboards Reports Plugin'
+                groupId = "org.opensearch.plugin"
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'
@@ -121,6 +122,7 @@ configurations.all {
         force "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}"
         force "org.jetbrains.kotlin:kotlin-stdlib-common:${kotlin_version}"
         force "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.11.4"
+        force "org.yaml:snakeyaml:1.32"
     }
 }
 
@@ -163,7 +165,7 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
     implementation "org.json:json:20180813"
     implementation group: 'com.github.wnameless', name: 'json-flattener', version: '0.1.0'
-    implementation 'org.jsoup:jsoup:1.14.3'
+    implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation "org.jetbrains.kotlin:kotlin-test:${kotlin_version}"
 
@@ -178,7 +180,7 @@ dependencies {
     testCompile "org.mockito:mockito-core:3.12.4"
     testCompile 'com.google.code.gson:gson:2.8.9'
 
-    ktlint "com.pinterest:ktlint:0.33.0"
+    ktlint "com.pinterest:ktlint:0.45.1"
 }
 
 javadoc.enabled = false // turn off javadoc as it barfs on Kotlin code
@@ -316,17 +318,17 @@ testClusters.integTest {
 }
 
 // For job-scheduler and reports-scheduler, the latest opensearch releases appear to be 1.1.0.0.
-String bwcVersion = "1.1.0.0"
+String bwcVersion = "2.4.0.0"
 String baseName = "reportsSchedulerBwcCluster"
 String bwcFilePath = "src/test/resources/bwc"
-String bwcJobSchedulerURL = "https://ci.opensearch.org/ci/dbc/bundle-build/1.1.0/20210930/linux/x64/builds/opensearch/plugins/opensearch-job-scheduler-1.1.0.0.zip"
-String bwcReportsSchedulerURL = "https://ci.opensearch.org/ci/dbc/bundle-build/1.1.0/20210930/linux/x64/builds/opensearch/plugins/opensearch-reports-scheduler-1.1.0.0.zip"
+String bwcJobSchedulerURL = "https://ci.opensearch.org/ci/dbc/distribution-build-opensearch/2.4.0/latest/linux/x64/tar/builds/opensearch/plugins/opensearch-job-scheduler-2.4.0.0.zip"
+String bwcReportsSchedulerURL = "https://ci.opensearch.org/ci/dbc/distribution-build-opensearch/2.4.0/latest/linux/x64/tar/builds/opensearch/plugins/opensearch-reports-scheduler-2.4.0.0.zip"
 
 2.times {i ->
     testClusters {
         "${baseName}$i" {
             testDistribution = "ARCHIVE"
-            versions = ["1.1.0", opensearch_version]
+            versions = ["2.4.0", opensearch_version]
             numberOfNodes = 3
             plugin(provider(new Callable<RegularFile>(){
                 @Override

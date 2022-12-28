@@ -32,7 +32,8 @@ internal object ReportDefinitionJobRunner : ScheduledJobRunner {
             val currentTime = Instant.now()
             val endTime = context.expectedExecutionTime
             val beginTime = endTime.minus(reportDefinitionDetails.reportDefinition.format.duration)
-            val reportInstance = ReportInstance(context.jobId,
+            val reportInstance = ReportInstance(
+                context.jobId,
                 currentTime,
                 currentTime,
                 beginTime,
@@ -40,7 +41,8 @@ internal object ReportDefinitionJobRunner : ScheduledJobRunner {
                 job.tenant,
                 job.access,
                 reportDefinitionDetails,
-                ReportInstance.Status.Success) // TODO: Revert to Scheduled when background job execution supported
+                ReportInstance.Status.Success
+            ) // TODO: Revert to Scheduled when background job execution supported
             val id = ReportInstancesIndex.createReportInstance(reportInstance)
             if (id == null) {
                 log.warn("$LOG_PREFIX:runJob-job creation failed for $reportInstance")

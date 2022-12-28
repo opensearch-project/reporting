@@ -4,6 +4,7 @@
  */
 package org.opensearch.reportsscheduler.resthandler
 
+import org.opensearch.client.node.NodeClient
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.action.GetReportInstanceAction
@@ -14,11 +15,10 @@ import org.opensearch.reportsscheduler.model.GetReportInstanceRequest
 import org.opensearch.reportsscheduler.model.RestTag.REPORT_INSTANCE_ID_FIELD
 import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusRequest
 import org.opensearch.reportsscheduler.util.contentParserNextToken
-import org.opensearch.client.node.NodeClient
 import org.opensearch.rest.BaseRestHandler.RestChannelConsumer
 import org.opensearch.rest.BytesRestResponse
-import org.opensearch.rest.RestHandler.Route
 import org.opensearch.rest.RestHandler.ReplacedRoute
+import org.opensearch.rest.RestHandler.Route
 import org.opensearch.rest.RestRequest
 import org.opensearch.rest.RestRequest.Method.GET
 import org.opensearch.rest.RestRequest.Method.POST
@@ -97,16 +97,20 @@ internal class ReportInstanceRestHandler : PluginBaseHandler() {
             POST -> RestChannelConsumer {
                 Metrics.REPORT_INSTANCE_UPDATE_TOTAL.counter.increment()
                 Metrics.REPORT_INSTANCE_UPDATE_INTERVAL_COUNT.counter.increment()
-                client.execute(UpdateReportInstanceStatusAction.ACTION_TYPE,
+                client.execute(
+                    UpdateReportInstanceStatusAction.ACTION_TYPE,
                     UpdateReportInstanceStatusRequest.parse(request.contentParserNextToken(), reportInstanceId),
-                    RestResponseToXContentListener(it))
+                    RestResponseToXContentListener(it)
+                )
             }
             GET -> RestChannelConsumer {
                 Metrics.REPORT_INSTANCE_INFO_TOTAL.counter.increment()
                 Metrics.REPORT_INSTANCE_INFO_INTERVAL_COUNT.counter.increment()
-                client.execute(GetReportInstanceAction.ACTION_TYPE,
+                client.execute(
+                    GetReportInstanceAction.ACTION_TYPE,
                     GetReportInstanceRequest(reportInstanceId),
-                    RestResponseToXContentListener(it))
+                    RestResponseToXContentListener(it)
+                )
             }
             else -> RestChannelConsumer {
                 it.sendResponse(BytesRestResponse(RestStatus.METHOD_NOT_ALLOWED, "${request.method()} is not allowed"))
