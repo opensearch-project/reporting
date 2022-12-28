@@ -64,13 +64,6 @@ jobs:
           yarn build
           mv ./build/*.zip ./build/${{ env.ARTIFACT_NAME }}-${{ env.OPENSEARCH_PLUGIN_VERSION }}.zip
 
-          cd windows-x64
-          wget https://github.com/opensearch-project/dashboards-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip
-          unzip chromium-windows-x64.zip -d ./opensearch-dashboards/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.ARTIFACT_NAME }}-*.zip ./opensearch-dashboards
-          mv ./${{ env.ARTIFACT_NAME }}-*.zip ..
-          cd ..
-
       - name: Upload Artifact For Linux x64
         uses: actions/upload-artifact@v1
         with:
