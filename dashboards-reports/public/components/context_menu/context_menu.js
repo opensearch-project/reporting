@@ -49,8 +49,6 @@ import {
   popoverMenu,
   popoverMenuDiscover,
 } from './context_menu_ui';
-import { parse } from 'url';
-import { uiSettingsService } from '../utils/settings_service';
 
 const generateInContextReport = async (
   timeRanges,
