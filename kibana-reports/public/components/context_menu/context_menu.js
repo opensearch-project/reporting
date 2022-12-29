@@ -21,6 +21,7 @@ import {
   GENERATE_REPORT_PARAM,
   GENERATE_REPORT_PARAM_REGEX,
 } from '../visual_report/constants';
+import { generateReport } from '../visual_report/generate_report';
 import {
   addSuccessOrFailureToast,
   contextMenuCreateReportDefinition,
