@@ -53,22 +53,21 @@ jobs:
         run: |
           cd ../kibana/plugins/${{ env.PLUGIN_NAME }}
           yarn build
-          mv ./build/*.zip ./build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}.zip
 
       - name: Upload Artifact For Linux x64
         uses: actions/upload-artifact@v1
         with:
           name: kibana-reports-linux-x64
-          path: kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}.zip
+          path: ../kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}.zip
 
       - name: Upload Artifact For Linux arm64
         uses: actions/upload-artifact@v1
         with:
           name: kibana-reports-linux-arm64
-          path: kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}.zip
+          path: ../kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}.zip
 
       - name: Upload Artifact For Windows
         uses: actions/upload-artifact@v1
         with:
           name: kibana-reports-windows-x64
-          path: kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}.zip
+          path: ../kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}.zip
