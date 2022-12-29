@@ -81,6 +81,12 @@ export enum DELIVERY_TYPE {
 // https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-request-from-size.html
 export const DEFAULT_MAX_SIZE = 10000;
 
+// Managed service uses 9200, with server.basePath = '/_plugin/kibana'
+export const LOCAL_HOST = 'http://localhost:9200';
+// Managed service specific server base path
+export const BASE_PATH = '/_dashboards';
+
+export const DEFAULT_REPORT_HEADER = '<h1>OpenSearch Dashboards Reports</h1>';
 export const SECURITY_CONSTANTS = {
   TENANT_LOCAL_STORAGE_KEY: 'opendistro::security::tenant::show_popup',
 };
