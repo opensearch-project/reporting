@@ -38,7 +38,8 @@
     "react-router-dom": "^5.2.0",
     "react-toast-notifications": "^2.4.0",
     "set-interval-async": "1.0.33",
-    "showdown": "^1.9.1"
+    "showdown": "^1.9.1",
+    "svg-pathdata": "5.0.5"
   },
   "devDependencies": {
     "@elastic/eslint-import-resolver-kibana": "link:../../packages/osd-eslint-import-resolver-opensearch-dashboards",
@@ -76,6 +77,6 @@
     "ws": "^7.4.6",
     "minimist": "^1.2.6",
     "execa": "^4.0.2",
-    "yargs": "^15.0.0"
+    "yargs": "^16.2.0"
   }
 }
