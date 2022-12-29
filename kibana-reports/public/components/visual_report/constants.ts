@@ -23,7 +23,7 @@ export enum SELECTOR {
   notebook = '.euiPageBody',
 }
 
-export const DEFAULT_REPORT_HEADER = '<h1>OpenSearch Dashboards Reports</h1>';
+export const DEFAULT_REPORT_HEADER = '<h1>Open Distro Kibana Reports</h1>';
 
 export const converter = new Showdown.Converter({
   tables: true,
