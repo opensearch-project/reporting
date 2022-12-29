@@ -122,8 +122,8 @@ export const generateReport = async (id: string, forceDelay = 15000) => {
   );
   const format =
     report.report_definition.report_params.core_params.report_format;
-  const reportSource = report.report_definition.report_params
-    .report_source as unknown as VISUAL_REPORT_TYPE;
+  const reportSource = (report.report_definition.report_params
+    .report_source as unknown) as VISUAL_REPORT_TYPE;
   const headerInput = report.report_definition.report_params.core_params.header;
   const footerInput = report.report_definition.report_params.core_params.footer;
   const header = headerInput

@@ -280,48 +280,48 @@ export default function (router: IRouter) {
   //   }
   // );
 
-  // // get single report details by id
-  // router.get(
-  //   {
-  //     path: `${API_PREFIX}/reports/{reportId}`,
-  //     validate: {
-  //       params: schema.object({
-  //         reportId: schema.string(),
-  //       }),
-  //     },
-  //   },
-  //   async (
-  //     context,
-  //     request,
-  //     response
-  //   ): Promise<IKibanaResponse<any | ResponseError>> => {
-  //     addToMetric('report', 'info', 'count');
-  //     try {
-  //       // @ts-ignore
-  //       const esReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.esReportsClient.asScoped(
-  //         request
-  //       );
+  // get single report details by id
+  router.get(
+    {
+      path: `${API_PREFIX}/reports/{reportId}`,
+      validate: {
+        params: schema.object({
+          reportId: schema.string(),
+        }),
+      },
+    },
+    async (
+      context,
+      request,
+      response
+    ): Promise<IKibanaResponse<any | ResponseError>> => {
+      addToMetric('report', 'info', 'count');
+      try {
+        // @ts-ignore
+        const esReportsClient: ILegacyScopedClusterClient = context.reporting_plugin.esReportsClient.asScoped(
+          request
+        );
 
-  //       const esResp = await esReportsClient.callAsCurrentUser(
-  //         'es_reports.getReportById',
-  //         {
-  //           reportInstanceId: request.params.reportId,
-  //         }
-  //       );
+        const esResp = await esReportsClient.callAsCurrentUser(
+          'es_reports.getReportById',
+          {
+            reportInstanceId: request.params.reportId,
+          }
+        );
 
-  //       const report = backendToUiReport(esResp.reportInstance);
+        const report = backendToUiReport(esResp.reportInstance);
 
-  //       return response.ok({
-  //         body: report,
-  //       });
-  //     } catch (error) {
-  //       //@ts-ignore
-  //       context.reporting_plugin.logger.error(
-  //         `Failed to get single report details: ${error}`
-  //       );
-  //       addToMetric('report', 'info', checkErrorType(error));
-  //       return errorResponse(response, error);
-  //     }
-  //   }
-  // );
+        return response.ok({
+          body: report,
+        });
+      } catch (error) {
+        //@ts-ignore
+        context.reporting_plugin.logger.error(
+          `Failed to get single report details: ${error}`
+        );
+        addToMetric('report', 'info', checkErrorType(error));
+        return errorResponse(response, error);
+      }
+    }
+  );
 }
