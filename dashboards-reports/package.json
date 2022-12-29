@@ -23,7 +23,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "cron-validator": "^1.1.1",
-    "dompurify": "^2.3.8",
+    "dompurify": "^2.4.1",
     "elastic-builder": "^2.7.1",
     "enzyme-adapter-react-16": "^1.15.2",
     "html2canvas": "1.4.1",
@@ -65,7 +65,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest-dom": "^4.0.0",
     "react-test-renderer": "^16.12.0",
-    "replace-in-file": "^6.3.5",
+    "replace-in-file": "^5.0.2",
     "ts-jest": "^26.1.0"
   },
   "resolutions": {
