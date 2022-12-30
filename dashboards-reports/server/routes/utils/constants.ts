@@ -86,6 +86,7 @@ export const LOCAL_HOST = 'http://localhost:9200';
 // Managed service specific server base path
 export const BASE_PATH = '/_dashboards';
 
+export const DEFAULT_REPORT_HEADER = '<h1>OpenSearch Dashboards Reports</h1>';
 export const SECURITY_CONSTANTS = {
   TENANT_LOCAL_STORAGE_KEY: 'opendistro::security::tenant::show_popup',
 };
