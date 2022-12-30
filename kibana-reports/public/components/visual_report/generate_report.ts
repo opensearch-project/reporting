@@ -198,7 +198,7 @@ export const generateReport = async (id: string, forceDelay = 15000) => {
       link.click();
     } else {
       const orient = canvas.width > canvas.height ? 'landscape' : 'portrait';
-      const pdf = new jsPDF(orient, 'px', [canvas.width, canvas.height]);
+      const pdf = new jsPDF(orient, 'pt', [canvas.width, canvas.height]);
       pdf.addImage(canvas, 'JPEG', 0, 0, canvas.width, canvas.height);
       pdf.save(fileName);
     }
