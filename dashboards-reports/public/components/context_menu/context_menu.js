@@ -25,12 +25,10 @@
  */
 
 /* eslint-disable no-restricted-globals */
-//@ts-check
-import { i18n } from '@osd/i18n';
 import $ from 'jquery';
-import { parse } from 'url';
+import dateMath from '@elastic/datemath';
+import { i18n } from '@osd/i18n';
 import { readStreamToFile } from '../main/main_utils';
-import { uiSettingsService } from '../utils/settings_service';
 import {
   GENERATE_REPORT_PARAM,
   GENERATE_REPORT_PARAM_REGEX,

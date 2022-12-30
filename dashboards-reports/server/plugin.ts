@@ -32,6 +32,7 @@ import {
   Logger,
   ILegacyClusterClient,
 } from '../../../src/core/server';
+import { setIntervalAsync } from 'set-interval-async/dynamic';
 import opensearchReportsPlugin from './backend/opensearch-reports-plugin';
 import {
   ReportsDashboardsPluginSetup,
@@ -56,14 +57,9 @@ export class ReportsDashboardsPlugin
   implements
     Plugin<ReportsDashboardsPluginSetup, ReportsDashboardsPluginStart> {
   private readonly logger: Logger;
-  private readonly initializerContext: PluginInitializerContext<
-    ReportingConfigType
-  >;
-  private reportingConfig?: ReportingConfig;
 
-  constructor(context: PluginInitializerContext<ReportingConfigType>) {
-    this.logger = context.logger.get();
-    this.initializerContext = context;
+  constructor(initializerContext: PluginInitializerContext) {
+    this.logger = initializerContext.logger.get();
   }
 
   public setup(core: CoreSetup) {

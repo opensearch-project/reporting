@@ -43,7 +43,6 @@ import { createSavedSearchReport } from '../utils/savedSearchReportHelper';
 import { ReportSchemaType, VisualReportSchemaType } from '../../model';
 import { CreateReportResultType } from '../utils/types';
 import { saveReport } from './saveReport';
-import { ReportingConfig } from 'server';
 import _ from 'lodash';
 import { getFileName } from '../utils/helpers';
 
