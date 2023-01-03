@@ -13,20 +13,21 @@
     "test": "../../node_modules/.bin/jest --config ./test/jest.config.js",
     "cypress:run": "cypress run",
     "cypress:open": "cypress open",
-    "plugin_helpers": "node ../../scripts/plugin_helpers"
+    "plugin_helpers": "node ../../scripts/plugin_helpers",
+    "postinstall": "node ./scripts/patch-html2canvas.js"
   },
   "dependencies": {
-    "async-mutex": "^0.2.6",
     "babel-polyfill": "^6.26.0",
     "cron-validator": "^1.1.1",
-    "dompurify": "^2.3.8",
+    "dompurify": "^2.4.1",
     "elastic-builder": "^2.7.1",
     "enzyme-adapter-react-16": "^1.15.5",
+    "html2canvas": "1.4.1",
     "jest-fetch-mock": "^3.0.3",
     "jquery": "^3.5.0",
     "jsdom": "13.1.0",
     "json-2-csv": "^3.7.6",
-    "puppeteer-core": "^13.7.0",
+    "jspdf": "^2.5.1",
     "react-addons-test-utils": "^15.6.2",
     "react-id-generator": "^3.0.1",
     "react-markdown": "^4.3.1",
@@ -44,7 +45,6 @@
     "@types/dompurify": "^2.3.3",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jsdom": "^16.2.3",
-    "@types/puppeteer-core": "^5.4.0",
     "@types/react": "^16.14.23",
     "@types/react-addons-test-utils": "^0.14.25",
     "@types/react-dom": "^16.9.8",
@@ -60,6 +60,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest-dom": "^4.0.0",
     "react-test-renderer": "^16.12.0",
+    "replace-in-file": "^6.3.5",
     "ts-jest": "^26.1.0"
   },
   "resolutions": {
