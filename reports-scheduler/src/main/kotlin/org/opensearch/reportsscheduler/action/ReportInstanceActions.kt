@@ -43,7 +43,8 @@ internal object ReportInstanceActions {
         log.info("$LOG_PREFIX:ReportInstance-createOnDemand")
         UserAccessManager.validateUser(user)
         val currentTime = Instant.now()
-        val reportInstance = ReportInstance("ignore",
+        val reportInstance = ReportInstance(
+            "ignore",
             currentTime,
             currentTime,
             request.beginTime,
@@ -53,7 +54,8 @@ internal object ReportInstanceActions {
             request.reportDefinitionDetails,
             Status.Success, // TODO: Revert to request.status when background job execution supported
             request.statusText,
-            request.inContextDownloadUrlPath)
+            request.inContextDownloadUrlPath
+        )
         val docId = ReportInstancesIndex.createReportInstance(reportInstance)
         docId ?: run {
             Metrics.REPORT_FROM_DEFINITION_SYSTEM_ERROR.counter.increment()
@@ -86,7 +88,8 @@ internal object ReportInstanceActions {
         val beginTime: Instant = currentTime.minus(reportDefinitionDetails.reportDefinition.format.duration)
         val endTime: Instant = currentTime
         val currentStatus: Status = Status.Success // TODO: Revert to Executing when background job execution supported
-        val reportInstance = ReportInstance("ignore",
+        val reportInstance = ReportInstance(
+            "ignore",
             currentTime,
             currentTime,
             beginTime,
@@ -94,7 +97,8 @@ internal object ReportInstanceActions {
             UserAccessManager.getUserTenant(user),
             reportDefinitionDetails.access,
             reportDefinitionDetails,
-            currentStatus)
+            currentStatus
+        )
         val docId = ReportInstancesIndex.createReportInstance(reportInstance)
         docId ?: run {
             Metrics.REPORT_FROM_DEFINITION_ID_SYSTEM_ERROR.counter.increment()
@@ -127,9 +131,11 @@ internal object ReportInstanceActions {
             throw OpenSearchStatusException("Status cannot be updated to ${Status.Scheduled}", RestStatus.BAD_REQUEST)
         }
         val currentTime = Instant.now()
-        val updatedReportInstance = currentReportInstance.copy(updatedTime = currentTime,
+        val updatedReportInstance = currentReportInstance.copy(
+            updatedTime = currentTime,
             status = request.status,
-            statusText = request.statusText)
+            statusText = request.statusText
+        )
         if (!ReportInstancesIndex.updateReportInstance(updatedReportInstance)) {
             Metrics.REPORT_INSTANCE_UPDATE_SYSTEM_ERROR.counter.increment()
             throw OpenSearchStatusException("Report Instance state update failed", RestStatus.INTERNAL_SERVER_ERROR)
@@ -167,10 +173,12 @@ internal object ReportInstanceActions {
     fun getAll(request: GetAllReportInstancesRequest, user: User?): GetAllReportInstancesResponse {
         log.info("$LOG_PREFIX:ReportInstance-getAll fromIndex:${request.fromIndex} maxItems:${request.maxItems}")
         UserAccessManager.validateUser(user)
-        val reportInstanceList = ReportInstancesIndex.getAllReportInstances(UserAccessManager.getUserTenant(user),
+        val reportInstanceList = ReportInstancesIndex.getAllReportInstances(
+            UserAccessManager.getUserTenant(user),
             UserAccessManager.getSearchAccessInfo(user),
             request.fromIndex,
-            request.maxItems)
+            request.maxItems
+        )
         return GetAllReportInstancesResponse(reportInstanceList, true)
     }
 }
