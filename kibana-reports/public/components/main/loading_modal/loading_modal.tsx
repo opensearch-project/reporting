@@ -59,7 +59,7 @@ export function GenerateReportLoadingModal(props: { setShowLoading: any; }) {
           <EuiModalBody>
             <EuiText>Preparing your file for download.</EuiText>
             <EuiText>
-              You can close this dialog while we continue in the background.
+              Please keep this dialog open while report is being generated.
             </EuiText>
             <EuiSpacer />
             <EuiFlexGroup justifyContent="center" alignItems="center">
@@ -71,11 +71,6 @@ export function GenerateReportLoadingModal(props: { setShowLoading: any; }) {
               </EuiFlexItem>
             </EuiFlexGroup>
             <EuiSpacer size="l" />
-            <EuiFlexGroup alignItems="flexEnd" justifyContent="flexEnd">
-              <EuiFlexItem grow={false}>
-                <EuiButton onClick={closeModal}>Close</EuiButton>
-              </EuiFlexItem>
-            </EuiFlexGroup>
           </EuiModalBody>
         </EuiModal>
       </EuiOverlayMask>

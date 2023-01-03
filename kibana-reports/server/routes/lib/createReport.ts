@@ -28,14 +28,13 @@ import {
   RequestHandlerContext,
 } from '../../../../../src/core/server';
 import { createSavedSearchReport } from '../utils/savedSearchReportHelper';
-import { ReportSchemaType } from '../../model';
+import { ReportSchemaType, VisualReportSchemaType } from '../../model';
 import { CreateReportResultType } from '../utils/types';
-import { createVisualReport } from '../utils/visual_report/visualReportHelper';
 import { SetCookie } from 'puppeteer-core';
 import { deliverReport } from './deliverReport';
-import { updateReportState } from './updateReportState';
+// import { updateReportState } from './updateReportState';
 import { saveReport } from './saveReport';
-import { SemaphoreInterface } from 'async-mutex';
+import { getFileName } from '../utils/helpers';
 
 export const createReport = async (
   request: KibanaRequest,
@@ -46,8 +45,6 @@ export const createReport = async (
   const isScheduledTask = false;
   //@ts-ignore
   const logger: Logger = context.reporting_plugin.logger;
-  //@ts-ignore
-  const semaphore: SemaphoreInterface = context.reporting_plugin.semaphore;
   // @ts-ignore
   const notificationClient: ILegacyScopedClusterClient = context.reporting_plugin.notificationClient.asScoped(
     request
@@ -105,18 +102,25 @@ export const createReport = async (
           }
         });
       }
-      const [value, release] = await semaphore.acquire();
-      try {
-        createReportResult = await createVisualReport(
-          reportParams,
-          completeQueryUrl,
-          logger,
-          cookieObject,
-          timezone
-        );
-      } finally {
-        release();
-      }
+      
+      const {
+        core_params,
+        report_name: reportName,
+        report_source: reportSource,
+      } = reportParams;
+      const coreParams = core_params as VisualReportSchemaType;
+      const {
+        header,
+        footer,
+        window_height: windowHeight,
+        window_width: windowWidth,
+        report_format: reportFormat,
+      } = coreParams;
+      const curTime = new Date();
+      const timeCreated = curTime.valueOf();
+      const fileName = `${getFileName(reportName, curTime)}.${reportFormat}`;
+
+      return { timeCreated, dataUrl: '', fileName, reportId, queryUrl: report.query_url };
     }
     // update report state to "created"
     // TODO: temporarily remove the following
