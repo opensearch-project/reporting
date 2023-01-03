@@ -202,7 +202,7 @@ export const popoverMenuDiscover = (savedObjectAvailable) => {
 
 export const permissionsMissingOnGeneration = () => {
   return `
-  <div class="euiToast euiToast--danger" id="permissionsMissingErrorToast">
+  <div class="euiToast euiToast--danger" id="permissionsMissingErrorToast" data-html2canvas-ignore>
   <p class="euiScreenReaderOnly">A new notification appears</p>
   <div class="euiToastHeader euiToastHeader--withBody" aria-label="Notification" data-test-subj="euiToastHeader">
     <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="euiIcon euiIcon--medium euiToastHeader__icon" focusable="false" role="img" aria-hidden="true">
@@ -224,7 +224,7 @@ export const permissionsMissingOnGeneration = () => {
 
 export const reportGenerationSuccess = () => {
   return `
-  <div class="euiToast euiToast--success" id="reportSuccessToast">
+  <div class="euiToast euiToast--success" id="reportSuccessToast"  data-html2canvas-ignore>
     <p class="euiScreenReaderOnly">A new notification appears</p>
     <div class="euiToastHeader euiToastHeader--withBody"
     aria-label="Notification" data-test-subj="euiToastHeader">
@@ -256,7 +256,7 @@ export const reportGenerationFailure = (
   text = 'There was an error generating this report.'
 ) => {
   return `
-  <div class="euiToast euiToast--danger" id="reportFailureToast">
+  <div class="euiToast euiToast--danger" id="reportFailureToast" data-html2canvas-ignore>
     <p class="euiScreenReaderOnly">A new notification appears</p>
     <div class="euiToastHeader euiToastHeader--withBody"
     aria-label="Notification" data-test-subj="euiToastHeader">
@@ -283,7 +283,7 @@ export const reportGenerationFailure = (
 
 export const reportGenerationInProgressModal = () => {
   return `
-  <div class="euiOverlayMask" id="reportGenerationProgressModal">
+  <div class="euiOverlayMask" id="reportGenerationProgressModal" data-html2canvas-ignore>
   <div data-focus-guard="true" tabindex="0" style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"></div>
   <div data-focus-guard="true" tabindex="1" style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"></div>
   <div data-focus-lock-disabled="false">
@@ -304,15 +304,12 @@ export const reportGenerationInProgressModal = () => {
            <div class="euiModalBody">
               <div class="euiModalBody__overflow">
                  <div class="euiText euiText--medium">Preparing your file for download.</div>
-                 <div class="euiText euiText--medium">You can close this dialog while we continue in the background.</div>
+                 <div class="euiText euiText--medium">Please keep this dialog open while report is being generated.</div>
                  <div class="euiSpacer euiSpacer--l"></div>
                  <div class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsCenter euiFlexGroup--justifyContentCenter euiFlexGroup--directionRow euiFlexGroup--responsive">
                     <div class="euiFlexItem euiFlexItem--flexGrowZero"><span class="euiLoadingSpinner euiLoadingSpinner--xLarge" style="min-width: 75px; min-height: 75px;"></span></div>
                  </div>
                  <div class="euiSpacer euiSpacer--l"></div>
-                 <div class="euiFlexGroup euiFlexGroup--gutterLarge euiFlexGroup--alignItemsFlexEnd euiFlexGroup--justifyContentFlexEnd euiFlexGroup--directionRow euiFlexGroup--responsive">
-                    <div class="euiFlexItem euiFlexItem--flexGrowZero"><button class="euiButton euiButton--primary" type="button" id="closeReportGenerationModalButton"><span class="euiButton__content"><span class="euiButton__text">Close</span></span></button></div>
-                 </div>
               </div>
            </div>
         </div>

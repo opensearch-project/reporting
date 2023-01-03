@@ -26,6 +26,8 @@ import {
 } from './types';
 import './components/context_menu/context_menu';
 import { PLUGIN_NAME } from '../common';
+import { uiSettingsService } from './components/utils/settings_service';
+
 export class OpendistroKibanaReportsPlugin
   implements
     Plugin<
@@ -33,6 +35,7 @@ export class OpendistroKibanaReportsPlugin
       OpendistroKibanaReportsPluginStart
     > {
   public setup(core: CoreSetup): OpendistroKibanaReportsPluginSetup {
+    uiSettingsService.init(core.uiSettings, core.http);
     // Register an application into the side navigation menu
     core.application.register({
       id: PLUGIN_NAME,

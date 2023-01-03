@@ -25,29 +25,8 @@ jobs:
         with:
           node-version: "10.23.1"
 
-      # bootstrap first to workaround errors caused by removing puppeteer-core from x-pack
-      - name: Kibana Plugin Bootstrap
-        uses: nick-invision/retry@v1
-        with:
-          timeout_minutes: 30
-          max_attempts: 3
-          command: cd ../kibana; yarn kbn bootstrap
-
       - name: Move Kibana Reports to Plugins Dir
         run: mv kibana-reports ../kibana/plugins/${{ env.PLUGIN_NAME }}
-
-      - name: Add Chromium Binary to Reporting for Testing
-        run: |
-          sudo apt install -y libnss3-dev fonts-liberation libfontconfig1
-          cd ../kibana/plugins/${{ env.PLUGIN_NAME }}
-          wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip
-          unzip chromium-linux-x64.zip
-          rm chromium-linux-x64.zip
-
-      # reporting uses newer version of puppeteer-core than x-pack, removing it to avoid conflicts
-      - name: Remove x-pack puppeteer-core dependency
-        run: |
-          sed -i '/"puppeteer-core": "/d' ../kibana/x-pack/package.json
 
       - name: Kibana Plugin Bootstrap
         uses: nick-invision/retry@v1
@@ -74,48 +53,22 @@ jobs:
         run: |
           cd ../kibana/plugins/${{ env.PLUGIN_NAME }}
           yarn build
-
-          cd build
-          mkdir -p ./{linux-x64,linux-arm64,windows-x64}/kibana/${{ env.PLUGIN_NAME }}
-          cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-x64/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-x64.zip
-          cp ./${{ env.PLUGIN_NAME }}-*.zip ./linux-arm64/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-arm64.zip
-          mv ./${{ env.PLUGIN_NAME }}-*.zip ./windows-x64/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-windows-x64.zip
-
-          cd linux-x64
-          wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-x64.zip
-          unzip chromium-linux-x64.zip -d ./kibana/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./kibana
-          mv ./${{ env.PLUGIN_NAME }}-*.zip ..
-          cd ..
-
-          cd linux-arm64
-          wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-linux-arm64.zip
-          unzip chromium-linux-arm64.zip -d ./kibana/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./kibana
-          mv ./${{ env.PLUGIN_NAME }}-*.zip ..
-          cd ..
-
-          cd windows-x64
-          wget https://github.com/opendistro-for-elasticsearch/kibana-reports/releases/download/chromium-1.12.0.0/chromium-windows-x64.zip
-          unzip chromium-windows-x64.zip -d ./kibana/${{ env.PLUGIN_NAME }}
-          zip -ur ./${{ env.PLUGIN_NAME }}-*.zip ./kibana
-          mv ./${{ env.PLUGIN_NAME }}-*.zip ..
-          cd ..
+          mv ./build/*.zip ./build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}.zip
 
       - name: Upload Artifact For Linux x64
         uses: actions/upload-artifact@v1
         with:
           name: kibana-reports-linux-x64
-          path: ../kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-x64.zip
+          path: ../kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}.zip
 
       - name: Upload Artifact For Linux arm64
         uses: actions/upload-artifact@v1
         with:
           name: kibana-reports-linux-arm64
-          path: ../kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-linux-arm64.zip
+          path: ../kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}.zip
 
       - name: Upload Artifact For Windows
         uses: actions/upload-artifact@v1
         with:
           name: kibana-reports-windows-x64
-          path: ../kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}-windows-x64.zip
+          path: ../kibana/plugins/${{ env.PLUGIN_NAME }}/build/${{ env.PLUGIN_NAME }}-${{ env.OD_VERSION }}.zip
