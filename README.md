@@ -10,7 +10,6 @@
 - [Contributing](#contributing)
 - [Setup](#setup-&-build)
 - [Notifications Integration](#notifications-integration)
-- [Troubleshooting](#troubleshooting)
 - [Code of Conduct](#code-of-conduct)
 - [Security](#security)
 - [License](#license)
@@ -35,6 +34,7 @@ Complete OpenSearch Dashboards Report feature is composed of 2 plugins.
 
 OpenSearch Dashboards Reports integration with [Notifications](https://github.com/opensearch-project/notifications) is currently in progress. Tracking [here](https://github.com/opensearch-project/dashboards-reports/issues/72)
 
+<<<<<<< HEAD
 ## Troubleshooting
 
 ### Fail to launch Chromium
@@ -66,6 +66,8 @@ If you are using a Ubuntu/Debian system, install the following packages:
 
 The installation command for both systems can be found [here](./dashboards-reports/rendering-engine/headless-chrome/README.md).
 
+=======
+>>>>>>> 71d843a... Use front-end report generation instead of chromium (#586)
 ## Code of Conduct
 
 This project has adopted the [Amazon Open Source Code of Conduct](CODE_OF_CONDUCT.md). For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq), or contact [opensource-codeofconduct@amazon.com](mailto:opensource-codeofconduct@amazon.com) with any additional questions or comments.
@@ -80,4 +82,3 @@ See the [LICENSE](./LICENSE) file for our project's licensing. We will ask you t
 
 ## Copyright
 
-Copyright OpenSearch Contributors. See [NOTICE](NOTICE.txt) for details.
