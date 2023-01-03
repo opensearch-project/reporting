@@ -3,13 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { IUiSettingsClient } from '../../../../../src/core/public';
+import { HttpStart, IUiSettingsClient } from '../../../../../src/core/public';
 
 let uiSettings: IUiSettingsClient;
+let http: HttpStart;
 
 export const uiSettingsService = {
-  init: (client: IUiSettingsClient) => {
-    uiSettings = client;
+  init: (uiSettingsClient: IUiSettingsClient, httpClient: HttpStart) => {
+    uiSettings = uiSettingsClient;
+    http = httpClient;
   },
   get: (key: string, defaultOverride?: any) => {
     return uiSettings?.get(key, defaultOverride) || '';
@@ -28,4 +30,5 @@ export const uiSettingsService = {
       csvSeparator,
     };
   },
+  getHttpClient: () => http,
 };
