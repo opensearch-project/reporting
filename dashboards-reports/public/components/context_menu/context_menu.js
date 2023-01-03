@@ -25,27 +25,31 @@
  */
 
 /* eslint-disable no-restricted-globals */
+//@ts-check
+import { i18n } from '@osd/i18n';
 import $ from 'jquery';
 import dateMath from '@elastic/datemath';
-import { i18n } from '@osd/i18n';
+import { parse } from 'url';
 import { readStreamToFile } from '../main/main_utils';
+import { uiSettingsService } from '../utils/settings_service';
 import {
-  contextMenuCreateReportDefinition,
-  getTimeFieldsFromUrl,
-  displayLoadingModal,
+  GENERATE_REPORT_PARAM,
+  GENERATE_REPORT_PARAM_REGEX,
+} from '../visual_report/constants';
+import { generateReport } from '../visual_report/generate_report';
+import {
   addSuccessOrFailureToast,
+  contextMenuCreateReportDefinition,
   contextMenuViewReports,
+  displayLoadingModal,
+  getTimeFieldsFromUrl,
   replaceQueryURL,
 } from './context_menu_helpers';
 import {
+  getMenuItem,
   popoverMenu,
   popoverMenuDiscover,
-  getMenuItem,
 } from './context_menu_ui';
-import { timeRangeMatcher } from '../utils/utils';
-import { parse } from 'url';
-import { unhashUrl } from '../../../../../src/plugins/opensearch_dashboards_utils/public';
-import { uiSettingsService } from '../utils/settings_service';
 
 const generateInContextReport = async (
   timeRanges,
@@ -126,23 +130,28 @@ const generateInContextReport = async (
       credentials: 'include',
     }
   )
-    .then((response) => {
-      if (response.status === 200) {
-        $('#reportGenerationProgressModal').remove();
-        addSuccessOrFailureToast('success');
-      } else {
-        if (response.status === 403) {
+    .then(async (response) => [response.status, await response.json()])
+    .then(async ([status, data]) => {
+      if (status !== 200) {
+        if (status === 403) {
           addSuccessOrFailureToast('permissionsFailure');
-        } else if (response.status === 503) {
+        } else if (status === 503) {
           addSuccessOrFailureToast('timeoutFailure', reportSource);
         } else {
           addSuccessOrFailureToast('failure');
         }
+      } else if (fileFormat === 'pdf' || fileFormat === 'png') {
+        try {
+          await generateReport(data.reportId);
+          addSuccessOrFailureToast('success');
+        } catch (error) {
+          console.error(error);
+          addSuccessOrFailureToast('failure');
+        }
+      } else if (data.data) {
+        await readStreamToFile(data.data, fileFormat, data.filename);
       }
-      return response.json();
-    })
-    .then(async (data) => {
-      await readStreamToFile(data.data, fileFormat, data.filename);
+      $('#reportGenerationProgressModal').remove();
     });
 };
 
@@ -239,8 +248,33 @@ $(function () {
     });
   });
 
+  checkURLParams();
   locationHashChanged();
 });
+
+/* generate a report if flagged in URL params */
+const checkURLParams = async () => {
+  const [hash, query] = location.href.split('#')[1].split('?');
+  const params = new URLSearchParams(query);
+  const id = params.get(GENERATE_REPORT_PARAM);
+  if (!id) return;
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  displayLoadingModal();
+  try {
+    await generateReport(id, 30000);
+    window.history.replaceState(
+      {},
+      '',
+      `#${hash}?${query.replace(GENERATE_REPORT_PARAM_REGEX, '')}`
+    );
+    addSuccessOrFailureToast('success');
+  } catch (error) {
+    console.error(error);
+    addSuccessOrFailureToast('failure');
+  } finally {
+    $('#reportGenerationProgressModal').remove();
+  }
+};
 
 const isDiscoverNavMenu = (navMenu) => {
   return (

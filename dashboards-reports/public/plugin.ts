@@ -44,7 +44,7 @@ export class ReportsDashboardsPlugin
   implements Plugin<ReportsDashboardsPluginSetup, ReportsDashboardsPluginStart>
 {
   public setup(core: CoreSetup): ReportsDashboardsPluginSetup {
-    uiSettingsService.init(core.uiSettings);
+    uiSettingsService.init(core.uiSettings, core.http);
     // Register an application into the side navigation menu
     core.application.register({
       id: PLUGIN_ID,
