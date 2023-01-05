@@ -7,6 +7,8 @@ export interface CreateReportResultType {
   timeCreated: number;
   dataUrl: string;
   fileName: string;
+  reportId: string;
+  queryUrl: string;
 }
 
 type ReportSourceType = 'dashboard' | 'visualization' | 'saved_search' | 'notebook';
