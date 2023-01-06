@@ -26,13 +26,6 @@ OpenSearch Dashboards Reports allows ‘Report Owner’ (engineers, including bu
 | Distribution build tests     | [![OpenSearch IT tests][reports-scheduler-it-badge]][reports-scheduler-it-link] [![OpenSearch IT code][reports-scheduler-it-code-badge]][reports-scheduler-it-code-link] |
 | Backward compatibility tests | [![BWC tests][bwc-tests-badge]][bwc-tests-link]                                                                                                                          |
 
-### Dashboard-Reports
-
-|                          |                                                                                                                    |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| Test and build           | [![Observability Dashboards CI][dashboard-reports-build-badge]][dashboard-reports-build-link]                      |
-| Code coverage            | [![codecov][dashboard-reports-codecov-badge]][codecov-link]                                                        |
-| Distribution build tests | [![cypress tests][cypress-test-badge]][cypress-test-link] [![cypress code][cypress-code-badge]][cypress-code-link] |
 
 ### Repository Checks
 
@@ -56,11 +49,8 @@ OpenSearch Dashboards Reports allows ‘Report Owner’ (engineers, including bu
 [dco-badge-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dco.yml
 [link-check-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/link-checker.yml/badge.svg
 [link-check-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/link-checker.yml
-[dashboard-reports-build-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dashboards-reports-test-and-build-workflow.yml/badge.svg
-[dashboard-reports-build-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dashboards-reports-test-and-build-workflow.yml
 [reports-scheduler-build-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/reports-scheduler-test-and-build-workflow.yml/badge.svg
 [reports-scheduler-build-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/reports-scheduler-test-and-build-workflow.yml
-[dashboard-reports-codecov-badge]: https://codecov.io/gh/opensearch-project/dashboards-reports/branch/main/graphs/badge.svg?flag=dashboards-reports
 [reports-scheduler-codecov-badge]: https://codecov.io/gh/opensearch-project/dashboards-reports/branch/main/graphs/badge.svg?flag=reports-scheduler
 [codecov-link]: https://codecov.io/gh/opensearch-project/dashboards-reports
 [cypress-test-badge]: https://img.shields.io/badge/Cypress%20tests-in%20progress-yellow
