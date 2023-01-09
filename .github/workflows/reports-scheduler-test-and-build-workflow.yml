@@ -61,7 +61,7 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          ./gradlew.bat build -x integTest -x jacocoTestReport
+          ./gradlew.bat build
 
       - name: Create Artifact Path
         run: |
@@ -94,7 +94,7 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          ./gradlew build -x integTest -x jacocoTestReport
+          ./gradlew build
 
       - name: Create Artifact Path
         run: |
