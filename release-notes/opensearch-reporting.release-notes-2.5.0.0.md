@@ -1,5 +1,5 @@
-## Version 2.4.1.0 Release Notes
-Compatible with OpenSearch and OpenSearch Dashboards Version 2.4.1
+## Version 2.5.0.0 Release Notes
+Compatible with OpenSearch and OpenSearch Dashboards Version 2.5.0
 
 ### Infrastructure
 * Include integration tests in windows and macOS workflow ([#624](https://github.com/opensearch-project/reporting/pull/624))
