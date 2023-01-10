@@ -17,19 +17,16 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
-      # reports-scheduler
       - name: Checkout Reports Scheduler
         uses: actions/checkout@v2
 
       - name: RunBackwards Compatibility Tests
         run: |
-          cd reports-scheduler
           echo "Running backwards compatibility tests ..."
           ./gradlew bwcTestSuite
 
       - name: Build with Gradle
         run: |
-          cd reports-scheduler
           ./gradlew build
 
       - name: Upload coverage
@@ -42,7 +39,7 @@ jobs:
       - name: Create Artifact Path
         run: |
           mkdir -p reports-scheduler-builds
-          cp -r ./reports-scheduler/build/distributions/*.zip reports-scheduler-builds/
+          cp -r ./build/distributions/*.zip reports-scheduler-builds/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v1
@@ -64,26 +61,17 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
-      # reports-scheduler
       - name: Checkout Reports Scheduler
         uses: actions/checkout@v2
 
-      # Disable bwc tests since first release
-      # - name: RunBackwards Compatibility Tests
-      #   run: |
-      #     cd reports-scheduler
-      #     echo "Running backwards compatibility tests ..."
-      #     ./gradlew.bat bwcTestSuite
-
       - name: Build with Gradle
         run: |
-          cd reports-scheduler
-          ./gradlew.bat build -x integTest -x jacocoTestReport
+          ./gradlew.bat build
 
       - name: Create Artifact Path
         run: |
           mkdir -p reports-scheduler-builds
-          cp -r ./reports-scheduler/build/distributions/*.zip reports-scheduler-builds/
+          cp -r ./build/distributions/*.zip reports-scheduler-builds/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v1
@@ -109,22 +97,14 @@ jobs:
       - name: Checkout Reports Scheduler
         uses: actions/checkout@v2
 
-      # Disable bwc tests since first release
-      # - name: RunBackwards Compatibility Tests
-      #   run: |
-      #     cd reports-scheduler
-      #     echo "Running backwards compatibility tests ..."
-      #     ./gradlew bwcTestSuite
-
       - name: Build with Gradle
         run: |
-          cd reports-scheduler
-          ./gradlew build -x integTest -x jacocoTestReport
+          ./gradlew build
 
       - name: Create Artifact Path
         run: |
           mkdir -p reports-scheduler-builds
-          cp -r ./reports-scheduler/build/distributions/*.zip reports-scheduler-builds/
+          cp -r ./build/distributions/*.zip reports-scheduler-builds/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v1
