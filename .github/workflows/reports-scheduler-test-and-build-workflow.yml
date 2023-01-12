@@ -26,7 +26,6 @@ jobs:
 
       - name: RunBackwards Compatibility Tests
         run: |
-          cd reports-scheduler
           echo "Running backwards compatibility tests ..."
           ./gradlew bwcTestSuite
 
