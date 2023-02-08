@@ -320,17 +320,18 @@ testClusters.integTest {
 }
 
 // For job-scheduler and reports-scheduler, the latest opensearch releases appear to be 1.1.0.0.
-String bwcVersion = "2.4.0.0"
+String baseVersion = "2.6.0"
+String bwcVersion = baseVersion + ".0"
 String baseName = "reportsSchedulerBwcCluster"
 String bwcFilePath = "src/test/resources/bwc"
-String bwcJobSchedulerURL = "https://ci.opensearch.org/ci/dbc/distribution-build-opensearch/2.4.0/latest/linux/x64/tar/builds/opensearch/plugins/opensearch-job-scheduler-2.4.0.0.zip"
-String bwcReportsSchedulerURL = "https://ci.opensearch.org/ci/dbc/distribution-build-opensearch/2.4.0/latest/linux/x64/tar/builds/opensearch/plugins/opensearch-reports-scheduler-2.4.0.0.zip"
+String bwcJobSchedulerURL = "https://ci.opensearch.org/ci/dbc/distribution-build-opensearch/${baseVersion}/latest/linux/x64/tar/builds/opensearch/plugins/opensearch-job-scheduler-${bwcVersion}.zip"
+String bwcReportsSchedulerURL = "https://ci.opensearch.org/ci/dbc/distribution-build-opensearch/${baseVersion}/latest/linux/x64/tar/builds/opensearch/plugins/opensearch-reports-scheduler-${bwcVersion}.zip"
 
 2.times {i ->
     testClusters {
         "${baseName}$i" {
             testDistribution = "ARCHIVE"
-            versions = ["2.4.0", opensearch_version]
+            versions = [baseVersion, opensearch_version]
             numberOfNodes = 3
             plugin(provider(new Callable<RegularFile>(){
                 @Override
