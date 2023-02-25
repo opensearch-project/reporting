@@ -5,8 +5,8 @@
 
 package org.opensearch.reportsscheduler.model
 
-import org.opensearch.common.xcontent.ToXContent
-import org.opensearch.common.xcontent.ToXContent.Params
+import org.opensearch.core.xcontent.ToXContent
+import org.opensearch.core.xcontent.ToXContent.Params
 
 /**
  * Plugin Rest common Tags.
