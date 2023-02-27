@@ -5,7 +5,7 @@
 
 package org.opensearch.reportsscheduler.resthandler
 
-import org.opensearch.common.xcontent.XContentBuilder
+import org.opensearch.core.xcontent.XContentBuilder
 import org.opensearch.reportsscheduler.metrics.Metrics
 import org.opensearch.reportsscheduler.model.BaseResponse
 import org.opensearch.rest.BytesRestResponse
