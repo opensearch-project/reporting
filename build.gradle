@@ -116,6 +116,7 @@ configurations {
     ktlint
     testCompile
     testRuntime
+    zipArchive
 }
 
 detekt {
@@ -167,6 +168,7 @@ repositories {
 }
 
 dependencies {
+    zipArchive group: 'org.opensearch.plugin', name:'opensearch-job-scheduler', version: "${opensearch_build}"
     implementation "org.opensearch:opensearch:${opensearch_version}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-common:${kotlin_version}"
@@ -293,8 +295,6 @@ Zip bundle = (Zip) project.getTasks().getByName("bundlePlugin");
 integTest.dependsOn(bundle)
 integTest.getClusters().forEach{c -> c.plugin(project.getObjects().fileProperty().value(bundle.getArchiveFile()))}
 
-String jobSchedulerURL = "https://ci.opensearch.org/ci/dbc/distribution-build-opensearch/" + opensearch_version.replace("-SNAPSHOT", "") + "/latest/linux/x64/tar/builds/opensearch/plugins/opensearch-job-scheduler-" + opensearch_build.replace("-SNAPSHOT", "") + ".zip"
-
 testClusters.integTest {
     testDistribution = "INTEG_TEST"
     // need to install job-scheduler first, need to assemble job-scheduler first
@@ -304,15 +304,7 @@ testClusters.integTest {
             return new RegularFile() {
                 @Override
                 File getAsFile() {
-                    File dir = new File("src/test/resources/job-scheduler")
-                    if (!dir.exists()) {
-                        dir.mkdirs()
-                    }
-                    File file = new File(dir, "opensearch-job-scheduler-" + opensearch_build + ".zip")
-                    if (!file.exists()) {
-                        new URL(jobSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
-                    }
-                    return fileTree("src/test/resources/job-scheduler").getSingleFile()
+                    return configurations.zipArchive.asFileTree.getSingleFile()
                 }
             }
         }
