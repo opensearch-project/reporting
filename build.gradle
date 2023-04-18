@@ -329,8 +329,8 @@ String baseVersion = "2.7.0"
 String bwcVersion = baseVersion + ".0"
 String baseName = "reportsSchedulerBwcCluster"
 String bwcFilePath = "src/test/resources/bwc"
-String bwcJobSchedulerURL = "https://aws.oss.sonatype.org/content/repositories/snapshots/org/opensearch/plugin/opensearch-job-scheduler/2.7.0.0-SNAPSHOT/opensearch-job-scheduler-2.7.0.0-20230305.020625-11.zip"
-String bwcReportsSchedulerURL = "https://aws.oss.sonatype.org/content/repositories/snapshots/org/opensearch/plugin/opensearch-reports-scheduler/2.7.0.0-SNAPSHOT/opensearch-reports-scheduler-2.7.0.0-20230306.195720-1.zip"
+String bwcJobSchedulerURL = "https://aws.oss.sonatype.org/content/repositories/snapshots/org/opensearch/plugin/opensearch-job-scheduler/2.7.0.0-SNAPSHOT/opensearch-job-scheduler-2.7.0.0-20230412.230425-26.zip"
+String bwcReportsSchedulerURL = "https://aws.oss.sonatype.org/content/repositories/snapshots/org/opensearch/plugin/opensearch-reports-scheduler/2.7.0.0-SNAPSHOT/opensearch-reports-scheduler-2.7.0.0-20230418.163501-5.zip"
 
 2.times {i ->
     testClusters {
