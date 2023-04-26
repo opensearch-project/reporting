@@ -176,7 +176,7 @@ dependencies {
     implementation "${group}:common-utils:${common_utils_version}"
     compileOnly "${group}:opensearch-job-scheduler-spi:${job_scheduler_version}"
     implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
-    implementation "org.json:json:20180813"
+    implementation "org.json:json:20230227"
     implementation group: 'com.github.wnameless.json', name: 'json-flattener', version: '0.15.1'
     // json-base, jackson-databind, jackson-annotations are transitive dependencies by json-flattener
     implementation group: 'com.github.wnameless.json', name: 'json-base', version: '2.2.1'
