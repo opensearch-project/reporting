@@ -130,7 +130,7 @@ dependencies {
     compile "${group}:common-utils:${common_utils_version}"
     compileOnly "${group}:opensearch-job-scheduler-spi:${job_scheduler_version}"
     compile group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
-    compile "org.json:json:20180813"
+    compile "org.json:json:20230227"
     compile group: 'com.github.wnameless', name: 'json-flattener', version: '0.1.0'
     implementation 'org.jsoup:jsoup:1.15.3'
 
