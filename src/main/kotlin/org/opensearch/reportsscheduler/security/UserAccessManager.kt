@@ -118,6 +118,9 @@ internal object UserAccessManager {
         if (getUserTenant(user) != tenant) {
             return false
         }
+        if (isUserPrivateTenant(user)) {
+            return access.contains("$USER_TAG${user.name}")
+        }
         return if (PluginSettings.isRbacEnabled()) {
             user.backendRoles.map { "$BACKEND_ROLE_TAG$it" }.any { it in access }
         } else {
