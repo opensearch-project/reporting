@@ -6,13 +6,13 @@
 package org.opensearch.integTest.rest
 
 import org.junit.Assert
+import org.opensearch.core.rest.RestStatus
 import org.opensearch.integTest.PluginRestTestCase
 import org.opensearch.integTest.constructReportDefinitionRequest
 import org.opensearch.integTest.validateErrorResponse
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.rest.RestRequest
-import org.opensearch.rest.RestStatus
 
 class ReportInstanceIT : PluginRestTestCase() {
     fun `test update on-demand report definition status to success after creation`() {
