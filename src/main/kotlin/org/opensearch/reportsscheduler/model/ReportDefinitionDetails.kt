@@ -6,11 +6,11 @@
 package org.opensearch.reportsscheduler.model
 
 import org.opensearch.common.xcontent.XContentFactory
-import org.opensearch.common.xcontent.XContentParserUtils
 import org.opensearch.core.xcontent.ToXContent
 import org.opensearch.core.xcontent.ToXContent.EMPTY_PARAMS
 import org.opensearch.core.xcontent.XContentBuilder
 import org.opensearch.core.xcontent.XContentParser
+import org.opensearch.core.xcontent.XContentParserUtils
 import org.opensearch.jobscheduler.spi.ScheduledJobParameter
 import org.opensearch.jobscheduler.spi.schedule.Schedule
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
