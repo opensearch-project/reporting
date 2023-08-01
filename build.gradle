@@ -26,7 +26,7 @@ buildscript {
 
         common_utils_version = System.getProperty("common_utils.version", opensearch_build)
         job_scheduler_version = System.getProperty("job_scheduler.version", opensearch_build)
-        kotlin_version = System.getProperty("kotlin.version", "1.6.0")
+        kotlin_version = System.getProperty("kotlin.version", "1.8.2")
         jackson_version = "2.14.1"
     }
 
