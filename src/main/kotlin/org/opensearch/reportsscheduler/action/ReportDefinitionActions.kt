@@ -7,6 +7,7 @@ package org.opensearch.reportsscheduler.action
 
 import org.opensearch.OpenSearchStatusException
 import org.opensearch.commons.authuser.User
+import org.opensearch.core.rest.RestStatus
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
 import org.opensearch.reportsscheduler.index.ReportDefinitionsIndex
 import org.opensearch.reportsscheduler.metrics.Metrics
@@ -23,7 +24,6 @@ import org.opensearch.reportsscheduler.model.UpdateReportDefinitionRequest
 import org.opensearch.reportsscheduler.model.UpdateReportDefinitionResponse
 import org.opensearch.reportsscheduler.security.UserAccessManager
 import org.opensearch.reportsscheduler.util.logger
-import org.opensearch.rest.RestStatus
 import java.time.Instant
 
 /**

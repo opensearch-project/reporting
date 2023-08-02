@@ -6,6 +6,7 @@
 package org.opensearch.integTest.rest
 
 import org.junit.Assert
+import org.opensearch.core.rest.RestStatus
 import org.opensearch.integTest.PluginRestTestCase
 import org.opensearch.integTest.jsonify
 import org.opensearch.integTest.validateErrorResponse
@@ -14,7 +15,6 @@ import org.opensearch.integTest.validateTimeRecency
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.rest.RestRequest
-import org.opensearch.rest.RestStatus
 import java.time.Duration
 import java.time.Instant
 
