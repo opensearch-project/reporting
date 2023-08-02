@@ -6,11 +6,11 @@
 package org.opensearch.reportsscheduler.model
 
 import org.opensearch.common.xcontent.XContentFactory
-import org.opensearch.common.xcontent.XContentParserUtils
 import org.opensearch.core.xcontent.ToXContent
 import org.opensearch.core.xcontent.ToXContentObject
 import org.opensearch.core.xcontent.XContentBuilder
 import org.opensearch.core.xcontent.XContentParser
+import org.opensearch.core.xcontent.XContentParserUtils
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
 import org.opensearch.reportsscheduler.model.RestTag.ACCESS_LIST_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.BEGIN_TIME_FIELD
