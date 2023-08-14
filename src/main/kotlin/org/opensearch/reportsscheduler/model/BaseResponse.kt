@@ -5,12 +5,21 @@
 
 package org.opensearch.reportsscheduler.model
 
+<<<<<<< HEAD
 import org.opensearch.action.ActionResponse
 import org.opensearch.common.xcontent.ToXContent
 import org.opensearch.common.xcontent.ToXContentObject
 import org.opensearch.common.xcontent.XContentBuilder
 import org.opensearch.common.xcontent.XContentFactory
 import org.opensearch.rest.RestStatus
+=======
+import org.opensearch.common.xcontent.XContentFactory
+import org.opensearch.core.action.ActionResponse
+import org.opensearch.core.rest.RestStatus
+import org.opensearch.core.xcontent.ToXContent
+import org.opensearch.core.xcontent.ToXContentObject
+import org.opensearch.core.xcontent.XContentBuilder
+>>>>>>> c254aad (Merge pull request #748 from derek-ho/insights)
 
 /**
  * Base response which give REST status.
