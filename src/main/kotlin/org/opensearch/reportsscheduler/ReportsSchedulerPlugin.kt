@@ -6,7 +6,6 @@
 package org.opensearch.reportsscheduler
 
 import org.opensearch.action.ActionRequest
-import org.opensearch.action.ActionResponse
 import org.opensearch.client.Client
 import org.opensearch.cluster.metadata.IndexNameExpressionResolver
 import org.opensearch.cluster.node.DiscoveryNodes
@@ -16,6 +15,7 @@ import org.opensearch.common.settings.IndexScopedSettings
 import org.opensearch.common.settings.Setting
 import org.opensearch.common.settings.Settings
 import org.opensearch.common.settings.SettingsFilter
+import org.opensearch.core.action.ActionResponse
 import org.opensearch.core.common.io.stream.NamedWriteableRegistry
 import org.opensearch.core.xcontent.NamedXContentRegistry
 import org.opensearch.env.Environment
