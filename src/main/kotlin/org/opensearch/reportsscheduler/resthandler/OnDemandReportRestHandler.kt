@@ -5,6 +5,7 @@
 package org.opensearch.reportsscheduler.resthandler
 
 import org.opensearch.client.node.NodeClient
+import org.opensearch.core.rest.RestStatus
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.action.InContextReportCreateAction
@@ -22,7 +23,6 @@ import org.opensearch.rest.RestHandler.Route
 import org.opensearch.rest.RestRequest
 import org.opensearch.rest.RestRequest.Method.POST
 import org.opensearch.rest.RestRequest.Method.PUT
-import org.opensearch.rest.RestStatus
 
 /**
  * Rest handler for creating on-demand report instances.

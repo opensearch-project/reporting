@@ -5,6 +5,7 @@
 package org.opensearch.reportsscheduler.resthandler
 
 import org.opensearch.client.node.NodeClient
+import org.opensearch.core.rest.RestStatus
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.action.GetAllReportDefinitionsAction
@@ -20,7 +21,6 @@ import org.opensearch.rest.RestHandler.ReplacedRoute
 import org.opensearch.rest.RestHandler.Route
 import org.opensearch.rest.RestRequest
 import org.opensearch.rest.RestRequest.Method.GET
-import org.opensearch.rest.RestStatus
 
 /**
  * Rest handler for getting list of report definitions.
