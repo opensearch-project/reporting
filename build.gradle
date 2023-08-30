@@ -27,7 +27,6 @@ buildscript {
         common_utils_version = System.getProperty("common_utils.version", opensearch_build)
         job_scheduler_version = System.getProperty("job_scheduler.version", opensearch_build)
         kotlin_version = System.getProperty("kotlin.version", "1.8.21")
-        jackson_version = "2.14.1"
     }
 
     repositories {
@@ -179,8 +178,8 @@ dependencies {
     implementation group: 'com.github.wnameless.json', name: 'json-flattener', version: '0.15.1'
     // json-base, jackson-databind, jackson-annotations are transitive dependencies by json-flattener
     implementation group: 'com.github.wnameless.json', name: 'json-base', version: '2.2.1'
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
-    implementation "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:${versions.jackson}"
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation "org.jetbrains.kotlin:kotlin-test:${kotlin_version}"
@@ -194,7 +193,7 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-test:${kotlin_version}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation "org.mockito:mockito-core:${versions.mockito}"
-    testImplementation "org.mockito:mockito-junit-jupiter:4.7.0"
+    testImplementation "org.mockito:mockito-junit-jupiter:${versions.mockito}"
     testImplementation 'com.google.code.gson:gson:2.8.9'
 
     ktlint "com.pinterest:ktlint:0.45.1"
