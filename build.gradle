@@ -324,7 +324,7 @@ testClusters.integTest {
 }
 
 // For job-scheduler and reports-scheduler, the latest opensearch releases appear to be 1.1.0.0.
-String baseVersion = "2.10.0"
+String baseVersion = "2.11.0"
 String bwcVersion = baseVersion + ".0"
 String baseName = "reportsSchedulerBwcCluster"
 String bwcFilePath = "src/test/resources/bwc"
