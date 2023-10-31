@@ -3,13 +3,25 @@ name: Test and Build Reports Scheduler
 on: [push, pull_request]
 
 jobs:
+  Get-CI-Image-Tag:
+    uses: opensearch-project/opensearch-build/.github/workflows/get-ci-image-tag.yml@main
+    with:
+      product: opensearch
+
   linux-build:
+    needs: Get-CI-Image-Tag
     strategy:
       matrix:
         java:
           - 11
           - 17
     runs-on: ubuntu-latest
+    container:
+      # using the same image which is used by opensearch-build team to build the OpenSearch Distribution
+      # this image tag is subject to change as more dependencies and updates will arrive over time
+      image: ${{ needs.Get-CI-Image-Tag.outputs.ci-image-version-linux }}
+      # need to switch to root so that github actions can install runner binary on container without permission issues.
+      options: --user root
 
     steps:
       - name: Set up JDK ${{ matrix.java }}
@@ -23,11 +35,13 @@ jobs:
       - name: RunBackwards Compatibility Tests
         run: |
           echo "Running backwards compatibility tests ..."
-          ./gradlew bwcTestSuite
+          chown -R 1000:1000 `pwd`
+          su `id -un 1000` -c "./gradlew bwcTestSuite"
 
       - name: Build with Gradle
         run: |
-          ./gradlew build
+          chown -R 1000:1000 `pwd`
+          su `id -un 1000` -c "./gradlew build"
 
       - name: Upload coverage
         uses: codecov/codecov-action@v1
@@ -40,6 +54,7 @@ jobs:
         run: |
           mkdir -p reports-scheduler-builds
           cp -r ./build/distributions/*.zip reports-scheduler-builds/
+          chown -R 1000:1000 `pwd`
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v1
