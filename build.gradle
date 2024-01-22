@@ -198,7 +198,7 @@ dependencies {
     testImplementation "org.mockito:mockito-junit-jupiter:${versions.mockito}"
     testImplementation 'com.google.code.gson:gson:2.8.9'
 
-    ktlint "com.pinterest:ktlint:0.45.1"
+    ktlint "com.pinterest:ktlint:0.47.1"
 }
 
 javadoc.enabled = false // turn off javadoc as it barfs on Kotlin code
