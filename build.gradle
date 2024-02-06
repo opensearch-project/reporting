@@ -136,7 +136,7 @@ configurations.all {
         force "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
         force "org.jetbrains.kotlin:kotlin-stdlib-common:${kotlin_version}"
         force "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.11.4"
-        force "org.yaml:snakeyaml:2.0"
+        force "org.yaml:snakeyaml:2.1"
     }
 }
 
