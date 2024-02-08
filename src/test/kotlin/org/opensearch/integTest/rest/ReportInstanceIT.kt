@@ -261,10 +261,12 @@ class ReportInstanceIT : PluginRestTestCase() {
         Assert.assertEquals(totalHits, 2)
         val reportInstanceList = listReportInstancesResponse.get("reportInstanceList").asJsonArray
         Assert.assertEquals(
-            reportInstanceId, reportInstanceList[0].asJsonObject.get("id").asString
+            reportInstanceId,
+            reportInstanceList[0].asJsonObject.get("id").asString
         )
         Assert.assertEquals(
-            newReportInstanceId, reportInstanceList[1].asJsonObject.get("id").asString
+            newReportInstanceId,
+            reportInstanceList[1].asJsonObject.get("id").asString
         )
     }
 
@@ -514,10 +516,12 @@ class ReportInstanceIT : PluginRestTestCase() {
         Assert.assertEquals(totalHits, 2)
         val reportInstanceList = listReportInstancesResponse.get("reportInstanceList").asJsonArray
         Assert.assertEquals(
-            reportInstanceId, reportInstanceList[0].asJsonObject.get("id").asString
+            reportInstanceId,
+            reportInstanceList[0].asJsonObject.get("id").asString
         )
         Assert.assertEquals(
-            newReportInstanceId, reportInstanceList[1].asJsonObject.get("id").asString
+            newReportInstanceId,
+            reportInstanceList[1].asJsonObject.get("id").asString
         )
     }
 }
