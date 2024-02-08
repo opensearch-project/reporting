@@ -109,7 +109,8 @@ internal class OnDemandReportRestHandler : PluginBaseHandler() {
                 client.execute(
                     OnDemandReportCreateAction.ACTION_TYPE,
                     OnDemandReportCreateRequest.parse(
-                        request.contentParserNextToken(), request.param(REPORT_DEFINITION_ID_FIELD)
+                        request.contentParserNextToken(),
+                        request.param(REPORT_DEFINITION_ID_FIELD)
                     ),
                     RestResponseToXContentListener(it)
                 )
