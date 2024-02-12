@@ -1,6 +1,6 @@
-## Version 2.10.0.0 Release Notes
+## Version 2.12.0.0 Release Notes
 
-Compatible with OpenSearch 2.10.0
+Compatible with OpenSearch 2.12.0
 
 ### Maintenance
 * Onboard jenkins prod docker images to github actions ([#924](https://github.com/opensearch-project/reporting/pull/924))
