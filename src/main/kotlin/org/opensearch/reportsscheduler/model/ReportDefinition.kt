@@ -33,7 +33,7 @@ import java.time.Duration
  *   },
  *   "format":{
  *       "duration":"PT1H",
- *       "fileFormat":"Pdf", // Pdf, Png, Csv
+ *       "fileFormat":"Pdf", // Pdf, Png, Csv, Xlsx
  *       "limit":1000, // optional
  *       "header":"optional header",
  *       "footer":"optional footer"
@@ -76,7 +76,7 @@ internal data class ReportDefinition(
     internal enum class SourceType { Dashboard, Visualization, SavedSearch, Notebook }
     internal enum class TriggerType { Download, OnDemand, CronSchedule, IntervalSchedule }
     internal enum class DeliveryFormat { LinkOnly, Attachment, Embedded }
-    internal enum class FileFormat { Pdf, Png, Csv }
+    internal enum class FileFormat { Pdf, Png, Csv, Xlsx }
 
     internal companion object {
         private val log by logger(ReportDefinition::class.java)
