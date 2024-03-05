@@ -16,7 +16,6 @@ import org.opensearch.reportsscheduler.getJsonString
 internal class GetAllReportInstancesResponseTests {
 
     private fun createReportInstanceSearchResults(): ReportInstanceSearchResults {
-
         return ReportInstanceSearchResults(
             startIndex = 0,
             totalHits = 100,
