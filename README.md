@@ -60,7 +60,7 @@ OpenSearch Dashboards Reports allows ‘Report Owner’ (engineers, including bu
 [reports-scheduler-it-badge]: https://img.shields.io/badge/Reports%20Scheduler%20IT%20tests-in%20progress-yellow
 [reports-scheduler-it-link]: https://github.com/opensearch-project/opensearch-build/issues/1124
 [reports-scheduler-it-code-badge]: https://img.shields.io/badge/Reports%20Scheduler%20code-blue
-[reports-scheduler-it-code-link]: https://github.com/opensearch-project/dashboards-reports/blob/main/reports-scheduler/src/test/kotlin/org/opensearch/reportsscheduler/ReportsSchedulerPluginIT.kt
+[reports-scheduler-it-code-link]: https://github.com/opensearch-project/reporting/blob/main/src/test/kotlin/org/opensearch/integTest/ReportsSchedulerPluginIT.kt
 [bwc-tests-badge]: https://img.shields.io/badge/BWC%20tests-in%20progress-yellow
 [bwc-tests-link]: https://github.com/opensearch-project/dashboards-reports/pull/244/files
 [good-first-badge]: https://img.shields.io/github/issues/opensearch-project/dashboards-reports/good%20first%20issue.svg
