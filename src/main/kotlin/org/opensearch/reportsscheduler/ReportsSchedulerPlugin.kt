@@ -81,7 +81,7 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSch
 
     override fun getSystemIndexDescriptors(settings: Settings): Collection<SystemIndexDescriptor> {
         return listOf(
-            SystemIndexDescriptor(".opendistro-reports-*", "Reports Scheduler Plugin system index pattern"),
+            SystemIndexDescriptor(".opendistro-reports-*", "Reports Scheduler Plugin system index pattern")
         )
     }
 
