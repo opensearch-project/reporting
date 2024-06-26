@@ -40,6 +40,7 @@ import org.opensearch.reportsscheduler.action.UpdateReportInstanceStatusAction
 import org.opensearch.reportsscheduler.index.ReportDefinitionsIndex
 import org.opensearch.reportsscheduler.index.ReportDefinitionsIndex.REPORT_DEFINITIONS_INDEX_NAME
 import org.opensearch.reportsscheduler.index.ReportInstancesIndex
+import org.opensearch.reportsscheduler.index.ReportInstancesIndex.REPORT_INSTANCES_INDEX_NAME
 import org.opensearch.reportsscheduler.resthandler.OnDemandReportRestHandler
 import org.opensearch.reportsscheduler.resthandler.ReportDefinitionListRestHandler
 import org.opensearch.reportsscheduler.resthandler.ReportDefinitionRestHandler
@@ -81,7 +82,8 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSch
 
     override fun getSystemIndexDescriptors(settings: Settings): Collection<SystemIndexDescriptor> {
         return listOf(
-            SystemIndexDescriptor(".opendistro-reports-*", "Reports Scheduler Plugin system index pattern")
+            SystemIndexDescriptor(REPORT_DEFINITIONS_INDEX_NAME, "Reports Scheduler Plugin Definitions index"),
+            SystemIndexDescriptor(REPORT_INSTANCES_INDEX_NAME, "Reports Scheduler Plugin Instances index")
         )
     }
 
