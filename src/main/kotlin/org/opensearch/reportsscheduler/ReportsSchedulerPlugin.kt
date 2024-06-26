@@ -20,11 +20,13 @@ import org.opensearch.core.common.io.stream.NamedWriteableRegistry
 import org.opensearch.core.xcontent.NamedXContentRegistry
 import org.opensearch.env.Environment
 import org.opensearch.env.NodeEnvironment
+import org.opensearch.indices.SystemIndexDescriptor
 import org.opensearch.jobscheduler.spi.JobSchedulerExtension
 import org.opensearch.jobscheduler.spi.ScheduledJobParser
 import org.opensearch.jobscheduler.spi.ScheduledJobRunner
 import org.opensearch.plugins.ActionPlugin
 import org.opensearch.plugins.Plugin
+import org.opensearch.plugins.SystemIndexPlugin
 import org.opensearch.reportsscheduler.action.CreateReportDefinitionAction
 import org.opensearch.reportsscheduler.action.DeleteReportDefinitionAction
 import org.opensearch.reportsscheduler.action.GetAllReportDefinitionsAction
@@ -38,6 +40,7 @@ import org.opensearch.reportsscheduler.action.UpdateReportInstanceStatusAction
 import org.opensearch.reportsscheduler.index.ReportDefinitionsIndex
 import org.opensearch.reportsscheduler.index.ReportDefinitionsIndex.REPORT_DEFINITIONS_INDEX_NAME
 import org.opensearch.reportsscheduler.index.ReportInstancesIndex
+import org.opensearch.reportsscheduler.index.ReportInstancesIndex.REPORT_INSTANCES_INDEX_NAME
 import org.opensearch.reportsscheduler.resthandler.OnDemandReportRestHandler
 import org.opensearch.reportsscheduler.resthandler.ReportDefinitionListRestHandler
 import org.opensearch.reportsscheduler.resthandler.ReportDefinitionRestHandler
@@ -59,7 +62,7 @@ import java.util.function.Supplier
  * Entry point of the OpenSearch Reports scheduler plugin.
  * This class initializes the rest handlers.
  */
-class ReportsSchedulerPlugin : Plugin(), ActionPlugin, JobSchedulerExtension {
+class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSchedulerExtension {
 
     companion object {
         const val PLUGIN_NAME = "opensearch-reports-scheduler"
@@ -75,6 +78,13 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, JobSchedulerExtension {
         val settingList = arrayListOf<Setting<*>>()
         settingList.addAll(PluginSettings.getAllSettings())
         return settingList
+    }
+
+    override fun getSystemIndexDescriptors(settings: Settings): Collection<SystemIndexDescriptor> {
+        return listOf(
+            SystemIndexDescriptor(REPORT_DEFINITIONS_INDEX_NAME, "Reports Scheduler Plugin Definitions index"),
+            SystemIndexDescriptor(REPORT_INSTANCES_INDEX_NAME, "Reports Scheduler Plugin Instances index")
+        )
     }
 
     /**
