@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit
  */
 internal object ReportInstancesIndex {
     private val log by logger(ReportInstancesIndex::class.java)
-    private const val REPORT_INSTANCES_INDEX_NAME = ".opendistro-reports-instances"
+    const val REPORT_INSTANCES_INDEX_NAME = ".opendistro-reports-instances"
     private const val REPORT_INSTANCES_MAPPING_FILE_NAME = "report-instances-mapping.yml"
     private const val REPORT_INSTANCES_SETTINGS_FILE_NAME = "report-instances-settings.yml"
 
