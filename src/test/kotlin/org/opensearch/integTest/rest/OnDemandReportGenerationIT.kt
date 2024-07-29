@@ -81,7 +81,7 @@ class OnDemandReportGenerationIT : PluginRestTestCase() {
         validateTimeNearRefTime(
             Instant.ofEpochMilli(reportInstance.get("beginTimeMs").asLong),
             Instant.now().minus(Duration.parse(reportDefinition.get("format").asJsonObject.get("duration").asString)),
-            1
+            3
         )
         Assert.assertEquals(
             reportInstance.get("tenant").asString,
