@@ -59,7 +59,7 @@ jobs:
           chown -R 1000:1000 `pwd`
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: reports-scheduler-linux
           path: reports-scheduler-builds
@@ -90,7 +90,7 @@ jobs:
           cp -r ./build/distributions/*.zip reports-scheduler-builds/
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: reports-scheduler-windows
           path: reports-scheduler-builds
@@ -122,7 +122,7 @@ jobs:
           cp -r ./build/distributions/*.zip reports-scheduler-builds/
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: reports-scheduler-macos
           path: reports-scheduler-builds

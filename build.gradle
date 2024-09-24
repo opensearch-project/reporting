@@ -14,6 +14,8 @@ buildscript {
         isSnapshot = "true" == System.getProperty("build.snapshot", "true")
         opensearch_version = System.getProperty("opensearch.version", "2.18.0-SNAPSHOT")
         buildVersionQualifier = System.getProperty("build.version_qualifier", "")
+        wazuh_version = System.getProperty("version", "5.0.0")
+        revision = System.getProperty("build.revision", "0")
         // 2.0.0-rc1-SNAPSHOT -> 2.0.0.0-rc1-SNAPSHOT
         version_tokens = opensearch_version.tokenize('-')
         opensearch_build = version_tokens[0] + '.0'
@@ -68,7 +70,7 @@ def usingMultiNode = project.properties.containsKey('numNodes')
 check.dependsOn jacocoTestReport
 
 opensearchplugin {
-    name 'opensearch-reports-scheduler'
+    name 'wazuh-indexer-reports-scheduler'
     description 'Scheduler for Dashboards Reports Plugin'
     classname "org.opensearch.reportsscheduler.ReportsSchedulerPlugin"
     extendedPlugins = ['opensearch-job-scheduler']
@@ -78,9 +80,8 @@ publishing {
     publications {
         pluginZip(MavenPublication) { publication ->
             pom {
-                name = 'opensearch-reports-scheduler'
+                name = 'wazuh-indexer-scheduler'
                 description = 'Scheduler for Dashboards Reports Plugin'
-                groupId = "org.opensearch.plugin"
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'
@@ -91,6 +92,10 @@ publishing {
                     developer {
                         name = 'OpenSearch'
                         url = 'https://github.com/opensearch-project/reporting'
+                    }
+                    developer {
+                        name = 'Wazuh'
+                        url = 'https://github.com/wazuh/wazuh-indexer-reporting'
                     }
                 }
             }
@@ -159,7 +164,7 @@ plugins.withId('org.jetbrains.kotlin.jvm') {
 
 allprojects {
     group = "org.opensearch"
-    version = "${opensearch_build}"
+    version = "${wazuh_version}" + ".${revision}"
     plugins.withId('java') {
         sourceCompatibility = targetCompatibility = "11"
     }

@@ -65,7 +65,7 @@ import java.util.function.Supplier
 class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSchedulerExtension {
 
     companion object {
-        const val PLUGIN_NAME = "opensearch-reports-scheduler"
+        const val PLUGIN_NAME = "wazuh-indexer-reports-scheduler"
         const val LOG_PREFIX = "reports"
         const val BASE_REPORTS_URI = "/_plugins/_reports"
         const val LEGACY_BASE_REPORTS_URI = "/_opendistro/_reports"
