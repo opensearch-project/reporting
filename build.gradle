@@ -15,16 +15,10 @@ buildscript {
         opensearch_version = System.getProperty("opensearch.version", "2.18.0-SNAPSHOT")
         buildVersionQualifier = System.getProperty("build.version_qualifier", "")
         wazuh_version = System.getProperty("version", "5.0.0")
-        revision = System.getProperty("build.revision", "0")
+        revision = System.getProperty("revision", "0")
         // 2.0.0-rc1-SNAPSHOT -> 2.0.0.0-rc1-SNAPSHOT
         version_tokens = opensearch_version.tokenize('-')
         opensearch_build = version_tokens[0] + '.0'
-        if (buildVersionQualifier) {
-            opensearch_build += "-${buildVersionQualifier}"
-        }
-        if (isSnapshot) {
-            opensearch_build += "-SNAPSHOT"
-        }
 
         common_utils_version = System.getProperty("common_utils.version", opensearch_build)
         job_scheduler_version = System.getProperty("job_scheduler.version", opensearch_build)
@@ -40,7 +34,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "${opensearch_group}.gradle:build-tools:${opensearch_version}"
+        classpath "org.opensearch.gradle:build-tools:${opensearch_version}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
         classpath "org.jetbrains.kotlin:kotlin-allopen:${kotlin_version}"
         classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.4"

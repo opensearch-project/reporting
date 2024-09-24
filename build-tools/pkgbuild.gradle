@@ -9,10 +9,9 @@ apply plugin: 'com.netflix.nebula.ospackage'
 afterEvaluate {
     ospackage {
         packageName = "${name}"
-        release = isSnapshot ? "0.1" : '1'
-        version = "${project.version}" - "-SNAPSHOT"
+        version = "${project.version}" 
 
-        into '/usr/share/opensearch/plugins'
+        into '/usr/share/wazuh-indexer/plugins'
         from(zipTree(bundlePlugin.archivePath)) {
             into opensearchplugin.name
         }
@@ -23,17 +22,17 @@ afterEvaluate {
         dirMode 0755
 
         requires('opensearch-oss', versions.opensearch, EQUAL)
-        packager = 'Amazon'
-        vendor = 'Amazon'
+        packager = 'Wazuh'
+        vendor = 'Wazuh'
         os = 'LINUX'
         prefix '/usr'
 
         license 'ASL-2.0'
-        maintainer 'OpenSearch Team <opensearch@amazon.com>'
-        url 'https://opensearch.org/downloads.html'
+        maintainer 'Wazuh Team <info@wazuh.com>'
+        url 'https://wazuh.com'
         summary '''
-         OpenSearch reports scheduler.
-         Reference documentation can be found at https://docs-beta.opensearch.org/.
+         Wazuh Indexer reports scheduler.
+         Reference documentation can be found at https://opensearch.org/docs/latest/reporting/report-dashboard-index/.
     '''.stripIndent().replace('\n', ' ').trim()
     }
 
