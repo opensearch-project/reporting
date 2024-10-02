@@ -23,7 +23,6 @@ import org.opensearch.reportsscheduler.index.ReportInstancesIndex
 import org.opensearch.reportsscheduler.model.ReportDefinitionDetails
 import org.opensearch.reportsscheduler.model.ReportInstance
 import org.opensearch.reportsscheduler.util.NotificationApiUtils.getNotificationConfigInfo
-import org.opensearch.reportsscheduler.util.SecureIndexClient
 import org.opensearch.reportsscheduler.util.buildReportLink
 import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.reportsscheduler.util.sendNotificationWithHTML
@@ -43,7 +42,7 @@ internal object ReportDefinitionJobRunner : ScheduledJobRunner {
      * @param clusterService The ES cluster service
      */
     fun initialize(client: Client, clusterService: ClusterService) {
-        this.client = SecureIndexClient(client)
+        this.client = client
         this.clusterService = clusterService
     }
 
@@ -65,7 +64,7 @@ internal object ReportDefinitionJobRunner : ScheduledJobRunner {
         val htmlWithURL: String? =
             htmlMessage?.replace("{{urlDefinition}}", urlDefinition)?.replace("{{hits}}", hits.toString())
 
-        log.info("esto es el mensaje html $htmlMessage")
+        log.debug("HTML message: $htmlMessage") // TODO remove
         configInfo.sendNotificationWithHTML(
             this.client,
             title,
