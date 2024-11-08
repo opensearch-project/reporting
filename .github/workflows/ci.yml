@@ -1,0 +1,20 @@
+name: Build packages (on push)
+
+# This workflow runs when any of the following occur:
+# - On push to branches named after ci/*
+on:
+  pull_request:
+      # Sequence of patterns matched against refs/heads
+      branches:
+          - "migrate-*"
+          - "ci/*"
+
+jobs:
+    call-test-workflow:
+        runs-on: ubuntu-22.04
+        steps:
+            - run: |
+                  ./gradlew check
+    call-build-workflow:
+        uses: ./.github/workflows/build.yml
+        secrets: inherit
