@@ -13,11 +13,7 @@ This update is still being discussed, but we need to be aware of potential issue
 
 For that, we need to:
 
-- [ ] Review opensearch's release notes.
-- [ ] Identify improvements and potential impact.
-- [ ] Create new development branch.
-- [ ] Develop a testing environment to verify our components would work under this new build.
-
+- [ ] Migrate our changes on top of OpenSearch's reporting plugin v2.X.X.0 tag. Follow the [Maintainers Guide](https://docs.google.com/document/d/1NjPyyp6V6HwjmgCHY_mL-ywdtqtc1Ac4pZ44QcbIpz8/edit?usp=sharing).
 
 ## Issues
 -  _List here the detected issues_
