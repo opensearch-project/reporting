@@ -2,7 +2,7 @@
 name: Compatibility request
 about: Suggest supporting a new version of OpenSearch
 title: 'Compatibility with OpenSearch (version)'
-labels: request/operational, level/task, type/research
+labels: request/operational, level/task, type/maintenance
 assignees: ''
 
 ---
