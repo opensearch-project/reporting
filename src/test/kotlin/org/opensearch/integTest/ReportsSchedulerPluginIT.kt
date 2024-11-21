@@ -29,7 +29,7 @@ class ReportsSchedulerPluginIT : OpenSearchIntegTestCase() {
         )
         assertTrue(
             pluginInfos.stream()
-                .anyMatch { pluginInfo: PluginInfo -> pluginInfo.name == "opensearch-reports-scheduler" }
+                .anyMatch { pluginInfo: PluginInfo -> pluginInfo.name == "wazuh-indexer-reports-scheduler" }
         )
     }
 }

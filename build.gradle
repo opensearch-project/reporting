@@ -14,15 +14,11 @@ buildscript {
         isSnapshot = "true" == System.getProperty("build.snapshot", "true")
         opensearch_version = System.getProperty("opensearch.version", "2.18.0-SNAPSHOT")
         buildVersionQualifier = System.getProperty("build.version_qualifier", "")
+        wazuh_version = System.getProperty("version", "5.0.0")
+        revision = System.getProperty("revision", "0")
         // 2.0.0-rc1-SNAPSHOT -> 2.0.0.0-rc1-SNAPSHOT
         version_tokens = opensearch_version.tokenize('-')
         opensearch_build = version_tokens[0] + '.0'
-        if (buildVersionQualifier) {
-            opensearch_build += "-${buildVersionQualifier}"
-        }
-        if (isSnapshot) {
-            opensearch_build += "-SNAPSHOT"
-        }
 
         common_utils_version = System.getProperty("common_utils.version", opensearch_build)
         job_scheduler_version = System.getProperty("job_scheduler.version", opensearch_build)
@@ -38,7 +34,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "${opensearch_group}.gradle:build-tools:${opensearch_version}"
+        classpath "org.opensearch.gradle:build-tools:${opensearch_version}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
         classpath "org.jetbrains.kotlin:kotlin-allopen:${kotlin_version}"
         classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.4"
@@ -68,7 +64,7 @@ def usingMultiNode = project.properties.containsKey('numNodes')
 check.dependsOn jacocoTestReport
 
 opensearchplugin {
-    name 'opensearch-reports-scheduler'
+    name 'wazuh-indexer-reports-scheduler'
     description 'Scheduler for Dashboards Reports Plugin'
     classname "org.opensearch.reportsscheduler.ReportsSchedulerPlugin"
     extendedPlugins = ['opensearch-job-scheduler']
@@ -78,9 +74,8 @@ publishing {
     publications {
         pluginZip(MavenPublication) { publication ->
             pom {
-                name = 'opensearch-reports-scheduler'
+                name = 'wazuh-indexer-scheduler'
                 description = 'Scheduler for Dashboards Reports Plugin'
-                groupId = "org.opensearch.plugin"
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'
@@ -91,6 +86,10 @@ publishing {
                     developer {
                         name = 'OpenSearch'
                         url = 'https://github.com/opensearch-project/reporting'
+                    }
+                    developer {
+                        name = 'Wazuh'
+                        url = 'https://github.com/wazuh/wazuh-indexer-reporting'
                     }
                 }
             }
@@ -159,7 +158,7 @@ plugins.withId('org.jetbrains.kotlin.jvm') {
 
 allprojects {
     group = "org.opensearch"
-    version = "${opensearch_build}"
+    version = "${wazuh_version}" + ".${revision}"
     plugins.withId('java') {
         sourceCompatibility = targetCompatibility = "11"
     }
@@ -173,6 +172,9 @@ repositories {
 }
 
 dependencies {
+    // Needed for integ tests
+    zipArchive group: 'org.opensearch.plugin', name:'opensearch-notifications-core', version: "${opensearch_build}"
+    zipArchive group: 'org.opensearch.plugin', name:'notifications', version: "${opensearch_build}"
     zipArchive group: 'org.opensearch.plugin', name:'opensearch-job-scheduler', version: "${opensearch_build}"
     implementation "org.opensearch:opensearch:${opensearch_version}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}"
@@ -302,14 +304,35 @@ integTest.getClusters().forEach{c -> c.plugin(project.getObjects().fileProperty(
 testClusters.integTest {
     testDistribution = "INTEG_TEST"
     // need to install job-scheduler first, need to assemble job-scheduler first
-    plugin(provider(new Callable<RegularFile>(){
-        @Override
-        RegularFile call() throws Exception {
-            return new RegularFile() {
-                @Override
-                File getAsFile() {
-                    return configurations.zipArchive.asFileTree.getSingleFile()
-                }
+    plugin(provider({
+        new RegularFile() {
+            @Override
+            File getAsFile() {
+                return configurations.zipArchive.asFileTree.matching {
+                    include '**/opensearch-job-scheduler*'
+                }.singleFile
+            }
+        }
+    }))
+
+    plugin(provider({
+        new RegularFile() {
+            @Override
+            File getAsFile() {
+                return configurations.zipArchive.asFileTree.matching {
+                    include '**/opensearch-notifications-core*'
+                }.singleFile
+            }
+        }
+    }))
+
+    plugin(provider({
+        new RegularFile() {
+            @Override
+            File getAsFile() {
+                return configurations.zipArchive.asFileTree.matching {
+                    include '**/notifications*'
+                }.singleFile
             }
         }
     }))

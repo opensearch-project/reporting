@@ -3,5 +3,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-rootProject.name = 'opensearch-reports-scheduler'
+rootProject.name = 'wazuh-indexer-reports-scheduler'
 
