@@ -46,9 +46,9 @@ jobs:
           cp -r ./build/distributions/*.zip reports-scheduler-builds/
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
-          name: reports-scheduler-linux
+          name: reports-scheduler-linux-${{ matrix.java }}
           path: reports-scheduler-builds
 
   windows-build:
@@ -79,7 +79,7 @@ jobs:
           cp -r ./build/distributions/*.zip reports-scheduler-builds/
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
-          name: reports-scheduler-windows
+          name: reports-scheduler-windows-${{ matrix.java }}
           path: reports-scheduler-builds
