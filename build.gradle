@@ -146,7 +146,12 @@ dependencies {
     testCompile "org.mockito:mockito-core:3.12.4"
     testCompile 'com.google.code.gson:gson:2.8.9'
 
-    ktlint "com.pinterest:ktlint:0.45.1"
+    add("ktlint", "com.pinterest:ktlint:0.45.1") {
+        exclude group: "ch.qos.logback", module: "logback-classic"
+        exclude group: "ch.qos.logback", module: "logback-core"
+    }
+    add("ktlint", "ch.qos.logback:logback-core:1.2.13")
+    add("ktlint", "ch.qos.logback:logback-classic:1.2.13")
 }
 
 javadoc.enabled = false // turn off javadoc as it barfs on Kotlin code
