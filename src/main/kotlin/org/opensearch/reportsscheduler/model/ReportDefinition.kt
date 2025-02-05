@@ -234,74 +234,85 @@ internal data class ReportDefinition(
      * Report definition format data class
      */
     internal data class Format(
-        val duration: Duration,
-        val fileFormat: FileFormat,
-        val limit: Int?,
-        val header: String?,
-        val footer: String?
-    ) : ToXContentObject {
-        internal companion object {
-            private const val DURATION_TAG = "duration"
-            private const val FILE_FORMAT_TAG = "fileFormat"
-            private const val LIMIT_TAG = "limit"
-            private const val HEADER_TAG = "header"
-            private const val FOOTER_TAG = "footer"
-
-            /**
-             * Parse the data from parser and create Format object
-             * @param parser data referenced at parser
-             * @return created Format object
-             */
-            fun parse(parser: XContentParser): Format {
-                var durationSeconds: Duration? = null
-                var fileFormat: FileFormat? = null
-                var limit: Int? = null
-                var header: String? = null
-                var footer: String? = null
-                XContentParserUtils.ensureExpectedToken(XContentParser.Token.START_OBJECT, parser.currentToken(), parser)
-                while (XContentParser.Token.END_OBJECT != parser.nextToken()) {
-                    val fieldName = parser.currentName()
-                    parser.nextToken()
-                    when (fieldName) {
-                        DURATION_TAG -> durationSeconds = Duration.parse(parser.text())
-                        FILE_FORMAT_TAG -> fileFormat = FileFormat.valueOf(parser.text())
-                        LIMIT_TAG -> limit = parser.intValue()
-                        HEADER_TAG -> header = parser.textOrNull()
-                        FOOTER_TAG -> footer = parser.textOrNull()
-                        else -> {
-                            parser.skipChildren()
-                            log.info("$LOG_PREFIX:Format Skipping Unknown field $fieldName")
-                        }
-                    }
-                }
-                durationSeconds
-                    ?: throw IllegalArgumentException("$DURATION_TAG field absent")
-                fileFormat ?: throw IllegalArgumentException("$FILE_FORMAT_TAG field absent")
-                return Format(
-                    durationSeconds,
-                    fileFormat,
-                    limit,
-                    header,
-                    footer
-                )
-            }
-        }
+    val duration: Duration,
+    val fileFormat: FileFormat,
+    val limit: Int?,
+    val header: String?,
+    val footer: String?,
+    val timeFrom: String,
+    val timeTo: String
+) : ToXContentObject {
+    internal companion object {
+        private const val DURATION_TAG = "duration"
+        private const val FILE_FORMAT_TAG = "fileFormat"
+        private const val LIMIT_TAG = "limit"
+        private const val HEADER_TAG = "header"
+        private const val FOOTER_TAG = "footer"
+        private const val TIME_FROM_TAG = "timeFrom"
+        private const val TIME_TO_TAG = "timeTo"
 
         /**
-         * {@inheritDoc}
+         * Parse the data from parser and create Format object
+         * @param parser data referenced at parser
+         * @return created Format object
          */
-        override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
-            builder!!
-            builder.startObject()
-                .field(DURATION_TAG, duration.toString())
-                .field(FILE_FORMAT_TAG, fileFormat.name)
-            if (limit != null) builder.field(LIMIT_TAG, limit)
-            if (header != null) builder.field(HEADER_TAG, header)
-            if (footer != null) builder.field(FOOTER_TAG, footer)
-            builder.endObject()
-            return builder
+        fun parse(parser: XContentParser): Format {
+            var durationSeconds: Duration? = null
+            var fileFormat: FileFormat? = null
+            var limit: Int? = null
+            var header: String? = null
+            var footer: String? = null
+            var timeFrom: String = ""
+            var timeTo: String = ""
+            XContentParserUtils.ensureExpectedToken(XContentParser.Token.START_OBJECT, parser.currentToken(), parser)
+            while (XContentParser.Token.END_OBJECT != parser.nextToken()) {
+                val fieldName = parser.currentName()
+                parser.nextToken()
+                when (fieldName) {
+                    DURATION_TAG -> durationSeconds = Duration.parse(parser.text())
+                    FILE_FORMAT_TAG -> fileFormat = FileFormat.valueOf(parser.text())
+                    LIMIT_TAG -> limit = parser.intValue()
+                    HEADER_TAG -> header = parser.textOrNull()
+                    FOOTER_TAG -> footer = parser.textOrNull()
+                    TIME_FROM_TAG -> timeFrom = parser.textOrNull() // Added timeFrom parsing
+                    TIME_TO_TAG -> timeTo = parser.textOrNull()     // Added timeTo parsing
+                    else -> {
+                        parser.skipChildren()
+                        log.info("$LOG_PREFIX:Format Skipping Unknown field $fieldName")
+                    }
+                }
+            }
+            durationSeconds ?: throw IllegalArgumentException("$DURATION_TAG field absent")
+            fileFormat ?: throw IllegalArgumentException("$FILE_FORMAT_TAG field absent")
+            return Format(
+                durationSeconds,
+                fileFormat,
+                limit,
+                header,
+                footer,
+                timeFrom,
+                timeTo
+            )
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
+        builder!!
+        builder.startObject()
+            .field(DURATION_TAG, duration.toString())
+            .field(FILE_FORMAT_TAG, fileFormat.name)
+        if (limit != null) builder.field(LIMIT_TAG, limit)
+        if (header != null) builder.field(HEADER_TAG, header)
+        if (footer != null) builder.field(FOOTER_TAG, footer)
+        builder.field(TIME_FROM_TAG, timeFrom)
+        builder.field(TIME_TO_TAG, timeTo)
+        builder.endObject()
+        return builder
+    }
+}
 
     /**
      * Report definition trigger data class

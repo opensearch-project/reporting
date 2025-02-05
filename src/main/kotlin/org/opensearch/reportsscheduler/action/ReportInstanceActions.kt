@@ -85,8 +85,8 @@ internal object ReportInstanceActions {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
             throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportDefinitionId}", RestStatus.FORBIDDEN)
         }
-        val beginTime: Instant = currentTime.minus(reportDefinitionDetails.reportDefinition.format.duration)
-        val endTime: Instant = currentTime
+        val beginTime: Instant = Instant.parse(reportDefinitionDetails.reportDefinition.format.timeFrom)
+        val endTime: Instant = Instant.parse(reportDefinitionDetails.reportDefinition.format.timeTo)
         val currentStatus: Status = Status.Success // TODO: Revert to Executing when background job execution supported
         val reportInstance = ReportInstance(
             "ignore",
