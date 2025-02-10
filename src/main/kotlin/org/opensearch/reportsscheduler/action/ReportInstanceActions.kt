@@ -90,11 +90,9 @@ internal object ReportInstanceActions {
 
         if (!reportDefinitionDetails.reportDefinition.format.timeFrom.isNullOrBlank() &&
             !reportDefinitionDetails.reportDefinition.format.timeTo.isNullOrBlank()) {
-            // Use new logic if timeFrom and timeTo are present
             beginTime = Instant.parse(reportDefinitionDetails.reportDefinition.format.timeFrom)
             endTime = Instant.parse(reportDefinitionDetails.reportDefinition.format.timeTo)
         } else {
-            // Fallback to old logic
             beginTime = currentTime.minus(reportDefinitionDetails.reportDefinition.format.duration)
             endTime = currentTime
         }
