@@ -239,8 +239,8 @@ internal data class ReportDefinition(
     val limit: Int?,
     val header: String?,
     val footer: String?,
-    val timeFrom: String,
-    val timeTo: String
+    val timeFrom: String?,
+    val timeTo: String?
 ) : ToXContentObject {
     internal companion object {
         private const val DURATION_TAG = "duration"
@@ -262,8 +262,8 @@ internal data class ReportDefinition(
             var limit: Int? = null
             var header: String? = null
             var footer: String? = null
-            var timeFrom: String = ""
-            var timeTo: String = ""
+            var timeFrom: String? = null
+            var timeTo: String? = null
             XContentParserUtils.ensureExpectedToken(XContentParser.Token.START_OBJECT, parser.currentToken(), parser)
             while (XContentParser.Token.END_OBJECT != parser.nextToken()) {
                 val fieldName = parser.currentName()
@@ -274,8 +274,8 @@ internal data class ReportDefinition(
                     LIMIT_TAG -> limit = parser.intValue()
                     HEADER_TAG -> header = parser.textOrNull()
                     FOOTER_TAG -> footer = parser.textOrNull()
-                    TIME_FROM_TAG -> timeFrom = parser.textOrNull() // Added timeFrom parsing
-                    TIME_TO_TAG -> timeTo = parser.textOrNull()     // Added timeTo parsing
+                    TIME_FROM_TAG -> timeFrom = parser.textOrNull()
+                    TIME_TO_TAG -> timeTo = parser.textOrNull()
                     else -> {
                         parser.skipChildren()
                         log.info("$LOG_PREFIX:Format Skipping Unknown field $fieldName")
