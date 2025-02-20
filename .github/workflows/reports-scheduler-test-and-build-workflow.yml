@@ -46,7 +46,7 @@ jobs:
           su `id -un 1000` -c "./gradlew build"
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v4
         with:
           flags: reports-scheduler
           directory: reports-scheduler/
@@ -59,7 +59,7 @@ jobs:
           chown -R 1000:1000 `pwd`
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: reports-scheduler-linux
           path: reports-scheduler-builds
@@ -78,7 +78,7 @@ jobs:
           java-version: ${{ matrix.java }}
 
       - name: Checkout Reports Scheduler
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build with Gradle
         run: |
@@ -90,7 +90,7 @@ jobs:
           cp -r ./build/distributions/*.zip reports-scheduler-builds/
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: reports-scheduler-windows
           path: reports-scheduler-builds
@@ -110,7 +110,7 @@ jobs:
 
       # reports-scheduler
       - name: Checkout Reports Scheduler
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build with Gradle
         run: |
@@ -122,7 +122,7 @@ jobs:
           cp -r ./build/distributions/*.zip reports-scheduler-builds/
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: reports-scheduler-macos
           path: reports-scheduler-builds
