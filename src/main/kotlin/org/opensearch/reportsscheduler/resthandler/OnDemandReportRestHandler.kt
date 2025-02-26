@@ -4,7 +4,7 @@
  */
 package org.opensearch.reportsscheduler.resthandler
 
-import org.opensearch.client.node.NodeClient
+import org.opensearch.transport.client.node.NodeClient
 import org.opensearch.core.rest.RestStatus
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
