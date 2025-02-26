@@ -7,13 +7,13 @@ package org.opensearch.reportsscheduler.action
 
 import org.opensearch.action.ActionType
 import org.opensearch.action.support.ActionFilters
-import org.opensearch.client.Client
 import org.opensearch.common.inject.Inject
 import org.opensearch.commons.authuser.User
 import org.opensearch.core.xcontent.NamedXContentRegistry
 import org.opensearch.reportsscheduler.model.GetReportInstanceRequest
 import org.opensearch.reportsscheduler.model.GetReportInstanceResponse
 import org.opensearch.transport.TransportService
+import org.opensearch.transport.client.Client
 
 /**
  * Get report instance transport action

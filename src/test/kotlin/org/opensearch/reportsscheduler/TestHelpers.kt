@@ -50,7 +50,9 @@ internal fun createReportDefinitionObject(): ReportDefinition {
         fileFormat = ReportDefinition.FileFormat.Pdf,
         limit = 1000,
         header = "optional header",
-        footer = "optional footer"
+        footer = "optional footer",
+        timeFrom = null,
+        timeTo = null
     )
 
     val trigger = ReportDefinition.Trigger(

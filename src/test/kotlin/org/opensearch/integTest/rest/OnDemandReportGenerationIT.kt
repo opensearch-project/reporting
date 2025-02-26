@@ -36,7 +36,8 @@ class OnDemandReportGenerationIT : PluginRestTestCase() {
                         "fileFormat":"Pdf",
                         "limit":1000,
                         "header":"optional header",
-                        "footer":"optional footer"
+                        "footer":"optional footer", 
+                        "timeFrom":null, "timeTo":null
                     },
                     "trigger":{
                         "triggerType":"OnDemand"

@@ -12,8 +12,8 @@ buildscript {
         opensearch_group = "org.opensearch"
 
         isSnapshot = "true" == System.getProperty("build.snapshot", "true")
-        opensearch_version = System.getProperty("opensearch.version", "3.0.0-SNAPSHOT")
-        buildVersionQualifier = System.getProperty("build.version_qualifier", "")
+        opensearch_version = System.getProperty("opensearch.version", "3.0.0-alpha1-SNAPSHOT")
+        buildVersionQualifier = System.getProperty("build.version_qualifier", "alpha1")
         // 2.0.0-rc1-SNAPSHOT -> 2.0.0.0-rc1-SNAPSHOT
         version_tokens = opensearch_version.tokenize('-')
         opensearch_build = version_tokens[0] + '.0'
@@ -26,7 +26,7 @@ buildscript {
 
         common_utils_version = System.getProperty("common_utils.version", opensearch_build)
         job_scheduler_version = System.getProperty("job_scheduler.version", opensearch_build)
-        kotlin_version = System.getProperty("kotlin.version", "1.8.21")
+        kotlin_version = System.getProperty("kotlin.version", "2.0.21")
     }
 
     repositories {
@@ -132,6 +132,7 @@ configurations.all {
     resolutionStrategy {
         force "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}"
         force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin_version}"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}"
         force "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
         force "org.jetbrains.kotlin:kotlin-stdlib-common:${kotlin_version}"
         force "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.11.4"
@@ -149,18 +150,18 @@ ext {
 }
 
 plugins.withId('java') {
-    sourceCompatibility = targetCompatibility = "11"
+    sourceCompatibility = targetCompatibility = "21"
 }
 
 plugins.withId('org.jetbrains.kotlin.jvm') {
-    compileKotlin.kotlinOptions.jvmTarget = compileTestKotlin.kotlinOptions.jvmTarget = "11"
+    compileKotlin.kotlinOptions.jvmTarget = compileTestKotlin.kotlinOptions.jvmTarget = "21"
 }
 
 allprojects {
     group = "org.opensearch"
     version = "${opensearch_build}"
     plugins.withId('java') {
-        sourceCompatibility = targetCompatibility = "11"
+        sourceCompatibility = targetCompatibility = "21"
     }
 }
 
@@ -329,7 +330,7 @@ testClusters.integTest {
 }
 
 // For job-scheduler and reports-scheduler, the latest opensearch releases appear to be 1.1.0.0.
-String baseVersion = "2.16.0"
+String baseVersion = "2.20.0"
 String bwcVersion = baseVersion + ".0"
 String baseName = "reportsSchedulerBwcCluster"
 String bwcFilePath = "src/test/resources/bwc"
