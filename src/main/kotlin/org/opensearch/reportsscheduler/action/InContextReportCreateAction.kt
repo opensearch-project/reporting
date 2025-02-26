@@ -7,13 +7,13 @@ package org.opensearch.reportsscheduler.action
 
 import org.opensearch.action.ActionType
 import org.opensearch.action.support.ActionFilters
-import org.opensearch.transport.client.Client
 import org.opensearch.common.inject.Inject
 import org.opensearch.commons.authuser.User
 import org.opensearch.core.xcontent.NamedXContentRegistry
 import org.opensearch.reportsscheduler.model.InContextReportCreateRequest
 import org.opensearch.reportsscheduler.model.InContextReportCreateResponse
 import org.opensearch.transport.TransportService
+import org.opensearch.transport.client.Client
 
 /**
  * In-Context ReportCreate transport action

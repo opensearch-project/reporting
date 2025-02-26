@@ -89,7 +89,8 @@ internal object ReportInstanceActions {
         val endTime: Instant
 
         if (!reportDefinitionDetails.reportDefinition.format.timeFrom.isNullOrBlank() &&
-            !reportDefinitionDetails.reportDefinition.format.timeTo.isNullOrBlank()) {
+            !reportDefinitionDetails.reportDefinition.format.timeTo.isNullOrBlank()
+        ) {
             beginTime = Instant.parse(reportDefinitionDetails.reportDefinition.format.timeFrom)
             endTime = Instant.parse(reportDefinitionDetails.reportDefinition.format.timeTo)
         } else {

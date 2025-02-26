@@ -5,10 +5,10 @@
 
 package org.opensearch.reportsscheduler.resthandler
 
-import org.opensearch.transport.client.node.NodeClient
 import org.opensearch.reportsscheduler.metrics.Metrics
 import org.opensearch.rest.BaseRestHandler
 import org.opensearch.rest.RestRequest
+import org.opensearch.transport.client.node.NodeClient
 
 abstract class PluginBaseHandler : BaseRestHandler() {
 

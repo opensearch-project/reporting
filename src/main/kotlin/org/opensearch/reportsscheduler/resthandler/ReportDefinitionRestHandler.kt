@@ -4,7 +4,6 @@
  */
 package org.opensearch.reportsscheduler.resthandler
 
-import org.opensearch.transport.client.node.NodeClient
 import org.opensearch.core.rest.RestStatus
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.BASE_REPORTS_URI
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LEGACY_BASE_REPORTS_URI
@@ -29,6 +28,7 @@ import org.opensearch.rest.RestRequest.Method.DELETE
 import org.opensearch.rest.RestRequest.Method.GET
 import org.opensearch.rest.RestRequest.Method.POST
 import org.opensearch.rest.RestRequest.Method.PUT
+import org.opensearch.transport.client.node.NodeClient
 
 /**
  * Rest handler for report definitions lifecycle management.
