@@ -128,7 +128,7 @@ detekt {
 
 // TODO Remove this once detekt supports JDK24
 tasks.withType(Detekt).configureEach {
-    jvmTarget = "22"
+    jvmTarget = "21"
 }
 
 configurations.testCompile {
