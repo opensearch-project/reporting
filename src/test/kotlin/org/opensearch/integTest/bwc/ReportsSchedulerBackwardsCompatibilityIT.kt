@@ -28,8 +28,6 @@ class ReportsSchedulerBackwardsCompatibilityIT : PluginRestTestCase() {
 
     override fun preserveTemplatesUponCompletion(): Boolean = true
 
-    override fun preserveODFEIndicesAfterTest(): Boolean = true
-
     override fun restClientSettings(): Settings {
         return Settings.builder()
             .put(super.restClientSettings())
