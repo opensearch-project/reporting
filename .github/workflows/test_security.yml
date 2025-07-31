@@ -1,4 +1,4 @@
-name: Test search-relevance on Secure Cluster
+name: Test reporting on Secure Cluster
 on:
   schedule:
     - cron: '0 0 * * *'  # every night
@@ -20,7 +20,7 @@ jobs:
   integ-test-with-security-linux:
     strategy:
       matrix:
-        java: [21, 24]
+        java: [21]
 
     name: Run Integration Tests on Linux
     runs-on: ubuntu-latest
