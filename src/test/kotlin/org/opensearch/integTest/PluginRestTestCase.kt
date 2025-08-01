@@ -9,7 +9,6 @@ import com.google.gson.JsonObject
 import org.apache.hc.core5.http.HttpHost
 import org.junit.After
 import org.junit.AfterClass
-import org.junit.Before
 import org.opensearch.client.Request
 import org.opensearch.client.RequestOptions
 import org.opensearch.client.Response
@@ -50,6 +49,9 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
         }
     }
 
+    /**
+     * wipeAllIndices won't work since it cannot delete security index. Use wipeAllODFEIndices instead.
+     */
     override fun preserveIndicesUponCompletion(): Boolean {
         return true
     }
@@ -107,7 +109,7 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
                     // create adminDN (super-admin) client
                     val uri = javaClass.classLoader.getResource("security/sample.pem").toURI()
                     val configPath = PathUtils.get(uri).parent.toAbsolutePath()
-                    SecureRestClientBuilder(settings, configPath).setSocketTimeout(60000).build()
+                    SecureRestClientBuilder(settings, configPath, hosts).setSocketTimeout(60000).build()
                 }
                 false -> {
                     // create client with passed user
@@ -121,14 +123,6 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
             configureClient(builder, settings)
             builder.setStrictDeprecationMode(true)
             return builder.build()
-        }
-    }
-
-    @Before
-    @Throws(InterruptedException::class)
-    open fun setup() {
-        if (client() == null) {
-            initClient()
         }
     }
 
