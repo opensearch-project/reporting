@@ -74,6 +74,7 @@ apply plugin: 'idea'
 apply plugin: 'opensearch.opensearchplugin'
 apply plugin: 'opensearch.pluginzip'
 apply plugin: 'opensearch.testclusters'
+apply plugin: 'opensearch.wait-for-cluster-setup'
 apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: 'org.jetbrains.kotlin.jvm'
 apply plugin: 'org.jetbrains.kotlin.plugin.allopen'
@@ -278,135 +279,6 @@ tasks.withType(licenseHeaders.class) {
     additionalLicense 'AL   ', 'Apache', 'Licensed under the Apache License, Version 2.0 (the "License")'
 }
 
-// Re-write WaitForHttpResource with updated code to support security plugin use case
-class WaitForClusterYellow {
-
-    private URL url
-    private String username
-    private String password
-    Set<Integer> validResponseCodes = Collections.singleton(200)
-
-    WaitForClusterYellow(String protocol, String host, int numberOfNodes) throws MalformedURLException {
-        this(new URL(protocol + "://" + host + "/_cluster/health?wait_for_nodes=>=" + numberOfNodes + "&wait_for_status=yellow"))
-    }
-
-    WaitForClusterYellow(URL url) {
-        this.url = url
-    }
-
-    boolean wait(int durationInMs) throws GeneralSecurityException, InterruptedException, IOException {
-        final long waitUntil = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(durationInMs)
-        final long sleep = 100
-
-        IOException failure = null
-        while (true) {
-            try {
-                checkResource()
-                return true
-            } catch (IOException e) {
-                failure = e
-            }
-            if (System.nanoTime() < waitUntil) {
-                Thread.sleep(sleep)
-            } else {
-                throw failure
-            }
-        }
-    }
-
-    void setUsername(String username) {
-        this.username = username
-    }
-
-    void setPassword(String password) {
-        this.password = password
-    }
-
-    void checkResource() throws IOException {
-        final HttpURLConnection connection = buildConnection()
-        connection.connect()
-        final Integer response = connection.getResponseCode()
-        if (validResponseCodes.contains(response)) {
-            return
-        } else {
-            throw new IOException(response + " " + connection.getResponseMessage())
-        }
-    }
-
-    HttpURLConnection buildConnection() throws IOException {
-        final HttpURLConnection connection = (HttpURLConnection) this.@url.openConnection()
-
-        if (connection instanceof HttpsURLConnection) {
-            TrustManager[] trustAllCerts = [new X509TrustManager() {
-                X509Certificate[] getAcceptedIssuers() {
-                    return null
-                }
-
-                void checkClientTrusted(X509Certificate[] certs, String authType) {
-                }
-
-                void checkServerTrusted(X509Certificate[] certs, String authType) {
-                }
-            }
-            ] as TrustManager[]
-            SSLContext sc = SSLContext.getInstance("SSL")
-            sc.init(null, trustAllCerts, new java.security.SecureRandom())
-            connection.setSSLSocketFactory(sc.getSocketFactory())
-            // Create all-trusting host name verifier
-            HostnameVerifier allHostsValid = new HostnameVerifier() {
-                boolean verify(String hostname, SSLSession session) {
-                    return true
-                }
-            }
-            // Install the all-trusting host verifier
-            connection.setHostnameVerifier(allHostsValid)
-        }
-
-        configureBasicAuth(connection)
-        connection.setRequestMethod("GET")
-        return connection
-    }
-
-    void configureBasicAuth(HttpURLConnection connection) {
-        if (username != null) {
-            if (password == null) {
-                throw new IllegalStateException("Basic Auth user [" + username + "] has been set, but no password has been configured")
-            }
-            connection.setRequestProperty(
-                    "Authorization",
-                    "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8))
-            )
-        }
-    }
-
-}
-
-def waitForClusterSetup(OpenSearchCluster cluster, Boolean securityEnabled) {
-    cluster.@waitConditions.clear()
-    String unicastUris = cluster.nodes.stream().flatMap { node ->
-        node.getAllTransportPortURI().stream()
-    }.collect(Collectors.joining("\n"))
-    cluster.nodes.forEach { node ->
-        try {
-            Files.write(node.getConfigDir().resolve("unicast_hosts.txt"), unicastUris.getBytes(StandardCharsets.UTF_8))
-        } catch (IOException e) {
-            throw new java.io.UncheckedIOException("Failed to write configuation files for " + this, e)
-        }
-    }
-
-    Predicate pred = {
-        String protocol = securityEnabled ? "https" : "http"
-        String host = System.getProperty("tests.cluster", cluster.getFirstNode().getHttpSocketURI())
-        WaitForClusterYellow wait = new WaitForClusterYellow(protocol, host, cluster.nodes.size())
-        wait.setUsername(System.getProperty("user", "admin"))
-        wait.setPassword(System.getProperty("password", "admin"))
-        return wait.wait(180000)
-    }
-
-    cluster.@waitConditions.put("cluster health yellow", pred)
-    cluster.waitForAllConditions()
-}
-
 task integTest(type: RestIntegTestTask) {
     description = "Run tests against a cluster"
     testClassesDirs = sourceSets.test.output.classesDirs
@@ -440,7 +312,12 @@ integTest {
         // There seems to be an issue when running multi node run or integ tasks with unicast_hosts
         // not being written, the waitForAllConditions ensures it's written
         getClusters().forEach { cluster ->
-            waitForClusterSetup(cluster, securityEnabled)
+            tasks.create(name: "waitForCluster${cluster.name}", type: org.opensearch.gradle.WaitForClusterSetupTask) {
+                it.cluster = cluster
+                it.securityEnabled = securityEnabled
+                it.username = username
+                it.password = password
+            }.setupCluster()
         }
     }
 
