@@ -68,13 +68,15 @@ internal object ReportDefinitionsIndex {
                 .mapping(indexMappingSource, XContentType.YAML)
                 .settings(indexSettingsSource, XContentType.YAML)
             try {
-                val actionFuture = client.admin().indices().create(request)
-                val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
-                if (response.isAcknowledged) {
-                    log.info("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation Acknowledged")
-                } else {
-                    Metrics.REPORT_DEFINITION_CREATE_SYSTEM_ERROR.counter.increment()
-                    error("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation not Acknowledged")
+                client.threadPool().threadContext.stashContext().use {
+                    val actionFuture = client.admin().indices().create(request)
+                    val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
+                    if (response.isAcknowledged) {
+                        log.info("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation Acknowledged")
+                    } else {
+                        Metrics.REPORT_DEFINITION_CREATE_SYSTEM_ERROR.counter.increment()
+                        error("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation not Acknowledged")
+                    }
                 }
             } catch (exception: ResourceAlreadyExistsException) {
                 log.warn("message: ${exception.message}")
