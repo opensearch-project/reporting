@@ -25,16 +25,16 @@ import org.opensearch.index.engine.VersionConflictEngineException
 import org.opensearch.indices.InvalidIndexNameException
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
 import org.opensearch.reportsscheduler.metrics.Metrics
+import org.opensearch.reportsscheduler.security.PluginClient
 import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.tasks.Task
 import org.opensearch.transport.TransportService
-import org.opensearch.transport.client.Client
 import java.io.IOException
 
 abstract class PluginBaseAction<Request : ActionRequest, Response : ActionResponse>(
     name: String,
     transportService: TransportService,
-    val client: Client,
+    val pluginClient: PluginClient,
     actionFilters: ActionFilters,
     requestReader: Writeable.Reader<Request>
 ) : HandledTransportAction<Request, Response>(name, transportService, actionFilters, requestReader) {
@@ -53,15 +53,12 @@ abstract class PluginBaseAction<Request : ActionRequest, Response : ActionRespon
         listener: ActionListener<Response>
     ) {
         val userStr: String? =
-            client.threadPool().threadContext.getTransient<String>(OPENSEARCH_SECURITY_USER_INFO_THREAD_CONTEXT)
+            pluginClient.threadPool().threadContext.getTransient<String>(OPENSEARCH_SECURITY_USER_INFO_THREAD_CONTEXT)
         val user: User? = User.parse(userStr)
-        val storedThreadContext = client.threadPool().threadContext.newStoredContext(false)
+        val storedThreadContext = pluginClient.threadPool().threadContext.newStoredContext(false)
         scope.launch {
             try {
-                client.threadPool().threadContext.stashContext().use {
-                    storedThreadContext.restore()
-                    listener.onResponse(executeRequest(request, user))
-                }
+                listener.onResponse(executeRequest(request, user))
             } catch (exception: OpenSearchStatusException) {
                 Metrics.REPORT_EXCEPTIONS_ES_STATUS_EXCEPTION.counter.increment()
                 log.warn("$LOG_PREFIX:OpenSearchStatusException: message:${exception.message}")

@@ -12,21 +12,21 @@ import org.opensearch.commons.authuser.User
 import org.opensearch.core.xcontent.NamedXContentRegistry
 import org.opensearch.reportsscheduler.model.GetAllReportInstancesRequest
 import org.opensearch.reportsscheduler.model.GetAllReportInstancesResponse
+import org.opensearch.reportsscheduler.security.PluginClient
 import org.opensearch.transport.TransportService
-import org.opensearch.transport.client.Client
 
 /**
  * Get all report instances transport action
  */
 internal class GetAllReportInstancesAction @Inject constructor(
     transportService: TransportService,
-    client: Client,
+    pluginClient: PluginClient,
     actionFilters: ActionFilters,
     val xContentRegistry: NamedXContentRegistry
 ) : PluginBaseAction<GetAllReportInstancesRequest, GetAllReportInstancesResponse>(
     NAME,
     transportService,
-    client,
+    pluginClient,
     actionFilters,
     ::GetAllReportInstancesRequest
 ) {
