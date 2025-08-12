@@ -12,21 +12,21 @@ import org.opensearch.commons.authuser.User
 import org.opensearch.core.xcontent.NamedXContentRegistry
 import org.opensearch.reportsscheduler.model.CreateReportDefinitionRequest
 import org.opensearch.reportsscheduler.model.CreateReportDefinitionResponse
+import org.opensearch.reportsscheduler.security.PluginClient
 import org.opensearch.transport.TransportService
-import org.opensearch.transport.client.Client
 
 /**
  * Create reportDefinition transport action
  */
 internal class CreateReportDefinitionAction @Inject constructor(
     transportService: TransportService,
-    client: Client,
+    pluginClient: PluginClient,
     actionFilters: ActionFilters,
     val xContentRegistry: NamedXContentRegistry
 ) : PluginBaseAction<CreateReportDefinitionRequest, CreateReportDefinitionResponse>(
     NAME,
     transportService,
-    client,
+    pluginClient,
     actionFilters,
     ::CreateReportDefinitionRequest
 ) {

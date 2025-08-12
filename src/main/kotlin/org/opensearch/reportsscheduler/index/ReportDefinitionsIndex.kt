@@ -12,6 +12,7 @@ import org.opensearch.action.delete.DeleteRequest
 import org.opensearch.action.get.GetRequest
 import org.opensearch.action.index.IndexRequest
 import org.opensearch.action.search.SearchRequest
+import org.opensearch.action.support.WriteRequest
 import org.opensearch.action.update.UpdateRequest
 import org.opensearch.cluster.service.ClusterService
 import org.opensearch.common.unit.TimeValue
@@ -27,7 +28,6 @@ import org.opensearch.reportsscheduler.model.RestTag.ACCESS_LIST_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.TENANT_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.UPDATED_TIME_FIELD
 import org.opensearch.reportsscheduler.settings.PluginSettings
-import org.opensearch.reportsscheduler.util.SecureIndexClient
 import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.search.builder.SearchSourceBuilder
 import org.opensearch.transport.client.Client
@@ -51,7 +51,7 @@ internal object ReportDefinitionsIndex {
      * @param clusterService The ES cluster service
      */
     fun initialize(client: Client, clusterService: ClusterService) {
-        this.client = SecureIndexClient(client)
+        this.client = client
         this.clusterService = clusterService
     }
 
@@ -68,15 +68,13 @@ internal object ReportDefinitionsIndex {
                 .mapping(indexMappingSource, XContentType.YAML)
                 .settings(indexSettingsSource, XContentType.YAML)
             try {
-                client.threadPool().threadContext.stashContext().use {
-                    val actionFuture = client.admin().indices().create(request)
-                    val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
-                    if (response.isAcknowledged) {
-                        log.info("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation Acknowledged")
-                    } else {
-                        Metrics.REPORT_DEFINITION_CREATE_SYSTEM_ERROR.counter.increment()
-                        error("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation not Acknowledged")
-                    }
+                val actionFuture = client.admin().indices().create(request)
+                val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
+                if (response.isAcknowledged) {
+                    log.info("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation Acknowledged")
+                } else {
+                    Metrics.REPORT_DEFINITION_CREATE_SYSTEM_ERROR.counter.increment()
+                    error("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation not Acknowledged")
                 }
             } catch (exception: ResourceAlreadyExistsException) {
                 log.warn("message: ${exception.message}")
@@ -108,6 +106,7 @@ internal object ReportDefinitionsIndex {
         createIndex()
         val indexRequest = IndexRequest(REPORT_DEFINITIONS_INDEX_NAME)
             .source(reportDefinitionDetails.toXContent())
+            .setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE)
             .create(true)
         val actionFuture = client.index(indexRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
@@ -192,6 +191,7 @@ internal object ReportDefinitionsIndex {
         createIndex()
         val updateRequest = UpdateRequest()
             .index(REPORT_DEFINITIONS_INDEX_NAME)
+            .setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE)
             .id(id)
             .doc(reportDefinitionDetails.toXContent())
             .fetchSource(true)
@@ -213,6 +213,7 @@ internal object ReportDefinitionsIndex {
         createIndex()
         val deleteRequest = DeleteRequest()
             .index(REPORT_DEFINITIONS_INDEX_NAME)
+            .setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE)
             .id(id)
         val actionFuture = client.delete(deleteRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)

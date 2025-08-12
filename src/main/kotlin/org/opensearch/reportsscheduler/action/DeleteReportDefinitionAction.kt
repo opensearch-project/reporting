@@ -12,21 +12,21 @@ import org.opensearch.commons.authuser.User
 import org.opensearch.core.xcontent.NamedXContentRegistry
 import org.opensearch.reportsscheduler.model.DeleteReportDefinitionRequest
 import org.opensearch.reportsscheduler.model.DeleteReportDefinitionResponse
+import org.opensearch.reportsscheduler.security.PluginClient
 import org.opensearch.transport.TransportService
-import org.opensearch.transport.client.Client
 
 /**
  * Delete reportDefinition transport action
  */
 internal class DeleteReportDefinitionAction @Inject constructor(
     transportService: TransportService,
-    client: Client,
+    pluginClient: PluginClient,
     actionFilters: ActionFilters,
     val xContentRegistry: NamedXContentRegistry
 ) : PluginBaseAction<DeleteReportDefinitionRequest, DeleteReportDefinitionResponse>(
     NAME,
     transportService,
-    client,
+    pluginClient,
     actionFilters,
     ::DeleteReportDefinitionRequest
 ) {

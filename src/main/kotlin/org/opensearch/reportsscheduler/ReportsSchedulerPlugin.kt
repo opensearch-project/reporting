@@ -19,11 +19,13 @@ import org.opensearch.core.common.io.stream.NamedWriteableRegistry
 import org.opensearch.core.xcontent.NamedXContentRegistry
 import org.opensearch.env.Environment
 import org.opensearch.env.NodeEnvironment
+import org.opensearch.identity.PluginSubject
 import org.opensearch.indices.SystemIndexDescriptor
 import org.opensearch.jobscheduler.spi.JobSchedulerExtension
 import org.opensearch.jobscheduler.spi.ScheduledJobParser
 import org.opensearch.jobscheduler.spi.ScheduledJobRunner
 import org.opensearch.plugins.ActionPlugin
+import org.opensearch.plugins.IdentityAwarePlugin
 import org.opensearch.plugins.Plugin
 import org.opensearch.plugins.SystemIndexPlugin
 import org.opensearch.reportsscheduler.action.CreateReportDefinitionAction
@@ -48,6 +50,7 @@ import org.opensearch.reportsscheduler.resthandler.ReportInstanceRestHandler
 import org.opensearch.reportsscheduler.resthandler.ReportStatsRestHandler
 import org.opensearch.reportsscheduler.scheduler.ReportDefinitionJobParser
 import org.opensearch.reportsscheduler.scheduler.ReportDefinitionJobRunner
+import org.opensearch.reportsscheduler.security.PluginClient
 import org.opensearch.reportsscheduler.settings.PluginSettings
 import org.opensearch.repositories.RepositoriesService
 import org.opensearch.rest.RestController
@@ -62,13 +65,14 @@ import java.util.function.Supplier
  * Entry point of the OpenSearch Reports scheduler plugin.
  * This class initializes the rest handlers.
  */
-class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSchedulerExtension {
+class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, IdentityAwarePlugin, JobSchedulerExtension {
 
     companion object {
         const val PLUGIN_NAME = "opensearch-reports-scheduler"
         const val LOG_PREFIX = "reports"
         const val BASE_REPORTS_URI = "/_plugins/_reports"
         const val LEGACY_BASE_REPORTS_URI = "/_opendistro/_reports"
+        private lateinit var pluginClient: PluginClient
     }
 
     /**
@@ -104,9 +108,16 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSch
         repositoriesServiceSupplier: Supplier<RepositoriesService>
     ): Collection<Any> {
         PluginSettings.addSettingsUpdateConsumer(clusterService)
-        ReportDefinitionsIndex.initialize(client, clusterService)
-        ReportInstancesIndex.initialize(client, clusterService)
-        return emptyList()
+        pluginClient = PluginClient(client)
+        ReportDefinitionsIndex.initialize(pluginClient, clusterService)
+        ReportInstancesIndex.initialize(pluginClient, clusterService)
+        return listOf(pluginClient)
+    }
+
+    override fun assignSubject(pluginSubject: PluginSubject) {
+        // When security is not installed, the pluginSubject will still be assigned.
+        requireNotNull(pluginSubject)
+        pluginClient.setSubject(pluginSubject)
     }
 
     /**
