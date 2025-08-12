@@ -12,6 +12,7 @@ import org.opensearch.action.delete.DeleteRequest
 import org.opensearch.action.get.GetRequest
 import org.opensearch.action.index.IndexRequest
 import org.opensearch.action.search.SearchRequest
+import org.opensearch.action.support.WriteRequest
 import org.opensearch.action.update.UpdateRequest
 import org.opensearch.cluster.service.ClusterService
 import org.opensearch.common.unit.TimeValue
@@ -105,6 +106,7 @@ internal object ReportDefinitionsIndex {
         createIndex()
         val indexRequest = IndexRequest(REPORT_DEFINITIONS_INDEX_NAME)
             .source(reportDefinitionDetails.toXContent())
+            .setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE)
             .create(true)
         val actionFuture = client.index(indexRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
@@ -189,6 +191,7 @@ internal object ReportDefinitionsIndex {
         createIndex()
         val updateRequest = UpdateRequest()
             .index(REPORT_DEFINITIONS_INDEX_NAME)
+            .setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE)
             .id(id)
             .doc(reportDefinitionDetails.toXContent())
             .fetchSource(true)
@@ -210,6 +213,7 @@ internal object ReportDefinitionsIndex {
         createIndex()
         val deleteRequest = DeleteRequest()
             .index(REPORT_DEFINITIONS_INDEX_NAME)
+            .setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE)
             .id(id)
         val actionFuture = client.delete(deleteRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
