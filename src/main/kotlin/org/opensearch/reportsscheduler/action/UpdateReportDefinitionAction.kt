@@ -12,21 +12,21 @@ import org.opensearch.commons.authuser.User
 import org.opensearch.core.xcontent.NamedXContentRegistry
 import org.opensearch.reportsscheduler.model.UpdateReportDefinitionRequest
 import org.opensearch.reportsscheduler.model.UpdateReportDefinitionResponse
+import org.opensearch.reportsscheduler.security.PluginClient
 import org.opensearch.transport.TransportService
-import org.opensearch.transport.client.Client
 
 /**
  * Update reportDefinitions transport action
  */
 internal class UpdateReportDefinitionAction @Inject constructor(
     transportService: TransportService,
-    client: Client,
+    pluginClient: PluginClient,
     actionFilters: ActionFilters,
     val xContentRegistry: NamedXContentRegistry
 ) : PluginBaseAction<UpdateReportDefinitionRequest, UpdateReportDefinitionResponse>(
     NAME,
     transportService,
-    client,
+    pluginClient,
     actionFilters,
     ::UpdateReportDefinitionRequest
 ) {
