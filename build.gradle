@@ -28,7 +28,7 @@ buildscript {
         opensearch_group = "org.opensearch"
 
         isSnapshot = "true" == System.getProperty("build.snapshot", "true")
-        opensearch_version = System.getProperty("opensearch.version", "3.3.0-SNAPSHOT")
+        opensearch_version = System.getProperty("opensearch.version", "3.4.0-SNAPSHOT")
         buildVersionQualifier = System.getProperty("build.version_qualifier", "")
         // 2.0.0-rc1-SNAPSHOT -> 2.0.0.0-rc1-SNAPSHOT
         version_tokens = opensearch_version.tokenize('-')
@@ -492,7 +492,7 @@ ext.resolvePluginFile = { pluginId ->
 def securityPluginFile = resolvePluginFile("opensearch-security")
 
 testClusters.integTest {
-    testDistribution = "INTEG_TEST"
+    testDistribution = "ARCHIVE"
     // need to install job-scheduler first, need to assemble job-scheduler first
     plugin(provider(new Callable<RegularFile>(){
         @Override
