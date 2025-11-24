@@ -143,7 +143,7 @@ detekt {
     buildUponDefaultConfig = true
 }
 
-// TODO Remove this once detekt supports JDK24
+// TODO Remove this once detekt supports JDK25
 tasks.withType(Detekt).configureEach {
     jvmTarget = "21"
 }
@@ -186,7 +186,10 @@ ext {
 }
 
 plugins.withId('java') {
-    sourceCompatibility = targetCompatibility = "21"
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
 }
 
 plugins.withId('org.jetbrains.kotlin.jvm') {
@@ -197,7 +200,10 @@ allprojects {
     group = "org.opensearch"
     version = "${opensearch_build}"
     plugins.withId('java') {
-        sourceCompatibility = targetCompatibility = "21"
+        java {
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
+        }
     }
 }
 
@@ -232,6 +238,7 @@ dependencies {
             'org.junit.jupiter:junit-jupiter-api:5.6.2'
     )
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher:1.6.2')
     testImplementation "org.opensearch.test:framework:${opensearch_version}"
     testImplementation "org.jetbrains.kotlin:kotlin-test:${kotlin_version}"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
