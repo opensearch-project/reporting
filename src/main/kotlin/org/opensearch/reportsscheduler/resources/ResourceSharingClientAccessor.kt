@@ -1,3 +1,8 @@
+/*
+ * Copyright OpenSearch Contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package org.opensearch.reportsscheduler.resources
 
 import org.opensearch.security.spi.resources.client.ResourceSharingClient

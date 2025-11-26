@@ -22,6 +22,8 @@ import org.opensearch.reportsscheduler.model.GetReportDefinitionResponse
 import org.opensearch.reportsscheduler.model.ReportDefinitionDetails
 import org.opensearch.reportsscheduler.model.UpdateReportDefinitionRequest
 import org.opensearch.reportsscheduler.model.UpdateReportDefinitionResponse
+import org.opensearch.reportsscheduler.resources.Utils
+import org.opensearch.reportsscheduler.resources.Utils.shouldUseResourceAuthz
 import org.opensearch.reportsscheduler.security.UserAccessManager
 import org.opensearch.reportsscheduler.util.logger
 import java.time.Instant
@@ -39,7 +41,10 @@ internal object ReportDefinitionActions {
      */
     fun create(request: CreateReportDefinitionRequest, user: User?): CreateReportDefinitionResponse {
         log.info("$LOG_PREFIX:ReportDefinition-create")
-        UserAccessManager.validateUser(user) // TODO: RP fix
+        // only use backend_role path if resource-sharing is disabled
+        if (!shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE)) {
+            UserAccessManager.validateUser(user)
+        }
         val currentTime = Instant.now()
         val reportDefinitionDetails = ReportDefinitionDetails(
             "ignore",
@@ -64,7 +69,10 @@ internal object ReportDefinitionActions {
      */
     fun update(request: UpdateReportDefinitionRequest, user: User?): UpdateReportDefinitionResponse {
         log.info("$LOG_PREFIX:ReportDefinition-update ${request.reportDefinitionId}")
-        UserAccessManager.validateUser(user)
+        // only use backend_role path if resource-sharing is disabled
+        if (!shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE)) {
+            UserAccessManager.validateUser(user)
+        }
         val currentReportDefinitionDetails = ReportDefinitionsIndex.getReportDefinition(request.reportDefinitionId)
         currentReportDefinitionDetails
             ?: run {
@@ -99,7 +107,10 @@ internal object ReportDefinitionActions {
      */
     fun info(request: GetReportDefinitionRequest, user: User?): GetReportDefinitionResponse {
         log.info("$LOG_PREFIX:ReportDefinition-info ${request.reportDefinitionId}")
-        UserAccessManager.validateUser(user)
+        // only use backend_role path if resource-sharing is disabled
+        if (!shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE)) {
+            UserAccessManager.validateUser(user)
+        }
         val reportDefinitionDetails = ReportDefinitionsIndex.getReportDefinition(request.reportDefinitionId)
         reportDefinitionDetails
             ?: run {
@@ -121,7 +132,10 @@ internal object ReportDefinitionActions {
      */
     fun delete(request: DeleteReportDefinitionRequest, user: User?): DeleteReportDefinitionResponse {
         log.info("$LOG_PREFIX:ReportDefinition-delete ${request.reportDefinitionId}")
-        UserAccessManager.validateUser(user)
+        // only use backend_role path if resource-sharing is disabled
+        if (!shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE)) {
+            UserAccessManager.validateUser(user)
+        }
         val reportDefinitionDetails = ReportDefinitionsIndex.getReportDefinition(request.reportDefinitionId)
         reportDefinitionDetails
             ?: run {
@@ -147,10 +161,21 @@ internal object ReportDefinitionActions {
      */
     fun getAll(request: GetAllReportDefinitionsRequest, user: User?): GetAllReportDefinitionsResponse {
         log.info("$LOG_PREFIX:ReportDefinition-getAll fromIndex:${request.fromIndex} maxItems:${request.maxItems}")
-        UserAccessManager.validateUser(user) // TODO RP search
+        // only use backend_role path if resource-sharing is disabled
+        if (!shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE)) {
+            UserAccessManager.validateUser(user)
+        }
+
+        // if resource-sharing is enabled, search result will automatically be filtered within security plugin
+        val access = if (shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE)) {
+            emptyList()
+        } else {
+            UserAccessManager.getSearchAccessInfo(user)
+        }
+
         val reportDefinitionsList = ReportDefinitionsIndex.getAllReportDefinitions(
             UserAccessManager.getUserTenant(user),
-            UserAccessManager.getSearchAccessInfo(user),
+            access,
             request.fromIndex,
             request.maxItems
         )
