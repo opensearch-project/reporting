@@ -7,6 +7,7 @@ package org.opensearch.reportsscheduler.model
 
 import org.opensearch.action.ActionRequest
 import org.opensearch.action.ActionRequestValidationException
+import org.opensearch.action.DocRequest
 import org.opensearch.common.xcontent.XContentFactory
 import org.opensearch.core.common.io.stream.StreamInput
 import org.opensearch.core.common.io.stream.StreamOutput
@@ -17,8 +18,10 @@ import org.opensearch.core.xcontent.XContentParser
 import org.opensearch.core.xcontent.XContentParser.Token
 import org.opensearch.core.xcontent.XContentParserUtils
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
+import org.opensearch.reportsscheduler.index.ReportDefinitionsIndex
 import org.opensearch.reportsscheduler.metrics.Metrics
 import org.opensearch.reportsscheduler.model.RestTag.REPORT_DEFINITION_ID_FIELD
+import org.opensearch.reportsscheduler.resources.Utils
 import org.opensearch.reportsscheduler.util.logger
 import java.io.IOException
 
@@ -34,7 +37,7 @@ import java.io.IOException
  */
 internal class OnDemandReportCreateRequest(
     val reportDefinitionId: String
-) : ActionRequest(), ToXContentObject {
+) : ActionRequest(), DocRequest, ToXContentObject {
 
     @Throws(IOException::class)
     constructor(input: StreamInput) : this(
@@ -104,5 +107,17 @@ internal class OnDemandReportCreateRequest(
      */
     override fun validate(): ActionRequestValidationException? {
         return null
+    }
+
+    override fun index(): String {
+        return ReportDefinitionsIndex.REPORT_DEFINITIONS_INDEX_NAME // because we need to check for definition access
+    }
+
+    override fun id(): String {
+        return reportDefinitionId
+    }
+
+    override fun type(): String {
+        return Utils.REPORT_DEFINITION_TYPE
     }
 }

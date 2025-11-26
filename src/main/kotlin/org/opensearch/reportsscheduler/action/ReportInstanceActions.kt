@@ -182,7 +182,7 @@ internal object ReportInstanceActions {
      */
     fun getAll(request: GetAllReportInstancesRequest, user: User?): GetAllReportInstancesResponse {
         log.info("$LOG_PREFIX:ReportInstance-getAll fromIndex:${request.fromIndex} maxItems:${request.maxItems}")
-        UserAccessManager.validateUser(user)
+        UserAccessManager.validateUser(user) // TODO RP search
         val reportInstanceList = ReportInstancesIndex.getAllReportInstances(
             UserAccessManager.getUserTenant(user),
             UserAccessManager.getSearchAccessInfo(user),

@@ -7,6 +7,7 @@ package org.opensearch.reportsscheduler.model
 
 import org.opensearch.action.ActionRequest
 import org.opensearch.action.ActionRequestValidationException
+import org.opensearch.action.DocRequest
 import org.opensearch.common.xcontent.XContentFactory
 import org.opensearch.core.common.io.stream.StreamInput
 import org.opensearch.core.common.io.stream.StreamOutput
@@ -17,6 +18,7 @@ import org.opensearch.core.xcontent.XContentParser
 import org.opensearch.core.xcontent.XContentParser.Token
 import org.opensearch.core.xcontent.XContentParserUtils
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
+import org.opensearch.reportsscheduler.index.ReportDefinitionsIndex
 import org.opensearch.reportsscheduler.metrics.Metrics
 import org.opensearch.reportsscheduler.model.RestTag.REPORT_DEFINITION_FIELD
 import org.opensearch.reportsscheduler.util.createJsonParser

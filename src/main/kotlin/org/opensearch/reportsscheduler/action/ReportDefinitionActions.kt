@@ -39,7 +39,7 @@ internal object ReportDefinitionActions {
      */
     fun create(request: CreateReportDefinitionRequest, user: User?): CreateReportDefinitionResponse {
         log.info("$LOG_PREFIX:ReportDefinition-create")
-        UserAccessManager.validateUser(user)
+        UserAccessManager.validateUser(user) // TODO: RP fix
         val currentTime = Instant.now()
         val reportDefinitionDetails = ReportDefinitionDetails(
             "ignore",
@@ -147,7 +147,7 @@ internal object ReportDefinitionActions {
      */
     fun getAll(request: GetAllReportDefinitionsRequest, user: User?): GetAllReportDefinitionsResponse {
         log.info("$LOG_PREFIX:ReportDefinition-getAll fromIndex:${request.fromIndex} maxItems:${request.maxItems}")
-        UserAccessManager.validateUser(user)
+        UserAccessManager.validateUser(user) // TODO RP search
         val reportDefinitionsList = ReportDefinitionsIndex.getAllReportDefinitions(
             UserAccessManager.getUserTenant(user),
             UserAccessManager.getSearchAccessInfo(user),

@@ -7,6 +7,7 @@ package org.opensearch.reportsscheduler.model
 
 import org.opensearch.action.ActionRequest
 import org.opensearch.action.ActionRequestValidationException
+import org.opensearch.action.DocRequest
 import org.opensearch.common.xcontent.XContentFactory
 import org.opensearch.core.common.io.stream.StreamInput
 import org.opensearch.core.common.io.stream.StreamOutput
@@ -17,6 +18,7 @@ import org.opensearch.core.xcontent.XContentParser
 import org.opensearch.core.xcontent.XContentParser.Token
 import org.opensearch.core.xcontent.XContentParserUtils
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
+import org.opensearch.reportsscheduler.index.ReportDefinitionsIndex
 import org.opensearch.reportsscheduler.metrics.Metrics
 import org.opensearch.reportsscheduler.model.ReportInstance.Status
 import org.opensearch.reportsscheduler.model.RestTag.BEGIN_TIME_FIELD
@@ -26,6 +28,7 @@ import org.opensearch.reportsscheduler.model.RestTag.REPORT_DEFINITION_DETAILS_F
 import org.opensearch.reportsscheduler.model.RestTag.REST_OUTPUT_PARAMS
 import org.opensearch.reportsscheduler.model.RestTag.STATUS_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.STATUS_TEXT_FIELD
+import org.opensearch.reportsscheduler.resources.Utils
 import org.opensearch.reportsscheduler.util.createJsonParser
 import org.opensearch.reportsscheduler.util.fieldIfNotNull
 import org.opensearch.reportsscheduler.util.logger
@@ -48,7 +51,7 @@ import java.time.Instant
  * }
  * }</pre>
  */
-internal class InContextReportCreateRequest : ActionRequest, ToXContentObject {
+internal class InContextReportCreateRequest : ActionRequest, DocRequest, ToXContentObject {
     val beginTime: Instant
     val endTime: Instant
     val reportDefinitionDetails: ReportDefinitionDetails?
@@ -166,5 +169,17 @@ internal class InContextReportCreateRequest : ActionRequest, ToXContentObject {
      */
     override fun validate(): ActionRequestValidationException? {
         return null
+    }
+
+    override fun index(): String {
+        return ReportDefinitionsIndex.REPORT_DEFINITIONS_INDEX_NAME // we need to check access to report definition
+    }
+
+    override fun id(): String {
+        return reportDefinitionDetails!!.id
+    }
+
+    override fun type(): String {
+        return Utils.REPORT_DEFINITION_TYPE
     }
 }
