@@ -7,7 +7,6 @@ package org.opensearch.reportsscheduler.resources
 
 import org.opensearch.security.spi.resources.client.ResourceSharingClient
 
-
 class ResourceSharingClientAccessor private constructor() {
 
     private var client: ResourceSharingClient? = null
