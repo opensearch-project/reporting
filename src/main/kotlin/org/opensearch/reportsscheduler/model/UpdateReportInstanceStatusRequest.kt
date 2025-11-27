@@ -7,6 +7,7 @@ package org.opensearch.reportsscheduler.model
 
 import org.opensearch.action.ActionRequest
 import org.opensearch.action.ActionRequestValidationException
+import org.opensearch.action.DocRequest
 import org.opensearch.common.xcontent.XContentFactory
 import org.opensearch.core.common.io.stream.StreamInput
 import org.opensearch.core.common.io.stream.StreamOutput
@@ -17,11 +18,13 @@ import org.opensearch.core.xcontent.XContentParser
 import org.opensearch.core.xcontent.XContentParser.Token
 import org.opensearch.core.xcontent.XContentParserUtils
 import org.opensearch.reportsscheduler.ReportsSchedulerPlugin.Companion.LOG_PREFIX
+import org.opensearch.reportsscheduler.index.ReportInstancesIndex
 import org.opensearch.reportsscheduler.metrics.Metrics
 import org.opensearch.reportsscheduler.model.ReportInstance.Status
 import org.opensearch.reportsscheduler.model.RestTag.REPORT_INSTANCE_ID_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.STATUS_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.STATUS_TEXT_FIELD
+import org.opensearch.reportsscheduler.resources.Utils
 import org.opensearch.reportsscheduler.util.fieldIfNotNull
 import org.opensearch.reportsscheduler.util.logger
 import java.io.IOException
@@ -41,7 +44,7 @@ internal class UpdateReportInstanceStatusRequest(
     val reportInstanceId: String,
     var status: Status,
     var statusText: String? = null
-) : ActionRequest(), ToXContentObject {
+) : ActionRequest(), DocRequest, ToXContentObject {
 
     @Throws(IOException::class)
     constructor(input: StreamInput) : this(
@@ -123,5 +126,17 @@ internal class UpdateReportInstanceStatusRequest(
      */
     override fun validate(): ActionRequestValidationException? {
         return null
+    }
+
+    override fun index(): String {
+        return ReportInstancesIndex.REPORT_INSTANCES_INDEX_NAME
+    }
+
+    override fun id(): String {
+        return reportInstanceId
+    }
+
+    override fun type(): String {
+        return Utils.REPORT_INSTANCE_TYPE
     }
 }

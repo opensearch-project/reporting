@@ -89,7 +89,7 @@ opensearchplugin {
     name 'opensearch-reports-scheduler'
     description 'Scheduler for Dashboards Reports Plugin'
     classname "org.opensearch.reportsscheduler.ReportsSchedulerPlugin"
-    extendedPlugins = ['opensearch-job-scheduler']
+    extendedPlugins = ['opensearch-job-scheduler','opensearch-security;optional=true']
 }
 
 publishing {
@@ -229,6 +229,9 @@ repositories {
 dependencies {
     zipArchive group: 'org.opensearch.plugin', name:'opensearch-job-scheduler', version: "${opensearch_build}"
     opensearchPlugin "org.opensearch.plugin:opensearch-security:${opensearch_build}@zip"
+    // resource-sharing
+    compileOnly group: 'org.opensearch', name:'opensearch-security-spi', version:"${opensearch_build}"
+
     implementation "org.opensearch:opensearch:${opensearch_version}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlin_version}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-common:${kotlin_version}"

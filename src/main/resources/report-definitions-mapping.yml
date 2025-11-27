@@ -23,3 +23,5 @@ properties:
   reportDefinition:
     type: object
     enabled: false
+  all_shared_principals:
+    type: keyword
