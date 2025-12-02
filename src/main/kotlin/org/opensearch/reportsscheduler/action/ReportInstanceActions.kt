@@ -27,6 +27,7 @@ import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusResponse
 import org.opensearch.reportsscheduler.resources.Utils
 import org.opensearch.reportsscheduler.resources.Utils.shouldUseResourceAuthz
 import org.opensearch.reportsscheduler.security.UserAccessManager
+import org.opensearch.reportsscheduler.util.PluginClient
 import org.opensearch.reportsscheduler.util.logger
 import java.time.Instant
 
@@ -195,7 +196,7 @@ internal object ReportInstanceActions {
      * @param request [GetAllReportInstancesRequest] object
      * @return [GetAllReportInstancesResponse]
      */
-    fun getAll(request: GetAllReportInstancesRequest, user: User?): GetAllReportInstancesResponse {
+    fun getAll(request: GetAllReportInstancesRequest, pluginClient: PluginClient?, user: User?): GetAllReportInstancesResponse {
         log.info("$LOG_PREFIX:ReportInstance-getAll fromIndex:${request.fromIndex} maxItems:${request.maxItems}")
         // only use backend_role path if resource-sharing is disabled
         if (!shouldUseResourceAuthz(Utils.REPORT_INSTANCE_TYPE)) {
@@ -212,7 +213,8 @@ internal object ReportInstanceActions {
             UserAccessManager.getUserTenant(user),
             access,
             request.fromIndex,
-            request.maxItems
+            request.maxItems,
+            pluginClient
         )
         return GetAllReportInstancesResponse(reportInstanceList, true)
     }
