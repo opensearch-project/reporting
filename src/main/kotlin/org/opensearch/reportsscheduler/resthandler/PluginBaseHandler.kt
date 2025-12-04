@@ -11,15 +11,20 @@ import org.opensearch.rest.RestRequest
 import org.opensearch.transport.client.node.NodeClient
 
 abstract class PluginBaseHandler : BaseRestHandler() {
-
     /**
      * {@inheritDoc}
      */
-    override fun prepareRequest(request: RestRequest, client: NodeClient): RestChannelConsumer {
+    override fun prepareRequest(
+        request: RestRequest,
+        client: NodeClient,
+    ): RestChannelConsumer {
         Metrics.REQUEST_TOTAL.counter.increment()
         Metrics.REQUEST_INTERVAL_COUNT.counter.increment()
         return executeRequest(request, client)
     }
 
-    protected abstract fun executeRequest(request: RestRequest, client: NodeClient): RestChannelConsumer
+    protected abstract fun executeRequest(
+        request: RestRequest,
+        client: NodeClient,
+    ): RestChannelConsumer
 }

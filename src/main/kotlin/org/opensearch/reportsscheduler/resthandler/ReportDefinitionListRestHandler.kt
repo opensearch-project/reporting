@@ -36,23 +36,19 @@ internal class ReportDefinitionListRestHandler : PluginBaseHandler() {
     /**
      * {@inheritDoc}
      */
-    override fun getName(): String {
-        return REPORT_DEFINITION_LIST_ACTION
-    }
+    override fun getName(): String = REPORT_DEFINITION_LIST_ACTION
 
     /**
      * {@inheritDoc}
      */
-    override fun routes(): List<Route> {
-        return listOf()
-    }
+    override fun routes(): List<Route> = listOf()
 
     /**
      * {@inheritDoc}
      */
-    override fun replacedRoutes(): List<ReplacedRoute> {
-        return listOf(
-            /**
+    override fun replacedRoutes(): List<ReplacedRoute> =
+        listOf(
+            /*
              * Get all report definitions (from optional fromIndex)
              * Request URL: GET LIST_REPORT_DEFINITIONS_URL[?[fromIndex=1000]&[maxItems=100]]
              * Request body: None
@@ -62,29 +58,36 @@ internal class ReportDefinitionListRestHandler : PluginBaseHandler() {
                 GET,
                 LIST_REPORT_DEFINITIONS_URL,
                 GET,
-                LEGACY_LIST_REPORT_DEFINITIONS_URL
-            )
+                LEGACY_LIST_REPORT_DEFINITIONS_URL,
+            ),
         )
-    }
 
     /**
      * {@inheritDoc}
      */
-    override fun executeRequest(request: RestRequest, client: NodeClient): RestChannelConsumer {
+    override fun executeRequest(
+        request: RestRequest,
+        client: NodeClient,
+    ): RestChannelConsumer {
         val from = request.param(FROM_INDEX_FIELD)?.toIntOrNull() ?: 0
         val maxItems = request.param(MAX_ITEMS_FIELD)?.toIntOrNull() ?: PluginSettings.defaultItemsQueryCount
         return when (request.method()) {
-            GET -> RestChannelConsumer {
-                Metrics.REPORT_DEFINITION_LIST_TOTAL.counter.increment()
-                Metrics.REPORT_DEFINITION_LIST_INTERVAL_COUNT.counter.increment()
-                client.execute(
-                    GetAllReportDefinitionsAction.ACTION_TYPE,
-                    GetAllReportDefinitionsRequest(from, maxItems),
-                    RestResponseToXContentListener(it)
-                )
+            GET -> {
+                RestChannelConsumer {
+                    Metrics.REPORT_DEFINITION_LIST_TOTAL.counter.increment()
+                    Metrics.REPORT_DEFINITION_LIST_INTERVAL_COUNT.counter.increment()
+                    client.execute(
+                        GetAllReportDefinitionsAction.ACTION_TYPE,
+                        GetAllReportDefinitionsRequest(from, maxItems),
+                        RestResponseToXContentListener(it),
+                    )
+                }
             }
-            else -> RestChannelConsumer {
-                it.sendResponse(BytesRestResponse(RestStatus.METHOD_NOT_ALLOWED, "${request.method()} is not allowed"))
+
+            else -> {
+                RestChannelConsumer {
+                    it.sendResponse(BytesRestResponse(RestStatus.METHOD_NOT_ALLOWED, "${request.method()} is not allowed"))
+                }
             }
         }
     }
@@ -92,7 +95,5 @@ internal class ReportDefinitionListRestHandler : PluginBaseHandler() {
     /**
      * {@inheritDoc}
      */
-    override fun responseParams(): Set<String> {
-        return setOf(FROM_INDEX_FIELD, MAX_ITEMS_FIELD)
-    }
+    override fun responseParams(): Set<String> = setOf(FROM_INDEX_FIELD, MAX_ITEMS_FIELD)
 }

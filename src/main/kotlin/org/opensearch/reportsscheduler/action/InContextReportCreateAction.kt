@@ -18,27 +18,30 @@ import org.opensearch.transport.client.Client
 /**
  * In-Context ReportCreate transport action
  */
-internal class InContextReportCreateAction @Inject constructor(
-    transportService: TransportService,
-    client: Client,
-    actionFilters: ActionFilters,
-    val xContentRegistry: NamedXContentRegistry
-) : PluginBaseAction<InContextReportCreateRequest, InContextReportCreateResponse>(
-    NAME,
-    transportService,
-    client,
-    actionFilters,
-    ::InContextReportCreateRequest
-) {
-    companion object {
-        private const val NAME = "cluster:admin/opendistro/reports/menu/download"
-        internal val ACTION_TYPE = ActionType(NAME, ::InContextReportCreateResponse)
-    }
+internal class InContextReportCreateAction
+    @Inject
+    constructor(
+        transportService: TransportService,
+        client: Client,
+        actionFilters: ActionFilters,
+        val xContentRegistry: NamedXContentRegistry,
+    ) : PluginBaseAction<InContextReportCreateRequest, InContextReportCreateResponse>(
+            NAME,
+            transportService,
+            client,
+            actionFilters,
+            ::InContextReportCreateRequest,
+        ) {
+        companion object {
+            private const val NAME = "cluster:admin/opendistro/reports/menu/download"
+            internal val ACTION_TYPE = ActionType(NAME, ::InContextReportCreateResponse)
+        }
 
-    /**
-     * {@inheritDoc}
-     */
-    override fun executeRequest(request: InContextReportCreateRequest, user: User?): InContextReportCreateResponse {
-        return ReportInstanceActions.createOnDemand(request, user)
+        /**
+         * {@inheritDoc}
+         */
+        override fun executeRequest(
+            request: InContextReportCreateRequest,
+            user: User?,
+        ): InContextReportCreateResponse = ReportInstanceActions.createOnDemand(request, user)
     }
-}

@@ -50,7 +50,10 @@ internal object ReportDefinitionsIndex {
      * @param client The ES client
      * @param clusterService The ES cluster service
      */
-    fun initialize(client: Client, clusterService: ClusterService) {
+    fun initialize(
+        client: Client,
+        clusterService: ClusterService,
+    ) {
         this.client = SecureIndexClient(client)
         this.clusterService = clusterService
     }
@@ -64,9 +67,10 @@ internal object ReportDefinitionsIndex {
             val classLoader = ReportDefinitionsIndex::class.java.classLoader
             val indexMappingSource = classLoader.getResource(REPORT_DEFINITIONS_MAPPING_FILE_NAME)?.readText()!!
             val indexSettingsSource = classLoader.getResource(REPORT_DEFINITIONS_SETTINGS_FILE_NAME)?.readText()!!
-            val request = CreateIndexRequest(REPORT_DEFINITIONS_INDEX_NAME)
-                .mapping(indexMappingSource, XContentType.YAML)
-                .settings(indexSettingsSource, XContentType.YAML)
+            val request =
+                CreateIndexRequest(REPORT_DEFINITIONS_INDEX_NAME)
+                    .mapping(indexMappingSource, XContentType.YAML)
+                    .settings(indexSettingsSource, XContentType.YAML)
             try {
                 client.threadPool().threadContext.stashContext().use {
                     val actionFuture = client.admin().indices().create(request)
@@ -106,9 +110,10 @@ internal object ReportDefinitionsIndex {
      */
     fun createReportDefinition(reportDefinitionDetails: ReportDefinitionDetails): String? {
         createIndex()
-        val indexRequest = IndexRequest(REPORT_DEFINITIONS_INDEX_NAME)
-            .source(reportDefinitionDetails.toXContent())
-            .create(true)
+        val indexRequest =
+            IndexRequest(REPORT_DEFINITIONS_INDEX_NAME)
+                .source(reportDefinitionDetails.toXContent())
+                .create(true)
         val actionFuture = client.index(indexRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         return if (response.result != DocWriteResponse.Result.CREATED) {
@@ -134,11 +139,12 @@ internal object ReportDefinitionsIndex {
             log.warn("$LOG_PREFIX:getReportDefinition - $id not found; response:$response")
             null
         } else {
-            val parser = XContentType.JSON.xContent().createParser(
-                NamedXContentRegistry.EMPTY,
-                LoggingDeprecationHandler.INSTANCE,
-                response.sourceAsString
-            )
+            val parser =
+                XContentType.JSON.xContent().createParser(
+                    NamedXContentRegistry.EMPTY,
+                    LoggingDeprecationHandler.INSTANCE,
+                    response.sourceAsString,
+                )
             parser.nextToken()
             ReportDefinitionDetails.parse(parser, id)
         }
@@ -152,13 +158,19 @@ internal object ReportDefinitionsIndex {
      * @param maxItems the max items to query
      * @return search result of Report definition details
      */
-    fun getAllReportDefinitions(tenant: String, access: List<String>, from: Int, maxItems: Int): ReportDefinitionDetailsSearchResults {
+    fun getAllReportDefinitions(
+        tenant: String,
+        access: List<String>,
+        from: Int,
+        maxItems: Int,
+    ): ReportDefinitionDetailsSearchResults {
         createIndex()
-        val sourceBuilder = SearchSourceBuilder()
-            .timeout(TimeValue(PluginSettings.operationTimeoutMs, TimeUnit.MILLISECONDS))
-            .sort(UPDATED_TIME_FIELD)
-            .size(maxItems)
-            .from(from)
+        val sourceBuilder =
+            SearchSourceBuilder()
+                .timeout(TimeValue(PluginSettings.operationTimeoutMs, TimeUnit.MILLISECONDS))
+                .sort(UPDATED_TIME_FIELD)
+                .size(maxItems)
+                .from(from)
         val tenantQuery = QueryBuilders.termsQuery(TENANT_FIELD, tenant)
         if (access.isNotEmpty()) {
             val accessQuery = QueryBuilders.termsQuery(ACCESS_LIST_FIELD, access)
@@ -169,15 +181,16 @@ internal object ReportDefinitionsIndex {
         } else {
             sourceBuilder.query(tenantQuery)
         }
-        val searchRequest = SearchRequest()
-            .indices(REPORT_DEFINITIONS_INDEX_NAME)
-            .source(sourceBuilder)
+        val searchRequest =
+            SearchRequest()
+                .indices(REPORT_DEFINITIONS_INDEX_NAME)
+                .source(sourceBuilder)
         val actionFuture = client.search(searchRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         val result = ReportDefinitionDetailsSearchResults(from.toLong(), response)
         log.info(
             "$LOG_PREFIX:getAllReportDefinitions from:$from, maxItems:$maxItems," +
-                " retCount:${result.objectList.size}, totalCount:${result.totalHits}"
+                " retCount:${result.objectList.size}, totalCount:${result.totalHits}",
         )
         return result
     }
@@ -188,13 +201,17 @@ internal object ReportDefinitionsIndex {
      * @param reportDefinitionDetails the Report definition details data
      * @return true if successful, false otherwise
      */
-    fun updateReportDefinition(id: String, reportDefinitionDetails: ReportDefinitionDetails): Boolean {
+    fun updateReportDefinition(
+        id: String,
+        reportDefinitionDetails: ReportDefinitionDetails,
+    ): Boolean {
         createIndex()
-        val updateRequest = UpdateRequest()
-            .index(REPORT_DEFINITIONS_INDEX_NAME)
-            .id(id)
-            .doc(reportDefinitionDetails.toXContent())
-            .fetchSource(true)
+        val updateRequest =
+            UpdateRequest()
+                .index(REPORT_DEFINITIONS_INDEX_NAME)
+                .id(id)
+                .doc(reportDefinitionDetails.toXContent())
+                .fetchSource(true)
         val actionFuture = client.update(updateRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         if (response.result != DocWriteResponse.Result.UPDATED) {
@@ -211,9 +228,10 @@ internal object ReportDefinitionsIndex {
      */
     fun deleteReportDefinition(id: String): Boolean {
         createIndex()
-        val deleteRequest = DeleteRequest()
-            .index(REPORT_DEFINITIONS_INDEX_NAME)
-            .id(id)
+        val deleteRequest =
+            DeleteRequest()
+                .index(REPORT_DEFINITIONS_INDEX_NAME)
+                .id(id)
         val actionFuture = client.delete(deleteRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         if (response.result != DocWriteResponse.Result.DELETED) {

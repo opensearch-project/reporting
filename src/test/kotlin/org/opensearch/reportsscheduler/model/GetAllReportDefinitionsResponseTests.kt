@@ -14,15 +14,13 @@ import org.opensearch.reportsscheduler.createReportDefinitionDetails
 import org.opensearch.reportsscheduler.getJsonString
 
 internal class GetAllReportDefinitionsResponseTests {
-
-    private fun createReportDefinitionDetailsSearchResults(): ReportDefinitionDetailsSearchResults {
-        return ReportDefinitionDetailsSearchResults(
+    private fun createReportDefinitionDetailsSearchResults(): ReportDefinitionDetailsSearchResults =
+        ReportDefinitionDetailsSearchResults(
             startIndex = 0,
             totalHits = 100,
             totalHitRelation = TotalHits.Relation.EQUAL_TO,
-            objectList = listOf(createReportDefinitionDetails())
+            objectList = listOf(createReportDefinitionDetails()),
         )
-    }
 
     @Test
     fun `Get response serialize and deserialize using json object should be equal`() {
@@ -32,14 +30,15 @@ internal class GetAllReportDefinitionsResponseTests {
         val recreatedObject = createObjectFromJsonString(jsonString) { GetAllReportDefinitionsResponse(it) }
         Assertions.assertEquals(
             response.reportDefinitionList.objectList,
-            recreatedObject.reportDefinitionList.objectList
+            recreatedObject.reportDefinitionList.objectList,
         )
     }
 
     @Test
     fun `Get response should deserialize json object using parser`() {
         val reportDefinitionDetailsSearchResults = createReportDefinitionDetailsSearchResults()
-        val jsonString = """
+        val jsonString =
+            """
             {
                 "startIndex":"0",
                 "totalHits":"100",
@@ -74,7 +73,7 @@ internal class GetAllReportDefinitionsResponseTests {
                 }
                ]
             }
-        """.trimIndent()
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { GetAllReportDefinitionsResponse(it) }
         Assertions.assertEquals(reportDefinitionDetailsSearchResults.objectList, recreatedObject.reportDefinitionList.objectList)
     }
@@ -90,7 +89,8 @@ internal class GetAllReportDefinitionsResponseTests {
     @Test
     fun `Get response should safely ignore extra field in json object`() {
         val reportDefinitionDetailsSearchResults = createReportDefinitionDetailsSearchResults()
-        val jsonString = """
+        val jsonString =
+            """
             {
                 "startIndex":"0",
                 "totalHits":"100",
@@ -128,7 +128,7 @@ internal class GetAllReportDefinitionsResponseTests {
               "extra_field_2":{"extra":"value"},
               "extra_field_3":"extra value 3"
             }
-        """.trimIndent()
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { GetAllReportDefinitionsResponse(it) }
         Assertions.assertEquals(reportDefinitionDetailsSearchResults.objectList, recreatedObject.reportDefinitionList.objectList)
     }

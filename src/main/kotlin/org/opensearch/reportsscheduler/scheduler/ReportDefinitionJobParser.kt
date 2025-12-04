@@ -15,7 +15,11 @@ internal object ReportDefinitionJobParser : ScheduledJobParser {
     /**
      * {@inheritDoc}
      */
-    override fun parse(xContentParser: XContentParser, id: String, jobDocVersion: JobDocVersion): ScheduledJobParameter {
+    override fun parse(
+        xContentParser: XContentParser,
+        id: String,
+        jobDocVersion: JobDocVersion,
+    ): ScheduledJobParameter {
         xContentParser.nextToken()
         return ReportDefinitionDetails.parse(xContentParser, id)
     }

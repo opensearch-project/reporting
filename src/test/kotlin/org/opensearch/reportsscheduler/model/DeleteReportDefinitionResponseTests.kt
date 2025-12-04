@@ -14,7 +14,6 @@ import org.opensearch.reportsscheduler.createObjectFromJsonString
 import org.opensearch.reportsscheduler.getJsonString
 
 internal class DeleteReportDefinitionResponseTests {
-
     @Test
     fun `Delete response serialize and deserialize transport object should be equal`() {
         val deleteRequest = DeleteReportDefinitionResponse("sample_report_definition_id")
@@ -33,11 +32,12 @@ internal class DeleteReportDefinitionResponseTests {
     @Test
     fun `Delete response should deserialize json object using parser`() {
         val reportDefinitionId = "sample_report_definition_id"
-        val jsonString = """
-        {
-            "reportDefinitionId":"$reportDefinitionId"
-        }
-        """.trimIndent()
+        val jsonString =
+            """
+            {
+                "reportDefinitionId":"$reportDefinitionId"
+            }
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { DeleteReportDefinitionResponse.parse(it) }
         assertEquals(reportDefinitionId, recreatedObject.reportDefinitionId)
     }
@@ -53,14 +53,15 @@ internal class DeleteReportDefinitionResponseTests {
     @Test
     fun `Delete response should safely ignore extra field in json object`() {
         val reportDefinitionId = "sample_report_definition_id"
-        val jsonString = """
-        {
-            "reportDefinitionId":"$reportDefinitionId",
-            "extra_field_1":["extra", "value"],
-            "extra_field_2":{"extra":"value"},
-            "extra_field_3":"extra value 3"
-        }
-        """.trimIndent()
+        val jsonString =
+            """
+            {
+                "reportDefinitionId":"$reportDefinitionId",
+                "extra_field_1":["extra", "value"],
+                "extra_field_2":{"extra":"value"},
+                "extra_field_3":"extra value 3"
+            }
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { DeleteReportDefinitionResponse.parse(it) }
         assertEquals(reportDefinitionId, recreatedObject.reportDefinitionId)
     }

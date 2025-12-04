@@ -16,7 +16,6 @@ import org.opensearch.rest.RestRequest
 import java.time.Instant
 
 class ReportsSchedulerBackwardsCompatibilityIT : PluginRestTestCase() {
-
     companion object {
         private val CLUSTER_TYPE = ClusterType.parse(System.getProperty("tests.rest.bwcsuite"))
         private val CLUSTER_NAME = System.getProperty("tests.clustername")
@@ -30,15 +29,15 @@ class ReportsSchedulerBackwardsCompatibilityIT : PluginRestTestCase() {
 
     override fun preserveODFEIndicesAfterTest(): Boolean = true
 
-    override fun restClientSettings(): Settings {
-        return Settings.builder()
+    override fun restClientSettings(): Settings =
+        Settings
+            .builder()
             .put(super.restClientSettings())
             // increase the timeout here to 90 seconds to handle long waits for a green
             // cluster health. the waits for green need to be longer than a minute to
             // account for delayed shards
             .put(CLIENT_SOCKET_TIMEOUT, "90s")
             .build()
-    }
 
     @Throws(Exception::class)
     @Suppress("UNCHECKED_CAST")
@@ -54,12 +53,14 @@ class ReportsSchedulerBackwardsCompatibilityIT : PluginRestTestCase() {
                     assertTrue(pluginNames.contains("opensearch-job-scheduler"))
                     createBasicReportDefinition()
                 }
+
                 ClusterType.MIXED -> {
                     assertTrue(pluginNames.contains("opensearch-reports-scheduler"))
                     assertTrue(pluginNames.contains("opensearch-job-scheduler"))
                     verifyReportDefinitionExists(LEGACY_BASE_REPORTS_URI)
                     verifyReportInstanceExists(LEGACY_BASE_REPORTS_URI)
                 }
+
                 ClusterType.UPGRADED -> {
                     assertTrue(pluginNames.contains("opensearch-reports-scheduler"))
                     assertTrue(pluginNames.contains("opensearch-job-scheduler"))
@@ -74,23 +75,26 @@ class ReportsSchedulerBackwardsCompatibilityIT : PluginRestTestCase() {
     private enum class ClusterType {
         OLD,
         MIXED,
-        UPGRADED;
+        UPGRADED,
+        ;
 
         companion object {
-            fun parse(value: String): ClusterType {
-                return when (value) {
+            fun parse(value: String): ClusterType =
+                when (value) {
                     "old_cluster" -> OLD
                     "mixed_cluster" -> MIXED
                     "upgraded_cluster" -> UPGRADED
                     else -> throw AssertionError("Unknown cluster type: $value")
                 }
-            }
         }
     }
 
-    private fun getPluginUri(): String {
-        return when (CLUSTER_TYPE) {
-            ClusterType.OLD -> "_nodes/$CLUSTER_NAME-0/plugins"
+    private fun getPluginUri(): String =
+        when (CLUSTER_TYPE) {
+            ClusterType.OLD -> {
+                "_nodes/$CLUSTER_NAME-0/plugins"
+            }
+
             ClusterType.MIXED -> {
                 when (System.getProperty("tests.rest.bwcsuite_round")) {
                     "second" -> "_nodes/$CLUSTER_NAME-1/plugins"
@@ -98,14 +102,17 @@ class ReportsSchedulerBackwardsCompatibilityIT : PluginRestTestCase() {
                     else -> "_nodes/$CLUSTER_NAME-0/plugins"
                 }
             }
-            ClusterType.UPGRADED -> "_nodes/plugins"
+
+            ClusterType.UPGRADED -> {
+                "_nodes/plugins"
+            }
         }
-    }
 
     @Throws(Exception::class)
     private fun createBasicReportDefinition() {
         val timeStampMillis = Instant.now().toEpochMilli()
-        val trigger = """
+        val trigger =
+            """
             "trigger":{
                 "triggerType":"IntervalSchedule",
                 "schedule":{
@@ -116,16 +123,17 @@ class ReportsSchedulerBackwardsCompatibilityIT : PluginRestTestCase() {
                     }
                 }
             },
-        """.trimIndent()
+            """.trimIndent()
         val reportDefinitionRequest = constructReportDefinitionRequest(trigger)
 
         // legacy test
-        val legacyReportDefinitionResponse = executeRequest(
-            RestRequest.Method.POST.name,
-            "$LEGACY_BASE_REPORTS_URI/definition",
-            reportDefinitionRequest,
-            RestStatus.OK.status
-        )
+        val legacyReportDefinitionResponse =
+            executeRequest(
+                RestRequest.Method.POST.name,
+                "$LEGACY_BASE_REPORTS_URI/definition",
+                reportDefinitionRequest,
+                RestStatus.OK.status,
+            )
         val legacyReportDefinitionId = legacyReportDefinitionResponse.get("reportDefinitionId").asString
         Assert.assertNotNull("reportDefinitionId should be generated", legacyReportDefinitionId)
         // adding this wait time for the scheduler to create a report instance in the report-instance index,
@@ -136,12 +144,13 @@ class ReportsSchedulerBackwardsCompatibilityIT : PluginRestTestCase() {
     @Throws(Exception::class)
     @Suppress("UNCHECKED_CAST")
     private fun verifyReportDefinitionExists(uri: String) {
-        val listReportDefinitions = executeRequest(
-            RestRequest.Method.GET.name,
-            "$uri/definitions",
-            "",
-            RestStatus.OK.status
-        )
+        val listReportDefinitions =
+            executeRequest(
+                RestRequest.Method.GET.name,
+                "$uri/definitions",
+                "",
+                RestStatus.OK.status,
+            )
         val totalHits = listReportDefinitions.get("totalHits").asInt
         Assert.assertEquals(totalHits, 1)
     }
@@ -149,12 +158,13 @@ class ReportsSchedulerBackwardsCompatibilityIT : PluginRestTestCase() {
     @Throws(Exception::class)
     @Suppress("UNCHECKED_CAST")
     private fun verifyReportInstanceExists(uri: String) {
-        val listReportInstances = executeRequest(
-            RestRequest.Method.GET.name,
-            "$uri/instances",
-            "",
-            RestStatus.OK.status
-        )
+        val listReportInstances =
+            executeRequest(
+                RestRequest.Method.GET.name,
+                "$uri/instances",
+                "",
+                RestStatus.OK.status,
+            )
         val totalHits = listReportInstances.get("totalHits").asInt
         assertTrue("Actual report instances counts ($totalHits) should be greater than or equal to (1)", totalHits >= 1)
     }

@@ -12,13 +12,17 @@ import org.opensearch.reportsscheduler.createObjectFromJsonString
 import org.opensearch.reportsscheduler.getJsonString
 
 internal class UpdateReportInstanceStatusRequestTests {
-    private val request = UpdateReportInstanceStatusRequest(
-        reportInstanceId = "sample_report_instance_id",
-        status = ReportInstance.Status.Success,
-        statusText = "200"
-    )
+    private val request =
+        UpdateReportInstanceStatusRequest(
+            reportInstanceId = "sample_report_instance_id",
+            status = ReportInstance.Status.Success,
+            statusText = "200",
+        )
 
-    private fun verify(request: UpdateReportInstanceStatusRequest, recreatedObject: UpdateReportInstanceStatusRequest) {
+    private fun verify(
+        request: UpdateReportInstanceStatusRequest,
+        recreatedObject: UpdateReportInstanceStatusRequest,
+    ) {
         Assertions.assertEquals(request.reportInstanceId, recreatedObject.reportInstanceId)
         Assertions.assertEquals(request.status, recreatedObject.status)
         Assertions.assertEquals(request.statusText, recreatedObject.statusText)
@@ -33,13 +37,14 @@ internal class UpdateReportInstanceStatusRequestTests {
 
     @Test
     fun `Create request should deserialize json object using parser`() {
-        val jsonString = """
-         {
-               "reportInstanceId":"sample_report_instance_id",
-               "status": "Success",
-               "statusText":"200"
-         }
-        """.trimIndent()
+        val jsonString =
+            """
+            {
+                  "reportInstanceId":"sample_report_instance_id",
+                  "status": "Success",
+                  "statusText":"200"
+            }
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { UpdateReportInstanceStatusRequest.parse(it) }
         verify(request, recreatedObject)
     }
@@ -54,16 +59,17 @@ internal class UpdateReportInstanceStatusRequestTests {
 
     @Test
     fun `Create request should safely ignore extra field in json object`() {
-        val jsonString = """
-        {
-            "reportInstanceId":"sample_report_instance_id",
-            "status": "Success",
-            "statusText":"200",
-            "extra_field_1":["extra", "value"],
-            "extra_field_2":{"extra":"value"},
-            "extra_field_3":"extra value 3"
-        }
-        """.trimIndent()
+        val jsonString =
+            """
+            {
+                "reportInstanceId":"sample_report_instance_id",
+                "status": "Success",
+                "statusText":"200",
+                "extra_field_1":["extra", "value"],
+                "extra_field_2":{"extra":"value"},
+                "extra_field_3":"extra value 3"
+            }
+            """.trimIndent()
 
         val recreatedObject = createObjectFromJsonString(jsonString) { UpdateReportInstanceStatusRequest.parse(it) }
         verify(request, recreatedObject)

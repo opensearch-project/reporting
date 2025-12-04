@@ -55,14 +55,15 @@ internal class UpdateReportDefinitionResponseTests {
     @Test
     fun `Update response should safely ignore extra field in json object`() {
         val reportDefinitionId = "report_definition_id"
-        val jsonString = """
-        {
-            "reportDefinitionId":"$reportDefinitionId",
-            "extra_field_1":["extra", "value"],
-            "extra_field_2":{"extra":"value"},
-            "extra_field_3":"extra value 3"
-        }
-        """.trimIndent()
+        val jsonString =
+            """
+            {
+                "reportDefinitionId":"$reportDefinitionId",
+                "extra_field_1":["extra", "value"],
+                "extra_field_2":{"extra":"value"},
+                "extra_field_3":"extra value 3"
+            }
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { UpdateReportDefinitionResponse.parse(it) }
         Assertions.assertEquals(reportDefinitionId, recreatedObject.reportDefinitionId)
     }

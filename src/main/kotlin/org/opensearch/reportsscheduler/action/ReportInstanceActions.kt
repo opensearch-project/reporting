@@ -39,23 +39,27 @@ internal object ReportInstanceActions {
      * @param request [InContextReportCreateRequest] object
      * @return [InContextReportCreateResponse]
      */
-    fun createOnDemand(request: InContextReportCreateRequest, user: User?): InContextReportCreateResponse {
+    fun createOnDemand(
+        request: InContextReportCreateRequest,
+        user: User?,
+    ): InContextReportCreateResponse {
         log.info("$LOG_PREFIX:ReportInstance-createOnDemand")
         UserAccessManager.validateUser(user)
         val currentTime = Instant.now()
-        val reportInstance = ReportInstance(
-            "ignore",
-            currentTime,
-            currentTime,
-            request.beginTime,
-            request.endTime,
-            UserAccessManager.getUserTenant(user),
-            UserAccessManager.getAllAccessInfo(user),
-            request.reportDefinitionDetails,
-            Status.Success, // TODO: Revert to request.status when background job execution supported
-            request.statusText,
-            request.inContextDownloadUrlPath
-        )
+        val reportInstance =
+            ReportInstance(
+                "ignore",
+                currentTime,
+                currentTime,
+                request.beginTime,
+                request.endTime,
+                UserAccessManager.getUserTenant(user),
+                UserAccessManager.getAllAccessInfo(user),
+                request.reportDefinitionDetails,
+                Status.Success, // TODO: Revert to request.status when background job execution supported
+                request.statusText,
+                request.inContextDownloadUrlPath,
+            )
         val docId = ReportInstancesIndex.createReportInstance(reportInstance)
         docId ?: run {
             Metrics.REPORT_FROM_DEFINITION_SYSTEM_ERROR.counter.increment()
@@ -70,7 +74,10 @@ internal object ReportInstanceActions {
      * @param request [OnDemandReportCreateRequest] object
      * @return [OnDemandReportCreateResponse]
      */
-    fun createOnDemandFromDefinition(request: OnDemandReportCreateRequest, user: User?): OnDemandReportCreateResponse {
+    fun createOnDemandFromDefinition(
+        request: OnDemandReportCreateRequest,
+        user: User?,
+    ): OnDemandReportCreateResponse {
         log.info("$LOG_PREFIX:ReportInstance-createOnDemandFromDefinition ${request.reportDefinitionId}")
         UserAccessManager.validateUser(user)
         val currentTime = Instant.now()
@@ -88,8 +95,10 @@ internal object ReportInstanceActions {
         val beginTime: Instant
         val endTime: Instant
 
-        if (!reportDefinitionDetails.reportDefinition.format.timeFrom.isNullOrBlank() &&
-            !reportDefinitionDetails.reportDefinition.format.timeTo.isNullOrBlank()
+        if (!reportDefinitionDetails.reportDefinition.format.timeFrom
+                .isNullOrBlank() &&
+            !reportDefinitionDetails.reportDefinition.format.timeTo
+                .isNullOrBlank()
         ) {
             beginTime = Instant.parse(reportDefinitionDetails.reportDefinition.format.timeFrom)
             endTime = Instant.parse(reportDefinitionDetails.reportDefinition.format.timeTo)
@@ -98,17 +107,18 @@ internal object ReportInstanceActions {
             endTime = currentTime
         }
         val currentStatus: Status = Status.Success // TODO: Revert to Executing when background job execution supported
-        val reportInstance = ReportInstance(
-            "ignore",
-            currentTime,
-            currentTime,
-            beginTime,
-            endTime,
-            UserAccessManager.getUserTenant(user),
-            reportDefinitionDetails.access,
-            reportDefinitionDetails,
-            currentStatus
-        )
+        val reportInstance =
+            ReportInstance(
+                "ignore",
+                currentTime,
+                currentTime,
+                beginTime,
+                endTime,
+                UserAccessManager.getUserTenant(user),
+                reportDefinitionDetails.access,
+                reportDefinitionDetails,
+                currentStatus,
+            )
         val docId = ReportInstancesIndex.createReportInstance(reportInstance)
         docId ?: run {
             Metrics.REPORT_FROM_DEFINITION_ID_SYSTEM_ERROR.counter.increment()
@@ -123,7 +133,10 @@ internal object ReportInstanceActions {
      * @param request [UpdateReportInstanceStatusRequest] object
      * @return [UpdateReportInstanceStatusResponse]
      */
-    fun update(request: UpdateReportInstanceStatusRequest, user: User?): UpdateReportInstanceStatusResponse {
+    fun update(
+        request: UpdateReportInstanceStatusRequest,
+        user: User?,
+    ): UpdateReportInstanceStatusResponse {
         log.info("$LOG_PREFIX:ReportInstance-update ${request.reportInstanceId}")
         UserAccessManager.validateUser(user)
         val currentReportInstance = ReportInstancesIndex.getReportInstance(request.reportInstanceId)
@@ -141,11 +154,12 @@ internal object ReportInstanceActions {
             throw OpenSearchStatusException("Status cannot be updated to ${Status.Scheduled}", RestStatus.BAD_REQUEST)
         }
         val currentTime = Instant.now()
-        val updatedReportInstance = currentReportInstance.copy(
-            updatedTime = currentTime,
-            status = request.status,
-            statusText = request.statusText
-        )
+        val updatedReportInstance =
+            currentReportInstance.copy(
+                updatedTime = currentTime,
+                status = request.status,
+                statusText = request.statusText,
+            )
         if (!ReportInstancesIndex.updateReportInstance(updatedReportInstance)) {
             Metrics.REPORT_INSTANCE_UPDATE_SYSTEM_ERROR.counter.increment()
             throw OpenSearchStatusException("Report Instance state update failed", RestStatus.INTERNAL_SERVER_ERROR)
@@ -158,7 +172,10 @@ internal object ReportInstanceActions {
      * @param request [GetReportInstanceRequest] object
      * @return [GetReportInstanceResponse]
      */
-    fun info(request: GetReportInstanceRequest, user: User?): GetReportInstanceResponse {
+    fun info(
+        request: GetReportInstanceRequest,
+        user: User?,
+    ): GetReportInstanceResponse {
         log.info("$LOG_PREFIX:ReportInstance-info ${request.reportInstanceId}")
         UserAccessManager.validateUser(user)
         val reportInstance = ReportInstancesIndex.getReportInstance(request.reportInstanceId)
@@ -180,15 +197,19 @@ internal object ReportInstanceActions {
      * @param request [GetAllReportInstancesRequest] object
      * @return [GetAllReportInstancesResponse]
      */
-    fun getAll(request: GetAllReportInstancesRequest, user: User?): GetAllReportInstancesResponse {
+    fun getAll(
+        request: GetAllReportInstancesRequest,
+        user: User?,
+    ): GetAllReportInstancesResponse {
         log.info("$LOG_PREFIX:ReportInstance-getAll fromIndex:${request.fromIndex} maxItems:${request.maxItems}")
         UserAccessManager.validateUser(user)
-        val reportInstanceList = ReportInstancesIndex.getAllReportInstances(
-            UserAccessManager.getUserTenant(user),
-            UserAccessManager.getSearchAccessInfo(user),
-            request.fromIndex,
-            request.maxItems
-        )
+        val reportInstanceList =
+            ReportInstancesIndex.getAllReportInstances(
+                UserAccessManager.getUserTenant(user),
+                UserAccessManager.getSearchAccessInfo(user),
+                request.fromIndex,
+                request.maxItems,
+            )
         return GetAllReportInstancesResponse(reportInstanceList, true)
     }
 }

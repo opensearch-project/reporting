@@ -37,22 +37,26 @@ internal object ReportDefinitionActions {
      * @param request [CreateReportDefinitionRequest] object
      * @return [CreateReportDefinitionResponse]
      */
-    fun create(request: CreateReportDefinitionRequest, user: User?): CreateReportDefinitionResponse {
+    fun create(
+        request: CreateReportDefinitionRequest,
+        user: User?,
+    ): CreateReportDefinitionResponse {
         log.info("$LOG_PREFIX:ReportDefinition-create")
         UserAccessManager.validateUser(user)
         val currentTime = Instant.now()
-        val reportDefinitionDetails = ReportDefinitionDetails(
-            "ignore",
-            currentTime,
-            currentTime,
-            UserAccessManager.getUserTenant(user),
-            UserAccessManager.getAllAccessInfo(user),
-            request.reportDefinition
-        )
+        val reportDefinitionDetails =
+            ReportDefinitionDetails(
+                "ignore",
+                currentTime,
+                currentTime,
+                UserAccessManager.getUserTenant(user),
+                UserAccessManager.getAllAccessInfo(user),
+                request.reportDefinition,
+            )
         val docId = ReportDefinitionsIndex.createReportDefinition(reportDefinitionDetails)
         docId ?: throw OpenSearchStatusException(
             "Report Definition Creation failed",
-            RestStatus.INTERNAL_SERVER_ERROR
+            RestStatus.INTERNAL_SERVER_ERROR,
         )
         return CreateReportDefinitionResponse(docId)
     }
@@ -62,7 +66,10 @@ internal object ReportDefinitionActions {
      * @param request [UpdateReportDefinitionRequest] object
      * @return [UpdateReportDefinitionResponse]
      */
-    fun update(request: UpdateReportDefinitionRequest, user: User?): UpdateReportDefinitionResponse {
+    fun update(
+        request: UpdateReportDefinitionRequest,
+        user: User?,
+    ): UpdateReportDefinitionResponse {
         log.info("$LOG_PREFIX:ReportDefinition-update ${request.reportDefinitionId}")
         UserAccessManager.validateUser(user)
         val currentReportDefinitionDetails = ReportDefinitionsIndex.getReportDefinition(request.reportDefinitionId)
@@ -77,14 +84,15 @@ internal object ReportDefinitionActions {
             throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportDefinitionId}", RestStatus.FORBIDDEN)
         }
         val currentTime = Instant.now()
-        val reportDefinitionDetails = ReportDefinitionDetails(
-            request.reportDefinitionId,
-            currentTime,
-            currentReportDefinitionDetails.createdTime,
-            UserAccessManager.getUserTenant(user),
-            currentReportDefinitionDetails.access,
-            request.reportDefinition
-        )
+        val reportDefinitionDetails =
+            ReportDefinitionDetails(
+                request.reportDefinitionId,
+                currentTime,
+                currentReportDefinitionDetails.createdTime,
+                UserAccessManager.getUserTenant(user),
+                currentReportDefinitionDetails.access,
+                request.reportDefinition,
+            )
         if (!ReportDefinitionsIndex.updateReportDefinition(request.reportDefinitionId, reportDefinitionDetails)) {
             Metrics.REPORT_DEFINITION_UPDATE_SYSTEM_ERROR.counter.increment()
             throw OpenSearchStatusException("Report Definition Update failed", RestStatus.INTERNAL_SERVER_ERROR)
@@ -97,7 +105,10 @@ internal object ReportDefinitionActions {
      * @param request [GetReportDefinitionRequest] object
      * @return [GetReportDefinitionResponse]
      */
-    fun info(request: GetReportDefinitionRequest, user: User?): GetReportDefinitionResponse {
+    fun info(
+        request: GetReportDefinitionRequest,
+        user: User?,
+    ): GetReportDefinitionResponse {
         log.info("$LOG_PREFIX:ReportDefinition-info ${request.reportDefinitionId}")
         UserAccessManager.validateUser(user)
         val reportDefinitionDetails = ReportDefinitionsIndex.getReportDefinition(request.reportDefinitionId)
@@ -119,7 +130,10 @@ internal object ReportDefinitionActions {
      * @param request [DeleteReportDefinitionRequest] object
      * @return [DeleteReportDefinitionResponse]
      */
-    fun delete(request: DeleteReportDefinitionRequest, user: User?): DeleteReportDefinitionResponse {
+    fun delete(
+        request: DeleteReportDefinitionRequest,
+        user: User?,
+    ): DeleteReportDefinitionResponse {
         log.info("$LOG_PREFIX:ReportDefinition-delete ${request.reportDefinitionId}")
         UserAccessManager.validateUser(user)
         val reportDefinitionDetails = ReportDefinitionsIndex.getReportDefinition(request.reportDefinitionId)
@@ -145,15 +159,19 @@ internal object ReportDefinitionActions {
      * @param request [GetAllReportDefinitionsRequest] object
      * @return [GetAllReportDefinitionsResponse]
      */
-    fun getAll(request: GetAllReportDefinitionsRequest, user: User?): GetAllReportDefinitionsResponse {
+    fun getAll(
+        request: GetAllReportDefinitionsRequest,
+        user: User?,
+    ): GetAllReportDefinitionsResponse {
         log.info("$LOG_PREFIX:ReportDefinition-getAll fromIndex:${request.fromIndex} maxItems:${request.maxItems}")
         UserAccessManager.validateUser(user)
-        val reportDefinitionsList = ReportDefinitionsIndex.getAllReportDefinitions(
-            UserAccessManager.getUserTenant(user),
-            UserAccessManager.getSearchAccessInfo(user),
-            request.fromIndex,
-            request.maxItems
-        )
+        val reportDefinitionsList =
+            ReportDefinitionsIndex.getAllReportDefinitions(
+                UserAccessManager.getUserTenant(user),
+                UserAccessManager.getSearchAccessInfo(user),
+                request.fromIndex,
+                request.maxItems,
+            )
         return GetAllReportDefinitionsResponse(reportDefinitionsList, true)
     }
 }

@@ -14,12 +14,12 @@ import org.opensearch.reportsscheduler.createReportDefinitionObject
 import org.opensearch.reportsscheduler.getJsonString
 
 internal class CreateReportDefinitionRequestTests {
-
     @Test
     fun `Create request serialize and deserialize using json object should be equal`() {
-        val reportDefinitionRequest = CreateReportDefinitionRequest(
-            createReportDefinitionObject()
-        )
+        val reportDefinitionRequest =
+            CreateReportDefinitionRequest(
+                createReportDefinitionObject(),
+            )
         val jsonString = getJsonString(reportDefinitionRequest)
         val recreatedObject = createObjectFromJsonString(jsonString) { CreateReportDefinitionRequest(it) }
         Assertions.assertEquals(reportDefinitionRequest.reportDefinition, recreatedObject.reportDefinition)
@@ -28,7 +28,8 @@ internal class CreateReportDefinitionRequestTests {
     @Test
     fun `Create request should deserialize json object using parser`() {
         val reportDefinitionObject = createReportDefinitionObject()
-        val jsonString = """
+        val jsonString =
+            """
             {
                 "reportDefinition":{
                     "name":"sample_report_definition",
@@ -51,7 +52,7 @@ internal class CreateReportDefinitionRequestTests {
                     }
                 }
             }
-        """.trimIndent()
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { CreateReportDefinitionRequest(it) }
         Assertions.assertEquals(reportDefinitionObject, recreatedObject.reportDefinition)
     }
@@ -67,7 +68,8 @@ internal class CreateReportDefinitionRequestTests {
     @Test
     fun `Create request should safely ignore extra field in json object`() {
         val reportDefinitionObject = createReportDefinitionObject()
-        val jsonString = """
+        val jsonString =
+            """
             {
                 "reportDefinition":{
                     "name":"sample_report_definition",
@@ -93,7 +95,7 @@ internal class CreateReportDefinitionRequestTests {
                 "extra_field_2":{"extra":"value"},
                 "extra_field_3":"extra value 3"
             }
-        """.trimIndent()
+            """.trimIndent()
 
         val recreatedObject = createObjectFromJsonString(jsonString) { CreateReportDefinitionRequest(it) }
         Assertions.assertEquals(reportDefinitionObject, recreatedObject.reportDefinition)

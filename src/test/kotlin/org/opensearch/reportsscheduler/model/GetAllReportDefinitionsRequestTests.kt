@@ -27,12 +27,13 @@ internal class GetAllReportDefinitionsRequestTests {
 
     @Test
     fun `Get request should deserialize json object using parser`() {
-        val jsonString = """
-        {
-            "fromIndex": $sampleFromIndex,
-            "maxItems": $sampleMaxItems
-        }
-        """.trimIndent()
+        val jsonString =
+            """
+            {
+                "fromIndex": $sampleFromIndex,
+                "maxItems": $sampleMaxItems
+            }
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { GetAllReportDefinitionsRequest.parse(it) }
         assertEquals(sampleFromIndex, recreatedObject.fromIndex)
         assertEquals(sampleMaxItems, recreatedObject.maxItems)
@@ -48,15 +49,16 @@ internal class GetAllReportDefinitionsRequestTests {
 
     @Test
     fun `Get request should safely ignore extra field in json object`() {
-        val jsonString = """
-        {
-            "fromIndex": $sampleFromIndex,
-            "maxItems": $sampleMaxItems,
-            "extra_field_1":["extra", "value"],
-            "extra_field_2":{"extra":"value"},
-            "extra_field_3":"extra value 3"
-        }
-        """.trimIndent()
+        val jsonString =
+            """
+            {
+                "fromIndex": $sampleFromIndex,
+                "maxItems": $sampleMaxItems,
+                "extra_field_1":["extra", "value"],
+                "extra_field_2":{"extra":"value"},
+                "extra_field_3":"extra value 3"
+            }
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { GetAllReportDefinitionsRequest.parse(it) }
         assertEquals(sampleFromIndex, recreatedObject.fromIndex)
         assertEquals(sampleMaxItems, recreatedObject.maxItems)

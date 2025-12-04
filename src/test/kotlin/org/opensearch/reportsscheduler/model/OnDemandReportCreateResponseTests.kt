@@ -21,14 +21,15 @@ internal class OnDemandReportCreateResponseTests {
         val recreatedObject = createObjectFromJsonString(jsonString) { OnDemandReportCreateResponse(it) }
         Assertions.assertEquals(
             response.reportInstance,
-            recreatedObject.reportInstance
+            recreatedObject.reportInstance,
         )
     }
 
     @Test
     fun `Create response should deserialize json object using parser`() {
         val reportInstance = createReportInstance()
-        val jsonString = """
+        val jsonString =
+            """
             {
                 "reportInstance": 
                 {
@@ -44,7 +45,7 @@ internal class OnDemandReportCreateResponseTests {
                    "inContextDownloadUrlPath":"/app/dashboard#view/dashboard-id"
                }
             }
-        """.trimIndent()
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { OnDemandReportCreateResponse(it) }
         Assertions.assertEquals(reportInstance, recreatedObject.reportInstance)
     }
@@ -60,7 +61,8 @@ internal class OnDemandReportCreateResponseTests {
     @Test
     fun `Create response should safely ignore extra field in json object`() {
         val reportInstance = createReportInstance()
-        val jsonString = """
+        val jsonString =
+            """
             {
                 "reportInstance": 
                 {
@@ -79,7 +81,7 @@ internal class OnDemandReportCreateResponseTests {
                "extra_field_2":{"extra":"value"},
                "extra_field_3":"extra value 3"
             }
-        """.trimIndent()
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { OnDemandReportCreateResponse(it) }
         Assertions.assertEquals(reportInstance, recreatedObject.reportInstance)
     }

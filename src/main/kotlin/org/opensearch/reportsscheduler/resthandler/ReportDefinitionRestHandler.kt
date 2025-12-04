@@ -44,23 +44,19 @@ internal class ReportDefinitionRestHandler : PluginBaseHandler() {
     /**
      * {@inheritDoc}
      */
-    override fun getName(): String {
-        return REPORT_DEFINITION_ACTION
-    }
+    override fun getName(): String = REPORT_DEFINITION_ACTION
 
     /**
      * {@inheritDoc}
      */
-    override fun routes(): List<Route> {
-        return listOf()
-    }
+    override fun routes(): List<Route> = listOf()
 
     /**
      * {@inheritDoc}
      */
-    override fun replacedRoutes(): List<ReplacedRoute> {
-        return listOf(
-            /**
+    override fun replacedRoutes(): List<ReplacedRoute> =
+        listOf(
+            /*
              * Create a new report definition
              * Request URL: POST REPORT_DEFINITION_URL
              * Request body: Ref [org.opensearch.reportsscheduler.model.CreateReportDefinitionRequest]
@@ -70,9 +66,9 @@ internal class ReportDefinitionRestHandler : PluginBaseHandler() {
                 POST,
                 REPORT_DEFINITION_URL,
                 POST,
-                LEGACY_REPORT_DEFINITION_URL
+                LEGACY_REPORT_DEFINITION_URL,
             ),
-            /**
+            /*
              * Update report definition
              * Request URL: PUT REPORT_DEFINITION_URL/{reportDefinitionId}
              * Request body: Ref [org.opensearch.reportsscheduler.model.UpdateReportDefinitionRequest]
@@ -82,9 +78,9 @@ internal class ReportDefinitionRestHandler : PluginBaseHandler() {
                 PUT,
                 "$REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}",
                 PUT,
-                "$LEGACY_REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}"
+                "$LEGACY_REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}",
             ),
-            /**
+            /*
              * Get a report definition
              * Request URL: GET REPORT_DEFINITION_URL/{reportDefinitionId}
              * Request body: Ref [org.opensearch.reportsscheduler.model.GetReportDefinitionRequest]
@@ -94,9 +90,9 @@ internal class ReportDefinitionRestHandler : PluginBaseHandler() {
                 GET,
                 "$REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}",
                 GET,
-                "$LEGACY_REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}"
+                "$LEGACY_REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}",
             ),
-            /**
+            /*
              * Delete report definition
              * Request URL: DELETE REPORT_DEFINITION_URL/{reportDefinitionId}
              * Request body: Ref [org.opensearch.reportsscheduler.model.DeleteReportDefinitionRequest]
@@ -106,62 +102,75 @@ internal class ReportDefinitionRestHandler : PluginBaseHandler() {
                 DELETE,
                 "$REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}",
                 DELETE,
-                "$LEGACY_REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}"
-            )
+                "$LEGACY_REPORT_DEFINITION_URL/{$REPORT_DEFINITION_ID_FIELD}",
+            ),
         )
-    }
 
     /**
      * {@inheritDoc}
      */
-    override fun responseParams(): Set<String> {
-        return setOf(REPORT_DEFINITION_ID_FIELD)
-    }
+    override fun responseParams(): Set<String> = setOf(REPORT_DEFINITION_ID_FIELD)
 
     /**
      * {@inheritDoc}
      */
-    override fun executeRequest(request: RestRequest, client: NodeClient): RestChannelConsumer {
-        return when (request.method()) {
-            POST -> RestChannelConsumer {
-                Metrics.REPORT_DEFINITION_CREATE_TOTAL.counter.increment()
-                Metrics.REPORT_DEFINITION_CREATE_INTERVAL_COUNT.counter.increment()
-                client.execute(
-                    CreateReportDefinitionAction.ACTION_TYPE,
-                    CreateReportDefinitionRequest(request.contentParserNextToken()),
-                    RestResponseToXContentListener(it)
-                )
+    override fun executeRequest(
+        request: RestRequest,
+        client: NodeClient,
+    ): RestChannelConsumer =
+        when (request.method()) {
+            POST -> {
+                RestChannelConsumer {
+                    Metrics.REPORT_DEFINITION_CREATE_TOTAL.counter.increment()
+                    Metrics.REPORT_DEFINITION_CREATE_INTERVAL_COUNT.counter.increment()
+                    client.execute(
+                        CreateReportDefinitionAction.ACTION_TYPE,
+                        CreateReportDefinitionRequest(request.contentParserNextToken()),
+                        RestResponseToXContentListener(it),
+                    )
+                }
             }
-            PUT -> RestChannelConsumer {
-                Metrics.REPORT_DEFINITION_UPDATE_TOTAL.counter.increment()
-                Metrics.REPORT_DEFINITION_UPDATE_INTERVAL_COUNT.counter.increment()
-                client.execute(
-                    UpdateReportDefinitionAction.ACTION_TYPE,
-                    UpdateReportDefinitionRequest(request.contentParserNextToken(), request.param(REPORT_DEFINITION_ID_FIELD)),
-                    RestResponseToXContentListener(it)
-                )
+
+            PUT -> {
+                RestChannelConsumer {
+                    Metrics.REPORT_DEFINITION_UPDATE_TOTAL.counter.increment()
+                    Metrics.REPORT_DEFINITION_UPDATE_INTERVAL_COUNT.counter.increment()
+                    client.execute(
+                        UpdateReportDefinitionAction.ACTION_TYPE,
+                        UpdateReportDefinitionRequest(request.contentParserNextToken(), request.param(REPORT_DEFINITION_ID_FIELD)),
+                        RestResponseToXContentListener(it),
+                    )
+                }
             }
-            GET -> RestChannelConsumer {
-                Metrics.REPORT_DEFINITION_INFO_TOTAL.counter.increment()
-                Metrics.REPORT_DEFINITION_INFO_INTERVAL_COUNT.counter.increment()
-                client.execute(
-                    GetReportDefinitionAction.ACTION_TYPE,
-                    GetReportDefinitionRequest(request.param(REPORT_DEFINITION_ID_FIELD)),
-                    RestResponseToXContentListener(it)
-                )
+
+            GET -> {
+                RestChannelConsumer {
+                    Metrics.REPORT_DEFINITION_INFO_TOTAL.counter.increment()
+                    Metrics.REPORT_DEFINITION_INFO_INTERVAL_COUNT.counter.increment()
+                    client.execute(
+                        GetReportDefinitionAction.ACTION_TYPE,
+                        GetReportDefinitionRequest(request.param(REPORT_DEFINITION_ID_FIELD)),
+                        RestResponseToXContentListener(it),
+                    )
+                }
             }
-            DELETE -> RestChannelConsumer {
-                Metrics.REPORT_DEFINITION_DELETE_TOTAL.counter.increment()
-                Metrics.REPORT_DEFINITION_DELETE_INTERVAL_COUNT.counter.increment()
-                client.execute(
-                    DeleteReportDefinitionAction.ACTION_TYPE,
-                    DeleteReportDefinitionRequest(request.param(REPORT_DEFINITION_ID_FIELD)),
-                    RestResponseToXContentListener(it)
-                )
+
+            DELETE -> {
+                RestChannelConsumer {
+                    Metrics.REPORT_DEFINITION_DELETE_TOTAL.counter.increment()
+                    Metrics.REPORT_DEFINITION_DELETE_INTERVAL_COUNT.counter.increment()
+                    client.execute(
+                        DeleteReportDefinitionAction.ACTION_TYPE,
+                        DeleteReportDefinitionRequest(request.param(REPORT_DEFINITION_ID_FIELD)),
+                        RestResponseToXContentListener(it),
+                    )
+                }
             }
-            else -> RestChannelConsumer {
-                it.sendResponse(BytesRestResponse(RestStatus.METHOD_NOT_ALLOWED, "${request.method()} is not allowed"))
+
+            else -> {
+                RestChannelConsumer {
+                    it.sendResponse(BytesRestResponse(RestStatus.METHOD_NOT_ALLOWED, "${request.method()} is not allowed"))
+                }
             }
         }
-    }
 }

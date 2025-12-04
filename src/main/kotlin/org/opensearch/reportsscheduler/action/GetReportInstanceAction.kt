@@ -18,27 +18,30 @@ import org.opensearch.transport.client.Client
 /**
  * Get report instance transport action
  */
-internal class GetReportInstanceAction @Inject constructor(
-    transportService: TransportService,
-    client: Client,
-    actionFilters: ActionFilters,
-    val xContentRegistry: NamedXContentRegistry
-) : PluginBaseAction<GetReportInstanceRequest, GetReportInstanceResponse>(
-    NAME,
-    transportService,
-    client,
-    actionFilters,
-    ::GetReportInstanceRequest
-) {
-    companion object {
-        private const val NAME = "cluster:admin/opendistro/reports/instance/get"
-        internal val ACTION_TYPE = ActionType(NAME, ::GetReportInstanceResponse)
-    }
+internal class GetReportInstanceAction
+    @Inject
+    constructor(
+        transportService: TransportService,
+        client: Client,
+        actionFilters: ActionFilters,
+        val xContentRegistry: NamedXContentRegistry,
+    ) : PluginBaseAction<GetReportInstanceRequest, GetReportInstanceResponse>(
+            NAME,
+            transportService,
+            client,
+            actionFilters,
+            ::GetReportInstanceRequest,
+        ) {
+        companion object {
+            private const val NAME = "cluster:admin/opendistro/reports/instance/get"
+            internal val ACTION_TYPE = ActionType(NAME, ::GetReportInstanceResponse)
+        }
 
-    /**
-     * {@inheritDoc}
-     */
-    override fun executeRequest(request: GetReportInstanceRequest, user: User?): GetReportInstanceResponse {
-        return ReportInstanceActions.info(request, user)
+        /**
+         * {@inheritDoc}
+         */
+        override fun executeRequest(
+            request: GetReportInstanceRequest,
+            user: User?,
+        ): GetReportInstanceResponse = ReportInstanceActions.info(request, user)
     }
-}

@@ -18,7 +18,7 @@ internal class ReportInstanceSearchResults : SearchResults<ReportInstance> {
         startIndex: Long,
         totalHits: Long,
         totalHitRelation: TotalHits.Relation,
-        objectList: List<ReportInstance>
+        objectList: List<ReportInstance>,
     ) : super(startIndex, totalHits, totalHitRelation, objectList, REPORT_INSTANCE_LIST_FIELD)
 
     constructor(parser: XContentParser) : super(parser, REPORT_INSTANCE_LIST_FIELD)
@@ -28,7 +28,8 @@ internal class ReportInstanceSearchResults : SearchResults<ReportInstance> {
     /**
      * {@inheritDoc}
      */
-    override fun parseItem(parser: XContentParser, useId: String?): ReportInstance {
-        return ReportInstance.parse(parser, useId)
-    }
+    override fun parseItem(
+        parser: XContentParser,
+        useId: String?,
+    ): ReportInstance = ReportInstance.parse(parser, useId)
 }

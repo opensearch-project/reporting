@@ -28,12 +28,11 @@ import java.io.IOException
  * }</pre>
  */
 internal class UpdateReportDefinitionResponse(
-    val reportDefinitionId: String?
+    val reportDefinitionId: String?,
 ) : BaseResponse() {
-
     @Throws(IOException::class)
     constructor(input: StreamInput) : this(
-        reportDefinitionId = input.readString()
+        reportDefinitionId = input.readString(),
     )
 
     companion object {
@@ -51,7 +50,10 @@ internal class UpdateReportDefinitionResponse(
                 val fieldName = parser.currentName()
                 parser.nextToken()
                 when (fieldName) {
-                    REPORT_DEFINITION_ID_FIELD -> reportDefinitionId = parser.text()
+                    REPORT_DEFINITION_ID_FIELD -> {
+                        reportDefinitionId = parser.text()
+                    }
+
                     else -> {
                         parser.skipChildren()
                         log.info("$LOG_PREFIX:Skipping Unknown field $fieldName")
@@ -77,9 +79,12 @@ internal class UpdateReportDefinitionResponse(
     /**
      * {@inheritDoc}
      */
-    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
-        return builder!!.startObject()
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: ToXContent.Params?,
+    ): XContentBuilder =
+        builder!!
+            .startObject()
             .field(REPORT_DEFINITION_ID_FIELD, reportDefinitionId)
             .endObject()
-    }
 }

@@ -61,9 +61,10 @@ internal data class ReportInstance(
     val reportDefinitionDetails: ReportDefinitionDetails?,
     val status: Status,
     val statusText: String? = null,
-    val inContextDownloadUrlPath: String? = null
+    val inContextDownloadUrlPath: String? = null,
 ) : ToXContentObject {
     internal enum class Status { Scheduled, Executing, Success, Failed }
+
     companion object {
         private val log by logger(ReportInstance::class.java)
 
@@ -73,7 +74,10 @@ internal data class ReportInstance(
          * @return created ReportInstance object
          */
         @Suppress("ComplexMethod")
-        fun parse(parser: XContentParser, useId: String? = null): ReportInstance {
+        fun parse(
+            parser: XContentParser,
+            useId: String? = null,
+        ): ReportInstance {
             var id: String? = useId
             var updatedTime: Instant? = null
             var createdTime: Instant? = null
@@ -90,17 +94,50 @@ internal data class ReportInstance(
                 val fieldName = parser.currentName()
                 parser.nextToken()
                 when (fieldName) {
-                    ID_FIELD -> id = parser.text()
-                    UPDATED_TIME_FIELD -> updatedTime = Instant.ofEpochMilli(parser.longValue())
-                    CREATED_TIME_FIELD -> createdTime = Instant.ofEpochMilli(parser.longValue())
-                    BEGIN_TIME_FIELD -> beginTime = Instant.ofEpochMilli(parser.longValue())
-                    END_TIME_FIELD -> endTime = Instant.ofEpochMilli(parser.longValue())
-                    TENANT_FIELD -> tenant = parser.text()
-                    ACCESS_LIST_FIELD -> access = parser.stringList()
-                    REPORT_DEFINITION_DETAILS_FIELD -> reportDefinitionDetails = ReportDefinitionDetails.parse(parser)
-                    STATUS_FIELD -> status = Status.valueOf(parser.text())
-                    STATUS_TEXT_FIELD -> statusText = parser.text()
-                    IN_CONTEXT_DOWNLOAD_URL_FIELD -> inContextDownloadUrlPath = parser.text()
+                    ID_FIELD -> {
+                        id = parser.text()
+                    }
+
+                    UPDATED_TIME_FIELD -> {
+                        updatedTime = Instant.ofEpochMilli(parser.longValue())
+                    }
+
+                    CREATED_TIME_FIELD -> {
+                        createdTime = Instant.ofEpochMilli(parser.longValue())
+                    }
+
+                    BEGIN_TIME_FIELD -> {
+                        beginTime = Instant.ofEpochMilli(parser.longValue())
+                    }
+
+                    END_TIME_FIELD -> {
+                        endTime = Instant.ofEpochMilli(parser.longValue())
+                    }
+
+                    TENANT_FIELD -> {
+                        tenant = parser.text()
+                    }
+
+                    ACCESS_LIST_FIELD -> {
+                        access = parser.stringList()
+                    }
+
+                    REPORT_DEFINITION_DETAILS_FIELD -> {
+                        reportDefinitionDetails = ReportDefinitionDetails.parse(parser)
+                    }
+
+                    STATUS_FIELD -> {
+                        status = Status.valueOf(parser.text())
+                    }
+
+                    STATUS_TEXT_FIELD -> {
+                        statusText = parser.text()
+                    }
+
+                    IN_CONTEXT_DOWNLOAD_URL_FIELD -> {
+                        inContextDownloadUrlPath = parser.text()
+                    }
+
                     else -> {
                         parser.skipChildren()
                         log.info("$LOG_PREFIX:ReportInstance Skipping Unknown field $fieldName")
@@ -125,7 +162,7 @@ internal data class ReportInstance(
                 reportDefinitionDetails,
                 status,
                 statusText,
-                inContextDownloadUrlPath
+                inContextDownloadUrlPath,
             )
         }
     }
@@ -135,20 +172,22 @@ internal data class ReportInstance(
      * @param params XContent parameters
      * @return created XContentBuilder object
      */
-    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? {
-        return toXContent(XContentFactory.jsonBuilder(), params)
-    }
+    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? = toXContent(XContentFactory.jsonBuilder(), params)
 
     /**
      * {ref toXContent}
      */
-    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: ToXContent.Params?,
+    ): XContentBuilder {
         builder!!
         builder.startObject()
         if (params?.paramAsBoolean(ID_FIELD, false) == true) {
             builder.field(ID_FIELD, id)
         }
-        builder.field(UPDATED_TIME_FIELD, updatedTime.toEpochMilli())
+        builder
+            .field(UPDATED_TIME_FIELD, updatedTime.toEpochMilli())
             .field(CREATED_TIME_FIELD, createdTime.toEpochMilli())
             .field(BEGIN_TIME_FIELD, beginTime.toEpochMilli())
             .field(END_TIME_FIELD, endTime.toEpochMilli())
@@ -158,11 +197,12 @@ internal data class ReportInstance(
         }
         if (reportDefinitionDetails != null) {
             builder.field(REPORT_DEFINITION_DETAILS_FIELD)
-            val passingParams = if (params?.param(ID_FIELD) == null) { // If called from index operation
-                INSTANCE_INDEX_PARAMS
-            } else {
-                params
-            }
+            val passingParams =
+                if (params?.param(ID_FIELD) == null) { // If called from index operation
+                    INSTANCE_INDEX_PARAMS
+                } else {
+                    params
+                }
             reportDefinitionDetails.toXContent(builder, passingParams)
         }
         builder.field(STATUS_FIELD, status.name)

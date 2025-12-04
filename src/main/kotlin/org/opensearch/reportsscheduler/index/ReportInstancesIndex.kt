@@ -50,7 +50,10 @@ internal object ReportInstancesIndex {
      * @param client The ES client
      * @param clusterService The ES cluster service
      */
-    fun initialize(client: Client, clusterService: ClusterService) {
+    fun initialize(
+        client: Client,
+        clusterService: ClusterService,
+    ) {
         this.client = SecureIndexClient(client)
         this.clusterService = clusterService
     }
@@ -64,9 +67,10 @@ internal object ReportInstancesIndex {
             val classLoader = ReportInstancesIndex::class.java.classLoader
             val indexMappingSource = classLoader.getResource(REPORT_INSTANCES_MAPPING_FILE_NAME)?.readText()!!
             val indexSettingsSource = classLoader.getResource(REPORT_INSTANCES_SETTINGS_FILE_NAME)?.readText()!!
-            val request = CreateIndexRequest(REPORT_INSTANCES_INDEX_NAME)
-                .mapping(indexMappingSource, XContentType.YAML)
-                .settings(indexSettingsSource, XContentType.YAML)
+            val request =
+                CreateIndexRequest(REPORT_INSTANCES_INDEX_NAME)
+                    .mapping(indexMappingSource, XContentType.YAML)
+                    .settings(indexSettingsSource, XContentType.YAML)
             try {
                 client.threadPool().threadContext.stashContext().use {
                     val actionFuture = client.admin().indices().create(request)
@@ -104,9 +108,10 @@ internal object ReportInstancesIndex {
      */
     fun createReportInstance(reportInstance: ReportInstance): String? {
         createIndex()
-        val indexRequest = IndexRequest(REPORT_INSTANCES_INDEX_NAME)
-            .source(reportInstance.toXContent())
-            .create(true)
+        val indexRequest =
+            IndexRequest(REPORT_INSTANCES_INDEX_NAME)
+                .source(reportInstance.toXContent())
+                .create(true)
         val actionFuture = client.index(indexRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         return if (response.result != DocWriteResponse.Result.CREATED) {
@@ -131,11 +136,12 @@ internal object ReportInstancesIndex {
             log.warn("$LOG_PREFIX:getReportInstance - $id not found; response:$response")
             null
         } else {
-            val parser = XContentType.JSON.xContent().createParser(
-                NamedXContentRegistry.EMPTY,
-                LoggingDeprecationHandler.INSTANCE,
-                response.sourceAsString
-            )
+            val parser =
+                XContentType.JSON.xContent().createParser(
+                    NamedXContentRegistry.EMPTY,
+                    LoggingDeprecationHandler.INSTANCE,
+                    response.sourceAsString,
+                )
             parser.nextToken()
             ReportInstance.parse(parser, id)
         }
@@ -149,13 +155,19 @@ internal object ReportInstancesIndex {
      * @param maxItems the max items to query
      * @return search result of Report instance details
      */
-    fun getAllReportInstances(tenant: String, access: List<String>, from: Int, maxItems: Int): ReportInstanceSearchResults {
+    fun getAllReportInstances(
+        tenant: String,
+        access: List<String>,
+        from: Int,
+        maxItems: Int,
+    ): ReportInstanceSearchResults {
         createIndex()
-        val sourceBuilder = SearchSourceBuilder()
-            .timeout(TimeValue(PluginSettings.operationTimeoutMs, TimeUnit.MILLISECONDS))
-            .sort(UPDATED_TIME_FIELD)
-            .size(maxItems)
-            .from(from)
+        val sourceBuilder =
+            SearchSourceBuilder()
+                .timeout(TimeValue(PluginSettings.operationTimeoutMs, TimeUnit.MILLISECONDS))
+                .sort(UPDATED_TIME_FIELD)
+                .size(maxItems)
+                .from(from)
         val tenantQuery = QueryBuilders.termsQuery(TENANT_FIELD, tenant)
         if (access.isNotEmpty()) {
             val accessQuery = QueryBuilders.termsQuery(ACCESS_LIST_FIELD, access)
@@ -166,15 +178,16 @@ internal object ReportInstancesIndex {
         } else {
             sourceBuilder.query(tenantQuery)
         }
-        val searchRequest = SearchRequest()
-            .indices(REPORT_INSTANCES_INDEX_NAME)
-            .source(sourceBuilder)
+        val searchRequest =
+            SearchRequest()
+                .indices(REPORT_INSTANCES_INDEX_NAME)
+                .source(sourceBuilder)
         val actionFuture = client.search(searchRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         val result = ReportInstanceSearchResults(from.toLong(), response)
         log.info(
             "$LOG_PREFIX:getAllReportInstances from:$from, maxItems:$maxItems," +
-                " retCount:${result.objectList.size}, totalCount:${result.totalHits}"
+                " retCount:${result.objectList.size}, totalCount:${result.totalHits}",
         )
         return result
     }
@@ -186,11 +199,12 @@ internal object ReportInstancesIndex {
      */
     fun updateReportInstance(reportInstance: ReportInstance): Boolean {
         createIndex()
-        val updateRequest = UpdateRequest()
-            .index(REPORT_INSTANCES_INDEX_NAME)
-            .id(reportInstance.id)
-            .doc(reportInstance.toXContent())
-            .fetchSource(true)
+        val updateRequest =
+            UpdateRequest()
+                .index(REPORT_INSTANCES_INDEX_NAME)
+                .id(reportInstance.id)
+                .doc(reportInstance.toXContent())
+                .fetchSource(true)
         val actionFuture = client.update(updateRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         if (response.result != DocWriteResponse.Result.UPDATED) {
@@ -206,13 +220,14 @@ internal object ReportInstancesIndex {
      */
     fun updateReportInstanceDoc(reportInstanceDoc: ReportInstanceDoc): Boolean {
         createIndex()
-        val updateRequest = UpdateRequest()
-            .index(REPORT_INSTANCES_INDEX_NAME)
-            .id(reportInstanceDoc.reportInstance.id)
-            .setIfSeqNo(reportInstanceDoc.seqNo)
-            .setIfPrimaryTerm(reportInstanceDoc.primaryTerm)
-            .doc(reportInstanceDoc.reportInstance.toXContent())
-            .fetchSource(true)
+        val updateRequest =
+            UpdateRequest()
+                .index(REPORT_INSTANCES_INDEX_NAME)
+                .id(reportInstanceDoc.reportInstance.id)
+                .setIfSeqNo(reportInstanceDoc.seqNo)
+                .setIfPrimaryTerm(reportInstanceDoc.primaryTerm)
+                .doc(reportInstanceDoc.reportInstance.toXContent())
+                .fetchSource(true)
         val actionFuture = client.update(updateRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         if (response.result != DocWriteResponse.Result.UPDATED) {
@@ -228,9 +243,10 @@ internal object ReportInstancesIndex {
      */
     fun deleteReportInstance(id: String): Boolean {
         createIndex()
-        val deleteRequest = DeleteRequest()
-            .index(REPORT_INSTANCES_INDEX_NAME)
-            .id(id)
+        val deleteRequest =
+            DeleteRequest()
+                .index(REPORT_INSTANCES_INDEX_NAME)
+                .id(id)
         val actionFuture = client.delete(deleteRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         if (response.result != DocWriteResponse.Result.DELETED) {

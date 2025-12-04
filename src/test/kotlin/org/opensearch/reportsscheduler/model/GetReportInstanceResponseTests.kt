@@ -13,7 +13,6 @@ import org.opensearch.reportsscheduler.createReportInstance
 import org.opensearch.reportsscheduler.getJsonString
 
 internal class GetReportInstanceResponseTests {
-
     @Test
     fun `Get response serialize and deserialize using json object should be equal`() {
         val reportInstance = createReportInstance()
@@ -22,14 +21,15 @@ internal class GetReportInstanceResponseTests {
         val recreatedObject = createObjectFromJsonString(jsonString) { GetReportInstanceResponse(it) }
         Assertions.assertEquals(
             response.reportInstance,
-            recreatedObject.reportInstance
+            recreatedObject.reportInstance,
         )
     }
 
     @Test
     fun `Get response should deserialize json object using parser`() {
         val reportInstance = createReportInstance()
-        val jsonString = """
+        val jsonString =
+            """
             {
                 "reportInstance": 
                 {
@@ -45,7 +45,7 @@ internal class GetReportInstanceResponseTests {
                    "inContextDownloadUrlPath":"/app/dashboard#view/dashboard-id"
                }
             }
-        """.trimIndent()
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { GetReportInstanceResponse(it) }
         Assertions.assertEquals(reportInstance, recreatedObject.reportInstance)
     }
@@ -61,7 +61,8 @@ internal class GetReportInstanceResponseTests {
     @Test
     fun `Get response should safely ignore extra field in json object`() {
         val reportInstance = createReportInstance()
-        val jsonString = """
+        val jsonString =
+            """
             {
                 "reportInstance": 
                 {
@@ -80,7 +81,7 @@ internal class GetReportInstanceResponseTests {
                "extra_field_2":{"extra":"value"},
                "extra_field_3":"extra value 3"
             }
-        """.trimIndent()
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { GetReportInstanceResponse(it) }
         Assertions.assertEquals(reportInstance, recreatedObject.reportInstance)
     }

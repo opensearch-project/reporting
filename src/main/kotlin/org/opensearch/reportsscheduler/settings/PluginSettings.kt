@@ -21,7 +21,6 @@ import java.io.IOException
  * settings specific to reports scheduler Plugin.
  */
 internal object PluginSettings {
-
     private lateinit var clusterService: ClusterService
 
     /**
@@ -107,42 +106,47 @@ internal object PluginSettings {
         defaultItemsQueryCount = (settings?.get(DEFAULT_ITEMS_QUERY_COUNT_KEY)?.toInt())
             ?: DEFAULT_ITEMS_QUERY_COUNT_VALUE
 
-        defaultSettings = mapOf(
-            OPERATION_TIMEOUT_MS_KEY to operationTimeoutMs.toString(DECIMAL_RADIX),
-            DEFAULT_ITEMS_QUERY_COUNT_KEY to defaultItemsQueryCount.toString(DECIMAL_RADIX)
-        )
+        defaultSettings =
+            mapOf(
+                OPERATION_TIMEOUT_MS_KEY to operationTimeoutMs.toString(DECIMAL_RADIX),
+                DEFAULT_ITEMS_QUERY_COUNT_KEY to defaultItemsQueryCount.toString(DECIMAL_RADIX),
+            )
     }
 
-    private val OPERATION_TIMEOUT_MS: Setting<Long> = Setting.longSetting(
-        OPERATION_TIMEOUT_MS_KEY,
-        defaultSettings[OPERATION_TIMEOUT_MS_KEY]!!.toLong(),
-        MINIMUM_OPERATION_TIMEOUT_MS,
-        NodeScope,
-        Dynamic
-    )
+    private val OPERATION_TIMEOUT_MS: Setting<Long> =
+        Setting.longSetting(
+            OPERATION_TIMEOUT_MS_KEY,
+            defaultSettings[OPERATION_TIMEOUT_MS_KEY]!!.toLong(),
+            MINIMUM_OPERATION_TIMEOUT_MS,
+            NodeScope,
+            Dynamic,
+        )
 
-    private val DEFAULT_ITEMS_QUERY_COUNT: Setting<Int> = Setting.intSetting(
-        DEFAULT_ITEMS_QUERY_COUNT_KEY,
-        defaultSettings[DEFAULT_ITEMS_QUERY_COUNT_KEY]!!.toInt(),
-        MINIMUM_ITEMS_QUERY_COUNT,
-        NodeScope,
-        Dynamic
-    )
+    private val DEFAULT_ITEMS_QUERY_COUNT: Setting<Int> =
+        Setting.intSetting(
+            DEFAULT_ITEMS_QUERY_COUNT_KEY,
+            defaultSettings[DEFAULT_ITEMS_QUERY_COUNT_KEY]!!.toInt(),
+            MINIMUM_ITEMS_QUERY_COUNT,
+            NodeScope,
+            Dynamic,
+        )
 
-    private val LEGACY_FILTER_BY_BACKEND_ROLES: Setting<Boolean> = Setting.boolSetting(
-        LEGACY_FILTER_BY_BACKEND_ROLES_KEY,
-        false,
-        NodeScope,
-        Dynamic,
-        Setting.Property.Deprecated
-    )
+    private val LEGACY_FILTER_BY_BACKEND_ROLES: Setting<Boolean> =
+        Setting.boolSetting(
+            LEGACY_FILTER_BY_BACKEND_ROLES_KEY,
+            false,
+            NodeScope,
+            Dynamic,
+            Setting.Property.Deprecated,
+        )
 
-    private val FILTER_BY_BACKEND_ROLES: Setting<Boolean> = Setting.boolSetting(
-        FILTER_BY_BACKEND_ROLES_KEY,
-        LEGACY_FILTER_BY_BACKEND_ROLES,
-        NodeScope,
-        Dynamic
-    )
+    private val FILTER_BY_BACKEND_ROLES: Setting<Boolean> =
+        Setting.boolSetting(
+            FILTER_BY_BACKEND_ROLES_KEY,
+            LEGACY_FILTER_BY_BACKEND_ROLES,
+            NodeScope,
+            Dynamic,
+        )
 
     /**
      * Returns true if RBAC is enabled, else false (default false).
@@ -160,12 +164,11 @@ internal object PluginSettings {
      *
      * @return list of settings defined in this plugin
      */
-    fun getAllSettings(): List<Setting<*>> {
-        return listOf(
+    fun getAllSettings(): List<Setting<*>> =
+        listOf(
             OPERATION_TIMEOUT_MS,
-            DEFAULT_ITEMS_QUERY_COUNT
+            DEFAULT_ITEMS_QUERY_COUNT,
         )
-    }
 
     /**
      * Update the setting variables to setting values from local settings

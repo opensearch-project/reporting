@@ -36,25 +36,19 @@ import javax.management.remote.JMXConnectorFactory
 import javax.management.remote.JMXServiceURL
 
 abstract class PluginRestTestCase : OpenSearchRestTestCase() {
+    private fun isHttps(): Boolean = System.getProperty("https", "false")!!.toBoolean()
 
-    private fun isHttps(): Boolean {
-        return System.getProperty("https", "false")!!.toBoolean()
-    }
-
-    override fun getProtocol(): String {
-        return if (isHttps()) {
+    override fun getProtocol(): String =
+        if (isHttps()) {
             "https"
         } else {
             "http"
         }
-    }
 
     /**
      * wipeAllIndices won't work since it cannot delete security index. Use wipeAllODFEIndices instead.
      */
-    override fun preserveIndicesUponCompletion(): Boolean {
-        return true
-    }
+    override fun preserveIndicesUponCompletion(): Boolean = true
 
     open fun preserveODFEIndicesAfterTest(): Boolean = false
 
@@ -64,32 +58,34 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
         if (preserveODFEIndicesAfterTest()) return
         val response = client().performRequest(Request("GET", "/_cat/indices?format=json&expand_wildcards=all"))
         val xContentType = MediaType.fromMediaType(response.entity.contentType)
-        xContentType.xContent().createParser(
-            NamedXContentRegistry.EMPTY,
-            DeprecationHandler.THROW_UNSUPPORTED_OPERATION,
-            response.entity.content
-        ).use { parser ->
-            for (index in parser.list()) {
-                val jsonObject: Map<*, *> = index as java.util.HashMap<*, *>
-                val indexName: String = jsonObject["index"] as String
-                // .opendistro_security isn't allowed to delete from cluster
-                if (!indexName.startsWith(".kibana") && !indexName.startsWith(".opendistro_security")) {
-                    val request = Request("DELETE", "/$indexName")
-                    // TODO: remove PERMISSIVE option after moving system index access to REST API call
-                    val options = RequestOptions.DEFAULT.toBuilder()
-                    options.setWarningsHandler(WarningsHandler.PERMISSIVE)
-                    request.options = options.build()
-                    adminClient().performRequest(request)
+        xContentType
+            .xContent()
+            .createParser(
+                NamedXContentRegistry.EMPTY,
+                DeprecationHandler.THROW_UNSUPPORTED_OPERATION,
+                response.entity.content,
+            ).use { parser ->
+                for (index in parser.list()) {
+                    val jsonObject: Map<*, *> = index as java.util.HashMap<*, *>
+                    val indexName: String = jsonObject["index"] as String
+                    // .opendistro_security isn't allowed to delete from cluster
+                    if (!indexName.startsWith(".kibana") && !indexName.startsWith(".opendistro_security")) {
+                        val request = Request("DELETE", "/$indexName")
+                        // TODO: remove PERMISSIVE option after moving system index access to REST API call
+                        val options = RequestOptions.DEFAULT.toBuilder()
+                        options.setWarningsHandler(WarningsHandler.PERMISSIVE)
+                        request.options = options.build()
+                        adminClient().performRequest(request)
+                    }
                 }
             }
-        }
     }
 
     /**
      * Returns the REST client settings used for super-admin actions like cleaning up after the test has completed.
      */
-    override fun restAdminSettings(): Settings {
-        return Settings
+    override fun restAdminSettings(): Settings =
+        Settings
             .builder()
             .put("http.port", 9200)
             .put(ConfigConstants.OPENSEARCH_SECURITY_SSL_HTTP_ENABLED, isHttps())
@@ -98,10 +94,12 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
             .put(ConfigConstants.OPENSEARCH_SECURITY_SSL_HTTP_KEYSTORE_PASSWORD, "changeit")
             .put(ConfigConstants.OPENSEARCH_SECURITY_SSL_HTTP_KEYSTORE_KEYPASSWORD, "changeit")
             .build()
-    }
 
     @Throws(IOException::class)
-    override fun buildClient(settings: Settings, hosts: Array<HttpHost>): RestClient {
+    override fun buildClient(
+        settings: Settings,
+        hosts: Array<HttpHost>,
+    ): RestClient {
         if (isHttps()) {
             val keystore = settings.get(ConfigConstants.OPENSEARCH_SECURITY_SSL_HTTP_KEYSTORE_FILEPATH)
             return when (keystore != null) {
@@ -111,6 +109,7 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
                     val configPath = PathUtils.get(uri).parent.toAbsolutePath()
                     SecureRestClientBuilder(settings, configPath, hosts).setSocketTimeout(60000).build()
                 }
+
                 false -> {
                     // create client with passed user
                     val userName = System.getProperty("user")
@@ -130,7 +129,7 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
         method: String,
         url: String,
         jsonString: String,
-        expectedRestStatus: Int? = null
+        expectedRestStatus: Int? = null,
     ): JsonObject {
         val request = Request(method, url)
         request.setJsonEntity(jsonString)
@@ -140,14 +139,18 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
         return executeRequest(request, expectedRestStatus)
     }
 
-    private fun executeRequest(request: Request, expectedRestStatus: Int? = null): JsonObject {
-        val response = try {
-            client().performRequest(request)
-        } catch (exception: ResponseException) {
-            exception.response
-        } catch (exception: WarningFailureException) {
-            exception.response
-        }
+    private fun executeRequest(
+        request: Request,
+        expectedRestStatus: Int? = null,
+    ): JsonObject {
+        val response =
+            try {
+                client().performRequest(request)
+            } catch (exception: ResponseException) {
+                exception.response
+            } catch (exception: WarningFailureException) {
+                exception.response
+            }
         if (expectedRestStatus != null) {
             assertEquals(expectedRestStatus, response.statusLine.statusCode)
         }
@@ -156,11 +159,14 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
     }
 
     @Throws(IOException::class)
-    private fun getResponseBody(response: Response, retainNewLines: Boolean = true): String {
+    private fun getResponseBody(
+        response: Response,
+        retainNewLines: Boolean = true,
+    ): String {
         val sb = StringBuilder()
         response.entity.content.use { `is` ->
             BufferedReader(
-                InputStreamReader(`is`, StandardCharsets.UTF_8)
+                InputStreamReader(`is`, StandardCharsets.UTF_8),
             ).use { br ->
                 var line: String?
                 while (br.readLine().also { line = it } != null) {
@@ -205,7 +211,11 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
         updateClusterSettings(ClusterSetting("transient", "*", null))
     }
 
-    protected class ClusterSetting(val type: String, val name: String, var value: Any?) {
+    protected class ClusterSetting(
+        val type: String,
+        val name: String,
+        var value: Any?,
+    ) {
         init {
             this.value = if (value == null) "null" else "\"" + value + "\""
         }
@@ -217,18 +227,20 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
             var sessionId: String?
 
             fun getExecutionData(reset: Boolean): ByteArray?
+
             fun dump(reset: Boolean)
+
             fun reset()
         }
 
         /*
-        * We need to be able to dump the jacoco coverage before the cluster shuts down.
-        * The new internal testing framework removed some gradle tasks we were listening to,
-        * to choose a good time to do it. This will dump the executionData to file after each test.
-        * TODO: This is also currently just overwriting integTest.exec with the updated execData without
-        *   resetting after writing each time. This can be improved to either write an exec file per test
-        *   or by letting jacoco append to the file.
-        * */
+         * We need to be able to dump the jacoco coverage before the cluster shuts down.
+         * The new internal testing framework removed some gradle tasks we were listening to,
+         * to choose a good time to do it. This will dump the executionData to file after each test.
+         * TODO: This is also currently just overwriting integTest.exec with the updated execData without
+         *   resetting after writing each time. This can be improved to either write an exec file per test
+         *   or by letting jacoco append to the file.
+         * */
         @JvmStatic
         @AfterClass
         fun dumpCoverage() {
@@ -237,12 +249,13 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
             val jacocoBuildPath = System.getProperty("jacoco.dir") ?: return
             val serverUrl = "service:jmx:rmi:///jndi/rmi://127.0.0.1:7777/jmxrmi"
             JMXConnectorFactory.connect(JMXServiceURL(serverUrl)).use { connector ->
-                val proxy = MBeanServerInvocationHandler.newProxyInstance(
-                    connector.mBeanServerConnection,
-                    ObjectName("org.jacoco:type=Runtime"),
-                    IProxy::class.java,
-                    false
-                )
+                val proxy =
+                    MBeanServerInvocationHandler.newProxyInstance(
+                        connector.mBeanServerConnection,
+                        ObjectName("org.jacoco:type=Runtime"),
+                        IProxy::class.java,
+                        false,
+                    )
                 proxy.getExecutionData(false)?.let {
                     val path = Paths.get("$jacocoBuildPath/integTest.exec")
                     Files.write(path, it)

@@ -22,7 +22,10 @@ internal object ReportDefinitionJobRunner : ScheduledJobRunner {
     private val log by logger(ReportDefinitionJobRunner::class.java)
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 
-    override fun runJob(job: ScheduledJobParameter, context: JobExecutionContext) {
+    override fun runJob(
+        job: ScheduledJobParameter,
+        context: JobExecutionContext,
+    ) {
         if (job !is ReportDefinitionDetails) {
             log.warn("$LOG_PREFIX:job is not of type ReportDefinitionDetails:${job.javaClass.name}")
             throw IllegalArgumentException("job is not of type ReportDefinitionDetails:${job.javaClass.name}")
@@ -32,17 +35,18 @@ internal object ReportDefinitionJobRunner : ScheduledJobRunner {
             val currentTime = Instant.now()
             val endTime = context.expectedExecutionTime
             val beginTime = endTime.minus(reportDefinitionDetails.reportDefinition.format.duration)
-            val reportInstance = ReportInstance(
-                context.jobId,
-                currentTime,
-                currentTime,
-                beginTime,
-                endTime,
-                job.tenant,
-                job.access,
-                reportDefinitionDetails,
-                ReportInstance.Status.Success
-            ) // TODO: Revert to Scheduled when background job execution supported
+            val reportInstance =
+                ReportInstance(
+                    context.jobId,
+                    currentTime,
+                    currentTime,
+                    beginTime,
+                    endTime,
+                    job.tenant,
+                    job.access,
+                    reportDefinitionDetails,
+                    ReportInstance.Status.Success,
+                ) // TODO: Revert to Scheduled when background job execution supported
             val id = ReportInstancesIndex.createReportInstance(reportInstance)
             if (id == null) {
                 log.warn("$LOG_PREFIX:runJob-job creation failed for $reportInstance")
