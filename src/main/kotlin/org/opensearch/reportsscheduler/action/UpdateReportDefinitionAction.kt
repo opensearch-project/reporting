@@ -18,27 +18,30 @@ import org.opensearch.transport.client.Client
 /**
  * Update reportDefinitions transport action
  */
-internal class UpdateReportDefinitionAction @Inject constructor(
-    transportService: TransportService,
-    client: Client,
-    actionFilters: ActionFilters,
-    val xContentRegistry: NamedXContentRegistry
-) : PluginBaseAction<UpdateReportDefinitionRequest, UpdateReportDefinitionResponse>(
-    NAME,
-    transportService,
-    client,
-    actionFilters,
-    ::UpdateReportDefinitionRequest
-) {
-    companion object {
-        private const val NAME = "cluster:admin/opendistro/reports/definition/update"
-        internal val ACTION_TYPE = ActionType(NAME, ::UpdateReportDefinitionResponse)
-    }
+internal class UpdateReportDefinitionAction
+    @Inject
+    constructor(
+        transportService: TransportService,
+        client: Client,
+        actionFilters: ActionFilters,
+        val xContentRegistry: NamedXContentRegistry,
+    ) : PluginBaseAction<UpdateReportDefinitionRequest, UpdateReportDefinitionResponse>(
+            NAME,
+            transportService,
+            client,
+            actionFilters,
+            ::UpdateReportDefinitionRequest,
+        ) {
+        companion object {
+            private const val NAME = "cluster:admin/opendistro/reports/definition/update"
+            internal val ACTION_TYPE = ActionType(NAME, ::UpdateReportDefinitionResponse)
+        }
 
-    /**
-     * {@inheritDoc}
-     */
-    override fun executeRequest(request: UpdateReportDefinitionRequest, user: User?): UpdateReportDefinitionResponse {
-        return ReportDefinitionActions.update(request, user)
+        /**
+         * {@inheritDoc}
+         */
+        override fun executeRequest(
+            request: UpdateReportDefinitionRequest,
+            user: User?,
+        ): UpdateReportDefinitionResponse = ReportDefinitionActions.update(request, user)
     }
-}

@@ -70,12 +70,14 @@ internal data class ReportDefinition(
     val source: Source,
     val format: Format,
     val trigger: Trigger,
-    val delivery: Delivery?
+    val delivery: Delivery?,
 ) : ToXContentObject {
-
     internal enum class SourceType { Dashboard, Visualization, SavedSearch, Notebook }
+
     internal enum class TriggerType { Download, OnDemand, CronSchedule, IntervalSchedule }
+
     internal enum class DeliveryFormat { LinkOnly, Attachment, Embedded }
+
     internal enum class FileFormat { Pdf, Png, Csv, Xlsx }
 
     internal companion object {
@@ -104,12 +106,30 @@ internal data class ReportDefinition(
                 val fieldName = parser.currentName()
                 parser.nextToken()
                 when (fieldName) {
-                    NAME_TAG -> name = parser.text()
-                    IS_ENABLED_TAG -> isEnabled = parser.booleanValue()
-                    SOURCE_TAG -> source = Source.parse(parser)
-                    FORMAT_TAG -> format = Format.parse(parser)
-                    TRIGGER_TAG -> trigger = Trigger.parse(parser)
-                    DELIVERY_TAG -> delivery = Delivery.parse(parser)
+                    NAME_TAG -> {
+                        name = parser.text()
+                    }
+
+                    IS_ENABLED_TAG -> {
+                        isEnabled = parser.booleanValue()
+                    }
+
+                    SOURCE_TAG -> {
+                        source = Source.parse(parser)
+                    }
+
+                    FORMAT_TAG -> {
+                        format = Format.parse(parser)
+                    }
+
+                    TRIGGER_TAG -> {
+                        trigger = Trigger.parse(parser)
+                    }
+
+                    DELIVERY_TAG -> {
+                        delivery = Delivery.parse(parser)
+                    }
+
                     else -> {
                         parser.skipChildren()
                         log.info("$LOG_PREFIX:ReportDefinition Skipping Unknown field $fieldName")
@@ -126,7 +146,7 @@ internal data class ReportDefinition(
                 source,
                 format,
                 trigger,
-                delivery
+                delivery,
             )
         }
     }
@@ -136,16 +156,18 @@ internal data class ReportDefinition(
      * @param params XContent parameters
      * @return created XContentBuilder object
      */
-    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? {
-        return toXContent(XContentFactory.jsonBuilder(), params)
-    }
+    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? = toXContent(XContentFactory.jsonBuilder(), params)
 
     /**
      * {@inheritDoc}
      */
-    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: ToXContent.Params?,
+    ): XContentBuilder {
         builder!!
-        builder.startObject()
+        builder
+            .startObject()
             .field(NAME_TAG, name)
             .field(IS_ENABLED_TAG, isEnabled)
         builder.field(SOURCE_TAG)
@@ -169,7 +191,7 @@ internal data class ReportDefinition(
         val description: String,
         val type: SourceType,
         val origin: String,
-        val id: String
+        val id: String,
     ) : ToXContentObject {
         internal companion object {
             private const val DESCRIPTION_TAG = "description"
@@ -192,10 +214,22 @@ internal data class ReportDefinition(
                     val fieldName = parser.currentName()
                     parser.nextToken()
                     when (fieldName) {
-                        DESCRIPTION_TAG -> description = parser.text()
-                        TYPE_TAG -> type = SourceType.valueOf(parser.text())
-                        ORIGIN_TAG -> origin = parser.text()
-                        ID_TAG -> id = parser.text()
+                        DESCRIPTION_TAG -> {
+                            description = parser.text()
+                        }
+
+                        TYPE_TAG -> {
+                            type = SourceType.valueOf(parser.text())
+                        }
+
+                        ORIGIN_TAG -> {
+                            origin = parser.text()
+                        }
+
+                        ID_TAG -> {
+                            id = parser.text()
+                        }
+
                         else -> {
                             parser.skipChildren()
                             log.info("$LOG_PREFIX:Source Skipping Unknown field $fieldName")
@@ -210,7 +244,7 @@ internal data class ReportDefinition(
                     description,
                     type,
                     origin,
-                    id
+                    id,
                 )
             }
         }
@@ -218,9 +252,13 @@ internal data class ReportDefinition(
         /**
          * {@inheritDoc}
          */
-        override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
+        override fun toXContent(
+            builder: XContentBuilder?,
+            params: ToXContent.Params?,
+        ): XContentBuilder {
             builder!!
-            builder.startObject()
+            builder
+                .startObject()
                 .field(DESCRIPTION_TAG, description)
                 .field(TYPE_TAG, type.name)
                 .field(ORIGIN_TAG, origin)
@@ -240,7 +278,7 @@ internal data class ReportDefinition(
         val header: String?,
         val footer: String?,
         val timeFrom: String?,
-        val timeTo: String?
+        val timeTo: String?,
     ) : ToXContentObject {
         internal companion object {
             private const val DURATION_TAG = "duration"
@@ -269,13 +307,34 @@ internal data class ReportDefinition(
                     val fieldName = parser.currentName()
                     parser.nextToken()
                     when (fieldName) {
-                        DURATION_TAG -> durationSeconds = Duration.parse(parser.text())
-                        FILE_FORMAT_TAG -> fileFormat = FileFormat.valueOf(parser.text())
-                        LIMIT_TAG -> limit = parser.intValue()
-                        HEADER_TAG -> header = parser.textOrNull()
-                        FOOTER_TAG -> footer = parser.textOrNull()
-                        TIME_FROM_TAG -> timeFrom = parser.textOrNull()
-                        TIME_TO_TAG -> timeTo = parser.textOrNull()
+                        DURATION_TAG -> {
+                            durationSeconds = Duration.parse(parser.text())
+                        }
+
+                        FILE_FORMAT_TAG -> {
+                            fileFormat = FileFormat.valueOf(parser.text())
+                        }
+
+                        LIMIT_TAG -> {
+                            limit = parser.intValue()
+                        }
+
+                        HEADER_TAG -> {
+                            header = parser.textOrNull()
+                        }
+
+                        FOOTER_TAG -> {
+                            footer = parser.textOrNull()
+                        }
+
+                        TIME_FROM_TAG -> {
+                            timeFrom = parser.textOrNull()
+                        }
+
+                        TIME_TO_TAG -> {
+                            timeTo = parser.textOrNull()
+                        }
+
                         else -> {
                             parser.skipChildren()
                             log.info("$LOG_PREFIX:Format Skipping Unknown field $fieldName")
@@ -291,7 +350,7 @@ internal data class ReportDefinition(
                     header,
                     footer,
                     timeFrom,
-                    timeTo
+                    timeTo,
                 )
             }
         }
@@ -299,9 +358,13 @@ internal data class ReportDefinition(
         /**
          * {@inheritDoc}
          */
-        override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
+        override fun toXContent(
+            builder: XContentBuilder?,
+            params: ToXContent.Params?,
+        ): XContentBuilder {
             builder!!
-            builder.startObject()
+            builder
+                .startObject()
                 .field(DURATION_TAG, duration.toString())
                 .field(FILE_FORMAT_TAG, fileFormat.name)
             if (limit != null) builder.field(LIMIT_TAG, limit)
@@ -319,7 +382,7 @@ internal data class ReportDefinition(
      */
     internal data class Trigger(
         val triggerType: TriggerType,
-        val schedule: Schedule?
+        val schedule: Schedule?,
     ) : ToXContentObject {
         internal companion object {
             private const val TRIGGER_TYPE_TAG = "triggerType"
@@ -350,17 +413,19 @@ internal data class ReportDefinition(
                 return Trigger(triggerType, schedule)
             }
 
-            fun isScheduleType(triggerType: TriggerType): Boolean {
-                return (triggerType == TriggerType.CronSchedule || triggerType == TriggerType.IntervalSchedule)
-            }
+            fun isScheduleType(triggerType: TriggerType): Boolean = (triggerType == TriggerType.CronSchedule || triggerType == TriggerType.IntervalSchedule)
         }
 
         /**
          * {@inheritDoc}
          */
-        override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
+        override fun toXContent(
+            builder: XContentBuilder?,
+            params: ToXContent.Params?,
+        ): XContentBuilder {
             builder!!
-            builder.startObject()
+            builder
+                .startObject()
                 .field(TRIGGER_TYPE_TAG, triggerType)
             if (isScheduleType(triggerType)) {
                 builder.field(SCHEDULE_TAG)
@@ -378,7 +443,7 @@ internal data class ReportDefinition(
         val title: String,
         val textDescription: String,
         val htmlDescription: String?,
-        val configIds: List<String>
+        val configIds: List<String>,
     ) : ToXContentObject {
         internal companion object {
             private const val TITLE_TAG = "title"
@@ -414,7 +479,7 @@ internal data class ReportDefinition(
                     title,
                     textDescription,
                     htmlDescription,
-                    configIds
+                    configIds,
                 )
             }
         }
@@ -422,9 +487,13 @@ internal data class ReportDefinition(
         /**
          * {@inheritDoc}
          */
-        override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
+        override fun toXContent(
+            builder: XContentBuilder?,
+            params: ToXContent.Params?,
+        ): XContentBuilder {
             builder!!
-            builder.startObject()
+            builder
+                .startObject()
                 .field(TITLE_TAG, title)
                 .field(TEXT_DESCRIPTION_TAG, textDescription)
             if (htmlDescription != null) {

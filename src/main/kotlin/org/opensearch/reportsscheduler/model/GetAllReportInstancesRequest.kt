@@ -37,13 +37,13 @@ import java.io.IOException
  */
 internal data class GetAllReportInstancesRequest(
     val fromIndex: Int,
-    val maxItems: Int
-) : ActionRequest(), ToXContentObject {
-
+    val maxItems: Int,
+) : ActionRequest(),
+    ToXContentObject {
     @Throws(IOException::class)
     constructor(input: StreamInput) : this(
         fromIndex = input.readInt(),
-        maxItems = input.readInt()
+        maxItems = input.readInt(),
     )
 
     companion object {
@@ -62,8 +62,14 @@ internal data class GetAllReportInstancesRequest(
                 val fieldName = parser.currentName()
                 parser.nextToken()
                 when (fieldName) {
-                    FROM_INDEX_FIELD -> fromIndex = parser.intValue()
-                    MAX_ITEMS_FIELD -> maxItems = parser.intValue()
+                    FROM_INDEX_FIELD -> {
+                        fromIndex = parser.intValue()
+                    }
+
+                    MAX_ITEMS_FIELD -> {
+                        maxItems = parser.intValue()
+                    }
+
                     else -> {
                         parser.skipChildren()
                         log.info("$LOG_PREFIX:Skipping Unknown field $fieldName")
@@ -86,8 +92,8 @@ internal data class GetAllReportInstancesRequest(
     /**
      * {@inheritDoc}
      */
-    override fun validate(): ActionRequestValidationException? {
-        return if (fromIndex < 0) {
+    override fun validate(): ActionRequestValidationException? =
+        if (fromIndex < 0) {
             val exception = ActionRequestValidationException()
             exception.addValidationError("fromIndex should be greater than 0")
             Metrics.REPORT_INSTANCE_LIST_USER_ERROR_INVALID_FROM_INDEX.counter.increment()
@@ -95,24 +101,24 @@ internal data class GetAllReportInstancesRequest(
         } else {
             null
         }
-    }
 
     /**
      * create XContentBuilder from this object using [XContentFactory.jsonBuilder()]
      * @param params XContent parameters
      * @return created XContentBuilder object
      */
-    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? {
-        return toXContent(XContentFactory.jsonBuilder(), params)
-    }
+    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? = toXContent(XContentFactory.jsonBuilder(), params)
 
     /**
      * {@inheritDoc}
      */
-    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
-        return builder!!.startObject()
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: ToXContent.Params?,
+    ): XContentBuilder =
+        builder!!
+            .startObject()
             .field(FROM_INDEX_FIELD, fromIndex)
             .field(MAX_ITEMS_FIELD, maxItems)
             .endObject()
-    }
 }

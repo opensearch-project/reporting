@@ -37,7 +37,9 @@ import java.io.IOException
  * }
  * }</pre>
  */
-internal class UpdateReportDefinitionRequest : ActionRequest, ToXContentObject {
+internal class UpdateReportDefinitionRequest :
+    ActionRequest,
+    ToXContentObject {
     val reportDefinitionId: String
     val reportDefinition: ReportDefinition
 
@@ -65,8 +67,14 @@ internal class UpdateReportDefinitionRequest : ActionRequest, ToXContentObject {
             val fieldName = parser.currentName()
             parser.nextToken()
             when (fieldName) {
-                REPORT_DEFINITION_ID_FIELD -> reportDefinitionId = parser.text()
-                REPORT_DEFINITION_FIELD -> reportDefinition = ReportDefinition.parse(parser)
+                REPORT_DEFINITION_ID_FIELD -> {
+                    reportDefinitionId = parser.text()
+                }
+
+                REPORT_DEFINITION_FIELD -> {
+                    reportDefinition = ReportDefinition.parse(parser)
+                }
+
                 else -> {
                     parser.skipChildren()
                     log.info("$LOG_PREFIX:Skipping Unknown field $fieldName")
@@ -98,24 +106,23 @@ internal class UpdateReportDefinitionRequest : ActionRequest, ToXContentObject {
      * @param params XContent parameters
      * @return created XContentBuilder object
      */
-    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? {
-        return toXContent(XContentFactory.jsonBuilder(), params)
-    }
+    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? = toXContent(XContentFactory.jsonBuilder(), params)
 
     /**
      * {@inheritDoc}
      */
-    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
-        return builder!!.startObject()
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: ToXContent.Params?,
+    ): XContentBuilder =
+        builder!!
+            .startObject()
             .field(REPORT_DEFINITION_ID_FIELD, reportDefinitionId)
             .field(REPORT_DEFINITION_FIELD, reportDefinition)
             .endObject()
-    }
 
     /**
      * {@inheritDoc}
      */
-    override fun validate(): ActionRequestValidationException? {
-        return null
-    }
+    override fun validate(): ActionRequestValidationException? = null
 }

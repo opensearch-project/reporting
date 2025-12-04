@@ -40,14 +40,14 @@ import java.io.IOException
 internal class UpdateReportInstanceStatusRequest(
     val reportInstanceId: String,
     var status: Status,
-    var statusText: String? = null
-) : ActionRequest(), ToXContentObject {
-
+    var statusText: String? = null,
+) : ActionRequest(),
+    ToXContentObject {
     @Throws(IOException::class)
     constructor(input: StreamInput) : this(
         reportInstanceId = input.readString(),
         status = input.readEnum(Status::class.java),
-        statusText = input.readOptionalString()
+        statusText = input.readOptionalString(),
     )
 
     companion object {
@@ -58,7 +58,10 @@ internal class UpdateReportInstanceStatusRequest(
          * @param parser data referenced at parser
          * @return created [UpdateReportInstanceStatusRequest] object
          */
-        fun parse(parser: XContentParser, useReportInstanceId: String? = null): UpdateReportInstanceStatusRequest {
+        fun parse(
+            parser: XContentParser,
+            useReportInstanceId: String? = null,
+        ): UpdateReportInstanceStatusRequest {
             var reportInstanceId: String? = useReportInstanceId
             var status: Status? = null
             var statusText: String? = null
@@ -67,9 +70,18 @@ internal class UpdateReportInstanceStatusRequest(
                 val fieldName = parser.currentName()
                 parser.nextToken()
                 when (fieldName) {
-                    REPORT_INSTANCE_ID_FIELD -> reportInstanceId = parser.text()
-                    STATUS_FIELD -> status = Status.valueOf(parser.text())
-                    STATUS_TEXT_FIELD -> statusText = parser.text()
+                    REPORT_INSTANCE_ID_FIELD -> {
+                        reportInstanceId = parser.text()
+                    }
+
+                    STATUS_FIELD -> {
+                        status = Status.valueOf(parser.text())
+                    }
+
+                    STATUS_TEXT_FIELD -> {
+                        statusText = parser.text()
+                    }
+
                     else -> {
                         parser.skipChildren()
                         log.info("$LOG_PREFIX:Skipping Unknown field $fieldName")
@@ -103,25 +115,24 @@ internal class UpdateReportInstanceStatusRequest(
      * @param params XContent parameters
      * @return created XContentBuilder object
      */
-    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? {
-        return toXContent(XContentFactory.jsonBuilder(), params)
-    }
+    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? = toXContent(XContentFactory.jsonBuilder(), params)
 
     /**
      * {@inheritDoc}
      */
-    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
-        return builder!!.startObject()
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: ToXContent.Params?,
+    ): XContentBuilder =
+        builder!!
+            .startObject()
             .field(REPORT_INSTANCE_ID_FIELD, reportInstanceId)
             .field(STATUS_FIELD, status)
             .fieldIfNotNull(STATUS_TEXT_FIELD, statusText)
             .endObject()
-    }
 
     /**
      * {@inheritDoc}
      */
-    override fun validate(): ActionRequestValidationException? {
-        return null
-    }
+    override fun validate(): ActionRequestValidationException? = null
 }

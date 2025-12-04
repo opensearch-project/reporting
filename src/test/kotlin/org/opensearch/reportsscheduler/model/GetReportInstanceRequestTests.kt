@@ -13,7 +13,6 @@ import org.opensearch.reportsscheduler.createObjectFromJsonString
 import org.opensearch.reportsscheduler.getJsonString
 
 internal class GetReportInstanceRequestTests {
-
     @Test
     fun `Get request serialize and deserialize transport object should be equal`() {
         val request = GetReportInstanceRequest("sample_report_instance_id")
@@ -56,14 +55,15 @@ internal class GetReportInstanceRequestTests {
     @Test
     fun `Get request should safely ignore extra field in json object`() {
         val reportInstanceId = "report_definition_id"
-        val jsonString = """
-        {
-            "reportInstanceId":"$reportInstanceId",
-            "extra_field_1":["extra", "value"],
-            "extra_field_2":{"extra":"value"},
-            "extra_field_3":"extra value 3"
-        }
-        """.trimIndent()
+        val jsonString =
+            """
+            {
+                "reportInstanceId":"$reportInstanceId",
+                "extra_field_1":["extra", "value"],
+                "extra_field_2":{"extra":"value"},
+                "extra_field_3":"extra value 3"
+            }
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { GetReportInstanceRequest.parse(it) }
         Assertions.assertEquals(reportInstanceId, recreatedObject.reportInstanceId)
     }

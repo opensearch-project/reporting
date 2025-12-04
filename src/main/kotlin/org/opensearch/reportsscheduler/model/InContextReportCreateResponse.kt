@@ -57,7 +57,10 @@ internal class InContextReportCreateResponse : BaseResponse {
             val fieldName = parser.currentName()
             parser.nextToken()
             when (fieldName) {
-                REPORT_INSTANCE_FIELD -> reportInstance = ReportInstance.parse(parser)
+                REPORT_INSTANCE_FIELD -> {
+                    reportInstance = ReportInstance.parse(parser)
+                }
+
                 else -> {
                     parser.skipChildren()
                     log.info("$LOG_PREFIX:Skipping Unknown field $fieldName")
@@ -80,13 +83,18 @@ internal class InContextReportCreateResponse : BaseResponse {
     /**
      * {@inheritDoc}
      */
-    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
-        val xContentParams = if (filterSensitiveInfo) {
-            RestTag.FILTERED_REST_OUTPUT_PARAMS
-        } else {
-            RestTag.REST_OUTPUT_PARAMS
-        }
-        builder!!.startObject()
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: ToXContent.Params?,
+    ): XContentBuilder {
+        val xContentParams =
+            if (filterSensitiveInfo) {
+                RestTag.FILTERED_REST_OUTPUT_PARAMS
+            } else {
+                RestTag.REST_OUTPUT_PARAMS
+            }
+        builder!!
+            .startObject()
             .field(REPORT_INSTANCE_FIELD)
         reportInstance.toXContent(builder, xContentParams)
         return builder.endObject()

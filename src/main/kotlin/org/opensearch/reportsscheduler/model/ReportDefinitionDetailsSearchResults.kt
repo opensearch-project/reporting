@@ -18,7 +18,7 @@ internal class ReportDefinitionDetailsSearchResults : SearchResults<ReportDefini
         startIndex: Long,
         totalHits: Long,
         totalHitRelation: TotalHits.Relation,
-        objectList: List<ReportDefinitionDetails>
+        objectList: List<ReportDefinitionDetails>,
     ) : super(startIndex, totalHits, totalHitRelation, objectList, REPORT_DEFINITION_LIST_FIELD)
 
     constructor(parser: XContentParser) : super(parser, REPORT_DEFINITION_LIST_FIELD)
@@ -28,7 +28,8 @@ internal class ReportDefinitionDetailsSearchResults : SearchResults<ReportDefini
     /**
      * {@inheritDoc}
      */
-    override fun parseItem(parser: XContentParser, useId: String?): ReportDefinitionDetails {
-        return ReportDefinitionDetails.parse(parser, useId)
-    }
+    override fun parseItem(
+        parser: XContentParser,
+        useId: String?,
+    ): ReportDefinitionDetails = ReportDefinitionDetails.parse(parser, useId)
 }

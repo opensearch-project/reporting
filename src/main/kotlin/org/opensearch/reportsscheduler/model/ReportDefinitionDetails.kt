@@ -48,7 +48,7 @@ internal data class ReportDefinitionDetails(
     val createdTime: Instant,
     val tenant: String,
     val access: List<String>,
-    val reportDefinition: ReportDefinition
+    val reportDefinition: ReportDefinition,
 ) : ScheduledJobParameter {
     internal companion object {
         private val log by logger(ReportDefinitionDetails::class.java)
@@ -59,7 +59,10 @@ internal data class ReportDefinitionDetails(
          * @param useId use this id if not available in the json
          * @return created ReportDefinitionDetails object
          */
-        fun parse(parser: XContentParser, useId: String? = null): ReportDefinitionDetails {
+        fun parse(
+            parser: XContentParser,
+            useId: String? = null,
+        ): ReportDefinitionDetails {
             var id: String? = useId
             var updatedTime: Instant? = null
             var createdTime: Instant? = null
@@ -71,12 +74,30 @@ internal data class ReportDefinitionDetails(
                 val fieldName = parser.currentName()
                 parser.nextToken()
                 when (fieldName) {
-                    ID_FIELD -> id = parser.text()
-                    UPDATED_TIME_FIELD -> updatedTime = Instant.ofEpochMilli(parser.longValue())
-                    CREATED_TIME_FIELD -> createdTime = Instant.ofEpochMilli(parser.longValue())
-                    TENANT_FIELD -> tenant = parser.text()
-                    ACCESS_LIST_FIELD -> access = parser.stringList()
-                    REPORT_DEFINITION_FIELD -> reportDefinition = ReportDefinition.parse(parser)
+                    ID_FIELD -> {
+                        id = parser.text()
+                    }
+
+                    UPDATED_TIME_FIELD -> {
+                        updatedTime = Instant.ofEpochMilli(parser.longValue())
+                    }
+
+                    CREATED_TIME_FIELD -> {
+                        createdTime = Instant.ofEpochMilli(parser.longValue())
+                    }
+
+                    TENANT_FIELD -> {
+                        tenant = parser.text()
+                    }
+
+                    ACCESS_LIST_FIELD -> {
+                        access = parser.stringList()
+                    }
+
+                    REPORT_DEFINITION_FIELD -> {
+                        reportDefinition = ReportDefinition.parse(parser)
+                    }
+
                     else -> {
                         parser.skipChildren()
                         log.info("$LOG_PREFIX:ReportDefinitionDetails Skipping Unknown field $fieldName")
@@ -94,7 +115,7 @@ internal data class ReportDefinitionDetails(
                 createdTime,
                 tenant,
                 access,
-                reportDefinition
+                reportDefinition,
             )
         }
     }
@@ -104,20 +125,22 @@ internal data class ReportDefinitionDetails(
      * @param params XContent parameters
      * @return created XContentBuilder object
      */
-    fun toXContent(params: ToXContent.Params = EMPTY_PARAMS): XContentBuilder? {
-        return toXContent(XContentFactory.jsonBuilder(), params)
-    }
+    fun toXContent(params: ToXContent.Params = EMPTY_PARAMS): XContentBuilder? = toXContent(XContentFactory.jsonBuilder(), params)
 
     /**
      * {ref toXContent}
      */
-    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: ToXContent.Params?,
+    ): XContentBuilder {
         builder!!
         builder.startObject()
         if (params?.paramAsBoolean(ID_FIELD, false) == true) {
             builder.field(ID_FIELD, id)
         }
-        builder.field(UPDATED_TIME_FIELD, updatedTime.toEpochMilli())
+        builder
+            .field(UPDATED_TIME_FIELD, updatedTime.toEpochMilli())
             .field(CREATED_TIME_FIELD, createdTime.toEpochMilli())
             .field(TENANT_FIELD, tenant)
         if (params?.paramAsBoolean(ACCESS_LIST_FIELD, true) == true && access.isNotEmpty()) {
@@ -132,27 +155,19 @@ internal data class ReportDefinitionDetails(
     /**
      * {@inheritDoc}
      */
-    override fun getName(): String {
-        return reportDefinition.name
-    }
+    override fun getName(): String = reportDefinition.name
 
     /**
      * {@inheritDoc}
      */
-    override fun getLastUpdateTime(): Instant {
-        return updatedTime
-    }
+    override fun getLastUpdateTime(): Instant = updatedTime
 
     /**
      * {@inheritDoc}
      */
-    override fun getEnabledTime(): Instant {
-        return createdTime
-    }
+    override fun getEnabledTime(): Instant = createdTime
 
-    override fun getSchedule(): Schedule {
-        return reportDefinition.trigger.schedule!!
-    }
+    override fun getSchedule(): Schedule = reportDefinition.trigger.schedule!!
 
     override fun isEnabled(): Boolean {
         val trigger = reportDefinition.trigger
@@ -160,6 +175,6 @@ internal data class ReportDefinitionDetails(
             reportDefinition.isEnabled &&
                 (reportDefinition.trigger.schedule != null) &&
                 (trigger.triggerType == TriggerType.IntervalSchedule || trigger.triggerType == TriggerType.CronSchedule)
-            )
+        )
     }
 }

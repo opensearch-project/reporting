@@ -60,12 +60,16 @@ internal class GetAllReportInstancesResponse : BaseResponse {
     /**
      * {@inheritDoc}
      */
-    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
-        val xContentParams = if (filterSensitiveInfo) {
-            RestTag.FILTERED_REST_OUTPUT_PARAMS
-        } else {
-            RestTag.REST_OUTPUT_PARAMS
-        }
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: ToXContent.Params?,
+    ): XContentBuilder {
+        val xContentParams =
+            if (filterSensitiveInfo) {
+                RestTag.FILTERED_REST_OUTPUT_PARAMS
+            } else {
+                RestTag.REST_OUTPUT_PARAMS
+            }
         return reportInstanceList.toXContent(builder, xContentParams)
     }
 }

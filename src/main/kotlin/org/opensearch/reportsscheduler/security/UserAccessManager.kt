@@ -37,7 +37,7 @@ internal object UserAccessManager {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
             throw OpenSearchStatusException(
                 "User name not provided for private tenant access",
-                RestStatus.FORBIDDEN
+                RestStatus.FORBIDDEN,
             )
         }
         if (PluginSettings.isRbacEnabled()) {
@@ -46,7 +46,7 @@ internal object UserAccessManager {
                 Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
                 throw OpenSearchStatusException(
                     "User doesn't have backend roles configured. Contact administrator.",
-                    RestStatus.FORBIDDEN
+                    RestStatus.FORBIDDEN,
                 )
             }
         }
@@ -55,12 +55,11 @@ internal object UserAccessManager {
     /**
      * Get tenant info from user object.
      */
-    fun getUserTenant(user: User?): String {
-        return when (val requestedTenant = user?.requestedTenant) {
+    fun getUserTenant(user: User?): String =
+        when (val requestedTenant = user?.requestedTenant) {
             null -> DEFAULT_TENANT
             else -> requestedTenant
         }
-    }
 
     /**
      * Get all user access info from user object.
@@ -111,7 +110,11 @@ internal object UserAccessManager {
     /**
      * validate if user has access based on given access list
      */
-    fun doesUserHasAccess(user: User?, tenant: String, access: List<String>): Boolean {
+    fun doesUserHasAccess(
+        user: User?,
+        tenant: String,
+        access: List<String>,
+    ): Boolean {
         if (user == null) { // Security is disabled
             return true
         }
@@ -128,7 +131,5 @@ internal object UserAccessManager {
         }
     }
 
-    private fun isUserPrivateTenant(user: User?): Boolean {
-        return getUserTenant(user) == PRIVATE_TENANT
-    }
+    private fun isUserPrivateTenant(user: User?): Boolean = getUserTenant(user) == PRIVATE_TENANT
 }

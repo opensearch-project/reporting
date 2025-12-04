@@ -14,11 +14,11 @@ import org.opensearch.reportsscheduler.createReportDefinitionObject
 import org.opensearch.reportsscheduler.getJsonString
 
 internal class UpdateReportDefinitionRequestTests {
-
-    private val reportDefinitionRequest = UpdateReportDefinitionRequest(
-        "sample_report_definition_id",
-        createReportDefinitionObject()
-    )
+    private val reportDefinitionRequest =
+        UpdateReportDefinitionRequest(
+            "sample_report_definition_id",
+            createReportDefinitionObject(),
+        )
 
     @Test
     fun `Update request serialize and deserialize using json object should be equal`() {
@@ -29,7 +29,8 @@ internal class UpdateReportDefinitionRequestTests {
 
     @Test
     fun `Update request should deserialize json object using parser`() {
-        val jsonString = """
+        val jsonString =
+            """
             {
                 "reportDefinitionId": "sample_report_definition_id",
                 "reportDefinition":{
@@ -53,7 +54,7 @@ internal class UpdateReportDefinitionRequestTests {
                     }
                 }
             }
-        """.trimIndent()
+            """.trimIndent()
         val recreatedObject = createObjectFromJsonString(jsonString) { UpdateReportDefinitionRequest(it) }
         Assertions.assertEquals(reportDefinitionRequest.reportDefinition, recreatedObject.reportDefinition)
     }
@@ -68,7 +69,8 @@ internal class UpdateReportDefinitionRequestTests {
 
     @Test
     fun `Update request should safely ignore extra field in json object`() {
-        val jsonString = """
+        val jsonString =
+            """
             {
                 "reportDefinitionId": "sample_report_definition_id",
                 "reportDefinition":{
@@ -95,7 +97,7 @@ internal class UpdateReportDefinitionRequestTests {
                 "extra_field_2":{"extra":"value"},
                 "extra_field_3":"extra value 3"
             }
-        """.trimIndent()
+            """.trimIndent()
 
         val recreatedObject = createObjectFromJsonString(jsonString) { UpdateReportDefinitionRequest(it) }
         Assertions.assertEquals(reportDefinitionRequest.reportDefinition, recreatedObject.reportDefinition)

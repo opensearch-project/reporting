@@ -27,12 +27,11 @@ import java.io.IOException
  * }</pre>
  */
 internal data class UpdateReportInstanceStatusResponse(
-    val reportInstanceId: String
+    val reportInstanceId: String,
 ) : BaseResponse() {
-
     @Throws(IOException::class)
     constructor(input: StreamInput) : this(
-        reportInstanceId = input.readString()
+        reportInstanceId = input.readString(),
     )
 
     companion object {
@@ -50,7 +49,10 @@ internal data class UpdateReportInstanceStatusResponse(
                 val fieldName = parser.currentName()
                 parser.nextToken()
                 when (fieldName) {
-                    REPORT_INSTANCE_ID_FIELD -> reportInstanceId = parser.text()
+                    REPORT_INSTANCE_ID_FIELD -> {
+                        reportInstanceId = parser.text()
+                    }
+
                     else -> {
                         parser.skipChildren()
                         log.info("$LOG_PREFIX:Skipping Unknown field $fieldName")
@@ -73,9 +75,12 @@ internal data class UpdateReportInstanceStatusResponse(
     /**
      * {@inheritDoc}
      */
-    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
-        return builder!!.startObject()
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: ToXContent.Params?,
+    ): XContentBuilder =
+        builder!!
+            .startObject()
             .field(REPORT_INSTANCE_ID_FIELD, reportInstanceId)
             .endObject()
-    }
 }

@@ -57,7 +57,10 @@ internal class GetReportDefinitionResponse : BaseResponse {
             val fieldName = parser.currentName()
             parser.nextToken()
             when (fieldName) {
-                RestTag.REPORT_DEFINITION_DETAILS_FIELD -> reportDefinition = ReportDefinitionDetails.parse(parser)
+                RestTag.REPORT_DEFINITION_DETAILS_FIELD -> {
+                    reportDefinition = ReportDefinitionDetails.parse(parser)
+                }
+
                 else -> {
                     parser.skipChildren()
                     log.info("$LOG_PREFIX:Skipping Unknown field $fieldName")
@@ -83,13 +86,18 @@ internal class GetReportDefinitionResponse : BaseResponse {
     /**
      * {@inheritDoc}
      */
-    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
-        val xContentParams = if (filterSensitiveInfo) {
-            RestTag.FILTERED_REST_OUTPUT_PARAMS
-        } else {
-            RestTag.REST_OUTPUT_PARAMS
-        }
-        builder!!.startObject()
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: ToXContent.Params?,
+    ): XContentBuilder {
+        val xContentParams =
+            if (filterSensitiveInfo) {
+                RestTag.FILTERED_REST_OUTPUT_PARAMS
+            } else {
+                RestTag.REST_OUTPUT_PARAMS
+            }
+        builder!!
+            .startObject()
             .field(RestTag.REPORT_DEFINITION_DETAILS_FIELD)
         reportDefinitionDetails.toXContent(builder, xContentParams)
         return builder.endObject()

@@ -48,7 +48,9 @@ import java.time.Instant
  * }
  * }</pre>
  */
-internal class InContextReportCreateRequest : ActionRequest, ToXContentObject {
+internal class InContextReportCreateRequest :
+    ActionRequest,
+    ToXContentObject {
     val beginTime: Instant
     val endTime: Instant
     val reportDefinitionDetails: ReportDefinitionDetails?
@@ -66,7 +68,7 @@ internal class InContextReportCreateRequest : ActionRequest, ToXContentObject {
         reportDefinitionDetails: ReportDefinitionDetails?,
         status: Status,
         statusText: String? = null,
-        inContextDownloadUrlPath: String? = null
+        inContextDownloadUrlPath: String? = null,
     ) : super() {
         this.beginTime = beginTime
         this.endTime = endTime
@@ -95,12 +97,30 @@ internal class InContextReportCreateRequest : ActionRequest, ToXContentObject {
             val fieldName = parser.currentName()
             parser.nextToken()
             when (fieldName) {
-                BEGIN_TIME_FIELD -> beginTime = Instant.ofEpochMilli(parser.longValue())
-                END_TIME_FIELD -> endTime = Instant.ofEpochMilli(parser.longValue())
-                REPORT_DEFINITION_DETAILS_FIELD -> reportDefinitionDetails = ReportDefinitionDetails.parse(parser)
-                STATUS_FIELD -> status = Status.valueOf(parser.text())
-                STATUS_TEXT_FIELD -> statusText = parser.text()
-                IN_CONTEXT_DOWNLOAD_URL_FIELD -> inContextDownloadUrlPath = parser.text()
+                BEGIN_TIME_FIELD -> {
+                    beginTime = Instant.ofEpochMilli(parser.longValue())
+                }
+
+                END_TIME_FIELD -> {
+                    endTime = Instant.ofEpochMilli(parser.longValue())
+                }
+
+                REPORT_DEFINITION_DETAILS_FIELD -> {
+                    reportDefinitionDetails = ReportDefinitionDetails.parse(parser)
+                }
+
+                STATUS_FIELD -> {
+                    status = Status.valueOf(parser.text())
+                }
+
+                STATUS_TEXT_FIELD -> {
+                    statusText = parser.text()
+                }
+
+                IN_CONTEXT_DOWNLOAD_URL_FIELD -> {
+                    inContextDownloadUrlPath = parser.text()
+                }
+
                 else -> {
                     parser.skipChildren()
                     log.info("$LOG_PREFIX:InContextReportCreateRequest Skipping Unknown field $fieldName")
@@ -140,22 +160,25 @@ internal class InContextReportCreateRequest : ActionRequest, ToXContentObject {
      * @param params XContent parameters
      * @return created XContentBuilder object
      */
-    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? {
-        return toXContent(XContentFactory.jsonBuilder(), params)
-    }
+    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? = toXContent(XContentFactory.jsonBuilder(), params)
 
     /**
      * {@inheritDoc}
      */
-    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
-        builder!!.startObject()
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: ToXContent.Params?,
+    ): XContentBuilder {
+        builder!!
+            .startObject()
             .field(BEGIN_TIME_FIELD, beginTime.toEpochMilli())
             .field(END_TIME_FIELD, endTime.toEpochMilli())
         if (reportDefinitionDetails != null) {
             builder.field(REPORT_DEFINITION_DETAILS_FIELD)
             reportDefinitionDetails.toXContent(builder, REST_OUTPUT_PARAMS)
         }
-        return builder.field(STATUS_FIELD, status.name)
+        return builder
+            .field(STATUS_FIELD, status.name)
             .fieldIfNotNull(STATUS_TEXT_FIELD, statusText)
             .fieldIfNotNull(IN_CONTEXT_DOWNLOAD_URL_FIELD, inContextDownloadUrlPath)
             .endObject()
@@ -164,7 +187,5 @@ internal class InContextReportCreateRequest : ActionRequest, ToXContentObject {
     /**
      * {@inheritDoc}
      */
-    override fun validate(): ActionRequestValidationException? {
-        return null
-    }
+    override fun validate(): ActionRequestValidationException? = null
 }

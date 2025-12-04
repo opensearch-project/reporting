@@ -17,7 +17,7 @@ internal class HelpersTests {
     fun `test build report link works with global tenant`() {
         assertEquals(
             "$sampleOrigin/app/reports-dashboards?security_tenant=global#/report_details/$sampleId",
-            buildReportLink(sampleOrigin, sampleTenant, sampleId)
+            buildReportLink(sampleOrigin, sampleTenant, sampleId),
         )
     }
 
@@ -26,7 +26,7 @@ internal class HelpersTests {
         sampleTenant = "__user__"
         assertEquals(
             "$sampleOrigin/app/reports-dashboards?security_tenant=private#/report_details/$sampleId",
-            buildReportLink(sampleOrigin, sampleTenant, sampleId)
+            buildReportLink(sampleOrigin, sampleTenant, sampleId),
         )
     }
 
@@ -36,7 +36,7 @@ internal class HelpersTests {
         val reportLink = buildReportLink(sampleOrigin, sampleTenant, sampleId)
         assertEquals(
             "$sampleOrigin/app/reports-dashboards?security_tenant=custom%20name#/report_details/$sampleId",
-            reportLink
+            reportLink,
         )
     }
 }

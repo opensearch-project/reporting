@@ -18,27 +18,30 @@ import org.opensearch.transport.client.Client
 /**
  * Update ReportInstance Status transport action
  */
-internal class UpdateReportInstanceStatusAction @Inject constructor(
-    transportService: TransportService,
-    client: Client,
-    actionFilters: ActionFilters,
-    val xContentRegistry: NamedXContentRegistry
-) : PluginBaseAction<UpdateReportInstanceStatusRequest, UpdateReportInstanceStatusResponse>(
-    NAME,
-    transportService,
-    client,
-    actionFilters,
-    ::UpdateReportInstanceStatusRequest
-) {
-    companion object {
-        private const val NAME = "cluster:admin/opendistro/reports/instance/update_status"
-        internal val ACTION_TYPE = ActionType(NAME, ::UpdateReportInstanceStatusResponse)
-    }
+internal class UpdateReportInstanceStatusAction
+    @Inject
+    constructor(
+        transportService: TransportService,
+        client: Client,
+        actionFilters: ActionFilters,
+        val xContentRegistry: NamedXContentRegistry,
+    ) : PluginBaseAction<UpdateReportInstanceStatusRequest, UpdateReportInstanceStatusResponse>(
+            NAME,
+            transportService,
+            client,
+            actionFilters,
+            ::UpdateReportInstanceStatusRequest,
+        ) {
+        companion object {
+            private const val NAME = "cluster:admin/opendistro/reports/instance/update_status"
+            internal val ACTION_TYPE = ActionType(NAME, ::UpdateReportInstanceStatusResponse)
+        }
 
-    /**
-     * {@inheritDoc}
-     */
-    override fun executeRequest(request: UpdateReportInstanceStatusRequest, user: User?): UpdateReportInstanceStatusResponse {
-        return ReportInstanceActions.update(request, user)
+        /**
+         * {@inheritDoc}
+         */
+        override fun executeRequest(
+            request: UpdateReportInstanceStatusRequest,
+            user: User?,
+        ): UpdateReportInstanceStatusResponse = ReportInstanceActions.update(request, user)
     }
-}

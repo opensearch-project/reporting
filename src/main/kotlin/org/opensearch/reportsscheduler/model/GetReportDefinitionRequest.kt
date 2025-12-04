@@ -33,12 +33,12 @@ import java.io.IOException
  * }</pre>
  */
 internal class GetReportDefinitionRequest(
-    val reportDefinitionId: String
-) : ActionRequest(), ToXContentObject {
-
+    val reportDefinitionId: String,
+) : ActionRequest(),
+    ToXContentObject {
     @Throws(IOException::class)
     constructor(input: StreamInput) : this(
-        reportDefinitionId = input.readString()
+        reportDefinitionId = input.readString(),
     )
 
     companion object {
@@ -50,14 +50,20 @@ internal class GetReportDefinitionRequest(
          * @param useReportDefinitionId use this id if not available in the json
          * @return created [GetReportDefinitionRequest] object
          */
-        fun parse(parser: XContentParser, useReportDefinitionId: String? = null): GetReportDefinitionRequest {
+        fun parse(
+            parser: XContentParser,
+            useReportDefinitionId: String? = null,
+        ): GetReportDefinitionRequest {
             var reportDefinitionId: String? = useReportDefinitionId
             XContentParserUtils.ensureExpectedToken(Token.START_OBJECT, parser.currentToken(), parser)
             while (Token.END_OBJECT != parser.nextToken()) {
                 val fieldName = parser.currentName()
                 parser.nextToken()
                 when (fieldName) {
-                    REPORT_DEFINITION_ID_FIELD -> reportDefinitionId = parser.text()
+                    REPORT_DEFINITION_ID_FIELD -> {
+                        reportDefinitionId = parser.text()
+                    }
+
                     else -> {
                         parser.skipChildren()
                         log.info("$LOG_PREFIX:Skipping Unknown field $fieldName")
@@ -85,23 +91,22 @@ internal class GetReportDefinitionRequest(
      * @param params XContent parameters
      * @return created XContentBuilder object
      */
-    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? {
-        return toXContent(XContentFactory.jsonBuilder(), params)
-    }
+    fun toXContent(params: ToXContent.Params = ToXContent.EMPTY_PARAMS): XContentBuilder? = toXContent(XContentFactory.jsonBuilder(), params)
 
     /**
      * {@inheritDoc}
      */
-    override fun toXContent(builder: XContentBuilder?, params: ToXContent.Params?): XContentBuilder {
-        return builder!!.startObject()
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: ToXContent.Params?,
+    ): XContentBuilder =
+        builder!!
+            .startObject()
             .field(REPORT_DEFINITION_ID_FIELD, reportDefinitionId)
             .endObject()
-    }
 
     /**
      * {@inheritDoc}
      */
-    override fun validate(): ActionRequestValidationException? {
-        return null
-    }
+    override fun validate(): ActionRequestValidationException? = null
 }

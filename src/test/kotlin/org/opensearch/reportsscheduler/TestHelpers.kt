@@ -29,36 +29,41 @@ fun getJsonString(xContent: ToXContent): String {
 
 inline fun <reified CreateType> createObjectFromJsonString(
     jsonString: String,
-    block: (XContentParser) -> CreateType
+    block: (XContentParser) -> CreateType,
 ): CreateType {
-    val parser = XContentType.JSON.xContent()
-        .createParser(NamedXContentRegistry.EMPTY, DeprecationHandler.IGNORE_DEPRECATIONS, jsonString)
+    val parser =
+        XContentType.JSON
+            .xContent()
+            .createParser(NamedXContentRegistry.EMPTY, DeprecationHandler.IGNORE_DEPRECATIONS, jsonString)
     parser.nextToken()
     return block(parser)
 }
 
 internal fun createReportDefinitionObject(): ReportDefinition {
-    val source = ReportDefinition.Source(
-        description = "description",
-        type = ReportDefinition.SourceType.Dashboard,
-        origin = "http://localhost:5601",
-        id = "id"
-    )
+    val source =
+        ReportDefinition.Source(
+            description = "description",
+            type = ReportDefinition.SourceType.Dashboard,
+            origin = "http://localhost:5601",
+            id = "id",
+        )
 
-    val format = ReportDefinition.Format(
-        duration = Duration.parse("PT1H"),
-        fileFormat = ReportDefinition.FileFormat.Pdf,
-        limit = 1000,
-        header = "optional header",
-        footer = "optional footer",
-        timeFrom = null,
-        timeTo = null
-    )
+    val format =
+        ReportDefinition.Format(
+            duration = Duration.parse("PT1H"),
+            fileFormat = ReportDefinition.FileFormat.Pdf,
+            limit = 1000,
+            header = "optional header",
+            footer = "optional footer",
+            timeFrom = null,
+            timeTo = null,
+        )
 
-    val trigger = ReportDefinition.Trigger(
-        triggerType = ReportDefinition.TriggerType.OnDemand,
-        schedule = null
-    )
+    val trigger =
+        ReportDefinition.Trigger(
+            triggerType = ReportDefinition.TriggerType.OnDemand,
+            schedule = null,
+        )
 
     return ReportDefinition(
         name = "sample_report_definition",
@@ -66,12 +71,12 @@ internal fun createReportDefinitionObject(): ReportDefinition {
         source = source,
         format = format,
         trigger = trigger,
-        delivery = null
+        delivery = null,
     )
 }
 
-internal fun createReportInstance(): ReportInstance {
-    return ReportInstance(
+internal fun createReportInstance(): ReportInstance =
+    ReportInstance(
         "id",
         Instant.ofEpochMilli(1603506908773),
         Instant.ofEpochMilli(1603506908773),
@@ -82,17 +87,15 @@ internal fun createReportInstance(): ReportInstance {
         null,
         ReportInstance.Status.Success,
         statusText = "200",
-        inContextDownloadUrlPath = "/app/dashboard#view/dashboard-id"
+        inContextDownloadUrlPath = "/app/dashboard#view/dashboard-id",
     )
-}
 
-internal fun createReportDefinitionDetails(): ReportDefinitionDetails {
-    return ReportDefinitionDetails(
+internal fun createReportDefinitionDetails(): ReportDefinitionDetails =
+    ReportDefinitionDetails(
         "id",
         Instant.ofEpochMilli(1603506908773),
         Instant.ofEpochMilli(1603506908773),
         "__user__",
         listOf(),
-        reportDefinition = createReportDefinitionObject()
+        reportDefinition = createReportDefinitionObject(),
     )
-}

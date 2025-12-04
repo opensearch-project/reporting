@@ -38,23 +38,19 @@ internal class OnDemandReportRestHandler : PluginBaseHandler() {
     /**
      * {@inheritDoc}
      */
-    override fun getName(): String {
-        return REPORT_INSTANCE_LIST_ACTION
-    }
+    override fun getName(): String = REPORT_INSTANCE_LIST_ACTION
 
     /**
      * {@inheritDoc}
      */
-    override fun routes(): List<Route> {
-        return listOf()
-    }
+    override fun routes(): List<Route> = listOf()
 
     /**
      * {@inheritDoc}
      */
-    override fun replacedRoutes(): List<ReplacedRoute> {
-        return listOf(
-            /**
+    override fun replacedRoutes(): List<ReplacedRoute> =
+        listOf(
+            /*
              * Create a new report instance from provided definition
              * Request URL: PUT ON_DEMAND_REPORT_URL
              * Request body: Ref [org.opensearch.reportsscheduler.model.InContextReportCreateRequest]
@@ -64,10 +60,9 @@ internal class OnDemandReportRestHandler : PluginBaseHandler() {
                 PUT,
                 ON_DEMAND_REPORT_URL,
                 PUT,
-                LEGACY_ON_DEMAND_REPORT_URL
+                LEGACY_ON_DEMAND_REPORT_URL,
             ),
-
-            /**
+            /*
              * Create a new report from definition and return instance
              * Request URL: POST ON_DEMAND_REPORT_URL/{reportDefinitionId}
              * Request body: Ref [org.opensearch.reportsscheduler.model.OnDemandReportCreateRequest]
@@ -77,47 +72,54 @@ internal class OnDemandReportRestHandler : PluginBaseHandler() {
                 POST,
                 "$ON_DEMAND_REPORT_URL/{$REPORT_DEFINITION_ID_FIELD}",
                 POST,
-                "$LEGACY_ON_DEMAND_REPORT_URL/{$REPORT_DEFINITION_ID_FIELD}"
-            )
+                "$LEGACY_ON_DEMAND_REPORT_URL/{$REPORT_DEFINITION_ID_FIELD}",
+            ),
         )
-    }
 
     /**
      * {@inheritDoc}
      */
-    override fun responseParams(): Set<String> {
-        return setOf(REPORT_DEFINITION_ID_FIELD)
-    }
+    override fun responseParams(): Set<String> = setOf(REPORT_DEFINITION_ID_FIELD)
 
     /**
      * {@inheritDoc}
      */
-    override fun executeRequest(request: RestRequest, client: NodeClient): RestChannelConsumer {
-        return when (request.method()) {
-            PUT -> RestChannelConsumer {
-                Metrics.REPORT_FROM_DEFINITION_TOTAL.counter.increment()
-                Metrics.REPORT_FROM_DEFINITION_INTERVAL_COUNT.counter.increment()
-                client.execute(
-                    InContextReportCreateAction.ACTION_TYPE,
-                    InContextReportCreateRequest(request.contentParserNextToken()),
-                    RestResponseToXContentListener(it)
-                )
+    override fun executeRequest(
+        request: RestRequest,
+        client: NodeClient,
+    ): RestChannelConsumer =
+        when (request.method()) {
+            PUT -> {
+                RestChannelConsumer {
+                    Metrics.REPORT_FROM_DEFINITION_TOTAL.counter.increment()
+                    Metrics.REPORT_FROM_DEFINITION_INTERVAL_COUNT.counter.increment()
+                    client.execute(
+                        InContextReportCreateAction.ACTION_TYPE,
+                        InContextReportCreateRequest(request.contentParserNextToken()),
+                        RestResponseToXContentListener(it),
+                    )
+                }
             }
-            POST -> RestChannelConsumer {
-                Metrics.REPORT_FROM_DEFINITION_ID_TOTAL.counter.increment()
-                Metrics.REPORT_FROM_DEFINITION_ID_INTERVAL_COUNT.counter.increment()
-                client.execute(
-                    OnDemandReportCreateAction.ACTION_TYPE,
-                    OnDemandReportCreateRequest.parse(
-                        request.contentParserNextToken(),
-                        request.param(REPORT_DEFINITION_ID_FIELD)
-                    ),
-                    RestResponseToXContentListener(it)
-                )
+
+            POST -> {
+                RestChannelConsumer {
+                    Metrics.REPORT_FROM_DEFINITION_ID_TOTAL.counter.increment()
+                    Metrics.REPORT_FROM_DEFINITION_ID_INTERVAL_COUNT.counter.increment()
+                    client.execute(
+                        OnDemandReportCreateAction.ACTION_TYPE,
+                        OnDemandReportCreateRequest.parse(
+                            request.contentParserNextToken(),
+                            request.param(REPORT_DEFINITION_ID_FIELD),
+                        ),
+                        RestResponseToXContentListener(it),
+                    )
+                }
             }
-            else -> RestChannelConsumer {
-                it.sendResponse(BytesRestResponse(RestStatus.METHOD_NOT_ALLOWED, "${request.method()} is not allowed"))
+
+            else -> {
+                RestChannelConsumer {
+                    it.sendResponse(BytesRestResponse(RestStatus.METHOD_NOT_ALLOWED, "${request.method()} is not allowed"))
+                }
             }
         }
-    }
 }

@@ -34,21 +34,20 @@ internal abstract class SearchResults<ItemClass : ToXContentObject> : ToXContent
         private const val START_INDEX_TAG = "startIndex"
         private const val TOTAL_HITS_TAG = "totalHits"
         private const val TOTAL_HIT_RELATION_TAG = "totalHitRelation"
-        private fun convertRelation(totalHitRelation: Relation): String {
-            return if (totalHitRelation == EQUAL_TO) {
+
+        private fun convertRelation(totalHitRelation: Relation): String =
+            if (totalHitRelation == EQUAL_TO) {
                 "eq"
             } else {
                 "gte"
             }
-        }
 
-        private fun convertRelation(totalHitRelation: String): Relation {
-            return if (totalHitRelation == "eq") {
+        private fun convertRelation(totalHitRelation: String): Relation =
+            if (totalHitRelation == "eq") {
                 EQUAL_TO
             } else {
                 GREATER_THAN_OR_EQUAL_TO
             }
-        }
     }
 
     constructor(
@@ -56,7 +55,7 @@ internal abstract class SearchResults<ItemClass : ToXContentObject> : ToXContent
         totalHits: Long,
         totalHitRelation: Relation,
         objectList: List<ItemClass>,
-        objectListFieldName: String
+        objectListFieldName: String,
     ) {
         this.startIndex = startIndex
         this.totalHits = totalHits
@@ -68,11 +67,12 @@ internal abstract class SearchResults<ItemClass : ToXContentObject> : ToXContent
     constructor(from: Long, response: SearchResponse, objectListFieldName: String) {
         val mutableList: MutableList<ItemClass> = mutableListOf()
         response.hits.forEach {
-            val parser = XContentType.JSON.xContent().createParser(
-                NamedXContentRegistry.EMPTY,
-                LoggingDeprecationHandler.INSTANCE,
-                it.sourceAsString
-            )
+            val parser =
+                XContentType.JSON.xContent().createParser(
+                    NamedXContentRegistry.EMPTY,
+                    LoggingDeprecationHandler.INSTANCE,
+                    it.sourceAsString,
+                )
             parser.nextToken()
             mutableList.add(parseItem(parser, it.id))
         }
@@ -107,10 +107,22 @@ internal abstract class SearchResults<ItemClass : ToXContentObject> : ToXContent
             val fieldName = parser.currentName()
             parser.nextToken()
             when (fieldName) {
-                START_INDEX_TAG -> startIndex = parser.longValue()
-                TOTAL_HITS_TAG -> totalHits = parser.longValue()
-                TOTAL_HIT_RELATION_TAG -> totalHitRelation = convertRelation(parser.text())
-                objectListFieldName -> objectList = parseItemList(parser)
+                START_INDEX_TAG -> {
+                    startIndex = parser.longValue()
+                }
+
+                TOTAL_HITS_TAG -> {
+                    totalHits = parser.longValue()
+                }
+
+                TOTAL_HIT_RELATION_TAG -> {
+                    totalHitRelation = convertRelation(parser.text())
+                }
+
+                objectListFieldName -> {
+                    objectList = parseItemList(parser)
+                }
+
                 else -> {
                     parser.skipChildren()
                     log.info("$LOG_PREFIX:Skipping Unknown field $fieldName")
@@ -147,14 +159,21 @@ internal abstract class SearchResults<ItemClass : ToXContentObject> : ToXContent
      * @param parser data referenced at parser
      * @return created item
      */
-    abstract fun parseItem(parser: XContentParser, useId: String? = null): ItemClass
+    abstract fun parseItem(
+        parser: XContentParser,
+        useId: String? = null,
+    ): ItemClass
 
     /**
      * {@inheritDoc}
      */
-    override fun toXContent(builder: XContentBuilder?, params: Params?): XContentBuilder {
+    override fun toXContent(
+        builder: XContentBuilder?,
+        params: Params?,
+    ): XContentBuilder {
         val xContentParams = params ?: REST_OUTPUT_PARAMS
-        builder!!.startObject()
+        builder!!
+            .startObject()
             .field(START_INDEX_TAG, startIndex)
             .field(TOTAL_HITS_TAG, totalHits)
             .field(TOTAL_HIT_RELATION_TAG, convertRelation(totalHitRelation))

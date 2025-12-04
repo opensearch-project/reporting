@@ -62,8 +62,11 @@ import java.util.function.Supplier
  * Entry point of the OpenSearch Reports scheduler plugin.
  * This class initializes the rest handlers.
  */
-class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSchedulerExtension {
-
+class ReportsSchedulerPlugin :
+    Plugin(),
+    ActionPlugin,
+    SystemIndexPlugin,
+    JobSchedulerExtension {
     companion object {
         const val PLUGIN_NAME = "opensearch-reports-scheduler"
         const val LOG_PREFIX = "reports"
@@ -80,12 +83,11 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSch
         return settingList
     }
 
-    override fun getSystemIndexDescriptors(settings: Settings): Collection<SystemIndexDescriptor> {
-        return listOf(
+    override fun getSystemIndexDescriptors(settings: Settings): Collection<SystemIndexDescriptor> =
+        listOf(
             SystemIndexDescriptor(REPORT_DEFINITIONS_INDEX_NAME, "Reports Scheduler Plugin Definitions index"),
-            SystemIndexDescriptor(REPORT_INSTANCES_INDEX_NAME, "Reports Scheduler Plugin Instances index")
+            SystemIndexDescriptor(REPORT_INSTANCES_INDEX_NAME, "Reports Scheduler Plugin Instances index"),
         )
-    }
 
     /**
      * {@inheritDoc}
@@ -101,7 +103,7 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSch
         nodeEnvironment: NodeEnvironment,
         namedWriteableRegistry: NamedWriteableRegistry,
         indexNameExpressionResolver: IndexNameExpressionResolver,
-        repositoriesServiceSupplier: Supplier<RepositoriesService>
+        repositoriesServiceSupplier: Supplier<RepositoriesService>,
     ): Collection<Any> {
         PluginSettings.addSettingsUpdateConsumer(clusterService)
         ReportDefinitionsIndex.initialize(client, clusterService)
@@ -112,30 +114,22 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSch
     /**
      * {@inheritDoc}
      */
-    override fun getJobType(): String {
-        return "reports-scheduler"
-    }
+    override fun getJobType(): String = "reports-scheduler"
 
     /**
      * {@inheritDoc}
      */
-    override fun getJobIndex(): String {
-        return REPORT_DEFINITIONS_INDEX_NAME
-    }
+    override fun getJobIndex(): String = REPORT_DEFINITIONS_INDEX_NAME
 
     /**
      * {@inheritDoc}
      */
-    override fun getJobRunner(): ScheduledJobRunner {
-        return ReportDefinitionJobRunner
-    }
+    override fun getJobRunner(): ScheduledJobRunner = ReportDefinitionJobRunner
 
     /**
      * {@inheritDoc}
      */
-    override fun getJobParser(): ScheduledJobParser {
-        return ReportDefinitionJobParser
-    }
+    override fun getJobParser(): ScheduledJobParser = ReportDefinitionJobParser
 
     /**
      * {@inheritDoc}
@@ -147,23 +141,22 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSch
         indexScopedSettings: IndexScopedSettings,
         settingsFilter: SettingsFilter,
         indexNameExpressionResolver: IndexNameExpressionResolver,
-        nodesInCluster: Supplier<DiscoveryNodes>
-    ): List<RestHandler> {
-        return listOf(
+        nodesInCluster: Supplier<DiscoveryNodes>,
+    ): List<RestHandler> =
+        listOf(
             ReportDefinitionRestHandler(),
             ReportDefinitionListRestHandler(),
             ReportInstanceRestHandler(),
             ReportInstanceListRestHandler(),
             OnDemandReportRestHandler(),
-            ReportStatsRestHandler()
+            ReportStatsRestHandler(),
         )
-    }
 
     /**
      * {@inheritDoc}
      */
-    override fun getActions(): List<ActionPlugin.ActionHandler<out ActionRequest, out ActionResponse>> {
-        return listOf(
+    override fun getActions(): List<ActionPlugin.ActionHandler<out ActionRequest, out ActionResponse>> =
+        listOf(
             ActionPlugin.ActionHandler(CreateReportDefinitionAction.ACTION_TYPE, CreateReportDefinitionAction::class.java),
             ActionPlugin.ActionHandler(DeleteReportDefinitionAction.ACTION_TYPE, DeleteReportDefinitionAction::class.java),
             ActionPlugin.ActionHandler(GetAllReportDefinitionsAction.ACTION_TYPE, GetAllReportDefinitionsAction::class.java),
@@ -173,7 +166,6 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSch
             ActionPlugin.ActionHandler(InContextReportCreateAction.ACTION_TYPE, InContextReportCreateAction::class.java),
             ActionPlugin.ActionHandler(OnDemandReportCreateAction.ACTION_TYPE, OnDemandReportCreateAction::class.java),
             ActionPlugin.ActionHandler(UpdateReportDefinitionAction.ACTION_TYPE, UpdateReportDefinitionAction::class.java),
-            ActionPlugin.ActionHandler(UpdateReportInstanceStatusAction.ACTION_TYPE, UpdateReportInstanceStatusAction::class.java)
+            ActionPlugin.ActionHandler(UpdateReportInstanceStatusAction.ACTION_TYPE, UpdateReportInstanceStatusAction::class.java),
         )
-    }
 }

@@ -30,23 +30,19 @@ internal class ReportStatsRestHandler : BaseRestHandler() {
     /**
      * {@inheritDoc}
      */
-    override fun getName(): String {
-        return REPORT_STATS_ACTION
-    }
+    override fun getName(): String = REPORT_STATS_ACTION
 
     /**
      * {@inheritDoc}
      */
-    override fun routes(): List<Route> {
-        return listOf()
-    }
+    override fun routes(): List<Route> = listOf()
 
     /**
      * {@inheritDoc}
      */
-    override fun replacedRoutes(): List<ReplacedRoute> {
-        return listOf(
-            /**
+    override fun replacedRoutes(): List<ReplacedRoute> =
+        listOf(
+            /*
              * Get reporting backend stats
              * Request URL: GET REPORT_STATS_URL
              * Response body derived from: Ref [org.opensearch.reportsscheduler.metrics.Metrics]
@@ -55,31 +51,35 @@ internal class ReportStatsRestHandler : BaseRestHandler() {
                 GET,
                 "$REPORT_STATS_URL",
                 GET,
-                "$LEGACY_REPORT_STATS_URL"
-            )
+                "$LEGACY_REPORT_STATS_URL",
+            ),
         )
-    }
 
     /**
      * {@inheritDoc}
      */
-    override fun responseParams(): Set<String> {
-        return setOf()
-    }
+    override fun responseParams(): Set<String> = setOf()
 
     /**
      * {@inheritDoc}
      */
-    override fun prepareRequest(request: RestRequest, client: NodeClient): RestChannelConsumer {
-        return when (request.method()) {
+    override fun prepareRequest(
+        request: RestRequest,
+        client: NodeClient,
+    ): RestChannelConsumer =
+        when (request.method()) {
             // TODO: Wrap this into TransportAction
-            GET -> RestChannelConsumer {
-                // it.sendResponse(BytesRestResponse(RestStatus.OK, Metrics.getInstance().collectToFlattenedJSON()))
-                it.sendResponse(BytesRestResponse(RestStatus.OK, Metrics.collectToFlattenedJSON()))
+            GET -> {
+                RestChannelConsumer {
+                    // it.sendResponse(BytesRestResponse(RestStatus.OK, Metrics.getInstance().collectToFlattenedJSON()))
+                    it.sendResponse(BytesRestResponse(RestStatus.OK, Metrics.collectToFlattenedJSON()))
+                }
             }
-            else -> RestChannelConsumer {
-                it.sendResponse(BytesRestResponse(RestStatus.METHOD_NOT_ALLOWED, "${request.method()} is not allowed"))
+
+            else -> {
+                RestChannelConsumer {
+                    it.sendResponse(BytesRestResponse(RestStatus.METHOD_NOT_ALLOWED, "${request.method()} is not allowed"))
+                }
             }
         }
-    }
 }

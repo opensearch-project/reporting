@@ -38,23 +38,19 @@ internal class ReportInstanceRestHandler : PluginBaseHandler() {
     /**
      * {@inheritDoc}
      */
-    override fun getName(): String {
-        return REPORT_INSTANCE_LIST_ACTION
-    }
+    override fun getName(): String = REPORT_INSTANCE_LIST_ACTION
 
     /**
      * {@inheritDoc}
      */
-    override fun routes(): List<Route> {
-        return listOf()
-    }
+    override fun routes(): List<Route> = listOf()
 
     /**
      * {@inheritDoc}
      */
-    override fun replacedRoutes(): List<ReplacedRoute> {
-        return listOf(
-            /**
+    override fun replacedRoutes(): List<ReplacedRoute> =
+        listOf(
+            /*
              * Update report instance status
              * Request URL: POST REPORT_INSTANCE_URL/{reportInstanceId}
              * Request body: Ref [org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusRequest]
@@ -64,9 +60,9 @@ internal class ReportInstanceRestHandler : PluginBaseHandler() {
                 POST,
                 "$REPORT_INSTANCE_URL/{$REPORT_INSTANCE_ID_FIELD}",
                 POST,
-                "$LEGACY_REPORT_INSTANCE_URL/{$REPORT_INSTANCE_ID_FIELD}"
+                "$LEGACY_REPORT_INSTANCE_URL/{$REPORT_INSTANCE_ID_FIELD}",
             ),
-            /**
+            /*
              * Get a report instance information
              * Request URL: GET REPORT_INSTANCE_URL/{reportInstanceId}
              * Request body: None
@@ -76,44 +72,52 @@ internal class ReportInstanceRestHandler : PluginBaseHandler() {
                 GET,
                 "$REPORT_INSTANCE_URL/{$REPORT_INSTANCE_ID_FIELD}",
                 GET,
-                "$LEGACY_REPORT_INSTANCE_URL/{$REPORT_INSTANCE_ID_FIELD}"
-            )
+                "$LEGACY_REPORT_INSTANCE_URL/{$REPORT_INSTANCE_ID_FIELD}",
+            ),
         )
-    }
 
     /**
      * {@inheritDoc}
      */
-    override fun responseParams(): Set<String> {
-        return setOf(REPORT_INSTANCE_ID_FIELD)
-    }
+    override fun responseParams(): Set<String> = setOf(REPORT_INSTANCE_ID_FIELD)
 
     /**
      * {@inheritDoc}
      */
-    override fun executeRequest(request: RestRequest, client: NodeClient): RestChannelConsumer {
+    override fun executeRequest(
+        request: RestRequest,
+        client: NodeClient,
+    ): RestChannelConsumer {
         val reportInstanceId = request.param(REPORT_INSTANCE_ID_FIELD) ?: throw IllegalArgumentException("Must specify id")
         return when (request.method()) {
-            POST -> RestChannelConsumer {
-                Metrics.REPORT_INSTANCE_UPDATE_TOTAL.counter.increment()
-                Metrics.REPORT_INSTANCE_UPDATE_INTERVAL_COUNT.counter.increment()
-                client.execute(
-                    UpdateReportInstanceStatusAction.ACTION_TYPE,
-                    UpdateReportInstanceStatusRequest.parse(request.contentParserNextToken(), reportInstanceId),
-                    RestResponseToXContentListener(it)
-                )
+            POST -> {
+                RestChannelConsumer {
+                    Metrics.REPORT_INSTANCE_UPDATE_TOTAL.counter.increment()
+                    Metrics.REPORT_INSTANCE_UPDATE_INTERVAL_COUNT.counter.increment()
+                    client.execute(
+                        UpdateReportInstanceStatusAction.ACTION_TYPE,
+                        UpdateReportInstanceStatusRequest.parse(request.contentParserNextToken(), reportInstanceId),
+                        RestResponseToXContentListener(it),
+                    )
+                }
             }
-            GET -> RestChannelConsumer {
-                Metrics.REPORT_INSTANCE_INFO_TOTAL.counter.increment()
-                Metrics.REPORT_INSTANCE_INFO_INTERVAL_COUNT.counter.increment()
-                client.execute(
-                    GetReportInstanceAction.ACTION_TYPE,
-                    GetReportInstanceRequest(reportInstanceId),
-                    RestResponseToXContentListener(it)
-                )
+
+            GET -> {
+                RestChannelConsumer {
+                    Metrics.REPORT_INSTANCE_INFO_TOTAL.counter.increment()
+                    Metrics.REPORT_INSTANCE_INFO_INTERVAL_COUNT.counter.increment()
+                    client.execute(
+                        GetReportInstanceAction.ACTION_TYPE,
+                        GetReportInstanceRequest(reportInstanceId),
+                        RestResponseToXContentListener(it),
+                    )
+                }
             }
-            else -> RestChannelConsumer {
-                it.sendResponse(BytesRestResponse(RestStatus.METHOD_NOT_ALLOWED, "${request.method()} is not allowed"))
+
+            else -> {
+                RestChannelConsumer {
+                    it.sendResponse(BytesRestResponse(RestStatus.METHOD_NOT_ALLOWED, "${request.method()} is not allowed"))
+                }
             }
         }
     }
