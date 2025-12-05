@@ -12,6 +12,7 @@ import org.opensearch.commons.authuser.User
 import org.opensearch.core.xcontent.NamedXContentRegistry
 import org.opensearch.reportsscheduler.model.GetAllReportDefinitionsRequest
 import org.opensearch.reportsscheduler.model.GetAllReportDefinitionsResponse
+import org.opensearch.reportsscheduler.util.PluginClient
 import org.opensearch.transport.TransportService
 import org.opensearch.transport.client.Client
 
@@ -21,6 +22,7 @@ import org.opensearch.transport.client.Client
 internal class GetAllReportDefinitionsAction @Inject constructor(
     transportService: TransportService,
     client: Client,
+    private val pluginClient: PluginClient?,
     actionFilters: ActionFilters,
     val xContentRegistry: NamedXContentRegistry
 ) : PluginBaseAction<GetAllReportDefinitionsRequest, GetAllReportDefinitionsResponse>(
@@ -39,6 +41,6 @@ internal class GetAllReportDefinitionsAction @Inject constructor(
      * {@inheritDoc}
      */
     override fun executeRequest(request: GetAllReportDefinitionsRequest, user: User?): GetAllReportDefinitionsResponse {
-        return ReportDefinitionActions.getAll(request, user)
+        return ReportDefinitionActions.getAll(request, pluginClient, user)
     }
 }

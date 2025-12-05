@@ -19,11 +19,13 @@ import org.opensearch.core.common.io.stream.NamedWriteableRegistry
 import org.opensearch.core.xcontent.NamedXContentRegistry
 import org.opensearch.env.Environment
 import org.opensearch.env.NodeEnvironment
+import org.opensearch.identity.PluginSubject
 import org.opensearch.indices.SystemIndexDescriptor
 import org.opensearch.jobscheduler.spi.JobSchedulerExtension
 import org.opensearch.jobscheduler.spi.ScheduledJobParser
 import org.opensearch.jobscheduler.spi.ScheduledJobRunner
 import org.opensearch.plugins.ActionPlugin
+import org.opensearch.plugins.IdentityAwarePlugin
 import org.opensearch.plugins.Plugin
 import org.opensearch.plugins.SystemIndexPlugin
 import org.opensearch.reportsscheduler.action.CreateReportDefinitionAction
@@ -49,6 +51,7 @@ import org.opensearch.reportsscheduler.resthandler.ReportStatsRestHandler
 import org.opensearch.reportsscheduler.scheduler.ReportDefinitionJobParser
 import org.opensearch.reportsscheduler.scheduler.ReportDefinitionJobRunner
 import org.opensearch.reportsscheduler.settings.PluginSettings
+import org.opensearch.reportsscheduler.util.PluginClient
 import org.opensearch.repositories.RepositoriesService
 import org.opensearch.rest.RestController
 import org.opensearch.rest.RestHandler
@@ -62,8 +65,9 @@ import java.util.function.Supplier
  * Entry point of the OpenSearch Reports scheduler plugin.
  * This class initializes the rest handlers.
  */
-class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSchedulerExtension {
+class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSchedulerExtension, IdentityAwarePlugin {
 
+    private var pluginClient: PluginClient? = null
     companion object {
         const val PLUGIN_NAME = "opensearch-reports-scheduler"
         const val LOG_PREFIX = "reports"
@@ -106,7 +110,9 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSch
         PluginSettings.addSettingsUpdateConsumer(clusterService)
         ReportDefinitionsIndex.initialize(client, clusterService)
         ReportInstancesIndex.initialize(client, clusterService)
-        return emptyList()
+        val pluginClientInstance = PluginClient(client)
+        this.pluginClient = pluginClientInstance
+        return listOf(pluginClientInstance)
     }
 
     /**
@@ -175,5 +181,12 @@ class ReportsSchedulerPlugin : Plugin(), ActionPlugin, SystemIndexPlugin, JobSch
             ActionPlugin.ActionHandler(UpdateReportDefinitionAction.ACTION_TYPE, UpdateReportDefinitionAction::class.java),
             ActionPlugin.ActionHandler(UpdateReportInstanceStatusAction.ACTION_TYPE, UpdateReportInstanceStatusAction::class.java)
         )
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    override fun assignSubject(pluginSubject: PluginSubject) {
+        pluginClient?.setSubject(pluginSubject)
     }
 }

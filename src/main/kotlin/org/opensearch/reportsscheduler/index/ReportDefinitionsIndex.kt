@@ -26,7 +26,10 @@ import org.opensearch.reportsscheduler.model.ReportDefinitionDetailsSearchResult
 import org.opensearch.reportsscheduler.model.RestTag.ACCESS_LIST_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.TENANT_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.UPDATED_TIME_FIELD
+import org.opensearch.reportsscheduler.resources.Utils
+import org.opensearch.reportsscheduler.resources.Utils.shouldUseResourceAuthz
 import org.opensearch.reportsscheduler.settings.PluginSettings
+import org.opensearch.reportsscheduler.util.PluginClient
 import org.opensearch.reportsscheduler.util.SecureIndexClient
 import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.search.builder.SearchSourceBuilder
@@ -152,7 +155,13 @@ internal object ReportDefinitionsIndex {
      * @param maxItems the max items to query
      * @return search result of Report definition details
      */
-    fun getAllReportDefinitions(tenant: String, access: List<String>, from: Int, maxItems: Int): ReportDefinitionDetailsSearchResults {
+    fun getAllReportDefinitions(
+        tenant: String,
+        access: List<String>,
+        from: Int,
+        maxItems: Int,
+        pluginClient: PluginClient?
+    ): ReportDefinitionDetailsSearchResults {
         createIndex()
         val sourceBuilder = SearchSourceBuilder()
             .timeout(TimeValue(PluginSettings.operationTimeoutMs, TimeUnit.MILLISECONDS))
@@ -172,7 +181,12 @@ internal object ReportDefinitionsIndex {
         val searchRequest = SearchRequest()
             .indices(REPORT_DEFINITIONS_INDEX_NAME)
             .source(sourceBuilder)
-        val actionFuture = client.search(searchRequest)
+        val actionFuture =
+            if (pluginClient != null && shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE)) {
+                pluginClient.search(searchRequest)
+            } else {
+                client.search(searchRequest)
+            }
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         val result = ReportDefinitionDetailsSearchResults(from.toLong(), response)
         log.info(

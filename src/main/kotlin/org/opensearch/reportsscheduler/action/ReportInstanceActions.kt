@@ -24,7 +24,10 @@ import org.opensearch.reportsscheduler.model.ReportInstance
 import org.opensearch.reportsscheduler.model.ReportInstance.Status
 import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusRequest
 import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusResponse
+import org.opensearch.reportsscheduler.resources.Utils
+import org.opensearch.reportsscheduler.resources.Utils.shouldUseResourceAuthz
 import org.opensearch.reportsscheduler.security.UserAccessManager
+import org.opensearch.reportsscheduler.util.PluginClient
 import org.opensearch.reportsscheduler.util.logger
 import java.time.Instant
 
@@ -41,7 +44,11 @@ internal object ReportInstanceActions {
      */
     fun createOnDemand(request: InContextReportCreateRequest, user: User?): InContextReportCreateResponse {
         log.info("$LOG_PREFIX:ReportInstance-createOnDemand")
-        UserAccessManager.validateUser(user)
+        // only use backend_role path if resource-sharing is disabled
+        if (!shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE)) {
+            UserAccessManager.validateUser(user)
+        }
+
         val currentTime = Instant.now()
         val reportInstance = ReportInstance(
             "ignore",
@@ -72,7 +79,10 @@ internal object ReportInstanceActions {
      */
     fun createOnDemandFromDefinition(request: OnDemandReportCreateRequest, user: User?): OnDemandReportCreateResponse {
         log.info("$LOG_PREFIX:ReportInstance-createOnDemandFromDefinition ${request.reportDefinitionId}")
-        UserAccessManager.validateUser(user)
+        // only use backend_role path if resource-sharing is disabled
+        if (!shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE)) {
+            UserAccessManager.validateUser(user)
+        }
         val currentTime = Instant.now()
         val reportDefinitionDetails = ReportDefinitionsIndex.getReportDefinition(request.reportDefinitionId)
         reportDefinitionDetails
@@ -125,7 +135,10 @@ internal object ReportInstanceActions {
      */
     fun update(request: UpdateReportInstanceStatusRequest, user: User?): UpdateReportInstanceStatusResponse {
         log.info("$LOG_PREFIX:ReportInstance-update ${request.reportInstanceId}")
-        UserAccessManager.validateUser(user)
+        // only use backend_role path if resource-sharing is disabled
+        if (!shouldUseResourceAuthz(Utils.REPORT_INSTANCE_TYPE)) {
+            UserAccessManager.validateUser(user)
+        }
         val currentReportInstance = ReportInstancesIndex.getReportInstance(request.reportInstanceId)
         currentReportInstance
             ?: run {
@@ -160,7 +173,10 @@ internal object ReportInstanceActions {
      */
     fun info(request: GetReportInstanceRequest, user: User?): GetReportInstanceResponse {
         log.info("$LOG_PREFIX:ReportInstance-info ${request.reportInstanceId}")
-        UserAccessManager.validateUser(user)
+        // only use backend_role path if resource-sharing is disabled
+        if (!shouldUseResourceAuthz(Utils.REPORT_INSTANCE_TYPE)) {
+            UserAccessManager.validateUser(user)
+        }
         val reportInstance = ReportInstancesIndex.getReportInstance(request.reportInstanceId)
         reportInstance
             ?: run {
@@ -180,14 +196,25 @@ internal object ReportInstanceActions {
      * @param request [GetAllReportInstancesRequest] object
      * @return [GetAllReportInstancesResponse]
      */
-    fun getAll(request: GetAllReportInstancesRequest, user: User?): GetAllReportInstancesResponse {
+    fun getAll(request: GetAllReportInstancesRequest, pluginClient: PluginClient?, user: User?): GetAllReportInstancesResponse {
         log.info("$LOG_PREFIX:ReportInstance-getAll fromIndex:${request.fromIndex} maxItems:${request.maxItems}")
-        UserAccessManager.validateUser(user)
+        // only use backend_role path if resource-sharing is disabled
+        if (!shouldUseResourceAuthz(Utils.REPORT_INSTANCE_TYPE)) {
+            UserAccessManager.validateUser(user)
+        }
+
+        // if resource-sharing is enabled, search result will automatically be filtered within security plugin
+        val access = if (shouldUseResourceAuthz(Utils.REPORT_INSTANCE_TYPE)) {
+            emptyList()
+        } else {
+            UserAccessManager.getSearchAccessInfo(user)
+        }
         val reportInstanceList = ReportInstancesIndex.getAllReportInstances(
             UserAccessManager.getUserTenant(user),
-            UserAccessManager.getSearchAccessInfo(user),
+            access,
             request.fromIndex,
-            request.maxItems
+            request.maxItems,
+            pluginClient
         )
         return GetAllReportInstancesResponse(reportInstanceList, true)
     }

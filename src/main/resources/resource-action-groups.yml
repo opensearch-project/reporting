@@ -1,0 +1,40 @@
+# For resource-access-management
+resource_types:
+  report-definition:
+    rd_read_only:
+      allowed_actions:
+        - 'cluster:admin/opendistro/reports/definition/get'
+        - 'cluster:admin/opendistro/reports/definition/list'
+        - 'cluster:admin/opendistro/reports/instance/get'
+        - 'cluster:admin/opendistro/reports/instance/list'
+        - 'cluster:admin/opendistro/reports/menu/download'
+
+    rd_read_write:
+      allowed_actions:
+        - 'cluster:admin/opendistro/reports/definition/*'
+        - 'cluster:admin/opendistro/reports/instance/*'
+        - 'cluster:admin/opendistro/reports/menu/download'
+
+    rd_full_access:
+      allowed_actions:
+        - 'cluster:admin/opendistro/reports/definition/*'
+        - 'cluster:admin/opendistro/reports/instance/get'
+        - 'cluster:admin/opendistro/reports/instance/list'
+        - 'cluster:admin/opendistro/reports/menu/download'
+        - "cluster:admin/security/resource/share"
+
+  report-instance:
+    ri_read_only:
+      allowed_actions:
+        - 'cluster:admin/opendistro/reports/instance/get'
+        - 'cluster:admin/opendistro/reports/instance/list'
+        - 'cluster:admin/opendistro/reports/menu/download'
+
+    ri_read_write:
+      allowed_actions:
+        - 'cluster:admin/opendistro/reports/instance/*'
+
+    ri_full_access:
+      allowed_actions:
+        - 'cluster:admin/opendistro/reports/instance/*'
+        - "cluster:admin/security/resource/share"

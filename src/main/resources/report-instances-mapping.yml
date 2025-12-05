@@ -24,3 +24,5 @@ properties:
     type: keyword
   reportDefinitionDetails.id:
     type: keyword
+  all_shared_principals:
+    type: keyword
