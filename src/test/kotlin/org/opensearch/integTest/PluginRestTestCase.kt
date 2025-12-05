@@ -367,8 +367,9 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
                 val defaults = settings.getAsJsonObject("defaults")
                 defaults?.get(key)?.asString?.toBoolean() ?: false
             }
-        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+        } catch (@Suppress("TooGenericExceptionCaught", "SwallowedException") e: Exception) {
             // Return false if settings cannot be retrieved or parsed
+            // Exception is intentionally swallowed as this is a feature detection check
             false
         }
     }
