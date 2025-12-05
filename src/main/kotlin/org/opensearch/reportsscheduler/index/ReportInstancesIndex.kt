@@ -152,7 +152,13 @@ internal object ReportInstancesIndex {
      * @param maxItems the max items to query
      * @return search result of Report instance details
      */
-    fun getAllReportInstances(tenant: String, access: List<String>, from: Int, maxItems: Int, pluginClient: PluginClient?): ReportInstanceSearchResults {
+    fun getAllReportInstances(
+        tenant: String,
+        access: List<String>,
+        from: Int,
+        maxItems: Int,
+        pluginClient: PluginClient?
+    ): ReportInstanceSearchResults {
         createIndex()
         val sourceBuilder = SearchSourceBuilder()
             .timeout(TimeValue(PluginSettings.operationTimeoutMs, TimeUnit.MILLISECONDS))

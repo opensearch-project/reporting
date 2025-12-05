@@ -262,6 +262,8 @@ dependencies {
     testImplementation 'com.google.code.gson:gson:2.8.9'
 
     ktlint "com.pinterest:ktlint:0.47.1"
+
+    testImplementation 'org.awaitility:awaitility:4.3.0'
 }
 
 javadoc.enabled = false // turn off javadoc as it barfs on Kotlin code
@@ -455,6 +457,7 @@ integTest {
     systemProperty "security", securityEnabled
     systemProperty "user", System.getProperty("user", "admin")
     systemProperty "password", "admin"
+    systemProperty "resource_sharing.enabled", System.getProperty("resource_sharing.enabled")
     // Tell the test JVM if the cluster JVM is running under a debugger so that tests can use longer timeouts for
     // requests. The 'doFirst' delays reading the debug setting on the cluster till execution time.
     doFirst {
@@ -574,6 +577,10 @@ testClusters.integTest {
             node.setting("plugins.security.check_snapshot_restore_write_privileges", "true")
             node.setting("plugins.security.restapi.roles_enabled", "[\"all_access\", \"security_rest_api_access\"]")
             node.setting("plugins.security.system_indices.enabled", "true")
+            if (System.getProperty("resource_sharing.enabled") == "true") {
+                node.setting("plugins.security.experimental.resource_sharing.enabled", "true")
+                node.setting("plugins.security.experimental.resource_sharing.protected_types", "[\"report-definition\", \"report-instance\"]")
+            }
         }
     }
 }

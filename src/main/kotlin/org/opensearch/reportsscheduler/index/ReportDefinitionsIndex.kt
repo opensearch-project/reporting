@@ -155,7 +155,13 @@ internal object ReportDefinitionsIndex {
      * @param maxItems the max items to query
      * @return search result of Report definition details
      */
-    fun getAllReportDefinitions(tenant: String, access: List<String>, from: Int, maxItems: Int, pluginClient: PluginClient?): ReportDefinitionDetailsSearchResults {
+    fun getAllReportDefinitions(
+        tenant: String,
+        access: List<String>,
+        from: Int,
+        maxItems: Int,
+        pluginClient: PluginClient?
+    ): ReportDefinitionDetailsSearchResults {
         createIndex()
         val sourceBuilder = SearchSourceBuilder()
             .timeout(TimeValue(PluginSettings.operationTimeoutMs, TimeUnit.MILLISECONDS))

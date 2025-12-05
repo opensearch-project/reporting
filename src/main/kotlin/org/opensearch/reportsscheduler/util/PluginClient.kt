@@ -42,7 +42,7 @@ class PluginClient : FilterClient {
         listener: ActionListener<Response>
     ) {
         val currentSubject = subject
-            ?: throw IllegalStateException("PluginClient is not initialized.")
+            ?: error("PluginClient is not initialized.")
 
         val storedContext = threadPool().threadContext.newStoredContext(false)
 
@@ -55,10 +55,6 @@ class PluginClient : FilterClient {
 
                 super.doExecute(action, request, wrappedListener)
             }
-        } catch (e: RuntimeException) {
-            throw e
-        } catch (e: Exception) {
-            throw RuntimeException(e)
         } finally {
             storedContext.close()
         }
