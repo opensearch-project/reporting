@@ -5,7 +5,6 @@
 
 package org.opensearch.integTest.rest
 
-import org.junit.Assert
 import org.opensearch.core.rest.RestStatus
 import org.opensearch.integTest.PluginRestTestCase
 import org.opensearch.integTest.constructReportDefinitionRequest
@@ -27,10 +26,18 @@ class ResourceSharingIT : PluginRestTestCase() {
      * Test report definition CRUD operations with resource sharing enabled.
      * Verifies that full access user cannot access resources until explicitly shared.
      */
+    @Suppress("LongMethod")
     private fun testReportDefinitionCRUDWithResourceSharing(baseUri: String) {
         if (!isResourceSharingFeatureEnabled()) return
 
-        // Create report definition with full access user
+        val reportDefinitionId = createReportDefinitionAndVerifyOwnerAccess(baseUri)
+        verifyNoAccessWithoutSharing(baseUri, reportDefinitionId)
+        testReadOnlyAccessSharing(baseUri, reportDefinitionId)
+        testFullAccessSharing(baseUri, reportDefinitionId)
+        cleanupReportDefinition(baseUri, reportDefinitionId)
+    }
+
+    private fun createReportDefinitionAndVerifyOwnerAccess(baseUri: String): String {
         val createRequest = constructReportDefinitionRequest()
         val createResponse = executeRequest(
             reportsFullClient,
@@ -43,7 +50,6 @@ class ResourceSharingIT : PluginRestTestCase() {
         assertNotNull("reportDefinitionId should be generated", reportDefinitionId)
         Thread.sleep(100)
 
-        // Owner can access their own resource
         val ownerGet = executeRequest(
             reportsFullClient,
             RestRequest.Method.GET.name,
@@ -55,8 +61,10 @@ class ResourceSharingIT : PluginRestTestCase() {
             reportDefinitionId,
             ownerGet.get("reportDefinitionDetails").asJsonObject.get("id").asString
         )
+        return reportDefinitionId
+    }
 
-        // Read user cannot access without sharing (even with read role)
+    private fun verifyNoAccessWithoutSharing(baseUri: String, reportDefinitionId: String) {
         val readGetBefore = executeRequest(
             reportsReadClient,
             RestRequest.Method.GET.name,
@@ -66,7 +74,6 @@ class ResourceSharingIT : PluginRestTestCase() {
         )
         validateErrorResponse(readGetBefore, RestStatus.FORBIDDEN.status)
 
-        // No access user cannot access
         val noAccessGetBefore = executeRequest(
             reportsNoAccessClient,
             RestRequest.Method.GET.name,
@@ -75,17 +82,17 @@ class ResourceSharingIT : PluginRestTestCase() {
             RestStatus.FORBIDDEN.status
         )
         validateErrorResponse(noAccessGetBefore, RestStatus.FORBIDDEN.status)
+    }
 
-        // Share with read user (read-only access)
+    private fun testReadOnlyAccessSharing(baseUri: String, reportDefinitionId: String) {
         val shareReadPayload = shareWithUserPayload(
             reportDefinitionId,
             Utils.REPORT_DEFINITION_TYPE,
             reportReadOnlyAccessLevel,
             reportReadUser
         )
-        shareConfig(reportsFullClient, null, shareReadPayload)
+        shareConfig(reportsFullClient, shareReadPayload)
 
-        // Wait for sharing to propagate
         waitForSharingVisibility(
             RestRequest.Method.GET.name,
             "$baseUri/definition/$reportDefinitionId",
@@ -93,7 +100,6 @@ class ResourceSharingIT : PluginRestTestCase() {
             reportsReadClient
         )
 
-        // Read user can now access
         val readGetAfter = executeRequest(
             reportsReadClient,
             RestRequest.Method.GET.name,
@@ -106,7 +112,6 @@ class ResourceSharingIT : PluginRestTestCase() {
             readGetAfter.get("reportDefinitionDetails").asJsonObject.get("id").asString
         )
 
-        // Read user cannot update (read-only access)
         val updateRequest = constructReportDefinitionRequest(name = "read_user_update_attempt")
         val readUpdateForbidden = executeRequest(
             reportsReadClient,
@@ -117,7 +122,6 @@ class ResourceSharingIT : PluginRestTestCase() {
         )
         validateErrorResponse(readUpdateForbidden, RestStatus.FORBIDDEN.status)
 
-        // Read user cannot delete
         val readDeleteForbidden = executeRequest(
             reportsReadClient,
             RestRequest.Method.DELETE.name,
@@ -126,17 +130,17 @@ class ResourceSharingIT : PluginRestTestCase() {
             RestStatus.FORBIDDEN.status
         )
         validateErrorResponse(readDeleteForbidden, RestStatus.FORBIDDEN.status)
+    }
 
-        // Share with no-access user (full access)
+    private fun testFullAccessSharing(baseUri: String, reportDefinitionId: String) {
         val shareNoAccessPayload = shareWithUserPayload(
             reportDefinitionId,
             Utils.REPORT_DEFINITION_TYPE,
             reportFullAccessLevel,
             reportNoAccessUser
         )
-        shareConfig(reportsFullClient, null, shareNoAccessPayload)
+        shareConfig(reportsFullClient, shareNoAccessPayload)
 
-        // Wait for sharing to propagate
         waitForSharingVisibility(
             RestRequest.Method.GET.name,
             "$baseUri/definition/$reportDefinitionId",
@@ -144,7 +148,6 @@ class ResourceSharingIT : PluginRestTestCase() {
             reportsNoAccessClient
         )
 
-        // No-access user can now access (despite having no-access role)
         val noAccessGetAfter = executeRequest(
             reportsNoAccessClient,
             RestRequest.Method.GET.name,
@@ -157,7 +160,6 @@ class ResourceSharingIT : PluginRestTestCase() {
             noAccessGetAfter.get("reportDefinitionDetails").asJsonObject.get("id").asString
         )
 
-        // No-access user can update (full access granted)
         val noAccessUpdateRequest = constructReportDefinitionRequest(name = "no_access_user_updated")
         val noAccessUpdate = executeRequest(
             reportsNoAccessClient,
@@ -171,7 +173,6 @@ class ResourceSharingIT : PluginRestTestCase() {
             noAccessUpdate.get("reportDefinitionId").asString
         )
 
-        // Verify update was successful
         val verifyUpdate = executeRequest(
             reportsFullClient,
             RestRequest.Method.GET.name,
@@ -184,8 +185,9 @@ class ResourceSharingIT : PluginRestTestCase() {
             verifyUpdate.get("reportDefinitionDetails").asJsonObject
                 .get("reportDefinition").asJsonObject.get("name").asString
         )
+    }
 
-        // Cleanup - owner deletes
+    private fun cleanupReportDefinition(baseUri: String, reportDefinitionId: String) {
         val deleteResponse = executeRequest(
             reportsFullClient,
             RestRequest.Method.DELETE.name,
@@ -283,7 +285,7 @@ class ResourceSharingIT : PluginRestTestCase() {
             reportReadOnlyAccessLevel,
             reportReadUser
         )
-        shareConfig(reportsFullClient, null, shareDef1)
+        shareConfig(reportsFullClient, shareDef1)
 
         // Share def2 with no-access user
         val shareDef2 = shareWithUserPayload(
@@ -292,7 +294,7 @@ class ResourceSharingIT : PluginRestTestCase() {
             reportFullAccessLevel,
             reportNoAccessUser
         )
-        shareConfig(reportsFullClient, null, shareDef2)
+        shareConfig(reportsFullClient, shareDef2)
 
         Thread.sleep(1000)
 
@@ -363,7 +365,7 @@ class ResourceSharingIT : PluginRestTestCase() {
             }
             .build()
 
-        patchSharingInfo(reportsFullClient, null, patchSharePayload)
+        patchSharingInfo(reportsFullClient, patchSharePayload)
 
         // Wait for sharing to propagate
         waitForSharingVisibility(
@@ -395,7 +397,7 @@ class ResourceSharingIT : PluginRestTestCase() {
             }
             .build()
 
-        patchSharingInfo(reportsFullClient, null, patchRevokePayload)
+        patchSharingInfo(reportsFullClient, patchRevokePayload)
 
         // Wait for revocation to propagate
         waitForRevokeNonVisibility(
@@ -490,7 +492,7 @@ class ResourceSharingIT : PluginRestTestCase() {
             reportInstanceReadOnlyAccessLevel,
             reportReadUser
         )
-        shareConfig(reportsFullClient, null, shareInstancePayload)
+        shareConfig(reportsFullClient, shareInstancePayload)
 
         // Wait for sharing to propagate
         waitForSharingVisibility(
@@ -596,7 +598,7 @@ class ResourceSharingIT : PluginRestTestCase() {
             reportInstanceReadOnlyAccessLevel,
             reportReadUser
         )
-        shareConfig(reportsFullClient, null, sharePayload)
+        shareConfig(reportsFullClient, sharePayload)
         Thread.sleep(1000)
 
         // Read user sees only instance1

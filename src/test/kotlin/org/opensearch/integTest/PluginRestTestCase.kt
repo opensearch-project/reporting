@@ -367,7 +367,8 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
                 val defaults = settings.getAsJsonObject("defaults")
                 defaults?.get(key)?.asString?.toBoolean() ?: false
             }
-        } catch (e: Exception) {
+        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            // Return false if settings cannot be retrieved or parsed
             false
         }
     }
@@ -527,7 +528,7 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
     }
 
     @Throws(IOException::class)
-    fun shareConfig(client: RestClient, params: MutableMap<String?, String?>?, payload: String?): JsonObject {
+    fun shareConfig(client: RestClient, payload: String?): JsonObject {
         val request = Request("PUT", shareConfigUri)
         val options = RequestOptions.DEFAULT.toBuilder()
         options.addHeader("Content-Type", "application/json")
@@ -537,7 +538,7 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
     }
 
     @Throws(IOException::class)
-    fun patchSharingInfo(client: RestClient, params: MutableMap<String?, String?>?, payload: String?): JsonObject {
+    fun patchSharingInfo(client: RestClient, payload: String?): JsonObject {
         val request = Request("PATCH", shareConfigUri)
         val options = RequestOptions.DEFAULT.toBuilder()
         options.addHeader("Content-Type", "application/json")
@@ -610,7 +611,7 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
                 runCatching {
                     "\"$key\" : ${toRecipientsJson(value)}"
                 }.getOrElse { e ->
-                    throw RuntimeException("Failed to serialize recipients for key=$key", e)
+                    throw IOException("Failed to serialize recipients for key=$key", e)
                 }
             }
 
@@ -644,27 +645,26 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
 
         companion object {
             /* ------------------------------ Internals ------------------------------ */
+            @Suppress("LoopWithTooManyJumpStatements")
             private fun mergeInto(
                 target: MutableMap<String?, MutableMap<String?, MutableSet<String?>?>>,
                 accessLevel: String?,
                 incoming: MutableMap<Recipient?, MutableSet<String?>?>?
             ) {
                 if (incoming == null || incoming.isEmpty()) return
-                val existing =
-                    target.computeIfAbsent(accessLevel) { k: String? -> HashMap<String?, MutableSet<String?>?>() }
+                val existing = target.getOrPut(accessLevel) { HashMap<String?, MutableSet<String?>?>() }
                 for (e in incoming.entries) {
-                    if (e.key == null) continue
-                    if (e.value == null || e.value!!.isEmpty()) continue
-                    existing.computeIfAbsent(e.key!!.name) { k: String? -> HashSet<String?>() }!!.addAll(e.value!!)
+                    val key = e.key ?: continue
+                    val value = e.value
+                    if (value == null || value.isEmpty()) continue
+                    val recipientSet = existing.getOrPut(key.name) { HashSet<String?>() }
+                    recipientSet?.addAll(value)
                 }
             }
 
             @Throws(IOException::class)
-            private fun toRecipientsJson(recipients: MutableMap<String?, MutableSet<String?>?>?): String? {
-                var recipients = recipients
-                if (recipients == null) {
-                    recipients = mutableMapOf<String?, MutableSet<String?>?>()
-                }
+            private fun toRecipientsJson(recipientsParam: MutableMap<String?, MutableSet<String?>?>?): String? {
+                val recipients = recipientsParam ?: mutableMapOf()
 
                 val builder = XContentFactory.jsonBuilder()
                 builder.startObject()
@@ -697,19 +697,12 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
         client: RestClient?,
         method: String?,
         endpoint: String?,
-        params: Map<String, String>,
-        httpEntity: HttpEntity?,
-        headers: List<org.apache.hc.core5.http.Header>?
+        httpEntity: HttpEntity?
     ): Response? {
         val request = Request(method, endpoint)
         if (httpEntity != null) {
             request.entity = httpEntity
         }
-        val options = RequestOptions.DEFAULT.toBuilder()
-        headers?.forEach { header ->
-            options.addHeader(header.name, header.value)
-        }
-        request.options = options.build()
         return client?.performRequest(request)
     }
 
@@ -728,10 +721,10 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
     ): Response? {
         return Awaitility.await().atMost(Duration.ofSeconds(30)).pollInterval(Duration.ofMillis(200)).until({
             try {
-                return@until makeRequest(client, method, endpoint, emptyMap(), httpEntity, null)
-            } catch (e: Exception) {
+                return@until makeRequest(client, method, endpoint, httpEntity)
+            } catch (e: ResponseException) {
                 // Treat 403 as eventual-consistency: keep waiting
-                if (isForbidden(e)) {
+                if (e.response.statusLine.statusCode == 403) {
                     return@until null
                 }
                 // Anything else is unexpected: fail fast
@@ -747,18 +740,15 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
         client: RestClient?
     ) {
         Awaitility.await().atMost(Duration.ofSeconds(30)).pollInterval(Duration.ofMillis(200)).until({
-            try {
+            val isRevoked = try {
                 // Still visible (200) -> keep waiting
-                makeRequest(client, method, endpoint, emptyMap(), httpEntity, null)
-                return@until false
-            } catch (e: Exception) {
+                makeRequest(client, method, endpoint, httpEntity)
+                false
+            } catch (e: ResponseException) {
                 // Access revoked (403) -> we're done
-                if (isForbidden(e)) {
-                    return@until true
-                }
-                // Anything else is unexpected: fail fast
-                throw e
+                e.response.statusLine.statusCode == 403
             }
+            return@until isRevoked
         }, Matchers.`is`(true))
     }
 
