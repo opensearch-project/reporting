@@ -21,7 +21,7 @@ resource_types:
         - 'cluster:admin/opendistro/reports/instance/get'
         - 'cluster:admin/opendistro/reports/instance/list'
         - 'cluster:admin/opendistro/reports/menu/download'
-        - "cluster:admin/security/resource/share"
+        - 'cluster:admin/security/resource/share'
 
   report-instance:
     ri_read_only:
@@ -33,8 +33,10 @@ resource_types:
     ri_read_write:
       allowed_actions:
         - 'cluster:admin/opendistro/reports/instance/*'
+        - 'cluster:admin/opendistro/reports/menu/download'
 
     ri_full_access:
       allowed_actions:
         - 'cluster:admin/opendistro/reports/instance/*'
-        - "cluster:admin/security/resource/share"
+        - 'cluster:admin/opendistro/reports/menu/download'
+        - 'cluster:admin/security/resource/share'
