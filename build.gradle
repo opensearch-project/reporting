@@ -243,7 +243,7 @@ dependencies {
     // json-base, jackson-databind, jackson-annotations are transitive dependencies by json-flattener
     implementation group: 'com.github.wnameless.json', name: 'json-base', version: '2.2.1'
     implementation "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}"
-    implementation "com.fasterxml.jackson.core:jackson-annotations:${versions.jackson}"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:${versions.jackson_annotations}"
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation "org.jetbrains.kotlin:kotlin-test:${kotlin_version}"
