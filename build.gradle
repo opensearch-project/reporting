@@ -614,16 +614,7 @@ def resolveZipSnapshotValue = { String metadataXmlUrl ->
 }
 
 String jobSchedulerArtifact = "opensearch-job-scheduler"
-String jobSchedulerMetadataUrl = "${base}/${groupPath}/${jobSchedulerArtifact}/${bwcSnapshotVersion}/maven-metadata.xml"
-String jobSchedulerSnapshotValue = resolveZipSnapshotValue(jobSchedulerMetadataUrl)
-String bwcJobSchedulerFileName = "${jobSchedulerArtifact}-${jobSchedulerSnapshotValue}.zip"
-String bwcJobSchedulerURL = "${base}/${groupPath}/${jobSchedulerArtifact}/${bwcSnapshotVersion}/${bwcJobSchedulerFileName}"
-
 String reportsSchedulerArtifact = "opensearch-reports-scheduler"
-String reportsSchedulerMetadataUrl = "${base}/${groupPath}/${reportsSchedulerArtifact}/${bwcSnapshotVersion}/maven-metadata.xml"
-String reportsSchedulerSnapshotValue = resolveZipSnapshotValue(reportsSchedulerMetadataUrl)
-String bwcReportsSchedulerFileName = "${reportsSchedulerArtifact}-${reportsSchedulerSnapshotValue}.zip"
-String bwcReportsSchedulerURL = "${base}/${groupPath}/${reportsSchedulerArtifact}/${bwcSnapshotVersion}/${bwcReportsSchedulerFileName}"
 
 2.times {i ->
     testClusters {
@@ -637,13 +628,17 @@ String bwcReportsSchedulerURL = "${base}/${groupPath}/${reportsSchedulerArtifact
                     return new RegularFile() {
                         @Override
                         File getAsFile() {
+                            String metadataUrl = "${base}/${groupPath}/${jobSchedulerArtifact}/${bwcSnapshotVersion}/maven-metadata.xml"
+                            String snapshotValue = resolveZipSnapshotValue(metadataUrl)
+                            String fileName = "${jobSchedulerArtifact}-${snapshotValue}.zip"
+                            String downloadUrl = "${base}/${groupPath}/${jobSchedulerArtifact}/${bwcSnapshotVersion}/${fileName}"
                             File dir = new File(bwcFilePath + "/job-scheduler/" + bwcVersion)
                             if (!dir.exists()) {
                                 dir.mkdirs()
                             }
-                            File file = new File(dir, bwcJobSchedulerFileName)
+                            File file = new File(dir, fileName)
                             if (!file.exists()) {
-                                new URL(bwcJobSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
+                                new URL(downloadUrl).withInputStream{ ins -> file.withOutputStream{ it << ins }}
                             }
                             return fileTree(bwcFilePath + "/job-scheduler/" + bwcVersion).getSingleFile()
                         }
@@ -656,13 +651,17 @@ String bwcReportsSchedulerURL = "${base}/${groupPath}/${reportsSchedulerArtifact
                     return new RegularFile() {
                         @Override
                         File getAsFile() {
+                            String metadataUrl = "${base}/${groupPath}/${reportsSchedulerArtifact}/${bwcSnapshotVersion}/maven-metadata.xml"
+                            String snapshotValue = resolveZipSnapshotValue(metadataUrl)
+                            String fileName = "${reportsSchedulerArtifact}-${snapshotValue}.zip"
+                            String downloadUrl = "${base}/${groupPath}/${reportsSchedulerArtifact}/${bwcSnapshotVersion}/${fileName}"
                             File dir = new File(bwcFilePath + "/reports-scheduler/" + bwcVersion)
                             if (!dir.exists()) {
                                 dir.mkdirs()
                             }
-                            File file = new File(dir, bwcReportsSchedulerFileName)
+                            File file = new File(dir, fileName)
                             if (!file.exists()) {
-                                new URL(bwcReportsSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
+                                new URL(downloadUrl).withInputStream{ ins -> file.withOutputStream{ it << ins }}
                             }
                             return fileTree(bwcFilePath + "/reports-scheduler/" + bwcVersion).getSingleFile()
                         }
