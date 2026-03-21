@@ -600,7 +600,7 @@ String baseVersion = "2.19.5"
 String bwcVersion = baseVersion + ".0"
 String baseName = "reportsSchedulerBwcCluster"
 String bwcFilePath = "src/test/resources/bwc"
-String bwcSnapshotVersion = bwcVersion + "-SNAPSHOT"
+String bwcSnapshotVersion = baseVersion + "-SNAPSHOT"
 String groupPath = "org/opensearch/plugin"
 String base = "https://ci.opensearch.org/ci/dbc/snapshots/maven"
 
