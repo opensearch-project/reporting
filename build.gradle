@@ -628,10 +628,10 @@ String reportsSchedulerArtifact = "opensearch-reports-scheduler"
                     return new RegularFile() {
                         @Override
                         File getAsFile() {
-                            String metadataUrl = "${base}/${groupPath}/${jobSchedulerArtifact}/${bwcSnapshotVersion}/maven-metadata.xml"
+                            String metadataUrl = "${base}/${groupPath}/${jobSchedulerArtifact}/${bwcVersion}-SNAPSHOT/maven-metadata.xml"
                             String snapshotValue = resolveZipSnapshotValue(metadataUrl)
                             String fileName = "${jobSchedulerArtifact}-${snapshotValue}.zip"
-                            String downloadUrl = "${base}/${groupPath}/${jobSchedulerArtifact}/${bwcSnapshotVersion}/${fileName}"
+                            String downloadUrl = "${base}/${groupPath}/${jobSchedulerArtifact}/${bwcVersion}-SNAPSHOT/${fileName}"
                             File dir = new File(bwcFilePath + "/job-scheduler/" + bwcVersion)
                             if (!dir.exists()) {
                                 dir.mkdirs()
@@ -651,10 +651,10 @@ String reportsSchedulerArtifact = "opensearch-reports-scheduler"
                     return new RegularFile() {
                         @Override
                         File getAsFile() {
-                            String metadataUrl = "${base}/${groupPath}/${reportsSchedulerArtifact}/${bwcSnapshotVersion}/maven-metadata.xml"
+                            String metadataUrl = "${base}/${groupPath}/${reportsSchedulerArtifact}/${bwcVersion}-SNAPSHOT/maven-metadata.xml"
                             String snapshotValue = resolveZipSnapshotValue(metadataUrl)
                             String fileName = "${reportsSchedulerArtifact}-${snapshotValue}.zip"
-                            String downloadUrl = "${base}/${groupPath}/${reportsSchedulerArtifact}/${bwcSnapshotVersion}/${fileName}"
+                            String downloadUrl = "${base}/${groupPath}/${reportsSchedulerArtifact}/${bwcVersion}-SNAPSHOT/${fileName}"
                             File dir = new File(bwcFilePath + "/reports-scheduler/" + bwcVersion)
                             if (!dir.exists()) {
                                 dir.mkdirs()
