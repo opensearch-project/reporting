@@ -596,14 +596,34 @@ testClusters.integTest {
     }
 }
 
-// For job-scheduler and reports-scheduler, the latest opensearch releases appear to be 1.1.0.0.
 String baseVersion = "2.19.5"
 String bwcVersion = baseVersion + ".0"
 String baseName = "reportsSchedulerBwcCluster"
 String bwcFilePath = "src/test/resources/bwc"
-String bwcJobSchedulerURL = "https://aws.oss.sonatype.org/service/local/artifact/maven/redirect?r=snapshots&g=org.opensearch.plugin&a=opensearch-job-scheduler&v=$bwcVersion-SNAPSHOT&p=zip"
-String bwcReportsSchedulerURL = "https://aws.oss.sonatype.org/service/local/artifact/maven/redirect?r=snapshots&g=org.opensearch.plugin&a=opensearch-reports-scheduler&v=$bwcVersion-SNAPSHOT&p=zip"
-String bwcSnapshotVersion = baseVersion + "-SNAPSHOT"
+String bwcSnapshotVersion = bwcVersion + "-SNAPSHOT"
+String groupPath = "org/opensearch/plugin"
+String base = "https://ci.opensearch.org/ci/dbc/snapshots/maven"
+
+def resolveZipSnapshotValue = { String metadataXmlUrl ->
+    def xml = new URL(metadataXmlUrl).text
+    def m = (xml =~ /<snapshotVersion>[\s\S]*?<extension>zip<\/extension>[\s\S]*?<value>([^<]+)<\/value>[\s\S]*?<\/snapshotVersion>/)
+    if (!m.find()) {
+        throw new GradleException("Could not find zip snapshot <value> in ${metadataXmlUrl}")
+    }
+    return m.group(1)
+}
+
+String jobSchedulerArtifact = "opensearch-job-scheduler"
+String jobSchedulerMetadataUrl = "${base}/${groupPath}/${jobSchedulerArtifact}/${bwcSnapshotVersion}/maven-metadata.xml"
+String jobSchedulerSnapshotValue = resolveZipSnapshotValue(jobSchedulerMetadataUrl)
+String bwcJobSchedulerFileName = "${jobSchedulerArtifact}-${jobSchedulerSnapshotValue}.zip"
+String bwcJobSchedulerURL = "${base}/${groupPath}/${jobSchedulerArtifact}/${bwcSnapshotVersion}/${bwcJobSchedulerFileName}"
+
+String reportsSchedulerArtifact = "opensearch-reports-scheduler"
+String reportsSchedulerMetadataUrl = "${base}/${groupPath}/${reportsSchedulerArtifact}/${bwcSnapshotVersion}/maven-metadata.xml"
+String reportsSchedulerSnapshotValue = resolveZipSnapshotValue(reportsSchedulerMetadataUrl)
+String bwcReportsSchedulerFileName = "${reportsSchedulerArtifact}-${reportsSchedulerSnapshotValue}.zip"
+String bwcReportsSchedulerURL = "${base}/${groupPath}/${reportsSchedulerArtifact}/${bwcSnapshotVersion}/${bwcReportsSchedulerFileName}"
 
 2.times {i ->
     testClusters {
@@ -621,7 +641,7 @@ String bwcSnapshotVersion = baseVersion + "-SNAPSHOT"
                             if (!dir.exists()) {
                                 dir.mkdirs()
                             }
-                            File file = new File(dir, "opensearch-job-scheduler-" + bwcVersion + ".zip")
+                            File file = new File(dir, bwcJobSchedulerFileName)
                             if (!file.exists()) {
                                 new URL(bwcJobSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
                             }
@@ -640,7 +660,7 @@ String bwcSnapshotVersion = baseVersion + "-SNAPSHOT"
                             if (!dir.exists()) {
                                 dir.mkdirs()
                             }
-                            File file = new File(dir, "opensearch-reports-scheduler-" + bwcVersion + ".zip")
+                            File file = new File(dir, bwcReportsSchedulerFileName)
                             if (!file.exists()) {
                                 new URL(bwcReportsSchedulerURL).withInputStream{ ins -> file.withOutputStream{ it << ins }}
                             }
