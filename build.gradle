@@ -249,7 +249,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-test:${kotlin_version}"
 
     testImplementation(
-            'org.assertj:assertj-core:3.16.1',
+            'org.assertj:assertj-core:3.27.7',
             'org.junit.jupiter:junit-jupiter-api:5.6.2'
     )
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
