@@ -5,12 +5,12 @@
 
 package org.opensearch.reportsscheduler.model
 
-import com.fasterxml.jackson.core.JsonParseException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.opensearch.commons.utils.recreateObject
 import org.opensearch.reportsscheduler.createObjectFromJsonString
 import org.opensearch.reportsscheduler.getJsonString
+import org.opensearch.tools.jackson.core.JsonParseException
 
 internal class GetReportDefinitionRequestTests {
 
