@@ -3,5 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-rootProject.name = 'opensearch-reports-scheduler'
+pluginManagement {
+    repositories {
+        maven { url = uri("https://ci.opensearch.org/maven2/") }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
 
+rootProject.name = 'opensearch-reports-scheduler'
