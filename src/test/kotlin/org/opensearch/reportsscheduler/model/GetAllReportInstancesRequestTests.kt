@@ -4,12 +4,12 @@ package org.opensearch.reportsscheduler.model
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import com.fasterxml.jackson.core.JsonParseException
 import junit.framework.Assert.assertEquals
 import org.junit.jupiter.api.Test
 import org.opensearch.reportsscheduler.createObjectFromJsonString
 import org.opensearch.reportsscheduler.getJsonString
 import org.opensearch.reportsscheduler.settings.PluginSettings
+import org.opensearch.tools.jackson.core.JsonParseException
 
 internal class GetAllReportInstancesRequestTests {
     private val sampleFromIndex = 2
