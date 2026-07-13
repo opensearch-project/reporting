@@ -11,7 +11,7 @@ class ResourceSharingClientAccessor private constructor() {
 
     private var client: ResourceSharingClient? = null
 
-    fun setResourceSharingClient(client: ResourceSharingClient) {
+    fun setResourceSharingClient(client: ResourceSharingClient?) {
         this.client = client
     }
 
