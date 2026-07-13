@@ -28,7 +28,7 @@ class ReportsSchedulerExtension : ResourceSharingExtension {
         )
     }
 
-    override fun assignResourceSharingClient(resourceSharingClient: ResourceSharingClient) {
+    override fun assignResourceSharingClient(resourceSharingClient: ResourceSharingClient?) {
         ResourceSharingClientAccessor.getInstance()
             .setResourceSharingClient(resourceSharingClient)
     }
