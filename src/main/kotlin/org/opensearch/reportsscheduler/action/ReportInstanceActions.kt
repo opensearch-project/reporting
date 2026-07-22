@@ -91,7 +91,9 @@ internal object ReportInstanceActions {
                 throw OpenSearchStatusException("Report Definition ${request.reportDefinitionId} not found", RestStatus.NOT_FOUND)
             }
 
-        if (!UserAccessManager.doesUserHasAccess(user, reportDefinitionDetails.tenant, reportDefinitionDetails.access)) {
+        if (!shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE) &&
+            !UserAccessManager.doesUserHasAccess(user, reportDefinitionDetails.tenant, reportDefinitionDetails.access)
+        ) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
             throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportDefinitionId}", RestStatus.FORBIDDEN)
         }
@@ -145,7 +147,9 @@ internal object ReportInstanceActions {
                 Metrics.REPORT_INSTANCE_UPDATE_USER_ERROR_MISSING_REPORT_INSTANCE.counter.increment()
                 throw OpenSearchStatusException("Report Instance ${request.reportInstanceId} not found", RestStatus.NOT_FOUND)
             }
-        if (!UserAccessManager.doesUserHasAccess(user, currentReportInstance.tenant, currentReportInstance.access)) {
+        if (!shouldUseResourceAuthz(Utils.REPORT_INSTANCE_TYPE) &&
+            !UserAccessManager.doesUserHasAccess(user, currentReportInstance.tenant, currentReportInstance.access)
+        ) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
             throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportInstanceId}", RestStatus.FORBIDDEN)
         }
@@ -184,7 +188,9 @@ internal object ReportInstanceActions {
                 throw OpenSearchStatusException("Report Instance ${request.reportInstanceId} not found", RestStatus.NOT_FOUND)
             }
 
-        if (!UserAccessManager.doesUserHasAccess(user, reportInstance.tenant, reportInstance.access)) {
+        if (!shouldUseResourceAuthz(Utils.REPORT_INSTANCE_TYPE) &&
+            !UserAccessManager.doesUserHasAccess(user, reportInstance.tenant, reportInstance.access)
+        ) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
             throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportInstanceId}", RestStatus.FORBIDDEN)
         }
