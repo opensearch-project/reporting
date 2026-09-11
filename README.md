@@ -51,8 +51,8 @@ OpenSearch Dashboards Reports allows ‘Report Owner’ (engineers, including bu
 [link-check-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/link-checker.yml
 [reports-scheduler-build-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/reports-scheduler-test-and-build-workflow.yml/badge.svg
 [reports-scheduler-build-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/reports-scheduler-test-and-build-workflow.yml
-[reports-scheduler-codecov-badge]: https://codecov.io/gh/opensearch-project/dashboards-reports/branch/main/graphs/badge.svg?flag=reports-scheduler
-[codecov-link]: https://codecov.io/gh/opensearch-project/dashboards-reports
+[reports-scheduler-codecov-badge]: https://codecov.io/gh/opensearch-project/reporting/branch/main/graphs/badge.svg?flag=reports-scheduler
+[codecov-link]: https://codecov.io/gh/opensearch-project/reporting
 [cypress-test-badge]: https://img.shields.io/badge/Cypress%20tests-in%20progress-yellow
 [cypress-test-link]: https://github.com/opensearch-project/opensearch-build/issues/1124
 [cypress-code-badge]: https://img.shields.io/badge/Cypress%20code-blue
