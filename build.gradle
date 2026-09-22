@@ -248,7 +248,7 @@ dependencies {
     implementation group: 'com.github.wnameless.json', name: 'json-base', version: '2.2.1'
     implementation "tools.jackson.core:jackson-databind:${versions.jackson3}"
     implementation "com.fasterxml.jackson.core:jackson-annotations:${versions.jackson_annotations}"
-    implementation 'org.jsoup:jsoup:1.15.3'
+    implementation 'org.jsoup:jsoup:1.23.1'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation "org.jetbrains.kotlin:kotlin-test:${kotlin_version}"
 
