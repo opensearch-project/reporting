@@ -31,7 +31,6 @@ OpenSearch Dashboards Reports allows ‘Report Owner’ (engineers, including bu
 
 |              |                                                                 |
 | ------------ | --------------------------------------------------------------- |
-| DCO Checker  | [![Developer certificate of origin][dco-badge]][dco-badge-link] |
 | Link Checker | [![Link Checker][link-check-badge]][link-check-link]            |
 
 ### Issues
@@ -45,12 +44,10 @@ OpenSearch Dashboards Reports allows ‘Report Owner’ (engineers, including bu
 | [![untriaged open][untriaged-badge]][untriaged-link]           |
 | [![nolabel open][nolabel-badge]][nolabel-link]                 |
 
-[dco-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dco.yml/badge.svg
-[dco-badge-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/dco.yml
-[link-check-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/link-checker.yml/badge.svg
-[link-check-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/link-checker.yml
-[reports-scheduler-build-badge]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/reports-scheduler-test-and-build-workflow.yml/badge.svg
-[reports-scheduler-build-link]: https://github.com/opensearch-project/dashboards-reports/actions/workflows/reports-scheduler-test-and-build-workflow.yml
+[link-check-badge]: https://github.com/opensearch-project/reporting/actions/workflows/link-checker.yml/badge.svg
+[link-check-link]: https://github.com/opensearch-project/reporting/actions/workflows/link-checker.yml
+[reports-scheduler-build-badge]: https://github.com/opensearch-project/reporting/actions/workflows/reports-scheduler-test-and-build-workflow.yml/badge.svg
+[reports-scheduler-build-link]: https://github.com/opensearch-project/reporting/actions/workflows/reports-scheduler-test-and-build-workflow.yml
 [reports-scheduler-codecov-badge]: https://codecov.io/gh/opensearch-project/reporting/branch/main/graphs/badge.svg?flag=reports-scheduler
 [codecov-link]: https://codecov.io/gh/opensearch-project/reporting
 [cypress-test-badge]: https://img.shields.io/badge/Cypress%20tests-in%20progress-yellow
