@@ -2,9 +2,8 @@
 
 - [OpenSearch Dashboards Reports](#opensearch-dashboards-reports)
 - [Code Summary](#code-summary)
-- [Documentation](#documentation)
+- [Documentation](#documentation--forum)
 - [Contributing](#contributing)
-- [Setup](#setup-&-build)
 - [Notifications Integration](#notifications-integration)
 - [Code of Conduct](#code-of-conduct)
 - [Security](#security)
