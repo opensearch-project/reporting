@@ -137,11 +137,17 @@ internal object PluginSettings {
         Setting.Property.Deprecated
     )
 
+    /**
+     * Superseded by the security plugin's resource sharing and access control, which authorizes each report definition
+     * and report instance by the access level it is shared at rather than by backend-role overlap. Slated for removal
+     * in 4.0, alongside the same deprecation in the alerting plugin that owns this key.
+     */
     private val FILTER_BY_BACKEND_ROLES: Setting<Boolean> = Setting.boolSetting(
         FILTER_BY_BACKEND_ROLES_KEY,
         LEGACY_FILTER_BY_BACKEND_ROLES,
         NodeScope,
-        Dynamic
+        Dynamic,
+        Setting.Property.Deprecated
     )
 
     /**
