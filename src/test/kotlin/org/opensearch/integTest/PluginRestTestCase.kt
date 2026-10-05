@@ -372,7 +372,7 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
         return try {
             val settings = getAllClusterSettings() ?: return false
             val persistent = settings.getAsJsonObject("persistent")
-            val key = "plugins.security.experimental.resource_sharing.enabled"
+            val key = "plugins.security.resource_sharing.enabled"
             val persistentVal = persistent?.get(key)?.asString
             if (persistentVal != null) {
                 persistentVal.toBoolean()
@@ -400,8 +400,8 @@ abstract class PluginRestTestCase : OpenSearchRestTestCase() {
         val body = """
             {
               "persistent": {
-                "plugins.security.experimental.resource_sharing.enabled": "$enabledStr",
-                "plugins.security.experimental.resource_sharing.protected_types": $protectedJson
+                "plugins.security.resource_sharing.enabled": "$enabledStr",
+                "plugins.security.resource_sharing.protected_types": $protectedJson
               }
             }
         """.trimIndent()

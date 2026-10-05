@@ -28,7 +28,7 @@ buildscript {
         opensearch_group = "org.opensearch"
 
         isSnapshot = "true" == System.getProperty("build.snapshot", "true")
-        opensearch_version = System.getProperty("opensearch.version", "3.8.0-SNAPSHOT")
+        opensearch_version = System.getProperty("opensearch.version", "3.9.0-SNAPSHOT")
         buildVersionQualifier = System.getProperty("build.version_qualifier", "")
         // 2.0.0-rc1-SNAPSHOT -> 2.0.0.0-rc1-SNAPSHOT
         version_tokens = opensearch_version.tokenize('-')
@@ -248,7 +248,7 @@ dependencies {
     implementation group: 'com.github.wnameless.json', name: 'json-base', version: '2.2.1'
     implementation "tools.jackson.core:jackson-databind:${versions.jackson3}"
     implementation "com.fasterxml.jackson.core:jackson-annotations:${versions.jackson_annotations}"
-    implementation 'org.jsoup:jsoup:1.15.3'
+    implementation 'org.jsoup:jsoup:1.23.1'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation "org.jetbrains.kotlin:kotlin-test:${kotlin_version}"
 
@@ -593,8 +593,8 @@ testClusters.integTest {
             node.setting("plugins.security.restapi.roles_enabled", "[\"all_access\", \"security_rest_api_access\"]")
             node.setting("plugins.security.system_indices.enabled", "true")
             if (System.getProperty("resource_sharing.enabled") == "true") {
-                node.setting("plugins.security.experimental.resource_sharing.enabled", "true")
-                node.setting("plugins.security.experimental.resource_sharing.protected_types", "[\"report-definition\", \"report-instance\"]")
+                node.setting("plugins.security.resource_sharing.enabled", "true")
+                node.setting("plugins.security.resource_sharing.protected_types", "[\"report-definition\", \"report-instance\"]")
             }
         }
     }
