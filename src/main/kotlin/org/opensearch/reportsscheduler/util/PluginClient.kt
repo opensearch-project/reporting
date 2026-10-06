@@ -20,7 +20,11 @@ import org.opensearch.transport.client.FilterClient
  */
 class PluginClient : FilterClient {
 
+    // Assigned from IdentityAwarePlugin.assignSubject, which runs on a different thread than the
+    // transport actions that read it.
+    @Volatile
     private var subject: Subject? = null
+
     companion object {
         private val LOGGER: Logger = LogManager.getLogger(PluginClient::class.java)
     }
@@ -35,7 +39,7 @@ class PluginClient : FilterClient {
         this.subject = subject
     }
 
-    @Suppress("UNCHECKED_CAST")
+    @Suppress("TooGenericExceptionCaught")
     override fun <Request : ActionRequest, Response : ActionResponse> doExecute(
         action: ActionType<Response>,
         request: Request,
@@ -44,19 +48,22 @@ class PluginClient : FilterClient {
         val currentSubject = subject
             ?: error("PluginClient is not initialized.")
 
+        // Saves the caller's context so the listener can be given it back. runAs switches the
+        // context itself and restores it when its body returns, so this exists for the listener,
+        // which runs later and on a thread that never carried the caller's context.
         val storedContext = threadPool().threadContext.newStoredContext(false)
 
         try {
             currentSubject.runAs<Exception> {
-                LOGGER.info("Running transport action with subject: {}", currentSubject.principal.name)
+                LOGGER.debug("Running transport action with subject: {}", currentSubject.principal.name)
 
-                // Wrap listener to restore context before invocation
-                val wrappedListener = ActionListener.runBefore(listener) { storedContext.restore() }
-
-                super.doExecute(action, request, wrappedListener)
+                super.doExecute(action, request, ActionListener.runBefore(listener) { storedContext.restore() })
             }
-        } finally {
+        } catch (exception: Exception) {
+            // Reported through the listener rather than thrown, so a caller that only waits on the
+            // listener is not left waiting forever.
             storedContext.close()
+            listener.onFailure(exception)
         }
     }
 }
