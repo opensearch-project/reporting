@@ -25,7 +25,6 @@ import org.opensearch.reportsscheduler.model.UpdateReportDefinitionResponse
 import org.opensearch.reportsscheduler.resources.Utils
 import org.opensearch.reportsscheduler.resources.Utils.shouldUseResourceAuthz
 import org.opensearch.reportsscheduler.security.UserAccessManager
-import org.opensearch.reportsscheduler.util.PluginClient
 import org.opensearch.reportsscheduler.util.logger
 import java.time.Instant
 
@@ -166,7 +165,7 @@ internal object ReportDefinitionActions {
      * @param request [GetAllReportDefinitionsRequest] object
      * @return [GetAllReportDefinitionsResponse]
      */
-    fun getAll(request: GetAllReportDefinitionsRequest, pluginClient: PluginClient?, user: User?): GetAllReportDefinitionsResponse {
+    fun getAll(request: GetAllReportDefinitionsRequest, user: User?): GetAllReportDefinitionsResponse {
         log.info("$LOG_PREFIX:ReportDefinition-getAll fromIndex:${request.fromIndex} maxItems:${request.maxItems}")
         // only use backend_role path if resource-sharing is disabled
         if (!shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE)) {
@@ -184,8 +183,7 @@ internal object ReportDefinitionActions {
             UserAccessManager.getUserTenant(user),
             access,
             request.fromIndex,
-            request.maxItems,
-            pluginClient
+            request.maxItems
         )
         return GetAllReportDefinitionsResponse(reportDefinitionsList, true)
     }
