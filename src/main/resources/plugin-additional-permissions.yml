@@ -1,0 +1,11 @@
+##
+ # Copyright OpenSearch Contributors
+ # SPDX-License-Identifier: Apache-2.0
+##
+
+# Permissions the security plugin grants to this plugin's subject on top of what it already
+# grants on the system indices the plugin registers. Index actions on a registered system index
+# need no entry, and this plugin issues only create, get, index, update, delete and search, so
+# the list is empty. Actions that security classifies as cluster permissions even though they
+# act on indices (mget, msearch, scroll, mtv, reindex, template admin) would need listing here.
+cluster_permissions: []

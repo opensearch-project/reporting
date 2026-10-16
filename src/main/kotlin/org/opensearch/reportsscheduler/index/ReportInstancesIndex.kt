@@ -26,14 +26,10 @@ import org.opensearch.reportsscheduler.model.ReportInstanceSearchResults
 import org.opensearch.reportsscheduler.model.RestTag.ACCESS_LIST_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.TENANT_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.UPDATED_TIME_FIELD
-import org.opensearch.reportsscheduler.resources.Utils
-import org.opensearch.reportsscheduler.resources.Utils.shouldUseResourceAuthz
 import org.opensearch.reportsscheduler.settings.PluginSettings
 import org.opensearch.reportsscheduler.util.PluginClient
-import org.opensearch.reportsscheduler.util.SecureIndexClient
 import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.search.builder.SearchSourceBuilder
-import org.opensearch.transport.client.Client
 import java.util.concurrent.TimeUnit
 
 /**
@@ -45,16 +41,16 @@ internal object ReportInstancesIndex {
     private const val REPORT_INSTANCES_MAPPING_FILE_NAME = "report-instances-mapping.yml"
     private const val REPORT_INSTANCES_SETTINGS_FILE_NAME = "report-instances-settings.yml"
 
-    private lateinit var client: Client
+    private lateinit var client: PluginClient
     private lateinit var clusterService: ClusterService
 
     /**
      * Initialize the class
-     * @param client The ES client
+     * @param client The client that runs as the plugin's system subject
      * @param clusterService The ES cluster service
      */
-    fun initialize(client: Client, clusterService: ClusterService) {
-        this.client = SecureIndexClient(client)
+    fun initialize(client: PluginClient, clusterService: ClusterService) {
+        this.client = client
         this.clusterService = clusterService
     }
 
@@ -71,14 +67,12 @@ internal object ReportInstancesIndex {
                 .mapping(indexMappingSource, XContentType.YAML)
                 .settings(indexSettingsSource, XContentType.YAML)
             try {
-                client.threadPool().threadContext.stashContext().use {
-                    val actionFuture = client.admin().indices().create(request)
-                    val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
-                    if (response.isAcknowledged) {
-                        log.info("$LOG_PREFIX:Index $REPORT_INSTANCES_INDEX_NAME creation Acknowledged")
-                    } else {
-                        error("$LOG_PREFIX:Index $REPORT_INSTANCES_INDEX_NAME creation not Acknowledged")
-                    }
+                val actionFuture = client.admin().indices().create(request)
+                val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
+                if (response.isAcknowledged) {
+                    log.info("$LOG_PREFIX:Index $REPORT_INSTANCES_INDEX_NAME creation Acknowledged")
+                } else {
+                    error("$LOG_PREFIX:Index $REPORT_INSTANCES_INDEX_NAME creation not Acknowledged")
                 }
             } catch (exception: ResourceAlreadyExistsException) {
                 log.warn("message: ${exception.message}")
@@ -156,8 +150,7 @@ internal object ReportInstancesIndex {
         tenant: String,
         access: List<String>,
         from: Int,
-        maxItems: Int,
-        pluginClient: PluginClient?
+        maxItems: Int
     ): ReportInstanceSearchResults {
         createIndex()
         val sourceBuilder = SearchSourceBuilder()
@@ -178,12 +171,7 @@ internal object ReportInstancesIndex {
         val searchRequest = SearchRequest()
             .indices(REPORT_INSTANCES_INDEX_NAME)
             .source(sourceBuilder)
-        val actionFuture =
-            if (pluginClient != null && shouldUseResourceAuthz(Utils.REPORT_INSTANCE_TYPE)) {
-                pluginClient.search(searchRequest)
-            } else {
-                client.search(searchRequest)
-            }
+        val actionFuture = client.search(searchRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         val result = ReportInstanceSearchResults(from.toLong(), response)
         log.info(
