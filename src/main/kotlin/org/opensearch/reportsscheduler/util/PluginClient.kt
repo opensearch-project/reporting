@@ -9,61 +9,66 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.opensearch.action.ActionRequest
 import org.opensearch.action.ActionType
+import org.opensearch.action.support.ContextPreservingActionListener
 import org.opensearch.core.action.ActionListener
 import org.opensearch.core.action.ActionResponse
-import org.opensearch.identity.Subject
+import org.opensearch.identity.PluginSubject
 import org.opensearch.transport.client.Client
 import org.opensearch.transport.client.FilterClient
+import java.util.concurrent.atomic.AtomicReference
 
 /**
- * A special client for executing transport actions as this plugin's system subject.
+ * A client that runs transport actions as this plugin's system subject.
+ *
+ * @param delegate the client whose actions this wraps
  */
-class PluginClient : FilterClient {
+class PluginClient(delegate: Client) : FilterClient(delegate) {
 
-    // Assigned from IdentityAwarePlugin.assignSubject, which runs on a different thread than the
-    // transport actions that read it.
-    @Volatile
-    private var subject: Subject? = null
+    // Set once, from assignSubject, on a different thread from the actions that read it.
+    private val subject = AtomicReference<PluginSubject?>()
 
     companion object {
         private val LOGGER: Logger = LogManager.getLogger(PluginClient::class.java)
     }
 
-    constructor(delegate: Client) : super(delegate)
-
-    constructor(delegate: Client, subject: Subject) : super(delegate) {
-        this.subject = subject
+    /** Wraps a client whose actions run as the given subject. */
+    constructor(delegate: Client, subject: PluginSubject) : this(delegate) {
+        setSubject(subject)
     }
 
-    fun setSubject(subject: Subject) {
-        this.subject = subject
+    /**
+     * Assigns the subject every action runs as. It can be assigned once; assigning the same subject again is a no-op.
+     *
+     * @param subject the plugin's system subject, normally the one passed to assignSubject
+     * @throws IllegalStateException if a different subject is already assigned
+     */
+    fun setSubject(subject: PluginSubject) {
+        check(this.subject.compareAndSet(null, subject) || this.subject.get() === subject) {
+            "PluginClient already has a subject assigned."
+        }
     }
 
-    @Suppress("TooGenericExceptionCaught")
+    /** Not supported, because a plugin subject has no meaning on another cluster. */
+    override fun getRemoteClusterClient(clusterAlias: String): Client =
+        throw UnsupportedOperationException("PluginClient cannot run actions on a remote cluster.")
+
+    /**
+     * Runs the action as the assigned subject, notifying the listener with the caller's thread context in place.
+     *
+     * @throws IllegalStateException if no subject has been assigned yet, which is a wiring error
+     */
     override fun <Request : ActionRequest, Response : ActionResponse> doExecute(
         action: ActionType<Response>,
         request: Request,
         listener: ActionListener<Response>
     ) {
-        val currentSubject = subject
-            ?: error("PluginClient is not initialized.")
-
-        // Saves the caller's context so the listener can be given it back. runAs switches the
-        // context itself and restores it when its body returns, so this exists for the listener,
-        // which runs later and on a thread that never carried the caller's context.
-        val storedContext = threadPool().threadContext.newStoredContext(false)
-
-        try {
-            currentSubject.runAs<Exception> {
-                LOGGER.debug("Running transport action with subject: {}", currentSubject.principal.name)
-
-                super.doExecute(action, request, ActionListener.runBefore(listener) { storedContext.restore() })
-            }
-        } catch (exception: Exception) {
-            // Reported through the listener rather than thrown, so a caller that only waits on the
-            // listener is not left waiting forever.
-            storedContext.close()
-            listener.onFailure(exception)
+        val currentSubject = subject.get() ?: error("PluginClient is not initialized with a subject.")
+        // Captured before runAs stashes the context; core restores it around the callback, then puts
+        // the responding thread's own context back.
+        val callerContext = ContextPreservingActionListener.wrapPreservingContext(listener, threadPool().threadContext)
+        currentSubject.runAs<RuntimeException> {
+            LOGGER.debug("Running transport action as subject: {}", currentSubject.principal.name)
+            super.doExecute(action, request, callerContext)
         }
     }
 }
