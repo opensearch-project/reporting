@@ -46,7 +46,7 @@ internal object ReportInstanceActions {
     fun createOnDemand(request: InContextReportCreateRequest, user: User?): InContextReportCreateResponse {
         log.info("$LOG_PREFIX:ReportInstance-createOnDemand")
         // Legacy tenant and backend-role checks do not apply to resource-sharing authorization.
-        if (!shouldUseResourceAuthz(Utils.REPORT_INSTANCE_TYPE)) {
+        if (!shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE)) {
             UserAccessManager.validateUser(user)
             if (!UserAccessManager.doesUserHasAccessToCreate(user)) {
                 Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
