@@ -43,13 +43,13 @@ internal object ReportDefinitionActions {
      */
     fun create(request: CreateReportDefinitionRequest, user: User?): CreateReportDefinitionResponse {
         log.info("$LOG_PREFIX:ReportDefinition-create")
-        // only use backend_role path if resource-sharing is disabled
+        // Legacy tenant and backend-role checks do not apply to resource-sharing authorization.
         if (!shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE)) {
             UserAccessManager.validateUser(user)
-        }
-        if (!UserAccessManager.doesUserHasAccessToCreate(user)) {
-            Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
-            throw OpenSearchStatusException("Permission denied for report definition creation", RestStatus.FORBIDDEN)
+            if (!UserAccessManager.doesUserHasAccessToCreate(user)) {
+                Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
+                throw OpenSearchStatusException("Permission denied for report definition creation", RestStatus.FORBIDDEN)
+            }
         }
         val currentTime = Instant.now()
         val reportDefinitionDetails = ReportDefinitionDetails(
