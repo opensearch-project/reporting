@@ -20,6 +20,7 @@ import org.opensearch.reportsscheduler.model.InContextReportCreateRequest
 import org.opensearch.reportsscheduler.model.InContextReportCreateResponse
 import org.opensearch.reportsscheduler.model.OnDemandReportCreateRequest
 import org.opensearch.reportsscheduler.model.OnDemandReportCreateResponse
+import org.opensearch.reportsscheduler.model.ReportActionType
 import org.opensearch.reportsscheduler.model.ReportInstance
 import org.opensearch.reportsscheduler.model.ReportInstance.Status
 import org.opensearch.reportsscheduler.model.UpdateReportInstanceStatusRequest
@@ -49,6 +50,10 @@ internal object ReportInstanceActions {
             UserAccessManager.validateUser(user)
         }
 
+        if (!UserAccessManager.doesUserHasAccessToCreate(user)) {
+            Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
+            throw OpenSearchStatusException("Permission denied for report instance creation", RestStatus.FORBIDDEN)
+        }
         val currentTime = Instant.now()
         val reportInstance = ReportInstance(
             "ignore",
@@ -92,7 +97,12 @@ internal object ReportInstanceActions {
             }
 
         if (!shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE) &&
-            !UserAccessManager.doesUserHasAccess(user, reportDefinitionDetails.tenant, reportDefinitionDetails.access)
+            !UserAccessManager.doesUserHasAccess(
+                    user,
+                    reportDefinitionDetails.tenant,
+                    reportDefinitionDetails.access,
+                    ReportActionType.UPDATE
+                )
         ) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
             throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportDefinitionId}", RestStatus.FORBIDDEN)
@@ -148,7 +158,12 @@ internal object ReportInstanceActions {
                 throw OpenSearchStatusException("Report Instance ${request.reportInstanceId} not found", RestStatus.NOT_FOUND)
             }
         if (!shouldUseResourceAuthz(Utils.REPORT_INSTANCE_TYPE) &&
-            !UserAccessManager.doesUserHasAccess(user, currentReportInstance.tenant, currentReportInstance.access)
+            !UserAccessManager.doesUserHasAccess(
+                    user,
+                    currentReportInstance.tenant,
+                    currentReportInstance.access,
+                    ReportActionType.UPDATE
+                )
         ) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
             throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportInstanceId}", RestStatus.FORBIDDEN)
@@ -189,7 +204,12 @@ internal object ReportInstanceActions {
             }
 
         if (!shouldUseResourceAuthz(Utils.REPORT_INSTANCE_TYPE) &&
-            !UserAccessManager.doesUserHasAccess(user, reportInstance.tenant, reportInstance.access)
+            !UserAccessManager.doesUserHasAccess(
+                    user,
+                    reportInstance.tenant,
+                    reportInstance.access,
+                    ReportActionType.READ
+                )
         ) {
             Metrics.REPORT_PERMISSION_USER_ERROR.counter.increment()
             throw OpenSearchStatusException("Permission denied for Report Definition ${request.reportInstanceId}", RestStatus.FORBIDDEN)
