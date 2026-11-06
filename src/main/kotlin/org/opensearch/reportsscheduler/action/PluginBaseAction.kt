@@ -58,6 +58,9 @@ abstract class PluginBaseAction<Request : ActionRequest, Response : ActionRespon
         val storedThreadContext = client.threadPool().threadContext.newStoredContext(false)
         scope.launch {
             try {
+                // The coroutine runs on a pooled thread holding whatever the previous task left
+                // there, so clear it, put the caller's context on it for the length of the request,
+                // and hand the thread back as it was found.
                 client.threadPool().threadContext.stashContext().use {
                     storedThreadContext.restore()
                     listener.onResponse(executeRequest(request, user))

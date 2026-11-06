@@ -26,14 +26,10 @@ import org.opensearch.reportsscheduler.model.ReportDefinitionDetailsSearchResult
 import org.opensearch.reportsscheduler.model.RestTag.ACCESS_LIST_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.TENANT_FIELD
 import org.opensearch.reportsscheduler.model.RestTag.UPDATED_TIME_FIELD
-import org.opensearch.reportsscheduler.resources.Utils
-import org.opensearch.reportsscheduler.resources.Utils.shouldUseResourceAuthz
 import org.opensearch.reportsscheduler.settings.PluginSettings
 import org.opensearch.reportsscheduler.util.PluginClient
-import org.opensearch.reportsscheduler.util.SecureIndexClient
 import org.opensearch.reportsscheduler.util.logger
 import org.opensearch.search.builder.SearchSourceBuilder
-import org.opensearch.transport.client.Client
 import java.util.concurrent.TimeUnit
 
 /**
@@ -45,16 +41,16 @@ internal object ReportDefinitionsIndex {
     private const val REPORT_DEFINITIONS_MAPPING_FILE_NAME = "report-definitions-mapping.yml"
     private const val REPORT_DEFINITIONS_SETTINGS_FILE_NAME = "report-definitions-settings.yml"
 
-    private lateinit var client: Client
+    private lateinit var client: PluginClient
     private lateinit var clusterService: ClusterService
 
     /**
      * Initialize the class
-     * @param client The ES client
+     * @param client The client that runs as the plugin's system subject
      * @param clusterService The ES cluster service
      */
-    fun initialize(client: Client, clusterService: ClusterService) {
-        this.client = SecureIndexClient(client)
+    fun initialize(client: PluginClient, clusterService: ClusterService) {
+        this.client = client
         this.clusterService = clusterService
     }
 
@@ -71,15 +67,13 @@ internal object ReportDefinitionsIndex {
                 .mapping(indexMappingSource, XContentType.YAML)
                 .settings(indexSettingsSource, XContentType.YAML)
             try {
-                client.threadPool().threadContext.stashContext().use {
-                    val actionFuture = client.admin().indices().create(request)
-                    val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
-                    if (response.isAcknowledged) {
-                        log.info("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation Acknowledged")
-                    } else {
-                        Metrics.REPORT_DEFINITION_CREATE_SYSTEM_ERROR.counter.increment()
-                        error("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation not Acknowledged")
-                    }
+                val actionFuture = client.admin().indices().create(request)
+                val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
+                if (response.isAcknowledged) {
+                    log.info("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation Acknowledged")
+                } else {
+                    Metrics.REPORT_DEFINITION_CREATE_SYSTEM_ERROR.counter.increment()
+                    error("$LOG_PREFIX:Index $REPORT_DEFINITIONS_INDEX_NAME creation not Acknowledged")
                 }
             } catch (exception: ResourceAlreadyExistsException) {
                 log.warn("message: ${exception.message}")
@@ -159,8 +153,7 @@ internal object ReportDefinitionsIndex {
         tenant: String,
         access: List<String>,
         from: Int,
-        maxItems: Int,
-        pluginClient: PluginClient?
+        maxItems: Int
     ): ReportDefinitionDetailsSearchResults {
         createIndex()
         val sourceBuilder = SearchSourceBuilder()
@@ -181,12 +174,7 @@ internal object ReportDefinitionsIndex {
         val searchRequest = SearchRequest()
             .indices(REPORT_DEFINITIONS_INDEX_NAME)
             .source(sourceBuilder)
-        val actionFuture =
-            if (pluginClient != null && shouldUseResourceAuthz(Utils.REPORT_DEFINITION_TYPE)) {
-                pluginClient.search(searchRequest)
-            } else {
-                client.search(searchRequest)
-            }
+        val actionFuture = client.search(searchRequest)
         val response = actionFuture.actionGet(PluginSettings.operationTimeoutMs)
         val result = ReportDefinitionDetailsSearchResults(from.toLong(), response)
         log.info(
