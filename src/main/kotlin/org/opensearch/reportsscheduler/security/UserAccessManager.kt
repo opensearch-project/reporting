@@ -9,6 +9,7 @@ import org.opensearch.OpenSearchStatusException
 import org.opensearch.commons.authuser.User
 import org.opensearch.core.rest.RestStatus
 import org.opensearch.reportsscheduler.metrics.Metrics
+import org.opensearch.reportsscheduler.model.ReportActionType
 import org.opensearch.reportsscheduler.settings.PluginSettings
 
 /**
@@ -20,6 +21,9 @@ internal object UserAccessManager {
     private const val BACKEND_ROLE_TAG = "BERole:"
     private const val PRIVATE_TENANT = "__user__"
     const val DEFAULT_TENANT = ""
+    private const val ALL_ACCESS_ROLE = "all_access"
+    private const val WRITE_ACCESS = "WRITE"
+    private const val NO_ACCESS = "NONE"
 
     /**
      * Validate User if eligible to do operation
@@ -111,21 +115,62 @@ internal object UserAccessManager {
     /**
      * validate if user has access based on given access list
      */
-    fun doesUserHasAccess(user: User?, tenant: String, access: List<String>): Boolean {
+    fun doesUserHasAccess(
+        user: User?,
+        tenant: String,
+        access: List<String>,
+        actionType: ReportActionType = ReportActionType.READ
+    ): Boolean {
         if (user == null) { // Security is disabled
             return true
         }
         if (getUserTenant(user) != tenant) {
             return false
         }
-        if (isUserPrivateTenant(user)) {
+        if (isUserPrivateTenant(user)) { // The private tenant belongs to the user, so tenant access is not checked
             return access.contains("$USER_TAG${user.name}")
+        }
+        if (!hasTenantAccess(user, actionType)) {
+            return false
         }
         return if (PluginSettings.isRbacEnabled()) {
             user.backendRoles.map { "$BACKEND_ROLE_TAG$it" }.any { it in access }
         } else {
             true
         }
+    }
+
+    /**
+     * validate if user has access to create a report definition or report instance in the requested tenant
+     */
+    fun doesUserHasAccessToCreate(user: User?): Boolean {
+        if (user == null) { // Security is disabled
+            return true
+        }
+        if (isUserPrivateTenant(user)) { // The private tenant belongs to the user, so tenant access is not checked
+            return true
+        }
+        return hasTenantAccess(user, ReportActionType.CREATE)
+    }
+
+    /**
+     * Check the user's access to the requested tenant, as reported by the security plugin in the user info.
+     * Reading requires READ or WRITE tenant access; creating, updating and deleting require WRITE.
+     */
+    private fun hasTenantAccess(user: User, actionType: ReportActionType): Boolean {
+        // Security plugin versions that do not report tenant access leave this null; keep the previous behavior.
+        val tenantAccess = user.requestedTenantAccess ?: return true
+        if (isAdminUser(user)) {
+            return true
+        }
+        return when (actionType) {
+            ReportActionType.READ -> tenantAccess != NO_ACCESS
+            ReportActionType.CREATE, ReportActionType.UPDATE, ReportActionType.DELETE -> tenantAccess == WRITE_ACCESS
+        }
+    }
+
+    private fun isAdminUser(user: User): Boolean {
+        return user.roles.contains(ALL_ACCESS_ROLE)
     }
 
     private fun isUserPrivateTenant(user: User?): Boolean {
